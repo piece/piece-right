@@ -40,7 +40,8 @@
 // {{{ Piece_Right_Validator_Length
 
 /**
- * A validator which is used to check whether a value is within a given range.
+ * A validator which is used to check whether a value length is within a
+ * given range.
  *
  * @package    Piece_Right
  * @author     KUBO Atsuhiro <iteman@users.sourceforge.net>
@@ -95,7 +96,7 @@ class Piece_Right_Validator_Length
     // {{{ validate()
 
     /**
-     * Checks whether a value is within a given range.
+     * Checks whether a value length is within a given range.
      *
      * @param string $value
      * @return boolean
