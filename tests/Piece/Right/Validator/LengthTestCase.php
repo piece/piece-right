@@ -95,7 +95,7 @@ class Piece_Right_Validator_LengthTestCase extends PHPUnit_TestCase
         $this->assertTrue($validator->validate('foo'));
     }
 
-    function testFailureToBeGraeterThan()
+    function testFailureToBeLessThan()
     {
         $rules = array('max' => 2);
         $validator = &new Piece_Right_Validator_Length($rules);
@@ -103,7 +103,7 @@ class Piece_Right_Validator_LengthTestCase extends PHPUnit_TestCase
         $this->assertFalse($validator->validate('foo'));
     }
 
-    function testFailureToBeLessThan()
+    function testFailureToBeGreaterThan()
     {
         $rules = array('min' => 4);
         $validator = &new Piece_Right_Validator_Length($rules);

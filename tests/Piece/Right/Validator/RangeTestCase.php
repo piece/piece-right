@@ -95,7 +95,7 @@ class Piece_Right_Validator_RangeTestCase extends PHPUnit_TestCase
         $this->assertTrue($validator->validate(3));
     }
 
-    function testFailureToBeGraeterThan()
+    function testFailureToBeLessThan()
     {
         $rules = array('max' => 2);
         $validator = &new Piece_Right_Validator_Range($rules);
@@ -103,7 +103,7 @@ class Piece_Right_Validator_RangeTestCase extends PHPUnit_TestCase
         $this->assertFalse($validator->validate(3));
     }
 
-    function testFailureToBeLessThan()
+    function testFailureToBeGraeterThan()
     {
         $rules = array('min' => 4);
         $validator = &new Piece_Right_Validator_Range($rules);
