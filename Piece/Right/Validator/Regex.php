@@ -37,6 +37,8 @@
  * @since      File available since Release 0.1.0
  */
 
+require_once 'Piece/Right/Validator/Common.php';
+
 // {{{ Piece_Right_Validator_Regex
 
 /**
@@ -50,7 +52,7 @@
  * @link       http://iteman.typepad.jp/piece/
  * @since      Class available since Release 0.1.0
  */
-class Piece_Right_Validator_Regex
+class Piece_Right_Validator_Regex extends Piece_Right_Validator_Common
 {
 
     // {{{ properties
@@ -72,23 +74,6 @@ class Piece_Right_Validator_Regex
     /**#@+
      * @access public
      */
-
-    // }}}
-    // {{{ constructor
-
-    /**
-     * Sets the validation rules.
-     *
-     * @param array $rules
-     */
-    function Piece_Right_Validator_Regex($rules)
-    {
-        foreach ($rules as $key => $value) {
-            if (array_key_exists("_$key", $this)) {
-                $this->{"_$key"} = $value;
-            }
-        }
-    }
 
     // }}}
     // {{{ validate()

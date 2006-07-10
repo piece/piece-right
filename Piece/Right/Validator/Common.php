@@ -37,14 +37,9 @@
  * @since      File available since Release 0.1.0
  */
 
-require_once 'Piece/Right/Validator/Common.php';
-
-// {{{ Piece_Right_Validator_Required
+// {{{ Piece_Right_Validator_Common
 
 /**
- * A validator which is used to check whether a value is not null and empty
- * string.
- *
  * @package    Piece_Right
  * @author     KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @copyright  2006 KUBO Atsuhiro <iteman@users.sourceforge.net>
@@ -53,7 +48,7 @@ require_once 'Piece/Right/Validator/Common.php';
  * @link       http://iteman.typepad.jp/piece/
  * @since      Class available since Release 0.1.0
  */
-class Piece_Right_Validator_Required extends Piece_Right_Validator_Common
+class Piece_Right_Validator_Common
 {
 
     // {{{ properties
@@ -74,19 +69,31 @@ class Piece_Right_Validator_Required extends Piece_Right_Validator_Common
      * @access public
      */
 
+    /**
+     * Sets the validation rules.
+     *
+     * @param array $rules
+     */
+    function Piece_Right_Validator_Common($rules = array())
+    {
+        foreach ($rules as $key => $value) {
+            if (array_key_exists("_$key", $this)) {
+                $this->{"_$key"} = $value;
+            }
+        }
+    }
+
     // }}}
     // {{{ validate()
 
     /**
-     * Checks whether a value is not null and empty string.
+     * Checks whether a value is valid.
      *
      * @param string $value
      * @return boolean
+     * @abstract
      */
-    function validate($value)
-    {
-        return !is_null($value) && strlen($value);
-    }
+    function validate($value) {}
 
     /**#@-*/
 
