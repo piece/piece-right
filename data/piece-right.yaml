@@ -1,0 +1,23 @@
+# $Id$
+name: config
+desc: the definition of Piece_Right configuration file.
+type: seq
+sequence:
+  - type: map
+    required: yes
+    mapping:
+      "name": { type: str, required: yes }
+      "validator":
+        type: seq
+        required: no
+        sequence:
+          - type: map
+            required: yes
+            mapping:
+              "name": { type: str, required: yes }
+              "rules":
+                type: map
+                required: no
+                mapping:
+                  =:
+                    type: any
