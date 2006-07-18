@@ -89,7 +89,7 @@ class Piece_Right_Validator_LengthTestCase extends PHPUnit_TestCase
 
         $this->assertTrue($validator->validate('foo'));
 
-        $rules = array('max' => 2, 'max' => 5);
+        $rules = array('min' => 2, 'max' => 5);
         $validator = &new Piece_Right_Validator_Length($rules);
 
         $this->assertTrue($validator->validate('foo'));

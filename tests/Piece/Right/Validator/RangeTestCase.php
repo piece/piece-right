@@ -89,7 +89,7 @@ class Piece_Right_Validator_RangeTestCase extends PHPUnit_TestCase
 
         $this->assertTrue($validator->validate(3));
 
-        $rules = array('max' => 2, 'max' => 5);
+        $rules = array('min' => 2, 'max' => 5);
         $validator = &new Piece_Right_Validator_Range($rules);
 
         $this->assertTrue($validator->validate(3));
