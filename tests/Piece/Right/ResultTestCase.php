@@ -76,16 +76,27 @@ class Piece_Right_ResultTestCase extends PHPUnit_TestCase
      * @access public
      */
 
-    function testCheckingWhetherParameterHasError()
+    function testCheckingWhetherFieldHasErrors()
     {
         $result = &new Piece_Right_Result();
-        $result->addError('Required', 'The parameter [ foo ] is required');
+        $result->addError('Required', 'The parameter [ foo ] is required.');
 
         $this->assertTrue($result->hasErrors());
 
         $result = &new Piece_Right_Result();
 
         $this->assertFalse($result->hasErrors());
+    }
+
+    function testGettingLastErrorMessage()
+    {
+        $message = 'The parameter length must be greater than 5 characters.';
+        $result = &new Piece_Right_Result();
+        $result->addError('Required', 'The parameter [ foo ] is required.');
+        $result->addError('Length', $message);
+
+        $this->assertTrue($result->hasErrors());
+        $this->assertEquals($message, $result->getLastErrorMessage());
     }
 
     /**#@-*/
