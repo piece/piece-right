@@ -247,7 +247,7 @@ class Piece_Right_Config_Factory
             foreach ($validation['validator'] as $validator) {
                 $config->addValidation($validation['name'],
                                        $validator['name'],
-                                       (array)@$validator['rules']
+                                       (array)@$validator['rule']
                                        );
             }
         }
