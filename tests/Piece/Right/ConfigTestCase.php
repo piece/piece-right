@@ -98,21 +98,21 @@ class Piece_Right_ConfigTestCase extends PHPUnit_TestCase
         $this->_config->addValidation('first_name', 'Length', array('max' => 255));
         $this->_config->addValidation('last_name', 'Required');
         $this->_config->addValidation('last_name', 'Length', array('max' => 255));
-        $validations = $this->_config->getValidations();
+        $validationSet = $this->_config->getValidationSet();
 
-        $this->assertTrue(is_array($validations));
-        $this->assertTrue(array_key_exists('first_name', $validations));
-        $this->assertTrue(array_key_exists('validator', $validations['first_name'][0]));
-        $this->assertTrue(array_key_exists('rules', $validations['first_name'][1]));
-        $this->assertEquals('Required', $validations['first_name'][0]['validator']);
-        $this->assertEquals('Length', $validations['first_name'][1]['validator']);
-        $this->assertEquals(array('max' => 255), $validations['first_name'][1]['rules']);
-        $this->assertTrue(array_key_exists('last_name', $validations));
-        $this->assertTrue(array_key_exists('validator', $validations['last_name'][0]));
-        $this->assertTrue(array_key_exists('rules', $validations['last_name'][1]));
-        $this->assertEquals('Required', $validations['last_name'][0]['validator']);
-        $this->assertEquals('Length', $validations['last_name'][1]['validator']);
-        $this->assertEquals(array('max' => 255), $validations['last_name'][1]['rules']);
+        $this->assertTrue(is_array($validationSet));
+        $this->assertTrue(array_key_exists('first_name', $validationSet));
+        $this->assertTrue(array_key_exists('validator', $validationSet['first_name'][0]));
+        $this->assertTrue(array_key_exists('rules', $validationSet['first_name'][1]));
+        $this->assertEquals('Required', $validationSet['first_name'][0]['validator']);
+        $this->assertEquals('Length', $validationSet['first_name'][1]['validator']);
+        $this->assertEquals(array('max' => 255), $validationSet['first_name'][1]['rules']);
+        $this->assertTrue(array_key_exists('last_name', $validationSet));
+        $this->assertTrue(array_key_exists('validator', $validationSet['last_name'][0]));
+        $this->assertTrue(array_key_exists('rules', $validationSet['last_name'][1]));
+        $this->assertEquals('Required', $validationSet['last_name'][0]['validator']);
+        $this->assertEquals('Length', $validationSet['last_name'][1]['validator']);
+        $this->assertEquals(array('max' => 255), $validationSet['last_name'][1]['rules']);
     }
 
     /**#@-*/
