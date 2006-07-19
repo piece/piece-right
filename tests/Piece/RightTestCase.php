@@ -96,7 +96,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         Piece_Right_Error::popCallback();
     }
 
-    function testValidation()
+    function testSuccessToValidate()
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_POST['first_name'] = 'Foo';
@@ -110,6 +110,27 @@ class Piece_RightTestCase extends PHPUnit_TestCase
                                   );
 
         $this->assertTrue($right->validate('Example', $dynamicConfig));
+
+        unset($_POST['phone']);
+        unset($_POST['last_name']);
+        unset($_POST['first_name']);
+        unset($_SERVER['REQUEST_METHOD']);
+    }
+
+    function testFailureToValidate()
+    {
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST['first_name'] = 'Foo';
+        $_POST['last_name'] = 'Bar';
+        $_POST['phone'] = '012345678';
+        $dynamicConfig = &new Piece_Right_Config();
+        $dynamicConfig->addValidation('phone', 'Required');
+        $dynamicConfig->addValidation('phone', 'Length', array('min' => 10, 'max' => 11));
+        $right = &new Piece_Right(dirname(__FILE__) . '/../../data',
+                                  dirname(__FILE__)
+                                  );
+
+        $this->assertFalse($right->validate('Example', $dynamicConfig));
 
         unset($_POST['phone']);
         unset($_POST['last_name']);
