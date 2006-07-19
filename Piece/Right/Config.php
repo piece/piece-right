@@ -65,7 +65,7 @@ class Piece_Right_Config
      * @access private
      */
 
-    var $_validations = array();
+    var $_validationSet = array();
 
     /**#@-*/
 
@@ -85,26 +85,26 @@ class Piece_Right_Config
      */
     function addValidation($validationPoint, $validator, $rules = array())
     {
-        if (!array_key_exists($validationPoint, $this->_validations)) {
-            $this->_validations[$validationPoint] = array();
+        if (!array_key_exists($validationPoint, $this->_validationSet)) {
+            $this->_validationSet[$validationPoint] = array();
         }
 
-        array_push($this->_validations[$validationPoint],
+        array_push($this->_validationSet[$validationPoint],
                    array('validator' => $validator, 'rules' => $rules)
                    );
     }
 
     // }}}
-    // {{{ getValidations()
+    // {{{ getValidationSet()
 
     /**
-     * Gets the array of the validations.
+     * Gets the validation set as an array.
      *
      * @return array
      */
-    function getValidations()
+    function getValidationSet()
     {
-        return $this->_validations;
+        return $this->_validationSet;
     }
 
     // }}}
@@ -117,8 +117,8 @@ class Piece_Right_Config
      */
     function merge(&$config)
     {
-        $validations = $config->getValidations();
-        array_walk($validations, array(&$this, 'mergeValidations'));
+        $validationSet = $config->getValidationSet();
+        array_walk($validationSet, array(&$this, 'mergeValidations'));
     }
 
     // }}}
