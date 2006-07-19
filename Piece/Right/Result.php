@@ -82,25 +82,41 @@ class Piece_Right_Result
      * @param string   $validator
      * @param string   $message
      */
-    function pushError($validator, $message)
+    function addError($validator, $message = null)
     {
-        array_unshift($this->_errors,
-                      array('validator' => $validator,
-                            'message' => $message)
-                      );
+        array_push($this->_errors,
+                   array('validator' => $validator,
+                         'message' => $message)
+                   );
     }
 
     // }}}
     // {{{ hasErrors()
 
     /**
-     * Returns whether the result has errors or not.
+     * Returns the number of the errors.
      *
-     * @return boolean
+     * @return integer
      */
     function hasErrors()
     {
         return count($this->_errors);
+    }
+
+    // }}}
+    // {{{ getLastErrorMessage()
+
+    /**
+     * Gets the message of the last error.
+     *
+     * @return string
+     */
+    function getLastErrorMessage()
+    {
+        $errors = $this->hasErrors();
+        if ($errors) {
+            return $this->_errors[$errors - 1]['message'];
+        }
     }
 
     /**#@-*/
