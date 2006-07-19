@@ -97,7 +97,7 @@ class Piece_Right
         if (is_callable($parameterValuesCallback)) {
             $this->_parameterValuesCallback = $parameterValuesCallback;
         } else {
-            $this->_parameterValuesCallback = array(&$this, 'getParameterValueFromSuperglobals');
+            $this->_parameterValuesCallback = array(__CLASS__, 'getParameterValueFromSuperglobals');
         }
     }
 
@@ -138,6 +138,7 @@ class Piece_Right
      *
      * @param string $parameterName
      * @return mixed
+     * @static
      */
     function getParameterValueFromSuperglobals($parameterName)
     {
