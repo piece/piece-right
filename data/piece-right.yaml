@@ -15,7 +15,7 @@ sequence:
             required: yes
             mapping:
               "name": { type: str, required: yes }
-              "rules":
+              "rule":
                 type: map
                 required: no
                 mapping:
