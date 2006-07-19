@@ -3,7 +3,7 @@
   validator: &name
     - name: Required
     - name: Length
-      rules:
+      rule:
         min: 1
         max: 255
 - name: last_name
