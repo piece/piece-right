@@ -69,12 +69,15 @@ class Piece_Right_Validator_Common
      * @access public
      */
 
+    // }}}
+    // {{{ setRules()
+
     /**
      * Sets the validation rules.
      *
      * @param array $rules
      */
-    function Piece_Right_Validator_Common($rules = array())
+    function setRules($rules = array())
     {
         foreach ($rules as $key => $value) {
             if (array_key_exists("_$key", $this)) {
