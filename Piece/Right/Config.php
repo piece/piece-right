@@ -40,7 +40,7 @@
 // {{{ Piece_Right_Config
 
 /**
- * The configuration container for Piece_Right validations.
+ * The configuration container for Piece_Right validation sets.
  *
  * @package    Piece_Right
  * @author     KUBO Atsuhiro <iteman@users.sourceforge.net>
@@ -105,6 +105,37 @@ class Piece_Right_Config
     function getValidations()
     {
         return $this->_validations;
+    }
+
+    // }}}
+    // {{{ merge()
+
+    /**
+     * Merges the given configuretion into the existing configuration.
+     *
+     * @param Piece_Right_Config &$config
+     */
+    function merge(&$config)
+    {
+        $validations = $config->getValidations();
+        array_walk($validations, array(&$this, 'mergeValidations'));
+    }
+
+    // }}}
+    // {{{ mergeExtensions()
+
+    /**
+     * A callback that will be called by array_walk() function in merge()
+     * method.
+     *
+     * @param string $validations
+     * @param string $validationPoint
+     */
+    function mergeValidations($validations, $validationPoint)
+    {
+        foreach ($validations as $validation) {
+            $this->addValidation($validationPoint, $validation['validator'], $validation['rules']);
+        }
     }
 
     /**#@-*/
