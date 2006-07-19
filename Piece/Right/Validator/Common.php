@@ -73,16 +73,30 @@ class Piece_Right_Validator_Common
     // {{{ setRules()
 
     /**
-     * Sets the validation rules.
+     * Sets the validation rules to the validator.
      *
      * @param array $rules
      */
     function setRules($rules = array())
     {
-        foreach ($rules as $key => $value) {
-            if (array_key_exists("_$key", $this)) {
-                $this->{"_$key"} = $value;
-            }
+        foreach ($rules as $name => $value) {
+            $this->addRule($name, $value);
+        }
+    }
+
+    // }}}
+    // {{{ addRule()
+
+    /**
+     * Adds a validation rule to the validator.
+     *
+     * @param string $name
+     * @param mixed  $value
+     */
+    function addRule($name, $value)
+    {
+        if (array_key_exists("_$name", $this)) {
+            $this->{"_$name"} = $value;
         }
     }
 
