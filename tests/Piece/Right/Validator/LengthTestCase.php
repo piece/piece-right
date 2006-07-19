@@ -79,34 +79,34 @@ class Piece_Right_Validator_LengthTestCase extends PHPUnit_TestCase
 
     function testSuccess()
     {
-        $rules = array('min' => 2);
-        $validator = &new Piece_Right_Validator_Length($rules);
+        $validator = &new Piece_Right_Validator_Length();
+        $validator->setRules(array('min' => 2));
 
         $this->assertTrue($validator->validate('foo'));
 
-        $rules = array('max' => 5);
-        $validator = &new Piece_Right_Validator_Length($rules);
+        $validator = &new Piece_Right_Validator_Length();
+        $validator->setRules(array('max' => 5));
 
         $this->assertTrue($validator->validate('foo'));
 
-        $rules = array('min' => 2, 'max' => 5);
-        $validator = &new Piece_Right_Validator_Length($rules);
+        $validator = &new Piece_Right_Validator_Length();
+        $validator->setRules(array('min' => 2, 'max' => 5));
 
         $this->assertTrue($validator->validate('foo'));
     }
 
     function testFailureToBeLessThan()
     {
-        $rules = array('max' => 2);
-        $validator = &new Piece_Right_Validator_Length($rules);
+        $validator = &new Piece_Right_Validator_Length();
+        $validator->setRules(array('max' => 2));
 
         $this->assertFalse($validator->validate('foo'));
     }
 
     function testFailureToBeGreaterThan()
     {
-        $rules = array('min' => 4);
-        $validator = &new Piece_Right_Validator_Length($rules);
+        $validator = &new Piece_Right_Validator_Length();
+        $validator->setRules(array('min' => 4));
 
         $this->assertFalse($validator->validate('foo'));
     }

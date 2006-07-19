@@ -79,26 +79,26 @@ class Piece_Right_Validator_RegexTestCase extends PHPUnit_TestCase
 
     function testSuccess()
     {
-        $rules = array('pattern' => '/^\d+$/');
-        $validator = &new Piece_Right_Validator_Regex($rules);
+        $validator = &new Piece_Right_Validator_Regex();
+        $validator->setRules(array('pattern' => '/^\d+$/'));
 
         $this->assertTrue($validator->validate('12345'));
 
-        $rules = array('pattern' => '/^\w+$/');
-        $validator = &new Piece_Right_Validator_Regex($rules);
+        $validator = &new Piece_Right_Validator_Regex();
+        $validator->setRules(array('pattern' => '/^\w+$/'));
 
         $this->assertTrue($validator->validate('foo_bar_baz_12345'));
 
-        $rules = array('pattern' => '/^[a-z0-9]{10}$/i');
-        $validator = &new Piece_Right_Validator_Regex($rules);
+        $validator = &new Piece_Right_Validator_Regex();
+        $validator->setRules(array('pattern' => '/^[a-z0-9]{10}$/i'));
 
         $this->assertTrue($validator->validate('eapUjdCpJ8'));
     }
 
     function testFailure()
     {
-        $rules = array('pattern' => '/^\d+$/');
-        $validator = &new Piece_Right_Validator_Regex($rules);
+        $validator = &new Piece_Right_Validator_Regex();
+        $validator->setRules(array('pattern' => '/^\d+$/'));
 
         $this->assertFalse($validator->validate('foo_bar_baz_12345'));
     }
