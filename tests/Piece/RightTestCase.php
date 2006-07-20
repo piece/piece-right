@@ -142,6 +142,40 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         unset($_SERVER['REQUEST_METHOD']);
     }
 
+    function testGettingErrorInformation()
+    {
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST['last_name'] = 'Bar';
+        $_POST['phone'] = '0123456789';
+        $_POST['country'] = 'Japan';
+        $dynamicConfig = &new Piece_Right_Config();
+        $dynamicConfig->addValidation('phone', 'Required');
+        $dynamicConfig->addValidation('phone', 'Length', array('min' => 10, 'max' => 11));
+        $right = &new Piece_Right(dirname(__FILE__) . '/../../data',
+                                  dirname(__FILE__)
+                                  );
+
+        $this->assertFalse($right->validate('Example', $dynamicConfig));
+
+        $results = &$right->getResults();
+
+        $this->assertTrue($results->hasErrors());
+        $this->assertEquals(array('first_name'), $results->getErrorFields());
+        $this->assertTrue($results->isError('first_name'));
+        $this->assertFalse($results->isError('last_name'));
+        $this->assertFalse($results->isError('phone'));
+        $this->assertFalse($results->isError('country'));
+        $this->assertEquals('foo', $results->getErrorMessage('first_name'));
+        $this->assertEquals(array('foo', 'bar'),
+                            $results->getErrorMessages('first_name')
+                            );
+
+        unset($_POST['country']);
+        unset($_POST['phone']);
+        unset($_POST['last_name']);
+        unset($_SERVER['REQUEST_METHOD']);
+    }
+
     /**#@-*/
 
     /**#@+
