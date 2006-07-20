@@ -122,6 +122,8 @@ class Piece_Right_Validator_Factory
             }
 
             $GLOBALS['PIECE_RIGHT_Validator_Instances'][$validator] = &$instance;
+        } else {
+            $GLOBALS['PIECE_RIGHT_Validator_Instances'][$validator]->clear();
         }
 
         return $GLOBALS['PIECE_RIGHT_Validator_Instances'][$validator];
