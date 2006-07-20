@@ -76,26 +76,112 @@ class Piece_Right_Results
      * @access public
      */
 
-    function setFieldValue($validationPoint, $fieldValue)
+    // }}}
+    // {{{ setFieldValue()
+
+    /**
+     * Sets the value of a field.
+     *
+     * @param string $name
+     * @param string $value
+     */
+    function setFieldValue($name, $value)
     {
-        $this->_fieldValues[$validationPoint] = $fieldValue;
+        $this->_fieldValues[$name] = $value;
     }
 
+    // }}}
+    // {{{ hasErrors()
+
+    /**
+     * Returns the number of the error fields.
+     *
+     * @return integer
+     */
     function hasErrors()
     {
         return count($this->_errors);
     }
 
-    function addError($validationPoint, $validator, $message = null)
+    // }}}
+    // {{{ addError()
+
+    /**
+     * Adds an error to the given field.
+     *
+     * @param string $field
+     * @param string $validator
+     * @param string $message
+     */
+    function addError($field, $validator, $message = null)
     {
-        if (array_key_exists($validationPoint, $this->_errors)) {
-            $error = &$this->_errors[$validationPoint];
+        if ($this->isError($field)) {
+            $error = &$this->_errors[$field];
         } else {
             $error = &new Piece_Right_ValidationError();
-            $this->_errors[$validationPoint] = &$error;
+            $this->_errors[$field] = &$error;
         }
 
         $error->addError($validator, $message);
+    }
+
+    // }}}
+    // {{{ getErrorFields()
+
+    /**
+     * Gets an array of the field names which have errors.
+     *
+     * @return array
+     */
+    function getErrorFields()
+    {
+        return array_keys($this->_errors);
+    }
+
+    // }}}
+    // {{{ isError()
+
+    /**
+     * Returns whether the given field has errors or not.
+     *
+     * @param string $field
+     * @return boolean
+     */
+    function isError($field)
+    {
+        return array_key_exists($field, $this->_errors);
+    }
+
+    // }}}
+    // {{{ getErrorMessage()
+
+    /**
+     * Gets an error message of the given field.
+     *
+     * @param string $field
+     * @return string
+     */
+    function getErrorMessage($field)
+    {
+        if ($this->isError($field)) {
+            return $this->_errors[$field]->getFirstErrorMessage();
+        }
+    }
+
+    // }}}
+    // {{{ getErrorMessages()
+
+    /**
+     * Gets an array of all error messages for the given field.
+     *
+     * @param string $field
+     * @return array
+     */
+    function getErrorMessages($field)
+    {
+        if ($this->isError($field)) {
+            return $this->_errors[$field]->getMessages();
+        }
     }
 
     /**#@-*/
