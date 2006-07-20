@@ -129,10 +129,27 @@ class Piece_Right_ValidationError
      */
     function getFirstErrorMessage()
     {
-        $errors = $this->hasErrors();
-        if ($errors) {
+        if ($this->hasErrors()) {
             return $this->_errors[0]['message'];
         }
+    }
+
+    // }}}
+    // {{{ getMessages()
+
+    /**
+     * Gets an array of all messages.
+     *
+     * @return string
+     */
+    function getMessages()
+    {
+        $messages = array();
+        foreach ($this->_errors as $error) {
+            array_push($messages, $error['message']);
+        }
+
+        return $messages;
     }
 
     /**#@-*/
