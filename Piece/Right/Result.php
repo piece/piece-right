@@ -119,6 +119,22 @@ class Piece_Right_Result
         }
     }
 
+    // }}}
+    // {{{ getFirstErrorMessage()
+
+    /**
+     * Gets the message of the first error.
+     *
+     * @return string
+     */
+    function getFirstErrorMessage()
+    {
+        $errors = $this->hasErrors();
+        if ($errors) {
+            return $this->_errors[0]['message'];
+        }
+    }
+
     /**#@-*/
 
     /**#@+
