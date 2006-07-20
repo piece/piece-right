@@ -76,40 +76,28 @@ class Piece_Right_ValidationErrorTestCase extends PHPUnit_TestCase
      * @access public
      */
 
-    function testCheckingWhetherFieldHasErrors()
+    function testCheckingNumberOfErrors()
     {
         $error = &new Piece_Right_ValidationError();
-        $error->addError('Required', 'The field [ foo ] is required.');
+        $error->add('Required', 'The field [ foo ] is required.');
 
-        $this->assertTrue($error->hasErrors());
+        $this->assertTrue($error->countErrors());
 
         $error = &new Piece_Right_ValidationError();
 
-        $this->assertFalse($error->hasErrors());
+        $this->assertFalse($error->countErrors());
     }
 
-    function testGettingLastErrorMessage()
+    function testGettingMessage()
     {
         $message1 = 'The field [ foo ] is required.';
         $message2 = 'The field length must be greater than 5 characters.';
         $error = &new Piece_Right_ValidationError();
-        $error->addError('Required', $message1);
-        $error->addError('Length', $message2);
+        $error->add('Required', $message1);
+        $error->add('Length', $message2);
 
-        $this->assertTrue($error->hasErrors());
-        $this->assertEquals($message2, $error->getLastErrorMessage());
-    }
-
-    function testGettingFirstErrorMessage()
-    {
-        $message1 = 'The field [ foo ] is required.';
-        $message2 = 'The field length must be greater than 5 characters.';
-        $error = &new Piece_Right_ValidationError();
-        $error->addError('Required', $message1);
-        $error->addError('Length', $message2);
-
-        $this->assertTrue($error->hasErrors());
-        $this->assertEquals($message1, $error->getFirstErrorMessage());
+        $this->assertTrue($error->countErrors());
+        $this->assertEquals($message1, $error->getMessage());
     }
 
     /**#@-*/
