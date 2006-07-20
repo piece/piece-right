@@ -77,22 +77,22 @@ class Piece_Right_Config
     // {{{ addValidation()
 
     /**
-     * Adds a validation to a validation point with the given rules.
+     * Adds a validation to a field with the given rules.
      *
-     * @param string $validationPoint
+     * @param string $field
      * @param string $validator
      * @param array  $rules
      * @param string $message
      */
-    function addValidation($validationPoint, $validator, $rules = array(),
+    function addValidation($field, $validator, $rules = array(),
                            $message = null
                            )
     {
-        if (!array_key_exists($validationPoint, $this->_validationSet)) {
-            $this->_validationSet[$validationPoint] = array();
+        if (!array_key_exists($field, $this->_validationSet)) {
+            $this->_validationSet[$field] = array();
         }
 
-        array_push($this->_validationSet[$validationPoint],
+        array_push($this->_validationSet[$field],
                    array('validator' => $validator,
                          'rules'     => $rules,
                          'message'   => $message)
@@ -134,12 +134,12 @@ class Piece_Right_Config
      * method.
      *
      * @param string $validations
-     * @param string $validationPoint
+     * @param string $field
      */
-    function mergeValidations($validations, $validationPoint)
+    function mergeValidations($validations, $field)
     {
         foreach ($validations as $validation) {
-            $this->addValidation($validationPoint, $validation['validator'], $validation['rules']);
+            $this->addValidation($field, $validation['validator'], $validation['rules']);
         }
     }
 
