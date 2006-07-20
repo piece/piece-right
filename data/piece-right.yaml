@@ -21,3 +21,4 @@ sequence:
                 mapping:
                   =:
                     type: any
+              "message": { type: str, required: no }
