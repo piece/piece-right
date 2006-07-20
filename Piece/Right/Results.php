@@ -91,14 +91,14 @@ class Piece_Right_Results
     }
 
     // }}}
-    // {{{ hasErrors()
+    // {{{ countErrors()
 
     /**
      * Returns the number of the error fields.
      *
      * @return integer
      */
-    function hasErrors()
+    function countErrors()
     {
         return count($this->_errors);
     }
@@ -122,7 +122,7 @@ class Piece_Right_Results
             $this->_errors[$field] = &$error;
         }
 
-        $error->addError($validator, $message);
+        $error->add($validator, $message);
     }
 
     // }}}
@@ -164,7 +164,7 @@ class Piece_Right_Results
     function getErrorMessage($field)
     {
         if ($this->isError($field)) {
-            return $this->_errors[$field]->getFirstErrorMessage();
+            return $this->_errors[$field]->getMessage();
         }
     }
 
