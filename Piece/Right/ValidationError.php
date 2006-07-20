@@ -104,22 +104,6 @@ class Piece_Right_ValidationError
     }
 
     // }}}
-    // {{{ getLastErrorMessage()
-
-    /**
-     * Gets the message of the last error.
-     *
-     * @return string
-     */
-    function getLastErrorMessage()
-    {
-        $errors = $this->hasErrors();
-        if ($errors) {
-            return $this->_errors[$errors - 1]['message'];
-        }
-    }
-
-    // }}}
     // {{{ getFirstErrorMessage()
 
     /**
