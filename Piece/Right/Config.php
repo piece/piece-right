@@ -82,15 +82,20 @@ class Piece_Right_Config
      * @param string $validationPoint
      * @param string $validator
      * @param array  $rules
+     * @param string $message
      */
-    function addValidation($validationPoint, $validator, $rules = array())
+    function addValidation($validationPoint, $validator, $rules = array(),
+                           $message = null
+                           )
     {
         if (!array_key_exists($validationPoint, $this->_validationSet)) {
             $this->_validationSet[$validationPoint] = array();
         }
 
         array_push($this->_validationSet[$validationPoint],
-                   array('validator' => $validator, 'rules' => $rules)
+                   array('validator' => $validator,
+                         'rules'     => $rules,
+                         'message'   => $message)
                    );
     }
 
