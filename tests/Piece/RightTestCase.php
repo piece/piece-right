@@ -102,6 +102,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $_POST['first_name'] = 'Foo';
         $_POST['last_name'] = 'Bar';
         $_POST['phone'] = '0123456789';
+        $_POST['country'] = 'Japan';
         $dynamicConfig = &new Piece_Right_Config();
         $dynamicConfig->addValidation('phone', 'Required');
         $dynamicConfig->addValidation('phone', 'Length', array('min' => 10, 'max' => 11));
@@ -111,6 +112,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
 
         $this->assertTrue($right->validate('Example', $dynamicConfig));
 
+        unset($_POST['country']);
         unset($_POST['phone']);
         unset($_POST['last_name']);
         unset($_POST['first_name']);
@@ -123,6 +125,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $_POST['first_name'] = 'Foo';
         $_POST['last_name'] = 'Bar';
         $_POST['phone'] = '012345678';
+        $_POST['country'] = 'Japan';
         $dynamicConfig = &new Piece_Right_Config();
         $dynamicConfig->addValidation('phone', 'Required');
         $dynamicConfig->addValidation('phone', 'Length', array('min' => 10, 'max' => 11));
@@ -132,6 +135,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
 
         $this->assertFalse($right->validate('Example', $dynamicConfig));
 
+        unset($_POST['country']);
         unset($_POST['phone']);
         unset($_POST['last_name']);
         unset($_POST['first_name']);
