@@ -118,18 +118,18 @@ class Piece_Right
         $this->_results = &new Piece_Right_Results();
         $config = &$this->_configure($validationSetName, $dynamicConfig);
         $validationSet = $config->getValidationSet();
-        foreach ($validationSet as $validationPoint => $validations) {
-            $fieldValue = call_user_func($this->_fieldValuesCallback, $validationPoint);
+        foreach ($validationSet as $fieldName => $validations) {
+            $fieldValue = call_user_func($this->_fieldValuesCallback, $fieldName);
 
             foreach ($validations as $validation) {
                 $validator = &Piece_Right_Validator_Factory::factory($validation['validator']);
                 $validator->setRules($validation['rules']);
                 if (!$validator->validate($fieldValue)) {
-                    $this->_results->addError($validationPoint, $validation['validator'], $validation['message']);
+                    $this->_results->addError($fieldName, $validation['validator'], $validation['message']);
                 }
             }
 
-            $this->_results->setFieldValue($validationPoint, $fieldValue);
+            $this->_results->setFieldValue($fieldName, $fieldValue);
         }
 
         return !(boolean)$this->_results->hasErrors();
@@ -152,6 +152,19 @@ class Piece_Right
         }
 
         return @$_GET[$fieldName];
+    }
+
+    // }}}
+    // {{{ getResults()
+
+    /**
+     * Gets the Piece_Right_Results object for the current validation set.
+     *
+     * @return Piece_Right_Results
+     */
+    function &getResults()
+    {
+        return $this->_results;
     }
 
     /**#@-*/
