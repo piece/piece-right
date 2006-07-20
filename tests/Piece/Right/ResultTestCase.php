@@ -90,13 +90,26 @@ class Piece_Right_ResultTestCase extends PHPUnit_TestCase
 
     function testGettingLastErrorMessage()
     {
-        $message = 'The parameter length must be greater than 5 characters.';
+        $message1 = 'The parameter [ foo ] is required.';
+        $message2 = 'The parameter length must be greater than 5 characters.';
         $result = &new Piece_Right_Result();
-        $result->addError('Required', 'The parameter [ foo ] is required.');
-        $result->addError('Length', $message);
+        $result->addError('Required', $message1);
+        $result->addError('Length', $message2);
 
         $this->assertTrue($result->hasErrors());
-        $this->assertEquals($message, $result->getLastErrorMessage());
+        $this->assertEquals($message2, $result->getLastErrorMessage());
+    }
+
+    function testGettingFirstErrorMessage()
+    {
+        $message1 = 'The parameter [ foo ] is required.';
+        $message2 = 'The parameter length must be greater than 5 characters.';
+        $result = &new Piece_Right_Result();
+        $result->addError('Required', $message1);
+        $result->addError('Length', $message2);
+
+        $this->assertTrue($result->hasErrors());
+        $this->assertEquals($message1, $result->getFirstErrorMessage());
     }
 
     /**#@-*/
