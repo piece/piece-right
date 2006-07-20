@@ -79,7 +79,7 @@ class Piece_Right_ResultTestCase extends PHPUnit_TestCase
     function testCheckingWhetherFieldHasErrors()
     {
         $result = &new Piece_Right_Result();
-        $result->addError('Required', 'The parameter [ foo ] is required.');
+        $result->addError('Required', 'The field [ foo ] is required.');
 
         $this->assertTrue($result->hasErrors());
 
@@ -90,8 +90,8 @@ class Piece_Right_ResultTestCase extends PHPUnit_TestCase
 
     function testGettingLastErrorMessage()
     {
-        $message1 = 'The parameter [ foo ] is required.';
-        $message2 = 'The parameter length must be greater than 5 characters.';
+        $message1 = 'The field [ foo ] is required.';
+        $message2 = 'The field length must be greater than 5 characters.';
         $result = &new Piece_Right_Result();
         $result->addError('Required', $message1);
         $result->addError('Length', $message2);
@@ -102,8 +102,8 @@ class Piece_Right_ResultTestCase extends PHPUnit_TestCase
 
     function testGettingFirstErrorMessage()
     {
-        $message1 = 'The parameter [ foo ] is required.';
-        $message2 = 'The parameter length must be greater than 5 characters.';
+        $message1 = 'The field [ foo ] is required.';
+        $message2 = 'The field length must be greater than 5 characters.';
         $result = &new Piece_Right_Result();
         $result->addError('Required', $message1);
         $result->addError('Length', $message2);
