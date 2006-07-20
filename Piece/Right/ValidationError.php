@@ -37,7 +37,7 @@
  * @since      File available since Release 0.1.0
  */
 
-// {{{ Piece_Right_Result
+// {{{ Piece_Right_ValidationError
 
 /**
  * The holder of validation results.
@@ -50,7 +50,7 @@
  * @link       http://iteman.typepad.jp/piece/
  * @since      Class available since Release 0.1.0
  */
-class Piece_Right_Result
+class Piece_Right_ValidationError
 {
 
     // {{{ properties
