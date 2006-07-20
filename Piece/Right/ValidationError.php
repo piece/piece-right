@@ -74,7 +74,7 @@ class Piece_Right_ValidationError
      */
 
     // }}}
-    // {{{ addError()
+    // {{{ add()
 
     /**
      * Adds an error to the result.
@@ -82,7 +82,7 @@ class Piece_Right_ValidationError
      * @param string   $validator
      * @param string   $message
      */
-    function addError($validator, $message = null)
+    function add($validator, $message = null)
     {
         array_push($this->_errors,
                    array('validator' => $validator,
@@ -91,29 +91,29 @@ class Piece_Right_ValidationError
     }
 
     // }}}
-    // {{{ hasErrors()
+    // {{{ countErrors()
 
     /**
      * Returns the number of the errors.
      *
      * @return integer
      */
-    function hasErrors()
+    function countErrors()
     {
         return count($this->_errors);
     }
 
     // }}}
-    // {{{ getFirstErrorMessage()
+    // {{{ getMessage()
 
     /**
      * Gets the message of the first error.
      *
      * @return string
      */
-    function getFirstErrorMessage()
+    function getMessage()
     {
-        if ($this->hasErrors()) {
+        if ($this->countErrors()) {
             return $this->_errors[0]['message'];
         }
     }
