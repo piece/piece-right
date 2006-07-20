@@ -39,6 +39,7 @@
 
 require_once 'Piece/Right/Config/Factory.php';
 require_once 'Piece/Right/Validator/Factory.php';
+require_once 'Piece/Right/Results.php';
 
 // {{{ Piece_Right
 
@@ -69,7 +70,8 @@ class Piece_Right
 
     var $_configDirectory;
     var $_cacheDirectory;
-    var $_parameterValuesCallback;
+    var $_fieldValuesCallback;
+    var $_results;
 
     /**#@-*/
 
@@ -85,19 +87,19 @@ class Piece_Right
      *
      * @param string   $configDirectory
      * @param string   $cacheDirectory
-     * @param callback $parameterValuesCallback
+     * @param callback $fieldValuesCallback
      */
     function Piece_Right($configDirectory = null,
                          $cacheDirectory = null,
-                         $parameterValuesCallback = null
+                         $fieldValuesCallback = null
                          )
     {
         $this->_configDirectory = $configDirectory;
         $this->_cacheDirectory = $cacheDirectory;
-        if (is_callable($parameterValuesCallback)) {
-            $this->_parameterValuesCallback = $parameterValuesCallback;
+        if (is_callable($fieldValuesCallback)) {
+            $this->_fieldValuesCallback = $fieldValuesCallback;
         } else {
-            $this->_parameterValuesCallback = array(__CLASS__, 'getParameterValueFromSuperglobals');
+            $this->_fieldValuesCallback = array(__CLASS__, 'getFieldValueFromSuperglobals');
         }
     }
 
@@ -105,7 +107,7 @@ class Piece_Right
     // {{{ validate()
 
     /**
-     * Validates the current parameter values with the current validation set.
+     * Validates the current field values with the current validation set.
      *
      * @param string             $validationSetName
      * @param Piece_Right_Config $dynamicConfig
@@ -113,40 +115,43 @@ class Piece_Right
      */
     function validate($validationSetName = null, $dynamicConfig = null)
     {
-        $result = true;
+        $this->_results = &new Piece_Right_Results();
         $config = &$this->_configure($validationSetName, $dynamicConfig);
         $validationSet = $config->getValidationSet();
         foreach ($validationSet as $validationPoint => $validations) {
+            $fieldValue = call_user_func($this->_fieldValuesCallback, $validationPoint);
+
             foreach ($validations as $validation) {
                 $validator = &Piece_Right_Validator_Factory::factory($validation['validator']);
                 $validator->setRules($validation['rules']);
-                if (!$validator->validate(call_user_func($this->_parameterValuesCallback, $validationPoint))) {
-                    $result = false;
-                    continue;
+                if (!$validator->validate($fieldValue)) {
+                    $this->_results->addError($validationPoint, $validation['validator'], $validation['message']);
                 }
             }
+
+            $this->_results->setFieldValue($validationPoint, $fieldValue);
         }
 
-        return $result;
+        return !(boolean)$this->_results->hasErrors();
     }
 
     // }}}
-    // {{{ getParameterValueFromSuperglobals()
+    // {{{ getFieldValueFromSuperglobals()
 
     /**
-     * Gets the value of the given parameter name from PHP superglobals.
+     * Gets the value of the given field name from PHP superglobals.
      *
-     * @param string $parameterName
+     * @param string $fieldName
      * @return mixed
      * @static
      */
-    function getParameterValueFromSuperglobals($parameterName)
+    function getFieldValueFromSuperglobals($fieldName)
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            return @$_POST[$parameterName];
+            return @$_POST[$fieldName];
         }
 
-        return @$_GET[$parameterName];
+        return @$_GET[$fieldName];
     }
 
     /**#@-*/
