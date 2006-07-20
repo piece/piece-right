@@ -102,6 +102,18 @@ class Piece_Right_Validator_Range extends Piece_Right_Validator_Common
         return true;
     }
 
+    // }}}
+    // {{{ clear()
+
+    /**
+     * Clears the values of all properties.
+     */
+    function clear()
+    {
+        $this->_min = null;
+        $this->_max = null;
+    }
+
     /**#@-*/
 
     /**#@+

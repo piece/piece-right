@@ -112,6 +112,14 @@ class Piece_Right_Validator_Common
      */
     function validate($value) {}
 
+    // }}}
+    // {{{ clear()
+
+    /**
+     * Clears the values of all properties.
+     */
+    function clear() {}
+
     /**#@-*/
 
     /**#@+

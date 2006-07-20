@@ -93,6 +93,17 @@ class Piece_Right_Validator_Regex extends Piece_Right_Validator_Common
         return true;
     }
 
+    // }}}
+    // {{{ clear()
+
+    /**
+     * Clears the values of all properties.
+     */
+    function clear()
+    {
+        $this->_pattern = null;
+    }
+
     /**#@-*/
 
     /**#@+
