@@ -132,7 +132,7 @@ class Piece_Right
             $this->_results->setFieldValue($fieldName, $fieldValue);
         }
 
-        return !(boolean)$this->_results->hasErrors();
+        return !(boolean)$this->_results->countErrors();
     }
 
     // }}}
