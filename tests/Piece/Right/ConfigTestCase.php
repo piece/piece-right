@@ -100,19 +100,31 @@ class Piece_Right_ConfigTestCase extends PHPUnit_TestCase
         $this->_config->addValidation('last_name', 'Length', array('max' => 255));
         $validationSet = $this->_config->getValidationSet();
 
-        $this->assertTrue(is_array($validationSet));
-        $this->assertTrue(array_key_exists('first_name', $validationSet));
-        $this->assertTrue(array_key_exists('validator', $validationSet['first_name'][0]));
-        $this->assertTrue(array_key_exists('rules', $validationSet['first_name'][1]));
         $this->assertEquals('Required', $validationSet['first_name'][0]['validator']);
         $this->assertEquals('Length', $validationSet['first_name'][1]['validator']);
         $this->assertEquals(array('max' => 255), $validationSet['first_name'][1]['rules']);
-        $this->assertTrue(array_key_exists('last_name', $validationSet));
-        $this->assertTrue(array_key_exists('validator', $validationSet['last_name'][0]));
-        $this->assertTrue(array_key_exists('rules', $validationSet['last_name'][1]));
+
         $this->assertEquals('Required', $validationSet['last_name'][0]['validator']);
         $this->assertEquals('Length', $validationSet['last_name'][1]['validator']);
         $this->assertEquals(array('max' => 255), $validationSet['last_name'][1]['rules']);
+    }
+
+    function testAddingValidationsWithMessages()
+    {
+        $this->_config->addValidation('first_name', 'Required', null, 'foo');
+        $this->_config->addValidation('first_name', 'Length', array('max' => 255), 'bar');
+        $this->_config->addValidation('last_name', 'Required', null, 'baz');
+        $this->_config->addValidation('last_name', 'Length', array('max' => 255), 'qux');
+        $this->_config->addValidation('country', 'Required');
+        $this->_config->addValidation('country', 'Length', array('max' => 255));
+        $validationSet = $this->_config->getValidationSet();
+
+        $this->assertEquals('foo', $validationSet['first_name'][0]['message']);
+        $this->assertEquals('bar', $validationSet['first_name'][1]['message']);
+        $this->assertEquals('baz', $validationSet['last_name'][0]['message']);
+        $this->assertEquals('qux', $validationSet['last_name'][1]['message']);
+        $this->assertNull($validationSet['country'][0]['message']);
+        $this->assertNull($validationSet['country'][1]['message']);
     }
 
     /**#@-*/
