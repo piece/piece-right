@@ -34,17 +34,17 @@
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @link       http://iteman.typepad.jp/piece/
- * @see        Piece_Right_Result
+ * @see        Piece_Right_ValidationError
  * @since      File available since Release 0.1.0
  */
 
 require_once 'PHPUnit.php';
-require_once 'Piece/Right/Result.php';
+require_once 'Piece/Right/ValidationError.php';
 
-// {{{ Piece_Right_ResultTestCase
+// {{{ Piece_Right_ValidationErrorTestCase
 
 /**
- * TestCase for Piece_Right_Result
+ * TestCase for Piece_Right_ValidationError
  *
  * @package    Piece_Right
  * @author     KUBO Atsuhiro <iteman@users.sourceforge.net>
@@ -52,10 +52,10 @@ require_once 'Piece/Right/Result.php';
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @link       http://iteman.typepad.jp/piece/
- * @see        Piece_Right_Result
+ * @see        Piece_Right_ValidationError
  * @since      Class available since Release 0.1.0
  */
-class Piece_Right_ResultTestCase extends PHPUnit_TestCase
+class Piece_Right_ValidationErrorTestCase extends PHPUnit_TestCase
 {
 
     // {{{ properties
@@ -78,38 +78,38 @@ class Piece_Right_ResultTestCase extends PHPUnit_TestCase
 
     function testCheckingWhetherFieldHasErrors()
     {
-        $result = &new Piece_Right_Result();
-        $result->addError('Required', 'The field [ foo ] is required.');
+        $error = &new Piece_Right_ValidationError();
+        $error->addError('Required', 'The field [ foo ] is required.');
 
-        $this->assertTrue($result->hasErrors());
+        $this->assertTrue($error->hasErrors());
 
-        $result = &new Piece_Right_Result();
+        $error = &new Piece_Right_ValidationError();
 
-        $this->assertFalse($result->hasErrors());
+        $this->assertFalse($error->hasErrors());
     }
 
     function testGettingLastErrorMessage()
     {
         $message1 = 'The field [ foo ] is required.';
         $message2 = 'The field length must be greater than 5 characters.';
-        $result = &new Piece_Right_Result();
-        $result->addError('Required', $message1);
-        $result->addError('Length', $message2);
+        $error = &new Piece_Right_ValidationError();
+        $error->addError('Required', $message1);
+        $error->addError('Length', $message2);
 
-        $this->assertTrue($result->hasErrors());
-        $this->assertEquals($message2, $result->getLastErrorMessage());
+        $this->assertTrue($error->hasErrors());
+        $this->assertEquals($message2, $error->getLastErrorMessage());
     }
 
     function testGettingFirstErrorMessage()
     {
         $message1 = 'The field [ foo ] is required.';
         $message2 = 'The field length must be greater than 5 characters.';
-        $result = &new Piece_Right_Result();
-        $result->addError('Required', $message1);
-        $result->addError('Length', $message2);
+        $error = &new Piece_Right_ValidationError();
+        $error->addError('Required', $message1);
+        $error->addError('Length', $message2);
 
-        $this->assertTrue($result->hasErrors());
-        $this->assertEquals($message1, $result->getFirstErrorMessage());
+        $this->assertTrue($error->hasErrors());
+        $this->assertEquals($message1, $error->getFirstErrorMessage());
     }
 
     /**#@-*/
