@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
+<package version="1.0" packagerversion="1.4.9">
+ <name>Piece_Right</name>
+ <summary>A simple validation framework for PHP</summary>
+ <description>Piece_Right is a simple validation framework for PHP.
+The following is a list of features of Piece_Right.
+o Simple API
+o YAML based configuration
+o Dynamic configuration
+o Easy to extend with user defined validators
+ </description>
+ <maintainers>
+  <maintainer>
+   <user>iteman</user>
+   <name>KUBO Atsuhiro</name>
+   <email>iteman@users.sourceforge.net</email>
+   <role>lead</role>
+  </maintainer>
+  </maintainers>
+ <release>
+  <version>0.1.0</version>
+  <date>2006-07-20</date>
+  <license>BSD License (revised)</license>
+  <state>alpha</state>
+  <notes>The first alpha release of Piece_Right.
+  </notes>
+  <deps>
+   <dep type="php" rel="ge" version="4.3.0" optional="no"/>
+   <dep type="pkg" rel="ge" version="1.7.0" optional="no">Cache_Lite</dep>
+   <dep type="pkg" rel="ge" version="1.4.3" optional="no">PEAR</dep>
+   <dep type="pkg" rel="ge" version="0.3.0" optional="yes">Stagehand_TestRunner</dep>
+  </deps>
+  <filelist>
+   <dir name="/" baseinstalldir="/">
+    <dir name="data">
+     <file role="data" name="Example.yaml" install-as="Example.yaml">
+      <replace from="@package_version@" to="version" type="package-info"/>
+     </file>
+     <file role="data" name="piece-right.yaml" install-as="piece-right.yaml">
+      <replace from="@package_version@" to="version" type="package-info"/>
+     </file>
+    </dir> <!-- /data -->
+    <dir name="docs">
+     <file role="doc" name="LICENSE" install-as="LICENSE">
+      <replace from="@package_version@" to="version" type="package-info"/>
+     </file>
+    </dir> <!-- /docs -->
+    <dir name="Piece">
+     <dir name="Right">
+      <dir name="Config">
+       <file role="php" name="Factory.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+      </dir> <!-- /Piece/Right/Config -->
+      <dir name="Validator">
+       <file role="php" name="Common.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+       <file role="php" name="Factory.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+       <file role="php" name="Length.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+       <file role="php" name="Range.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+       <file role="php" name="Regex.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+       <file role="php" name="Required.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+      </dir> <!-- /Piece/Right/Validator -->
+      <file role="php" name="Config.php">
+       <replace from="@package_version@" to="version" type="package-info"/>
+      </file>
+      <file role="php" name="Error.php">
+       <replace from="@package_version@" to="version" type="package-info"/>
+      </file>
+      <file role="php" name="Results.php">
+       <replace from="@package_version@" to="version" type="package-info"/>
+      </file>
+      <file role="php" name="ValidationError.php">
+       <replace from="@package_version@" to="version" type="package-info"/>
+      </file>
+     </dir> <!-- /Piece/Right -->
+     <file role="php" name="Right.php">
+      <replace from="@package_version@" to="version" type="package-info"/>
+     </file>
+    </dir> <!-- /Piece -->
+    <dir name="tests">
+     <dir name="Piece">
+      <dir name="Right">
+       <dir name="Config">
+        <file role="test" name="FactoryTestCase.php" install-as="Piece/Right/Config/FactoryTestCase.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="TestRunner.php" install-as="Piece/Right/Config/TestRunner.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+       </dir> <!-- /tests/Piece/Right/Config -->
+       <dir name="Validator">
+        <file role="test" name="Bar.php" install-as="Piece/Right/Validator/Bar.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="FactoryTestCase.php" install-as="Piece/Right/Validator/FactoryTestCase.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="Foo.php" install-as="Piece/Right/Validator/Foo.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="Invalid.php" install-as="Piece/Right/Validator/Invalid.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="LengthTestCase.php" install-as="Piece/Right/Validator/LengthTestCase.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="RangeTestCase.php" install-as="Piece/Right/Validator/RangeTestCase.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="RegexTestCase.php" install-as="Piece/Right/Validator/RegexTestCase.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="RequiredTestCase.php" install-as="Piece/Right/Validator/RequiredTestCase.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="TestRunner.php" install-as="Piece/Right/Validator/TestRunner.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+       </dir> <!-- /tests/Piece/Right/Validator -->
+       <file role="test" name="ConfigTestCase.php" install-as="Piece/Right/ConfigTestCase.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+       <file role="test" name="TestRunner.php" install-as="Piece/Right/TestRunner.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+       <file role="test" name="ValidationErrorTestCase.php" install-as="Piece/Right/ValidationErrorTestCase.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+      </dir> <!-- /tests/Piece/Right -->
+      <file role="test" name="RightTestCase.php" install-as="Piece/RightTestCase.php">
+       <replace from="@package_version@" to="version" type="package-info"/>
+      </file>
+      <file role="test" name="TestRunner.php" install-as="Piece/TestRunner.php">
+       <replace from="@package_version@" to="version" type="package-info"/>
+      </file>
+     </dir> <!-- /tests/Piece -->
+     <file role="test" name="AllTestRunner.php" install-as="AllTestRunner.php">
+      <replace from="@package_version@" to="version" type="package-info"/>
+     </file>
+    </dir> <!-- /tests -->
+   </dir> <!-- / -->
+  </filelist>
+ </release>
+ <changelog>
+   <release>
+    <version>0.1.0</version>
+    <date>2006-07-20</date>
+    <license>BSD License (revised)</license>
+    <state>alpha</state>
+    <notes>The first alpha release of Piece_Right.
+    </notes>
+   </release>
+ </changelog>
+</package>
