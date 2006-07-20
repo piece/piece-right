@@ -159,7 +159,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
 
         $results = &$right->getResults();
 
-        $this->assertTrue($results->hasErrors());
+        $this->assertEquals(1, $results->countErrors());
         $this->assertEquals(array('first_name'), $results->getErrorFields());
         $this->assertTrue($results->isError('first_name'));
         $this->assertFalse($results->isError('last_name'));
