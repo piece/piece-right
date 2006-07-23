@@ -41,9 +41,14 @@ require_once 'PEAR/PackageFileManager2.php';
 
 PEAR::staticPushErrorHandling(PEAR_ERROR_CALLBACK, create_function('$error', 'var_dump($error); exit();'));
 
-$version = '0.1.0';
+$version = '0.2.0';
 $apiVersion = '0.1.0';
-$notes = 'The first alpha release of Piece_Right.';
+$notes = 'This release includes one enhancement as follows:
+
+<<< Enhancements >>>
+
+* Piece_Right_Results
+- Added getFieldValue() method for getting the value of a field.';
 
 $package = new PEAR_PackageFileManager2();
 $package->setOptions(array('filelistgenerator' => 'svn',

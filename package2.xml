@@ -18,10 +18,10 @@ o Easy to extend with user defined validators</description>
   <email>iteman@users.sourceforge.net</email>
   <active>yes</active>
  </lead>
- <date>2006-07-20</date>
- <time>16:55:35</time>
+ <date>2006-07-23</date>
+ <time>05:39:35</time>
  <version>
-  <release>0.1.0</release>
+  <release>0.2.0</release>
   <api>0.1.0</api>
  </version>
  <stability>
@@ -29,7 +29,12 @@ o Easy to extend with user defined validators</description>
   <api>alpha</api>
  </stability>
  <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
- <notes>The first alpha release of Piece_Right.</notes>
+ <notes>This release includes one enhancement as follows:
+
+&lt;&lt;&lt; Enhancements &gt;&gt;&gt;
+
+* Piece_Right_Results
+- Added getFieldValue() method for getting the value of a field.</notes>
  <contents>
   <dir baseinstalldir="/" name="/">
    <dir name="data">
@@ -204,6 +209,24 @@ o Easy to extend with user defined validators</description>
   </filelist>
  </phprelease>
  <changelog>
+  <release>
+   <version>
+    <release>0.2.0</release>
+    <api>0.1.0</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2006-07-23</date>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
+   <notes>This release includes one enhancement as follows:
+
+&lt;&lt;&lt; Enhancements &gt;&gt;&gt;
+
+* Piece_Right_Results
+- Added getFieldValue() method for getting the value of a field.</notes>
+  </release>
   <release>
    <version>
     <release>0.1.0</release>

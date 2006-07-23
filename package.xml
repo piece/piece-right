@@ -19,11 +19,16 @@ o Easy to extend with user defined validators
   </maintainer>
   </maintainers>
  <release>
-  <version>0.1.0</version>
-  <date>2006-07-20</date>
+  <version>0.2.0</version>
+  <date>2006-07-23</date>
   <license>BSD License (revised)</license>
   <state>alpha</state>
-  <notes>The first alpha release of Piece_Right.
+  <notes>This release includes one enhancement as follows:
+
+&lt;&lt;&lt; Enhancements &gt;&gt;&gt;
+
+* Piece_Right_Results
+- Added getFieldValue() method for getting the value of a field.
   </notes>
   <deps>
    <dep type="php" rel="ge" version="4.3.0" optional="no"/>
@@ -155,6 +160,19 @@ o Easy to extend with user defined validators
   </filelist>
  </release>
  <changelog>
+   <release>
+    <version>0.2.0</version>
+    <date>2006-07-23</date>
+    <license>BSD License (revised)</license>
+    <state>alpha</state>
+    <notes>This release includes one enhancement as follows:
+
+&lt;&lt;&lt; Enhancements &gt;&gt;&gt;
+
+* Piece_Right_Results
+- Added getFieldValue() method for getting the value of a field.
+    </notes>
+   </release>
    <release>
     <version>0.1.0</version>
     <date>2006-07-20</date>
