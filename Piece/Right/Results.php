@@ -184,6 +184,21 @@ class Piece_Right_Results
         }
     }
 
+    // }}}
+    // {{{ getFieldValue()
+
+    /**
+     * Gets the value of a field.
+     *
+     * @param string $name
+     * @return string
+     * @since Method available since Release 0.2.0
+     */
+    function getFieldValue($name)
+    {
+        return $this->_fieldValues[$name];
+    }
+
     /**#@-*/
 
     /**#@+
