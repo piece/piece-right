@@ -113,23 +113,22 @@ class Piece_Right_Config_FactoryTestCase extends PHPUnit_TestCase
         $validationSet = $config->getValidationSet();
 
         $this->assertTrue(is_array($validationSet));
-        $this->assertEquals('Required', $validationSet['first_name'][0]['validator']);
-        $this->assertEquals('Length', $validationSet['first_name'][1]['validator']);
-        $this->assertEquals(array('min' => 1, 'max' => 255), $validationSet['first_name'][1]['rules']);
-        $this->assertEquals('foo', $validationSet['first_name'][0]['message']);
-        $this->assertEquals('bar', $validationSet['first_name'][1]['message']);
+        $this->assertTrue($config->isRequired('first_name'));
+        $this->assertEquals('Length', $validationSet['first_name'][0]['validator']);
+        $this->assertEquals(array('min' => 1, 'max' => 255), $validationSet['first_name'][0]['rules']);
+        $this->assertEquals('foo', $config->getRequiredMessage('first_name'));
+        $this->assertEquals('bar', $validationSet['first_name'][0]['message']);
 
-        $this->assertEquals('Required', $validationSet['last_name'][0]['validator']);
-        $this->assertEquals('Length', $validationSet['last_name'][1]['validator']);
-        $this->assertEquals(array('min' => 1, 'max' => 255), $validationSet['last_name'][1]['rules']);
-        $this->assertEquals('foo', $validationSet['last_name'][0]['message']);
-        $this->assertEquals('bar', $validationSet['last_name'][1]['message']);
+        $this->assertTrue($config->isRequired('last_name'));
+        $this->assertEquals('Length', $validationSet['last_name'][0]['validator']);
+        $this->assertEquals(array('min' => 1, 'max' => 255), $validationSet['last_name'][0]['rules']);
+        $this->assertEquals('baz', $config->getRequiredMessage('last_name'));
+        $this->assertEquals('bar', $validationSet['last_name'][0]['message']);
 
-        $this->assertEquals('Required', $validationSet['country'][0]['validator']);
-        $this->assertEquals('Length', $validationSet['country'][1]['validator']);
-        $this->assertEquals(array('min' => 1, 'max' => 255), $validationSet['country'][1]['rules']);
+        $this->assertFalse($config->isRequired('country'));
+        $this->assertEquals('Length', $validationSet['country'][0]['validator']);
+        $this->assertEquals(array('min' => 1, 'max' => 255), $validationSet['country'][0]['rules']);
         $this->assertNull($validationSet['country'][0]['message']);
-        $this->assertNull($validationSet['country'][1]['message']);
     }
 
     function testCreatingIfConfigurationDirectoryNotFound()
