@@ -244,6 +244,10 @@ class Piece_Right_Config_Factory
         $config = &new Piece_Right_Config();
         $yaml = Spyc::YAMLLoad($file);
         foreach ($yaml as $validation) {
+            if (array_key_exists('required', $validation)) {
+                $config->setRequired($validation['name'], @$validation['required']['message']);
+            }
+
             foreach ($validation['validator'] as $validator) {
                 $config->addValidation($validation['name'],
                                        $validator['name'],
