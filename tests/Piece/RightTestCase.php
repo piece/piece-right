@@ -149,7 +149,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $_POST['phone'] = '0123456789';
         $_POST['country'] = 'Japan';
         $dynamicConfig = &new Piece_Right_Config();
-        $dynamicConfig->addValidation('phone', 'Required');
+        $dynamicConfig->setRequired('phone');
         $dynamicConfig->addValidation('phone', 'Length', array('min' => 10, 'max' => 11));
         $right = &new Piece_Right(dirname(__FILE__) . '/../../data',
                                   dirname(__FILE__)
