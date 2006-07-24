@@ -162,16 +162,28 @@ class Piece_Right_Config
      * Sets a field as required.
      *
      * @param string $field
-     * @param string $message
+     * @param array  $elements
      * @since Method available since Release 0.3.0
      */
-    function setRequired($field, $message = null)
+    function setRequired($field, $elements = array())
     {
         if (!array_key_exists($field, $this->_validationSet)) {
             $this->_validationSet[$field] = array();
         }
 
-        $this->_requiredFields[$field]['message'] = $message;
+        if (!array_key_exists($field, $this->_requiredFields)) {
+            $this->_requiredFields[$field] = array('enabled' => true,
+                                                   'message' => null
+                                                   );
+        }
+
+        if (array_key_exists('enabled', $elements)) {
+            $this->_requiredFields[$field]['enabled'] = $elements['enabled'];
+        }
+
+        if (array_key_exists('message', $elements)) {
+            $this->_requiredFields[$field]['message'] = $elements['message'];
+        }
     }
 
     // }}}
@@ -185,7 +197,7 @@ class Piece_Right_Config
      */
     function isRequired($field)
     {
-        return array_key_exists($field, $this->_requiredFields);
+        return array_key_exists($field, $this->_requiredFields) && $this->_requiredFields[$field]['enabled'];
     }
 
     // }}}
@@ -264,7 +276,7 @@ class Piece_Right_Config
      */
     function mergeRequiredField($elements, $field)
     {
-        $this->setRequired($field, $elements['message']);
+        $this->setRequired($field, $elements);
     }
 
     // }}}
@@ -356,7 +368,7 @@ class Piece_Right_Config
      */
     function getWatcher($field)
     {
-        return array_key_exists($field, $this->_watchers) ? $this->_watchers[$field] : array('target' => array());
+        return array_key_exists($field, $this->_watchers) ? $this->_watchers[$field] : null;
     }
 
     /**#@-*/
