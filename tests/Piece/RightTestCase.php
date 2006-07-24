@@ -262,6 +262,33 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         unset($_SERVER['REQUEST_METHOD']);
     }
 
+    /**
+     * @since Method available since Release 0.3.0
+     */
+    function testWatchingFields()
+    {
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST['first_name'] = 'Foo';
+        $_POST['last_name'] = 'Bar';
+        $_POST['country'] = 'Japan';
+        $_POST['birthdayMonth'] = '1';
+        $right = &new Piece_Right(dirname(__FILE__) . '/../../data',
+                                  dirname(__FILE__)
+                                  );
+
+        $this->assertFalse($right->validate('Example'));
+
+        $results = &$right->getResults();
+
+        $this->assertEquals(2, $results->countErrors());
+
+        unset($_POST['birthdayMonth']);
+        unset($_POST['country']);
+        unset($_POST['last_name']);
+        unset($_POST['first_name']);
+        unset($_SERVER['REQUEST_METHOD']);
+    }
+
     /**#@-*/
 
     /**#@+
