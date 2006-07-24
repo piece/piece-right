@@ -25,6 +25,8 @@
     target:
       - birthdayMonth
       - birthdayDay
+    turnOff:
+      - age
   validator:
     - name: Regex
       rule:
