@@ -12,6 +12,11 @@ sequence:
         required: no
         mapping:
           "message": { type: str, required: no }
+      "filter":
+        type: seq
+        required: no
+        sequence:
+          - type: str
       "validator":
         type: seq
         required: no
