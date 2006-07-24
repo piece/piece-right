@@ -68,6 +68,7 @@ class Piece_Right_Config
     var $_requiredFields = array();
     var $_validationSet = array();
     var $_filters = array();
+    var $_watchers = array();
 
     /**#@-*/
 
@@ -128,10 +129,13 @@ class Piece_Right_Config
         array_walk($validationSet, array(&$this, 'mergeValidations'));
 
         $requiredFields = $config->getRequiredFields();
-        array_walk($requiredFields, array(&$this, 'mergeRequiredFields'));
+        array_walk($requiredFields, array(&$this, 'mergeRequiredField'));
 
         $filters = $config->getFilters();
         array_walk($filters, array(&$this, 'mergeFilters'));
+
+        $watchers = $config->getWatchers();
+        array_walk($watchers, array(&$this, 'mergeWatcher'));
     }
 
     // }}}
@@ -248,7 +252,7 @@ class Piece_Right_Config
     }
 
     // }}}
-    // {{{ mergeRequiredFields()
+    // {{{ mergeRequiredField()
 
     /**
      * A callback that will be called by array_walk() function in merge()
@@ -258,7 +262,7 @@ class Piece_Right_Config
      * @param string $field
      * @since Method available since Release 0.3.0
      */
-    function mergeRequiredFields($elements, $field)
+    function mergeRequiredField($elements, $field)
     {
         $this->setRequired($field, $elements['message']);
     }
@@ -293,6 +297,66 @@ class Piece_Right_Config
     function getFilters()
     {
         return $this->_filters;
+    }
+
+    // }}}
+    // {{{ setWatcher()
+
+    /**
+     * Sets the watcher to the given field.
+     *
+     * @param string $field
+     * @param array  $watcher
+     * @since Method available since Release 0.3.0
+     */
+    function setWatcher($field, $watcher)
+    {
+        $this->_watchers[$field] = $watcher;
+    }
+
+    // }}}
+    // {{{ getWatchers()
+
+    /**
+     * Gets the watchers for the current configuration.
+     *
+     * @return array
+     * @since Method available since Release 0.3.0
+     */
+    function getWatchers()
+    {
+        return $this->_watchers;
+    }
+
+    // }}}
+    // {{{ mergeWatcher()
+
+    /**
+     * A callback that will be called by array_walk() function in merge()
+     * method.
+     *
+     * @param array $watcher
+     * @param string $field
+     * @since Method available since Release 0.3.0
+     */
+    function mergeWatcher($watcher, $field)
+    {
+        $this->_watchers[$field] = $watcher;
+    }
+
+    // }}}
+    // {{{ getWatcher()
+
+    /**
+     * Gets the watcher for the given field.
+     *
+     * @param string $field
+     * @return array
+     * @since Method available since Release 0.3.0
+     */
+    function getWatcher($field)
+    {
+        return array_key_exists($field, $this->_watchers) ? $this->_watchers[$field] : array('target' => array());
     }
 
     /**#@-*/
