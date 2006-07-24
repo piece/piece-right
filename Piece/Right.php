@@ -132,6 +132,43 @@ class Piece_Right
             }
 
             $this->_results->setFieldValue($fieldName, $fieldValue);
+        }
+
+        foreach ($validationSet as $fieldName => $validations) {
+            $fieldValue = $this->_results->getFieldValue($fieldName);
+
+            $watcher = $config->getWatcher($fieldName);
+            if (!is_null($watcher)) {
+                if (!in_array($fieldName, $watcher['target'])) {
+                    array_push($watcher['target'], $fieldName);
+                }
+                if (!array_key_exists('turnOn', $watcher)) {
+                    $watcher['turnOn'] = $watcher['target'];
+                }
+                if (!in_array($fieldName, $watcher['turnOn'])) {
+                    array_push($watcher['turnOn'], $fieldName);
+                }
+
+                $turnOnFields = array();
+                foreach ($watcher['target'] as $targetName) {
+                    $targetValue = $this->_results->getFieldValue($targetName);
+                    if (!is_null($targetValue) && strlen($targetValue)) {
+                        foreach ($watcher['turnOn'] as $turnOnFieldName) {
+                            array_push($turnOnFields, $turnOnFieldName);
+                        }
+                    }
+                }
+
+                foreach ($turnOnFields as $turnOnFieldName) {
+                    $config->setRequired($turnOnFieldName);
+                }
+
+                if (array_key_exists('turnOff', $watcher)) {
+                    foreach ($watcher['turnOff'] as $turnOffFieldName) {
+                        $config->setRequired($turnOffFieldName, array('enabled' => false));
+                    }
+                }
+            }
 
             if ($config->isRequired($fieldName)) {
                 if ((is_null($fieldValue) || !strlen($fieldValue))) {
