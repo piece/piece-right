@@ -7,6 +7,11 @@ sequence:
     required: yes
     mapping:
       "name": { type: str, required: yes }
+      "required":
+        type: map
+        required: no
+        mapping:
+          "message": { type: str, required: no }
       "validator":
         type: seq
         required: no
