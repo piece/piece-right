@@ -111,9 +111,9 @@ class Piece_Right_ConfigTestCase extends PHPUnit_TestCase
 
     function testAddingValidationsWithMessages()
     {
-        $this->_config->setRequired('first_name', 'foo');
+        $this->_config->setRequired('first_name', array('message' => 'foo'));
         $this->_config->addValidation('first_name', 'Length', array('max' => 255), 'bar');
-        $this->_config->setRequired('last_name', 'baz');
+        $this->_config->setRequired('last_name', array('message' => 'baz'));
         $this->_config->addValidation('last_name', 'Length', array('max' => 255), 'qux');
         $this->_config->setRequired('country');
         $this->_config->addValidation('country', 'Length', array('max' => 255));
