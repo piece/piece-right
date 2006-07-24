@@ -12,6 +12,7 @@ sequence:
         required: no
         mapping:
           "message": { type: str, required: no }
+          "enabled": { type: bool, required: no }
       "filter":
         type: seq
         required: no
