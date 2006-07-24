@@ -121,6 +121,16 @@ class Piece_Right
 
         foreach ($validationSet as $fieldName => $validations) {
             $fieldValue = call_user_func($this->_fieldValuesCallback, $fieldName);
+            $filters = $config->getFiltersByFieldName($fieldName);
+            foreach ($filters as $filterName) {
+                if (!function_exists($filterName)) {
+                    $filter = &Piece_Right_Filter_Factory::factory($filterName);
+                    $fieldValue = $filter->filter($fieldValue);
+                } else {
+                    $fieldValue = call_user_func($filterName, $fieldValue);
+                }
+            }
+
             $this->_results->setFieldValue($fieldName, $fieldValue);
 
             if ($config->isRequired($fieldName)) {
