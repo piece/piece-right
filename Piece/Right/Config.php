@@ -67,6 +67,7 @@ class Piece_Right_Config
 
     var $_requiredFields = array();
     var $_validationSet = array();
+    var $_filters = array();
 
     /**#@-*/
 
@@ -125,16 +126,22 @@ class Piece_Right_Config
     {
         $validationSet = $config->getValidationSet();
         array_walk($validationSet, array(&$this, 'mergeValidations'));
+
+        $requiredFields = $config->getRequiredFields();
+        array_walk($requiredFields, array(&$this, 'mergeRequiredFields'));
+
+        $filters = $config->getFilters();
+        array_walk($filters, array(&$this, 'mergeFilters'));
     }
 
     // }}}
-    // {{{ mergeExtensions()
+    // {{{ mergeValidations()
 
     /**
      * A callback that will be called by array_walk() function in merge()
      * method.
      *
-     * @param string $validations
+     * @param array $validations
      * @param string $field
      */
     function mergeValidations($validations, $field)
@@ -190,6 +197,102 @@ class Piece_Right_Config
     function getRequiredMessage($field)
     {
         return $this->_requiredFields[$field]['message'];
+    }
+
+    // }}}
+    // {{{ addFilter()
+
+    /**
+     * Adds a filter to a field.
+     *
+     * @param string $field
+     * @param string $filter
+     * @since Method available since Release 0.3.0
+     */
+    function addFilter($field, $filter)
+    {
+        if (!array_key_exists($field, $this->_filters)) {
+            $this->_filters[$field] = array();
+        }
+
+        array_push($this->_filters[$field], $filter);
+    }
+
+    // }}}
+    // {{{ getFiltersByFieldName()
+
+    /**
+     * Gets the filters for the given field.
+     *
+     * @param string $field
+     * @return array
+     * @since Method available since Release 0.3.0
+     */
+    function getFiltersByFieldName($field)
+    {
+        return array_key_exists($field, $this->_filters) ? $this->_filters[$field] : array();
+    }
+
+    // }}}
+    // {{{ getRequiredFields()
+
+    /**
+     * Gets the elements of the required fields as an array.
+     *
+     * @return array
+     * @since Method available since Release 0.3.0
+     */
+    function getRequiredFields()
+    {
+        return $this->_requiredFields;
+    }
+
+    // }}}
+    // {{{ mergeRequiredFields()
+
+    /**
+     * A callback that will be called by array_walk() function in merge()
+     * method.
+     *
+     * @param array $elements
+     * @param string $field
+     * @since Method available since Release 0.3.0
+     */
+    function mergeRequiredFields($elements, $field)
+    {
+        $this->setRequired($field, $elements['message']);
+    }
+
+    // }}}
+    // {{{ mergeFilters()
+
+    /**
+     * A callback that will be called by array_walk() function in merge()
+     * method.
+     *
+     * @param array $filters
+     * @param string $field
+     * @since Method available since Release 0.3.0
+     */
+    function mergeFilters($filters, $field)
+    {
+        foreach ($filters as $filter) {
+            $this->addFilter($field, $filter);
+        }
+    }
+
+    // }}}
+    // {{{ getFilters()
+
+    /**
+     * Gets the all filters for the current configuration.
+     *
+     * @return array
+     * @since Method available since Release 0.3.0
+     */
+    function getFilters()
+    {
+        return $this->_filters;
     }
 
     /**#@-*/
