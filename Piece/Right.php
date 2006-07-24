@@ -118,8 +118,21 @@ class Piece_Right
         $this->_results = &new Piece_Right_Results();
         $config = &$this->_configure($validationSetName, $dynamicConfig);
         $validationSet = $config->getValidationSet();
+
         foreach ($validationSet as $fieldName => $validations) {
             $fieldValue = call_user_func($this->_fieldValuesCallback, $fieldName);
+            $this->_results->setFieldValue($fieldName, $fieldValue);
+
+            if ($config->isRequired($fieldName)) {
+                if ((is_null($fieldValue) || !strlen($fieldValue))) {
+                    $this->_results->addError($fieldName, 'required', $config->getRequiredMessage($fieldName));
+                    continue;
+                }
+            } else {
+                if ((is_null($fieldValue) || !strlen($fieldValue))) {
+                    continue;
+                }
+            }
 
             foreach ($validations as $validation) {
                 $validator = &Piece_Right_Validator_Factory::factory($validation['validator']);
@@ -128,8 +141,6 @@ class Piece_Right
                     $this->_results->addError($fieldName, $validation['validator'], $validation['message']);
                 }
             }
-
-            $this->_results->setFieldValue($fieldName, $fieldValue);
         }
 
         return !(boolean)$this->_results->countErrors();
