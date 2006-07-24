@@ -269,6 +269,17 @@ class Piece_Right_Config_Factory
                                            );
                 }
             }
+
+            if (array_key_exists('watcher', $validation)
+                && is_array($validation['watcher'])
+                ) {
+                if (!array_key_exists('turnOn', $validation['watcher'])) {
+                    $validation['watcher']['turnOn'] = $validation['watcher']['target'];
+                    array_push($validation['watcher']['turnOn'], $validation['name']);
+                }
+
+                $config->setWatcher($validation['name'], $validation['watcher']);
+            }
         }
 
         return $config;
