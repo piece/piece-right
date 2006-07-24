@@ -2,6 +2,8 @@
 - name: first_name
   required:
     message: foo
+  filter:
+     - trim
   validator: &name
     - name: Length
       rule:
