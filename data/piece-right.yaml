@@ -32,3 +32,22 @@ sequence:
                   =:
                     type: any
               "message": { type: str, required: no }
+      "watcher":
+        type: map
+        required: no
+        mapping:
+          "target":
+            type: seq
+            required: yes
+            sequence:
+            - type: str
+          "turnOn":
+            type: seq
+            required: no
+            sequence:
+            - type: str
+          "turnOff":
+            type: seq
+            required: no
+            sequence:
+            - type: str
