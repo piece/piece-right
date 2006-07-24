@@ -104,7 +104,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $_POST['phone'] = '0123456789';
         $_POST['country'] = 'Japan';
         $dynamicConfig = &new Piece_Right_Config();
-        $dynamicConfig->addValidation('phone', 'Required');
+        $dynamicConfig->setRequired('phone');
         $dynamicConfig->addValidation('phone', 'Length', array('min' => 10, 'max' => 11));
         $right = &new Piece_Right(dirname(__FILE__) . '/../../data',
                                   dirname(__FILE__)
@@ -127,7 +127,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $_POST['phone'] = '012345678';
         $_POST['country'] = 'Japan';
         $dynamicConfig = &new Piece_Right_Config();
-        $dynamicConfig->addValidation('phone', 'Required');
+        $dynamicConfig->setRequired('phone');
         $dynamicConfig->addValidation('phone', 'Length', array('min' => 10, 'max' => 11));
         $right = &new Piece_Right(dirname(__FILE__) . '/../../data',
                                   dirname(__FILE__)
@@ -166,13 +166,32 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $this->assertFalse($results->isError('phone'));
         $this->assertFalse($results->isError('country'));
         $this->assertEquals('foo', $results->getErrorMessage('first_name'));
-        $this->assertEquals(array('foo', 'bar'),
-                            $results->getErrorMessages('first_name')
-                            );
+        $this->assertEquals(array('foo'), $results->getErrorMessages('first_name'));
 
         unset($_POST['country']);
         unset($_POST['phone']);
         unset($_POST['last_name']);
+        unset($_SERVER['REQUEST_METHOD']);
+    }
+
+    function testFieldIsNotRequired()
+    {
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST['bar'] = 'baz';
+        $dynamicConfig = &new Piece_Right_Config();
+        $dynamicConfig->addValidation('foo', 'Length', array('min' => 5));
+        $dynamicConfig->addValidation('bar', 'Length', array('min' => 5));
+        $right = &new Piece_Right();
+
+        $this->assertFalse($right->validate('Example', $dynamicConfig));
+
+        $results = &$right->getResults();
+
+        $this->assertEquals(1, $results->countErrors());
+        $this->assertFalse($results->isError('foo'));
+        $this->assertTrue($results->isError('bar'));
+
+        unset($_POST['baz']);
         unset($_SERVER['REQUEST_METHOD']);
     }
 
