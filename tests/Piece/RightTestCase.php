@@ -267,26 +267,9 @@ class Piece_RightTestCase extends PHPUnit_TestCase
      */
     function testWatchingFields()
     {
-        $_SERVER['REQUEST_METHOD'] = 'POST';
-        $_POST['first_name'] = 'Foo';
-        $_POST['last_name'] = 'Bar';
-        $_POST['country'] = 'Japan';
-        $_POST['birthdayMonth'] = '1';
-        $right = &new Piece_Right(dirname(__FILE__) . '/../../data',
-                                  dirname(__FILE__)
-                                  );
-
-        $this->assertFalse($right->validate('Example'));
-
-        $results = &$right->getResults();
-
-        $this->assertEquals(2, $results->countErrors());
-
-        unset($_POST['birthdayMonth']);
-        unset($_POST['country']);
-        unset($_POST['last_name']);
-        unset($_POST['first_name']);
-        unset($_SERVER['REQUEST_METHOD']);
+        $this->_assertWatchingFields('birthdayMonth', '1');
+        $this->_assertWatchingFields('birthdayDay', '20');
+        $this->_assertWatchingFields('birthdayYear', '1976');
     }
 
     /**#@-*/
@@ -294,6 +277,43 @@ class Piece_RightTestCase extends PHPUnit_TestCase
     /**#@+
      * @access private
      */
+
+    function _assertWatchingFields($name, $value)
+    {
+        $fields = array('birthdayYear' => true,
+                        'birthdayMonth' => true,
+                        'birthdayDay' => true
+                        );
+        unset($fields[$name]);
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST['first_name'] = 'Foo';
+        $_POST['last_name'] = 'Bar';
+        $_POST['country'] = 'Japan';
+        $_POST[$name] = $value;
+        
+        $dynamicConfig = &new Piece_Right_Config();
+        $dynamicConfig->setRequired('age');
+        $right = &new Piece_Right(dirname(__FILE__) . '/../../data',
+                                  dirname(__FILE__)
+                                  );
+
+        $this->assertFalse($right->validate('Example', $dynamicConfig));
+
+        $results = &$right->getResults();
+
+        $this->assertEquals(2, $results->countErrors());
+
+        $errorFields = $results->getErrorFields();
+        foreach (array_keys($fields) as $field) {
+            $this->assertTrue(in_array($field, $errorFields));
+        }
+
+        unset($_POST[$name]);
+        unset($_POST['country']);
+        unset($_POST['last_name']);
+        unset($_POST['first_name']);
+        unset($_SERVER['REQUEST_METHOD']);
+    }
 
     /**#@-*/
 
