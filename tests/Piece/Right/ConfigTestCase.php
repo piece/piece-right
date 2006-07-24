@@ -94,37 +94,47 @@ class Piece_Right_ConfigTestCase extends PHPUnit_TestCase
 
     function testAddingValidations()
     {
-        $this->_config->addValidation('first_name', 'Required');
+        $this->_config->setRequired('first_name');
         $this->_config->addValidation('first_name', 'Length', array('max' => 255));
-        $this->_config->addValidation('last_name', 'Required');
+        $this->_config->setRequired('last_name');
         $this->_config->addValidation('last_name', 'Length', array('max' => 255));
         $validationSet = $this->_config->getValidationSet();
 
-        $this->assertEquals('Required', $validationSet['first_name'][0]['validator']);
-        $this->assertEquals('Length', $validationSet['first_name'][1]['validator']);
-        $this->assertEquals(array('max' => 255), $validationSet['first_name'][1]['rules']);
+        $this->assertTrue($this->_config->isRequired('first_name'));
+        $this->assertEquals('Length', $validationSet['first_name'][0]['validator']);
+        $this->assertEquals(array('max' => 255), $validationSet['first_name'][0]['rules']);
 
-        $this->assertEquals('Required', $validationSet['last_name'][0]['validator']);
-        $this->assertEquals('Length', $validationSet['last_name'][1]['validator']);
-        $this->assertEquals(array('max' => 255), $validationSet['last_name'][1]['rules']);
+        $this->assertTrue($this->_config->isRequired('last_name'));
+        $this->assertEquals('Length', $validationSet['last_name'][0]['validator']);
+        $this->assertEquals(array('max' => 255), $validationSet['last_name'][0]['rules']);
     }
 
     function testAddingValidationsWithMessages()
     {
-        $this->_config->addValidation('first_name', 'Required', null, 'foo');
+        $this->_config->setRequired('first_name', 'foo');
         $this->_config->addValidation('first_name', 'Length', array('max' => 255), 'bar');
-        $this->_config->addValidation('last_name', 'Required', null, 'baz');
+        $this->_config->setRequired('last_name', 'baz');
         $this->_config->addValidation('last_name', 'Length', array('max' => 255), 'qux');
-        $this->_config->addValidation('country', 'Required');
+        $this->_config->setRequired('country');
         $this->_config->addValidation('country', 'Length', array('max' => 255));
         $validationSet = $this->_config->getValidationSet();
 
-        $this->assertEquals('foo', $validationSet['first_name'][0]['message']);
-        $this->assertEquals('bar', $validationSet['first_name'][1]['message']);
-        $this->assertEquals('baz', $validationSet['last_name'][0]['message']);
-        $this->assertEquals('qux', $validationSet['last_name'][1]['message']);
+        $this->assertEquals('foo', $this->_config->getRequiredMessage('first_name'));
+        $this->assertEquals('bar', $validationSet['first_name'][0]['message']);
+        $this->assertEquals('baz', $this->_config->getRequiredMessage('last_name'));
+        $this->assertEquals('qux', $validationSet['last_name'][0]['message']);
+        $this->assertNull($this->_config->getRequiredMessage('country'));
         $this->assertNull($validationSet['country'][0]['message']);
-        $this->assertNull($validationSet['country'][1]['message']);
+    }
+
+    function testGettingFiledNames()
+    {
+        $this->_config->setRequired('foo');
+        $this->_config->setRequired('bar');
+        $this->_config->addValidation('bar', 'Length', array('max' => 255));
+        $validationSet = $this->_config->getValidationSet();
+
+        $this->assertEquals(array('foo', 'bar'), array_keys($validationSet));
     }
 
     /**#@-*/
