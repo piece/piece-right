@@ -174,6 +174,9 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         unset($_SERVER['REQUEST_METHOD']);
     }
 
+    /**
+     * @since Method available since Release 0.3.0
+     */
     function testFieldIsNotRequired()
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';

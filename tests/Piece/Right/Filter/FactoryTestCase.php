@@ -35,6 +35,7 @@
  * @version    SVN: $Id$
  * @link       http://iteman.typepad.jp/piece/
  * @see        Piece_Right_Filter_Factory
+ * @since      File available since Release 0.3.0
  */
 
 require_once 'PHPUnit.php';
@@ -53,6 +54,7 @@ require_once 'Piece/Right/Error.php';
  * @version    Release: @package_version@
  * @link       http://iteman.typepad.jp/piece/
  * @see        Piece_Right_Filter_Factory
+ * @since      Class available since Release 0.3.0
  */
 class Piece_Right_Filter_FactoryTestCase extends PHPUnit_TestCase
 {

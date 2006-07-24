@@ -152,6 +152,7 @@ class Piece_Right_Config
      *
      * @param string $field
      * @param string $message
+     * @since Method available since Release 0.3.0
      */
     function setRequired($field, $message = null)
     {
@@ -169,6 +170,7 @@ class Piece_Right_Config
      * Returns whether the given field is required or not.
      *
      * @return boolean
+     * @since Method available since Release 0.3.0
      */
     function isRequired($field)
     {
@@ -183,6 +185,7 @@ class Piece_Right_Config
      *
      * @param string $field
      * @return string
+     * @since Method available since Release 0.3.0
      */
     function getRequiredMessage($field)
     {
