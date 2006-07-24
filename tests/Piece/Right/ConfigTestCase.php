@@ -147,14 +147,17 @@ class Piece_Right_ConfigTestCase extends PHPUnit_TestCase
         $dynamicConfig->addValidation('bar', 'Length', array('min' => 5));
         $dynamicConfig->setRequired('foo');
         $dynamicConfig->addFilter('foo', 'trim');
-        $dynamicConfig->addValidation('foo', 'Regex', array('regex' => '/^foo$/'));
+        $dynamicConfig->addValidation('foo', 'Regex', array('pattern' => '/^foo$/'));
+        $dynamicConfig->setWatcher('bar', array('target' => array('qux')));
         $this->_config->addFilter('foo', 'strtoupper');
         $this->_config->addValidation('foo', 'Length', array('max' => 255));
         $this->_config->addValidation('bar', 'Length', array('max' => 255));
+        $this->_config->setWatcher('foo', array('target' => array('baz')));
         $this->_config->merge($dynamicConfig);
         $validationSet = $this->_config->getValidationSet();
         $requiredFields = $this->_config->getRequiredFields();
         $filters = $this->_config->getFilters();
+        $watchers = $this->_config->getWatchers();
 
         $this->assertEquals(array('foo', 'bar'), array_keys($validationSet));
         $this->assertEquals('Length', $validationSet['foo'][0]['validator']);
@@ -168,6 +171,8 @@ class Piece_Right_ConfigTestCase extends PHPUnit_TestCase
         $this->assertEquals('strtoupper', $filters['foo'][0]);
         $this->assertEquals('trim', $filters['foo'][1]);
         $this->assertEquals('trim', $filters['bar'][0]);
+        $this->assertEquals('baz', $watchers['foo']['target'][0]);
+        $this->assertEquals('qux', $watchers['bar']['target'][0]);
     }
 
     /**#@-*/
