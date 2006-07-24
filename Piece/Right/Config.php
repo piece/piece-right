@@ -65,6 +65,7 @@ class Piece_Right_Config
      * @access private
      */
 
+    var $_requiredFields = array();
     var $_validationSet = array();
 
     /**#@-*/
@@ -141,6 +142,51 @@ class Piece_Right_Config
         foreach ($validations as $validation) {
             $this->addValidation($field, $validation['validator'], $validation['rules']);
         }
+    }
+
+    // }}}
+    // {{{ setRequired()
+
+    /**
+     * Sets a field as required.
+     *
+     * @param string $field
+     * @param string $message
+     */
+    function setRequired($field, $message = null)
+    {
+        if (!array_key_exists($field, $this->_validationSet)) {
+            $this->_validationSet[$field] = array();
+        }
+
+        $this->_requiredFields[$field]['message'] = $message;
+    }
+
+    // }}}
+    // {{{ isRequired()
+
+    /**
+     * Returns whether the given field is required or not.
+     *
+     * @return boolean
+     */
+    function isRequired($field)
+    {
+        return array_key_exists($field, $this->_requiredFields);
+    }
+
+    // }}}
+    // {{{ getRequiredMessage()
+
+    /**
+     * Gets the message when a field is required.
+     *
+     * @param string $field
+     * @return string
+     */
+    function getRequiredMessage($field)
+    {
+        return $this->_requiredFields[$field]['message'];
     }
 
     /**#@-*/
