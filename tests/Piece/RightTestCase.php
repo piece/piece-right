@@ -237,6 +237,31 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         unset($_SERVER['REQUEST_METHOD']);
     }
 
+    /**
+     * @since Method available since Release 0.3.0
+     */
+    function testFilters()
+    {
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST['first_name'] = ' THIS TEXT IS WRITTEN IN LOWER CASE ';
+        $dynamicConfig = &new Piece_Right_Config();
+        $dynamicConfig->addFilter('first_name', 'strtolower');
+        $right = &new Piece_Right(dirname(__FILE__) . '/../../data',
+                                  dirname(__FILE__)
+                                  );
+
+        $this->assertFalse($right->validate('Example', $dynamicConfig));
+
+        $results = &$right->getResults();
+
+        $this->assertEquals(1, $results->countErrors());
+        $this->assertFalse($results->isError('foo'));
+        $this->assertEquals('this text is written in lower case', $results->getFieldValue('first_name'));
+
+        unset($_POST['foo']);
+        unset($_SERVER['REQUEST_METHOD']);
+    }
+
     /**#@-*/
 
     /**#@+
