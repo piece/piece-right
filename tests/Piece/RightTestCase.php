@@ -43,6 +43,7 @@ require_once 'Piece/Right.php';
 require_once 'Piece/Right/Error.php';
 require_once 'Piece/Right/Config.php';
 require_once 'Cache/Lite/File.php';
+require_once 'Piece/Right/Filter/Factory.php';
 
 // {{{ Piece_RightTestCase
 
@@ -73,6 +74,8 @@ class Piece_RightTestCase extends PHPUnit_TestCase
      * @access private
      */
 
+    var $_oldFilterDirectories;
+
     /**#@-*/
 
     /**#@+
@@ -82,10 +85,14 @@ class Piece_RightTestCase extends PHPUnit_TestCase
     function setUp()
     {
         Piece_Right_Error::pushCallback(create_function('$error', 'var_dump($error); return ' . PEAR_ERRORSTACK_DIE . ';'));
+        $this->_oldFilterDirectories = $GLOBALS['PIECE_RIGHT_Filter_Directories'];
+        Piece_Right_Filter_Factory::addFilterDirectory(dirname(__FILE__) . '/..');
     }
 
     function tearDown()
     {
+        $GLOBALS['PIECE_RIGHT_Filter_Instances'] = array();
+        $GLOBALS['PIECE_RIGHT_Filter_Directories'] = $this->_oldFilterDirectories;
         $cache = &new Cache_Lite_File(array('cacheDir' => dirname(__FILE__) . '/',
                                             'masterFile' => '',
                                             'automaticSerialization' => true,
@@ -122,7 +129,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
     function testFailureToValidate()
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
-        $_POST['first_name'] = 'Foo';
+        $_POST['first_name'] = ' Foo ';
         $_POST['last_name'] = 'Bar';
         $_POST['phone'] = '012345678';
         $_POST['country'] = 'Japan';
@@ -195,6 +202,38 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $this->assertTrue($results->isError('bar'));
 
         unset($_POST['baz']);
+        unset($_SERVER['REQUEST_METHOD']);
+    }
+
+    /**
+     * @since Method available since Release 0.3.0
+     */
+    function testFiltersWithDynamicConfiguration()
+    {
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST['foo'] = ' THIS TEXT IS WRITTEN IN LOWER CASE ';
+        $_POST['bar'] = ' THIS ';
+        $dynamicConfig = &new Piece_Right_Config();
+        $dynamicConfig->addFilter('foo', 'LowerCase');
+        $dynamicConfig->addFilter('foo', 'trim');
+        $dynamicConfig->addValidation('foo', 'Length', array('min' => 5));
+        $dynamicConfig->addFilter('bar', 'LowerCase');
+        $dynamicConfig->addFilter('bar', 'trim');
+        $dynamicConfig->addValidation('bar', 'Length', array('min' => 5));
+        $right = &new Piece_Right();
+
+        $this->assertFalse($right->validate('Example', $dynamicConfig));
+
+        $results = &$right->getResults();
+
+        $this->assertEquals(1, $results->countErrors());
+        $this->assertFalse($results->isError('foo'));
+        $this->assertTrue($results->isError('bar'));
+        $this->assertEquals('this text is written in lower case', $results->getFieldValue('foo'));
+        $this->assertEquals('this', $results->getFieldValue('bar'));
+
+        unset($_POST['baz']);
+        unset($_POST['foo']);
         unset($_SERVER['REQUEST_METHOD']);
     }
 
