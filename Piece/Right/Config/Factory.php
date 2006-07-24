@@ -245,15 +245,29 @@ class Piece_Right_Config_Factory
         $yaml = Spyc::YAMLLoad($file);
         foreach ($yaml as $validation) {
             if (array_key_exists('required', $validation)) {
-                $config->setRequired($validation['name'], @$validation['required']['message']);
+                $config->setRequired($validation['name'],
+                                     @$validation['required']['message']
+                                     );
             }
 
-            foreach ($validation['validator'] as $validator) {
-                $config->addValidation($validation['name'],
-                                       $validator['name'],
-                                       (array)@$validator['rule'],
-                                       @$validator['message']
-                                       );
+            if (array_key_exists('filter', $validation)
+                && is_array($validation['filter'])
+                ) {
+                foreach ($validation['filter'] as $filter) {
+                    $config->addFilter($validation['name'], $filter);
+                }
+            }
+
+            if (array_key_exists('validator', $validation)
+                && is_array($validation['validator'])
+                ) {
+                foreach ($validation['validator'] as $validator) {
+                    $config->addValidation($validation['name'],
+                                           $validator['name'],
+                                           (array)@$validator['rule'],
+                                           @$validator['message']
+                                           );
+                }
             }
         }
 
