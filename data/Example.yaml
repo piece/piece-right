@@ -47,3 +47,22 @@
     - name: List
       rule:
         elements: [ programming, wine, manga ]
+- name: use_php
+  required:
+  validator:
+    - name: Range
+      rule:
+        min: 0
+        max: 1
+- name: favorite_framework
+  watcher:
+    target:
+      - name: use_php
+        trigger:
+          comparisonOperator: ==
+          comparisonTo: 1
+  validator:
+    - name: Length
+      rule:
+        min: 1
+        max: 255
