@@ -272,6 +272,24 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $this->_assertWatchingFields('birthdayYear', '1976');
     }
 
+    /**
+     * @since Method available since Release 0.3.0
+     */
+    function testMultipleValues()
+    {
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST['checkboxes'] = array('foo', 'bar');
+        $dynamicConfig = &new Piece_Right_Config();
+        $dynamicConfig->setRequired('checkboxes');
+        $dynamicConfig->addValidation('checkboxes', 'List', array('elements' => array('foo', 'bar', 'baz')));
+        $right = &new Piece_Right();
+
+        $this->assertTrue($right->validate('Example', $dynamicConfig));
+
+        unset($_POST['checkboxes']);
+        unset($_SERVER['REQUEST_METHOD']);
+    }
+
     /**#@-*/
 
     /**#@+
