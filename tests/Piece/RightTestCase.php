@@ -110,6 +110,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $_POST['last_name'] = 'Bar';
         $_POST['phone'] = '0123456789';
         $_POST['country'] = 'Japan';
+        $_POST['hobbies'] = array('wine', 'manga');
         $dynamicConfig = &new Piece_Right_Config();
         $dynamicConfig->setRequired('phone');
         $dynamicConfig->addValidation('phone', 'Length', array('min' => 10, 'max' => 11));
@@ -119,6 +120,9 @@ class Piece_RightTestCase extends PHPUnit_TestCase
 
         $this->assertTrue($right->validate('Example', $dynamicConfig));
 
+        $results = &$right->getResults();
+
+        unset($_POST['hobbies']);
         unset($_POST['country']);
         unset($_POST['phone']);
         unset($_POST['last_name']);
@@ -166,12 +170,16 @@ class Piece_RightTestCase extends PHPUnit_TestCase
 
         $results = &$right->getResults();
 
-        $this->assertEquals(1, $results->countErrors());
-        $this->assertEquals(array('first_name'), $results->getErrorFields());
+        $this->assertEquals(2, $results->countErrors());
+        $errorFields = $results->getErrorFields();
+        foreach (array('first_name', 'hobbies') as $field) {
+            $this->assertTrue(in_array($field, $errorFields));
+        }
         $this->assertTrue($results->isError('first_name'));
         $this->assertFalse($results->isError('last_name'));
         $this->assertFalse($results->isError('phone'));
         $this->assertFalse($results->isError('country'));
+        $this->assertTrue($results->isError('hobbies'));
         $this->assertEquals('foo', $results->getErrorMessage('first_name'));
         $this->assertEquals(array('foo'), $results->getErrorMessages('first_name'));
 
@@ -254,7 +262,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
 
         $results = &$right->getResults();
 
-        $this->assertEquals(1, $results->countErrors());
+        $this->assertEquals(2, $results->countErrors());
         $this->assertFalse($results->isError('foo'));
         $this->assertEquals('this text is written in lower case', $results->getFieldValue('first_name'));
 
@@ -307,6 +315,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $_POST['first_name'] = 'Foo';
         $_POST['last_name'] = 'Bar';
         $_POST['country'] = 'Japan';
+        $_POST['hobbies'] = array('programming');
         $_POST[$name] = $value;
         
         $dynamicConfig = &new Piece_Right_Config();
