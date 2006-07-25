@@ -23,8 +23,8 @@
 - name: birthdayYear
   watcher:
     target:
-      - birthdayMonth
-      - birthdayDay
+      - name: birthdayMonth
+      - name: birthdayDay
     turnOff:
       - age
   validator:
