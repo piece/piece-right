@@ -300,8 +300,56 @@ class Piece_Right
             foreach ($watcher['target'] as $target) {
                 $targetValue = $this->_results->getFieldValue($target['name']);
                 if (!$this->_isEmpty($targetValue)) {
-                    foreach ($watcher['turnOn'] as $turnOnFieldName) {
-                        $turnOnFields[] = $turnOnFieldName;
+                    $turnOn = false;
+                    if (!array_key_exists('trigger', $target)) {
+                        $turnOn = true;
+                    } else {
+                        if (array_key_exists('trigger', $target)
+                            && array_key_exists('comparisonOperator', $target['trigger'])
+                            && array_key_exists('comparisonTo', $target['trigger'])
+                            ) {
+                            switch ($target['trigger']['comparisonOperator']) {
+                            case '==':
+                                if ($targetValue == $target['trigger']['comparisonTo']) {
+                                    $turnOn = true;
+                                }
+                                break;
+                            case '!=':
+                            case '<>':
+                                if ($targetValue != $target['trigger']['comparisonTo']) {
+                                    $turnOn = true;
+                                }
+                                break;
+                            case '<':
+                                if ($targetValue < $target['trigger']['comparisonTo']) {
+                                    $turnOn = true;
+                                }
+                                break;
+                            case '>':
+                                if ($targetValue > $target['trigger']['comparisonTo']) {
+                                    $turnOn = true;
+                                }
+                                break;
+                            case '<=':
+                                if ($targetValue <= $target['trigger']['comparisonTo']) {
+                                    $turnOn = true;
+                                }
+                                break;
+                            case '>=':
+                                if ($targetValue >= $target['trigger']['comparisonTo']) {
+                                    $turnOn = true;
+                                }
+                                break;
+                            default:
+                                break;
+                            }
+                        }
+                    }
+
+                    if ($turnOn) {
+                        foreach ($watcher['turnOn'] as $turnOnFieldName) {
+                            $turnOnFields[] = $turnOnFieldName;
+                        }
                     }
                 }
             }
