@@ -149,30 +149,39 @@ class Piece_Right_ConfigTestCase extends PHPUnit_TestCase
         $dynamicConfig->addFilter('foo', 'trim');
         $dynamicConfig->addValidation('foo', 'Regex', array('pattern' => '/^foo$/'));
         $dynamicConfig->setWatcher('bar', array('target' => array('qux')));
+        $dynamicConfig->setRequired('baz');
         $this->_config->addFilter('foo', 'strtoupper');
         $this->_config->addValidation('foo', 'Length', array('max' => 255));
         $this->_config->addValidation('bar', 'Length', array('max' => 255));
         $this->_config->setWatcher('foo', array('target' => array('baz')));
+        $this->_config->setRequired('baz', array('message' => 'baz is required', 'enabled' => false));
         $this->_config->merge($dynamicConfig);
         $validationSet = $this->_config->getValidationSet();
         $requiredFields = $this->_config->getRequiredFields();
         $filters = $this->_config->getFilters();
         $watchers = $this->_config->getWatchers();
 
-        $this->assertEquals(array('foo', 'bar'), array_keys($validationSet));
+        foreach (array('foo', 'bar', 'baz') as $key) {
+            $this->assertContains($key, array_keys($validationSet), "$key does not contain in an array.");
+        }
         $this->assertEquals('Length', $validationSet['foo'][0]['validator']);
         $this->assertEquals('Regex', $validationSet['foo'][1]['validator']);
         $this->assertEquals('Length', $validationSet['bar'][0]['validator']);
         $this->assertEquals('Length', $validationSet['bar'][1]['validator']);
         $this->assertEquals(255, $validationSet['bar'][0]['rules']['max']);
         $this->assertEquals(5, $validationSet['bar'][1]['rules']['min']);
-        $this->assertEquals(array('foo'), array_keys($requiredFields));
-        $this->assertEquals(array('foo', 'bar'), array_keys($filters));
+        foreach (array('foo', 'baz') as $key) {
+            $this->assertContains($key, array_keys($requiredFields), "$key does not contain in an array.");
+        }
+        foreach (array('foo', 'bar') as $key) {
+            $this->assertContains($key, array_keys($filters), "$key does not contain in an array.");
+        }
         $this->assertEquals('strtoupper', $filters['foo'][0]);
         $this->assertEquals('trim', $filters['foo'][1]);
         $this->assertEquals('trim', $filters['bar'][0]);
         $this->assertEquals('baz', $watchers['foo']['target'][0]);
         $this->assertEquals('qux', $watchers['bar']['target'][0]);
+        $this->assertEquals('baz is required', $this->_config->getRequiredMessage('baz'));
     }
 
     /**#@-*/
