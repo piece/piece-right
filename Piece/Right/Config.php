@@ -229,6 +229,10 @@ class Piece_Right_Config
      */
     function addFilter($field, $filter)
     {
+        if (!array_key_exists($field, $this->_validationSet)) {
+            $this->_validationSet[$field] = array();
+        }
+
         if (!array_key_exists($field, $this->_filters)) {
             $this->_filters[$field] = array();
         }
@@ -325,6 +329,10 @@ class Piece_Right_Config
      */
     function setWatcher($field, $watcher)
     {
+        if (!array_key_exists($field, $this->_validationSet)) {
+            $this->_validationSet[$field] = array();
+        }
+
         $this->_watchers[$field] = $watcher;
     }
 
@@ -355,7 +363,7 @@ class Piece_Right_Config
      */
     function mergeWatcher($watcher, $field)
     {
-        $this->_watchers[$field] = $watcher;
+        $this->setWatcher($field, $watcher);
     }
 
     // }}}
