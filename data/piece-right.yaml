@@ -49,7 +49,17 @@ sequence:
                   type: map
                   required: no
                   mapping:
-                    "comparisonOperator": { type: str, required: yes, enum: [ eq, gt, lt ] }
+                    "comparisonOperator":
+                      type: str
+                      required: yes
+                      enum:
+                        - "=="
+                        - "!="
+                        - "<>"
+                        - "<"
+                        - ">"
+                        - "<="
+                        - ">="
                     "comparisonTo": { type: str, required: yes }
           "turnOn":
             type: seq
