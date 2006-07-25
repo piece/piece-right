@@ -212,6 +212,7 @@ class Piece_Right
      *
      * @param string $value
      * @return boolean
+     * @since Method available since Release 0.3.0
      */
     function _isEmpty($value)
     {
@@ -239,6 +240,7 @@ class Piece_Right
      * Filters field values.
      *
      * @param array $validationSet
+     * @since Method available since Release 0.3.0
      */
     function _filter($validationSet)
     {
@@ -266,6 +268,7 @@ class Piece_Right
      * on/off.
      *
      * @param string $fieldName
+     * @since Method available since Release 0.3.0
      */
     function _watch($fieldName)
     {
@@ -323,6 +326,7 @@ class Piece_Right
      *
      * @param string $name
      * @param string $value
+     * @since Method available since Release 0.3.0
      */
     function _doValidation($name, $value)
     {
@@ -352,6 +356,7 @@ class Piece_Right
      * @param string $name
      * @param string $value
      * @param array  $validations
+     * @since Method available since Release 0.3.0
      */
     function _validate($name, $value, $validations)
     {
