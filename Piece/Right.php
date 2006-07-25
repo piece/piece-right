@@ -152,7 +152,7 @@ class Piece_Right
                 $turnOnFields = array();
                 foreach ($watcher['target'] as $targetName) {
                     $targetValue = $this->_results->getFieldValue($targetName);
-                    if (!is_null($targetValue) && strlen($targetValue)) {
+                    if (!$this->_isFieldEmpty($targetValue)) {
                         foreach ($watcher['turnOn'] as $turnOnFieldName) {
                             array_push($turnOnFields, $turnOnFieldName);
                         }
@@ -171,12 +171,12 @@ class Piece_Right
             }
 
             if ($config->isRequired($fieldName)) {
-                if ((is_null($fieldValue) || !strlen($fieldValue))) {
+                if ($this->_isFieldEmpty($fieldValue)) {
                     $this->_results->addError($fieldName, 'required', $config->getRequiredMessage($fieldName));
                     continue;
                 }
             } else {
-                if ((is_null($fieldValue) || !strlen($fieldValue))) {
+                if ($this->_isFieldEmpty($fieldValue)) {
                     continue;
                 }
             }
@@ -260,6 +260,34 @@ class Piece_Right
         }
 
         return $config;
+    }
+
+    // }}}
+    // {{{ _isFieldEmpty()
+
+    /**
+     * Returns whether a value of a field is empty or not.
+     *
+     * @param string $value
+     * @return boolean
+     */
+    function _isFieldEmpty($value)
+    {
+        if (is_null($value)) {
+            return true;
+        }
+
+        if (is_array($value)) {
+            if (!count($value)) {
+                return true;
+            }
+        } else {
+            if (!strlen($value)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**#@-*/
