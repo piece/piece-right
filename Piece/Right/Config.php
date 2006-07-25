@@ -181,7 +181,9 @@ class Piece_Right_Config
             $this->_requiredFields[$field]['enabled'] = $elements['enabled'];
         }
 
-        if (array_key_exists('message', $elements)) {
+        if (array_key_exists('message', $elements)
+            && !is_null($elements['message'])
+            ) {
             $this->_requiredFields[$field]['message'] = $elements['message'];
         }
     }
