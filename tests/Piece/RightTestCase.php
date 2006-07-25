@@ -111,6 +111,8 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $_POST['phone'] = '0123456789';
         $_POST['country'] = 'Japan';
         $_POST['hobbies'] = array('wine', 'manga');
+        $_POST['use_php'] = '1';
+        $_POST['favorite_framework'] = 'Piece Framework';
         $dynamicConfig = &new Piece_Right_Config();
         $dynamicConfig->setRequired('phone');
         $dynamicConfig->addValidation('phone', 'Length', array('min' => 10, 'max' => 11));
@@ -122,6 +124,8 @@ class Piece_RightTestCase extends PHPUnit_TestCase
 
         $results = &$right->getResults();
 
+        unset($_POST['favorite_framework']);
+        unset($_POST['use_php']);
         unset($_POST['hobbies']);
         unset($_POST['country']);
         unset($_POST['phone']);
@@ -159,6 +163,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $_POST['last_name'] = 'Bar';
         $_POST['phone'] = '0123456789';
         $_POST['country'] = 'Japan';
+        $_POST['use_php'] = '1';
         $dynamicConfig = &new Piece_Right_Config();
         $dynamicConfig->setRequired('phone');
         $dynamicConfig->addValidation('phone', 'Length', array('min' => 10, 'max' => 11));
@@ -170,9 +175,9 @@ class Piece_RightTestCase extends PHPUnit_TestCase
 
         $results = &$right->getResults();
 
-        $this->assertEquals(2, $results->countErrors());
+        $this->assertEquals(3, $results->countErrors());
         $errorFields = $results->getErrorFields();
-        foreach (array('first_name', 'hobbies') as $field) {
+        foreach (array('first_name', 'hobbies', 'favorite_framework') as $field) {
             $this->assertTrue(in_array($field, $errorFields));
         }
         $this->assertTrue($results->isError('first_name'));
@@ -180,9 +185,11 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $this->assertFalse($results->isError('phone'));
         $this->assertFalse($results->isError('country'));
         $this->assertTrue($results->isError('hobbies'));
+        $this->assertTrue($results->isError('favorite_framework'));
         $this->assertEquals('foo', $results->getErrorMessage('first_name'));
         $this->assertEquals(array('foo'), $results->getErrorMessages('first_name'));
 
+        unset($_POST['use_php']);
         unset($_POST['country']);
         unset($_POST['phone']);
         unset($_POST['last_name']);
@@ -252,6 +259,8 @@ class Piece_RightTestCase extends PHPUnit_TestCase
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_POST['first_name'] = ' THIS TEXT IS WRITTEN IN LOWER CASE ';
+        $_POST['use_php'] = '1';
+        $_POST['favorite_framework'] = 'Piece Framework';
         $dynamicConfig = &new Piece_Right_Config();
         $dynamicConfig->addFilter('first_name', 'strtolower');
         $right = &new Piece_Right(dirname(__FILE__) . '/../../data',
@@ -266,6 +275,8 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $this->assertFalse($results->isError('foo'));
         $this->assertEquals('this text is written in lower case', $results->getFieldValue('first_name'));
 
+        unset($_POST['favorite_framework']);
+        unset($_POST['use_php']);
         unset($_POST['foo']);
         unset($_SERVER['REQUEST_METHOD']);
     }
@@ -365,7 +376,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
 
         $results = &$right->getResults();
 
-        $this->assertEquals(2, $results->countErrors());
+        $this->assertEquals(3, $results->countErrors());
 
         foreach (array_keys($fields) as $field) {
             $this->assertTrue(in_array($field, $results->getErrorFields()));
