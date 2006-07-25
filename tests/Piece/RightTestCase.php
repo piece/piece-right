@@ -240,7 +240,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $this->assertEquals('this text is written in lower case', $results->getFieldValue('foo'));
         $this->assertEquals('this', $results->getFieldValue('bar'));
 
-        unset($_POST['baz']);
+        unset($_POST['bar']);
         unset($_POST['foo']);
         unset($_SERVER['REQUEST_METHOD']);
     }
@@ -298,6 +298,43 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         unset($_SERVER['REQUEST_METHOD']);
     }
 
+    /**
+     * @since Method available since Release 0.3.0
+     */
+    function testWatchingFieldsWithTriggers()
+    {
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST['foo'] = 'a';
+        $_POST['qux'] = '6';
+        $dynamicConfig = &new Piece_Right_Config();
+        $dynamicConfig->setRequired('foo');
+        $dynamicConfig->setRequired('qux');
+        $dynamicConfig->setWatcher('bar',
+                                   array('target' => array(array('name' => 'foo',
+                                                                 'trigger' => array('comparisonOperator' => '==', 'comparisonTo' => 'a'))))
+                                   );
+        $dynamicConfig->setWatcher('baz',
+                                   array('target' => array(array('name' => 'qux',
+                                                                 'trigger' => array('comparisonOperator' => '>', 'comparisonTo' => '5'))))
+                                   );
+
+        $right = &new Piece_Right();
+
+        $this->assertFalse($right->validate('Example', $dynamicConfig));
+
+        $results = &$right->getResults();
+
+        $this->assertEquals(2, $results->countErrors());
+
+        foreach (array('bar', 'baz') as $field) {
+            $this->assertTrue(in_array($field, $results->getErrorFields()));
+        }
+
+        unset($_POST['qux']);
+        unset($_POST['foo']);
+        unset($_SERVER['REQUEST_METHOD']);
+    }
+
     /**#@-*/
 
     /**#@+
@@ -330,9 +367,8 @@ class Piece_RightTestCase extends PHPUnit_TestCase
 
         $this->assertEquals(2, $results->countErrors());
 
-        $errorFields = $results->getErrorFields();
         foreach (array_keys($fields) as $field) {
-            $this->assertTrue(in_array($field, $errorFields));
+            $this->assertTrue(in_array($field, $results->getErrorFields()));
         }
 
         unset($_POST[$name]);
