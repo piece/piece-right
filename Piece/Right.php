@@ -40,6 +40,7 @@
 require_once 'Piece/Right/Config/Factory.php';
 require_once 'Piece/Right/Validator/Factory.php';
 require_once 'Piece/Right/Results.php';
+require_once 'Piece/Right/Filter/Factory.php';
 
 // {{{ Piece_Right
 
@@ -72,6 +73,7 @@ class Piece_Right
     var $_cacheDirectory;
     var $_fieldValuesCallback;
     var $_results;
+    var $_config;
 
     /**#@-*/
 
@@ -115,79 +117,22 @@ class Piece_Right
      */
     function validate($validationSetName = null, $dynamicConfig = null)
     {
+        $this->_configure($validationSetName, $dynamicConfig);
         $this->_results = &new Piece_Right_Results();
-        $config = &$this->_configure($validationSetName, $dynamicConfig);
-        $validationSet = $config->getValidationSet();
+        $validationSet = $this->_config->getValidationSet();
+
+        $this->_filter($validationSet);
 
         foreach ($validationSet as $fieldName => $validations) {
-            $fieldValue = call_user_func($this->_fieldValuesCallback, $fieldName);
-            $filters = $config->getFiltersByFieldName($fieldName);
-            foreach ($filters as $filterName) {
-                if (!function_exists($filterName)) {
-                    $filter = &Piece_Right_Filter_Factory::factory($filterName);
-                    $fieldValue = $filter->filter($fieldValue);
-                } else {
-                    $fieldValue = call_user_func($filterName, $fieldValue);
-                }
-            }
+            $this->_watch($fieldName);
 
-            $this->_results->setFieldValue($fieldName, $fieldValue);
-        }
-
-        foreach ($validationSet as $fieldName => $validations) {
             $fieldValue = $this->_results->getFieldValue($fieldName);
 
-            $watcher = $config->getWatcher($fieldName);
-            if (!is_null($watcher)) {
-                if (!in_array($fieldName, $watcher['target'])) {
-                    array_push($watcher['target'], $fieldName);
-                }
-                if (!array_key_exists('turnOn', $watcher)) {
-                    $watcher['turnOn'] = $watcher['target'];
-                }
-                if (!in_array($fieldName, $watcher['turnOn'])) {
-                    array_push($watcher['turnOn'], $fieldName);
-                }
-
-                $turnOnFields = array();
-                foreach ($watcher['target'] as $targetName) {
-                    $targetValue = $this->_results->getFieldValue($targetName);
-                    if (!$this->_isFieldEmpty($targetValue)) {
-                        foreach ($watcher['turnOn'] as $turnOnFieldName) {
-                            array_push($turnOnFields, $turnOnFieldName);
-                        }
-                    }
-                }
-
-                foreach ($turnOnFields as $turnOnFieldName) {
-                    $config->setRequired($turnOnFieldName);
-                }
-
-                if (array_key_exists('turnOff', $watcher)) {
-                    foreach ($watcher['turnOff'] as $turnOffFieldName) {
-                        $config->setRequired($turnOffFieldName, array('enabled' => false));
-                    }
-                }
+            if (!$this->_doValidation($fieldName, $fieldValue)) {
+                continue;
             }
 
-            if ($config->isRequired($fieldName)) {
-                if ($this->_isFieldEmpty($fieldValue)) {
-                    $this->_results->addError($fieldName, 'required', $config->getRequiredMessage($fieldName));
-                    continue;
-                }
-            } else {
-                if ($this->_isFieldEmpty($fieldValue)) {
-                    continue;
-                }
-            }
-
-            foreach ($validations as $validation) {
-                $validator = &Piece_Right_Validator_Factory::factory($validation['validator']);
-                $validator->setRules($validation['rules']);
-                if (!$validator->validate($fieldValue)) {
-                    $this->_results->addError($fieldName, $validation['validator'], $validation['message']);
-                }
-            }
+            $this->_validate($fieldName, $fieldValue, $validations);
         }
 
         return !(boolean)$this->_results->countErrors();
@@ -246,24 +191,21 @@ class Piece_Right
      *
      * @param string             $validationSet
      * @param Piece_Right_Config $dynamicConfig
-     * @return Piece_Right_Config
      */
-    function &_configure($validationSet = null, $dynamicConfig = null)
+    function _configure($validationSet = null, $dynamicConfig = null)
     {
-        $config = &Piece_Right_Config_Factory::factory($validationSet,
-                                                       $this->_configDirectory,
-                                                       $this->_cacheDirectory
-                                                       );
+        $this->_config = &Piece_Right_Config_Factory::factory($validationSet,
+                                                              $this->_configDirectory,
+                                                              $this->_cacheDirectory
+                                                              );
 
         if (is_a($dynamicConfig, 'Piece_Right_Config')) {
-            $config->merge($dynamicConfig);
+            $this->_config->merge($dynamicConfig);
         }
-
-        return $config;
     }
 
     // }}}
-    // {{{ _isFieldEmpty()
+    // {{{ _isEmpty()
 
     /**
      * Returns whether a value of a field is empty or not.
@@ -271,7 +213,7 @@ class Piece_Right
      * @param string $value
      * @return boolean
      */
-    function _isFieldEmpty($value)
+    function _isEmpty($value)
     {
         if (is_null($value)) {
             return true;
@@ -288,6 +230,141 @@ class Piece_Right
         }
 
         return false;
+    }
+
+    // }}}
+    // {{{ _filter()
+
+    /**
+     * Filters field values.
+     *
+     * @param array $validationSet
+     */
+    function _filter($validationSet)
+    {
+        foreach ($validationSet as $fieldName => $validations) {
+            $fieldValue = call_user_func($this->_fieldValuesCallback, $fieldName);
+            $filters = $this->_config->getFiltersByFieldName($fieldName);
+            foreach ($filters as $filterName) {
+                if (!function_exists($filterName)) {
+                    $filter = &Piece_Right_Filter_Factory::factory($filterName);
+                    $fieldValue = $filter->filter($fieldValue);
+                } else {
+                    $fieldValue = call_user_func($filterName, $fieldValue);
+                }
+            }
+
+            $this->_results->setFieldValue($fieldName, $fieldValue);
+        }
+    }
+
+    // }}}
+    // {{{ _watch()
+
+    /**
+     * Watches the target fields and turns the fields requirements
+     * on/off.
+     *
+     * @param string $fieldName
+     */
+    function _watch($fieldName)
+    {
+        $watcher = $this->_config->getWatcher($fieldName);
+        if (is_array($watcher)) {
+            $found = false;
+            foreach ($watcher['target'] as $target) {
+                if ($target['name'] == $fieldName) {
+                    $found = true;
+                    break;
+                }
+            }
+            if (!$found) {
+                $watcher['target'][] = array('name' => $fieldName);
+            }
+
+            if (!array_key_exists('turnOn', $watcher)) {
+                $watcher['turnOn'] = array();
+                foreach ($watcher['target'] as $target) {
+                    $watcher['turnOn'][] = $target['name'];
+                }
+            }
+
+            if (!in_array($fieldName, $watcher['turnOn'])) {
+                $watcher['turnOn'][] = $fieldName;
+            }
+
+            $turnOnFields = array();
+            foreach ($watcher['target'] as $target) {
+                $targetValue = $this->_results->getFieldValue($target['name']);
+                if (!$this->_isEmpty($targetValue)) {
+                    foreach ($watcher['turnOn'] as $turnOnFieldName) {
+                        $turnOnFields[] = $turnOnFieldName;
+                    }
+                }
+            }
+
+            foreach ($turnOnFields as $turnOnFieldName) {
+                $this->_config->setRequired($turnOnFieldName);
+            }
+
+            if (array_key_exists('turnOff', $watcher)) {
+                foreach ($watcher['turnOff'] as $turnOffFieldName) {
+                    $this->_config->setRequired($turnOffFieldName, array('enabled' => false));
+                }
+            }
+        }
+    }
+
+    // }}}
+    // {{{ _doValidation()
+
+    /**
+     * Returns whether the current validation should be continued or not.
+     *
+     * @param string $name
+     * @param string $value
+     */
+    function _doValidation($name, $value)
+    {
+        if ($this->_config->isRequired($name)) {
+            if ($this->_isEmpty($value)) {
+                $this->_results->addError($name,
+                                          'required',
+                                          $this->_config->getRequiredMessage($name)
+                                          );
+                return false;
+            }
+        } else {
+            if ($this->_isEmpty($value)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    // }}}
+    // {{{ _validate()
+
+    /**
+     * Validates the value by the validations of the field.
+     *
+     * @param string $name
+     * @param string $value
+     * @param array  $validations
+     */
+    function _validate($name, $value, $validations)
+    {
+        foreach ($validations as $validation) {
+                $validator = &Piece_Right_Validator_Factory::factory($validation['validator']);
+                $validator->setRules($validation['rules']);
+                if (!$validator->validate($value)) {
+                    $this->_results->addError($name,
+                                              $validation['validator'],
+                                              $validation['message']
+);
+                }
+        }
     }
 
     /**#@-*/
