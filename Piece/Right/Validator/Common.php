@@ -164,6 +164,7 @@ class Piece_Right_Validator_Common
      * Initializes properties.
      *
      * @abstract
+     * @since Method available since Release 0.3.0
      */
     function _initialize() {}
  
