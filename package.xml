@@ -71,6 +71,9 @@ o Easy to extend with user defined validators
        <file role="php" name="Factory.php">
         <replace from="@package_version@" to="version" type="package-info"/>
        </file>
+       <file role="php" name="JapaneseDate.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
        <file role="php" name="Length.php">
         <replace from="@package_version@" to="version" type="package-info"/>
        </file>
@@ -146,6 +149,9 @@ o Easy to extend with user defined validators
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
         <file role="test" name="Invalid.php" install-as="Piece/Right/Validator/Invalid.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="JapaneseDateTestCase.php" install-as="Piece/Right/Validator/JapaneseDateTestCase.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
         <file role="test" name="LengthTestCase.php" install-as="Piece/Right/Validator/LengthTestCase.php">

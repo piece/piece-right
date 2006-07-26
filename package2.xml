@@ -19,7 +19,7 @@ o Easy to extend with user defined validators</description>
   <active>yes</active>
  </lead>
  <date>2006-07-26</date>
- <time>11:35:46</time>
+ <time>20:29:36</time>
  <version>
   <release>0.3.0</release>
   <api>0.3.0</api>
@@ -68,6 +68,9 @@ o Easy to extend with user defined validators</description>
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
       <file name="Factory.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="JapaneseDate.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
       <file name="Length.php" role="php">
@@ -145,6 +148,9 @@ o Easy to extend with user defined validators</description>
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
        <file name="Invalid.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="JapaneseDateTestCase.php" role="test">
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
        <file name="LengthTestCase.php" role="test">
@@ -239,6 +245,7 @@ o Easy to extend with user defined validators</description>
    <install as="Piece/Right/Validator/FactoryTestCase.php" name="tests/Piece/Right/Validator/FactoryTestCase.php" />
    <install as="Piece/Right/Validator/Foo.php" name="tests/Piece/Right/Validator/Foo.php" />
    <install as="Piece/Right/Validator/Invalid.php" name="tests/Piece/Right/Validator/Invalid.php" />
+   <install as="Piece/Right/Validator/JapaneseDateTestCase.php" name="tests/Piece/Right/Validator/JapaneseDateTestCase.php" />
    <install as="Piece/Right/Validator/LengthTestCase.php" name="tests/Piece/Right/Validator/LengthTestCase.php" />
    <install as="Piece/Right/Validator/ListTestCase.php" name="tests/Piece/Right/Validator/ListTestCase.php" />
    <install as="Piece/Right/Validator/RangeTestCase.php" name="tests/Piece/Right/Validator/RangeTestCase.php" />
