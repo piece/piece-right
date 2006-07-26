@@ -273,95 +273,53 @@ class Piece_Right
     function _watch($fieldName)
     {
         $watcher = $this->_config->getWatcher($fieldName);
-        if (is_array($watcher)) {
-            $found = false;
+        if (!is_array($watcher)) {
+            return;
+        }
+
+        $found = false;
+        foreach ($watcher['target'] as $target) {
+            if ($target['name'] == $fieldName) {
+                $found = true;
+                break;
+            }
+        }
+        if (!$found) {
+            $watcher['target'][] = array('name' => $fieldName);
+        }
+
+        if (!array_key_exists('turnOn', $watcher)) {
+            $watcher['turnOn'] = array();
             foreach ($watcher['target'] as $target) {
-                if ($target['name'] == $fieldName) {
-                    $found = true;
-                    break;
+                $watcher['turnOn'][] = $target['name'];
+            }
+        }
+
+        if (!in_array($fieldName, $watcher['turnOn'])) {
+            $watcher['turnOn'][] = $fieldName;
+        }
+
+        $turnOnFields = array();
+        foreach ($watcher['target'] as $target) {
+            $targetValue = $this->_results->getFieldValue($target['name']);
+            if ($this->_isEmpty($targetValue)) {
+                continue;
+            }
+
+            if ($this->_shouldBeTurnedOn($target, $targetValue)) {
+                foreach ($watcher['turnOn'] as $turnOnFieldName) {
+                    $turnOnFields[] = $turnOnFieldName;
                 }
             }
-            if (!$found) {
-                $watcher['target'][] = array('name' => $fieldName);
-            }
+        }
 
-            if (!array_key_exists('turnOn', $watcher)) {
-                $watcher['turnOn'] = array();
-                foreach ($watcher['target'] as $target) {
-                    $watcher['turnOn'][] = $target['name'];
-                }
-            }
+        foreach ($turnOnFields as $turnOnFieldName) {
+            $this->_config->setRequired($turnOnFieldName);
+        }
 
-            if (!in_array($fieldName, $watcher['turnOn'])) {
-                $watcher['turnOn'][] = $fieldName;
-            }
-
-            $turnOnFields = array();
-            foreach ($watcher['target'] as $target) {
-                $targetValue = $this->_results->getFieldValue($target['name']);
-                if (!$this->_isEmpty($targetValue)) {
-                    $turnOn = false;
-                    if (!array_key_exists('trigger', $target)) {
-                        $turnOn = true;
-                    } else {
-                        if (array_key_exists('trigger', $target)
-                            && array_key_exists('comparisonOperator', $target['trigger'])
-                            && array_key_exists('comparisonTo', $target['trigger'])
-                            ) {
-                            switch ($target['trigger']['comparisonOperator']) {
-                            case '==':
-                                if ($targetValue == $target['trigger']['comparisonTo']) {
-                                    $turnOn = true;
-                                }
-                                break;
-                            case '!=':
-                            case '<>':
-                                if ($targetValue != $target['trigger']['comparisonTo']) {
-                                    $turnOn = true;
-                                }
-                                break;
-                            case '<':
-                                if ($targetValue < $target['trigger']['comparisonTo']) {
-                                    $turnOn = true;
-                                }
-                                break;
-                            case '>':
-                                if ($targetValue > $target['trigger']['comparisonTo']) {
-                                    $turnOn = true;
-                                }
-                                break;
-                            case '<=':
-                                if ($targetValue <= $target['trigger']['comparisonTo']) {
-                                    $turnOn = true;
-                                }
-                                break;
-                            case '>=':
-                                if ($targetValue >= $target['trigger']['comparisonTo']) {
-                                    $turnOn = true;
-                                }
-                                break;
-                            default:
-                                break;
-                            }
-                        }
-                    }
-
-                    if ($turnOn) {
-                        foreach ($watcher['turnOn'] as $turnOnFieldName) {
-                            $turnOnFields[] = $turnOnFieldName;
-                        }
-                    }
-                }
-            }
-
-            foreach ($turnOnFields as $turnOnFieldName) {
-                $this->_config->setRequired($turnOnFieldName);
-            }
-
-            if (array_key_exists('turnOff', $watcher)) {
-                foreach ($watcher['turnOff'] as $turnOffFieldName) {
-                    $this->_config->setRequired($turnOffFieldName, array('enabled' => false));
-                }
+        if (array_key_exists('turnOff', $watcher)) {
+            foreach ($watcher['turnOff'] as $turnOffFieldName) {
+                $this->_config->setRequired($turnOffFieldName, array('enabled' => false));
             }
         }
     }
@@ -419,6 +377,70 @@ class Piece_Right
 );
                 }
         }
+    }
+
+    // }}}
+    // {{{ _shouldBeTurnedOn()
+
+    /**
+     * Returns whether the target field should be turned on or not.
+     *
+     * @param array $target
+     * @param string $targetValue
+     * @return boolean
+     * @since Method available since Release 0.3.0
+     */
+    function _shouldBeTurnedOn($target, $targetValue)
+    {
+        if (!array_key_exists('trigger', $target)) {
+            return true;
+        }
+
+        if (!array_key_exists('trigger', $target)
+            || !array_key_exists('comparisonOperator', $target['trigger'])
+            || !array_key_exists('comparisonTo', $target['trigger'])
+            ) {
+            return false;
+        }
+
+        $turnOn = false;
+        switch ($target['trigger']['comparisonOperator']) {
+        case '==':
+            if ($targetValue == $target['trigger']['comparisonTo']) {
+                $turnOn = true;
+            }
+            break;
+        case '!=':
+        case '<>':
+            if ($targetValue != $target['trigger']['comparisonTo']) {
+                $turnOn = true;
+            }
+            break;
+        case '<':
+            if ($targetValue < $target['trigger']['comparisonTo']) {
+                $turnOn = true;
+            }
+            break;
+        case '>':
+            if ($targetValue > $target['trigger']['comparisonTo']) {
+                $turnOn = true;
+            }
+            break;
+        case '<=':
+            if ($targetValue <= $target['trigger']['comparisonTo']) {
+                $turnOn = true;
+            }
+            break;
+        case '>=':
+            if ($targetValue >= $target['trigger']['comparisonTo']) {
+                $turnOn = true;
+            }
+            break;
+        default:
+            break;
+        }
+
+        return $turnOn;
     }
 
     /**#@-*/
