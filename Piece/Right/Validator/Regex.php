@@ -67,8 +67,6 @@ class Piece_Right_Validator_Regex extends Piece_Right_Validator_Common
      * @access private
      */
 
-    var $_pattern;
-
     /**#@-*/
 
     /**#@+
@@ -86,11 +84,12 @@ class Piece_Right_Validator_Regex extends Piece_Right_Validator_Common
      */
     function validate($value)
     {
-        if (!is_null($this->_pattern)) {
-            return preg_match($this->_pattern, $value);
+        $pattern = $this->getRule('pattern');
+        if (!is_null($pattern)) {
+            return preg_match($pattern, $value);
         }
 
-        return true;
+        return false;
     }
 
     /**#@-*/
@@ -109,7 +108,7 @@ class Piece_Right_Validator_Regex extends Piece_Right_Validator_Common
      */
     function _initialize()
     {
-        $this->_pattern = null;
+        $this->_addRule('pattern');
     }
  
     /**#@-*/
