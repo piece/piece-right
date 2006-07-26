@@ -72,6 +72,19 @@ class Piece_Right_Validator_Common
      */
 
     // }}}
+    // {{{ constructor
+
+    /**
+     * Initializes properties.
+     *
+     * @since Method available since Release 0.3.0
+     */
+    function Piece_Right_Validator_Common()
+    {
+        $this->_initialize();
+    }
+
+    // }}}
     // {{{ setRules()
 
     /**
@@ -120,7 +133,10 @@ class Piece_Right_Validator_Common
     /**
      * Clears the values of all properties.
      */
-    function clear() {}
+    function clear()
+    {
+        $this->_initialize();
+    }
 
     // }}}
     // {{{ setResults()
@@ -140,6 +156,16 @@ class Piece_Right_Validator_Common
     /**#@+
      * @access private
      */
+
+    // }}}
+    // {{{ _initialize()
+
+    /**
+     * Initializes properties.
+     *
+     * @abstract
+     */
+    function _initialize() {}
  
     /**#@-*/
 
