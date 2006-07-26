@@ -292,9 +292,9 @@ class Piece_RightTestCase extends PHPUnit_TestCase
      */
     function testWatchingFields()
     {
-        $this->_assertWatchingFields('birthdayMonth', '1');
-        $this->_assertWatchingFields('birthdayDay', '20');
-        $this->_assertWatchingFields('birthdayYear', '1976');
+        $this->_assertWatchingFields('birthdayMonth', '1', array('birthdayDay', 'birthdayYear'));
+        $this->_assertWatchingFields('birthdayDay', '20', array('birthdayMonth', 'birthdayYear'));
+        $this->_assertWatchingFields('birthdayYear', '1976', array('birthdayMonth', 'birthdayDay'));
     }
 
     /**
@@ -352,19 +352,21 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         unset($_SERVER['REQUEST_METHOD']);
     }
 
+    function testProblemThatNonRequiredFieldsCannotBeTurnedRequiredOn()
+    {
+        $this->_assertProblemThatNonRequiredFieldsCannotBeTurnedRequiredOn('param1', array('param2', 'param3'));
+        $this->_assertProblemThatNonRequiredFieldsCannotBeTurnedRequiredOn('param2', array('param1', 'param3'));
+        $this->_assertProblemThatNonRequiredFieldsCannotBeTurnedRequiredOn('param3', array('param1', 'param2'));
+    }
+
     /**#@-*/
 
     /**#@+
      * @access private
      */
 
-    function _assertWatchingFields($name, $value)
+    function _assertWatchingFields($name, $value, $invalidFields)
     {
-        $fields = array('birthdayYear' => true,
-                        'birthdayMonth' => true,
-                        'birthdayDay' => true
-                        );
-        unset($fields[$name]);
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_POST['first_name'] = 'Foo';
         $_POST['last_name'] = 'Bar';
@@ -382,9 +384,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
 
         $results = &$right->getResults();
 
-        $this->assertTrue($results->countErrors());
-
-        foreach (array_keys($fields) as $field) {
+        foreach ($invalidFields as $field) {
             $this->assertTrue(in_array($field, $results->getErrorFields()));
         }
 
@@ -392,6 +392,34 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         unset($_POST['country']);
         unset($_POST['last_name']);
         unset($_POST['first_name']);
+        unset($_SERVER['REQUEST_METHOD']);
+    }
+
+    function _assertProblemThatNonRequiredFieldsCannotBeTurnedRequiredOn($name, $invalidFields)
+    {
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST[$name] = '1234';
+
+        $dynamicConfig = &new Piece_Right_Config();
+        $dynamicConfig->setRequired('param1', array('enabled' => false, 'message' => 'param1 is required'));
+        $dynamicConfig->addValidation('param1', 'Regex', array('pattern' => '/^\d{1,4}$/', 'max' => 11), 'param1 validation error');
+        $dynamicConfig->setWatcher('param1',
+                                   array('target' => array(array('name' => 'param2'),
+                                                           array('name' => 'param3')))
+                                   );
+        $dynamicConfig->addValidation('param2', 'Regex', array('pattern' => '/^\d{1,4}$/', 'max' => 11), 'param2 validation error');
+        $dynamicConfig->addValidation('param3', 'Regex', array('pattern' => '/^\d{1,4}$/', 'max' => 11), 'param3 validation error');
+        $right = &new Piece_Right();
+
+        $this->assertFalse($right->validate('Example', $dynamicConfig));
+
+        $results = &$right->getResults();
+
+        foreach ($invalidFields as $field) {
+            $this->assertTrue(in_array($field, $results->getErrorFields()));
+        }
+
+        unset($_POST[$name]);
         unset($_SERVER['REQUEST_METHOD']);
     }
 
