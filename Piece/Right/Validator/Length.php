@@ -68,9 +68,6 @@ class Piece_Right_Validator_Length extends Piece_Right_Validator_Common
      * @access private
      */
 
-    var $_min;
-    var $_max;
-
     /**#@-*/
 
     /**#@+
@@ -89,14 +86,17 @@ class Piece_Right_Validator_Length extends Piece_Right_Validator_Common
     function validate($value)
     {
         $length = strlen($value);
-        if (!is_null($this->_min)) {
-            if ($length < $this->_min) {
+
+        $min = $this->getRule('min');
+        if (!is_null($min)) {
+            if ($length < $min) {
                 return false;
             }
         }
 
-        if (!is_null($this->_max)) {
-            if ($length > $this->_max) {
+        $max = $this->getRule('max');
+        if (!is_null($max)) {
+            if ($length > $max) {
                 return false;
             }
         }
@@ -120,8 +120,8 @@ class Piece_Right_Validator_Length extends Piece_Right_Validator_Common
      */
     function _initialize()
     {
-        $this->_min = null;
-        $this->_max = null;
+        $this->_addRule('min');
+        $this->_addRule('max');
     }
  
     /**#@-*/

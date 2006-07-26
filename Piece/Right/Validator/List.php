@@ -68,8 +68,6 @@ class Piece_Right_Validator_List extends Piece_Right_Validator_Common
      * @access private
      */
 
-    var $_elements = array();
-
     /**#@-*/
 
     /**#@+
@@ -91,8 +89,13 @@ class Piece_Right_Validator_List extends Piece_Right_Validator_Common
             return false;
         }
 
+        $elements = $this->getRule('elements');
+        if (!is_array($elements)) {
+            return false;
+        }
+
         foreach ($value as $element) {
-            if (!in_array($element, $this->_elements)) {
+            if (!in_array($element, $elements)) {
                 return false;
             }
         }
@@ -116,7 +119,7 @@ class Piece_Right_Validator_List extends Piece_Right_Validator_Common
      */
     function _initialize()
     {
-        $this->_elements = array();
+        $this->_addRule('elements', array());
     }
  
     /**#@-*/

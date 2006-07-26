@@ -67,14 +67,6 @@ class Piece_Right_Validator_Date extends Piece_Right_Validator_Common
      * @access private
      */
 
-    var $_year;
-    var $_month;
-    var $_day;
-    var $_pattern;
-    var $_patternYearPosition;
-    var $_patternMonthPosition;
-    var $_patternDayPosition;
-
     /**#@-*/
 
     /**#@+
@@ -92,23 +84,24 @@ class Piece_Right_Validator_Date extends Piece_Right_Validator_Common
      */
     function validate($value)
     {
-        if (!is_null($this->_year)
-            && !is_null($this->_month)
-            && !is_null($this->_day)
-            ) {
-            return checkdate($this->_results->getFieldValue($this->_month),
-                             $this->_results->getFieldValue($this->_day),
-                             $this->_results->getFieldValue($this->_year)
+        $year = $this->getRule('year');
+        $month = $this->getRule('month');
+        $day = $this->getRule('day');
+        if (!is_null($year) && !is_null($month) && !is_null($day)) {
+            return checkdate($this->_results->getFieldValue($month),
+                             $this->_results->getFieldValue($day),
+                             $this->_results->getFieldValue($year)
                              );
         }
 
-        if (!preg_match($this->_pattern, $value, $matches)) {
+        $pattern = $this->getRule('pattern');
+        if (!preg_match($pattern, $value, $matches)) {
             return false;
         }
 
-        return checkdate($matches[$this->_patternMonthPosition],
-                         $matches[$this->_patternDayPosition],
-                         $matches[$this->_patternYearPosition]
+        return checkdate($matches[ $this->getRule('patternMonthPosition') ],
+                         $matches[ $this->getRule('patternDayPosition') ],
+                         $matches[ $this->getRule('patternYearPosition') ]
                          );
     }
 
@@ -128,13 +121,13 @@ class Piece_Right_Validator_Date extends Piece_Right_Validator_Common
      */
     function _initialize()
     {
-        $this->_year = null;
-        $this->_month = null;
-        $this->_day = null;
-        $this->_pattern = '/^(\d+)-(\d+)-(\d+)$/';
-        $this->_patternYearPosition = 1;
-        $this->_patternMonthPosition = 2;
-        $this->_patternDayPosition = 3;
+        $this->_addRule('year');
+        $this->_addRule('month');
+        $this->_addRule('day');
+        $this->_addRule('pattern', '/^(\d+)-(\d+)-(\d+)$/');
+        $this->_addRule('patternYearPosition', 1);
+        $this->_addRule('patternMonthPosition', 2);
+        $this->_addRule('patternDayPosition', 3);
     }
  
     /**#@-*/
