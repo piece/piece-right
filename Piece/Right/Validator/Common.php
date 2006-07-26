@@ -64,6 +64,7 @@ class Piece_Right_Validator_Common
      */
 
     var $_results;
+    var $_rules = array();
 
     /**#@-*/
 
@@ -94,24 +95,24 @@ class Piece_Right_Validator_Common
      */
     function setRules($rules = array())
     {
-        foreach ($rules as $name => $value) {
-            $this->addRule($name, $value);
+        foreach ($rules as $rule => $value) {
+            $this->setRule($rule, $value);
         }
     }
 
     // }}}
-    // {{{ addRule()
+    // {{{ setRule()
 
     /**
-     * Adds a validation rule to the validator.
+     * Sets a validation rule to the given rule name.
      *
-     * @param string $name
+     * @param string $rule
      * @param mixed  $value
      */
-    function addRule($name, $value)
+    function setRule($rule, $value)
     {
-        if (array_key_exists("_$name", $this)) {
-            $this->{"_$name"} = $value;
+        if (array_key_exists($rule, $this->_rules)) {
+            $this->_rules[$rule] = $value;
         }
     }
 
@@ -151,6 +152,20 @@ class Piece_Right_Validator_Common
         $this->_results = &$results;
     }
 
+    // }}}
+    // {{{ getRule()
+
+    /**
+     * Gets the validation rule of the given rule name.
+     *
+     * @param string $rule
+     * @return mixed
+     */
+    function getRule($rule)
+    {
+        return $this->_rules[$rule];
+    }
+
     /**#@-*/
 
     /**#@+
@@ -167,6 +182,21 @@ class Piece_Right_Validator_Common
      * @since Method available since Release 0.3.0
      */
     function _initialize() {}
+
+    // }}}
+    // {{{ _addRule()
+
+    /**
+     * Adds the validation rule to the validator, and sets the default value
+     * for the rule to the given value.
+     *
+     * @param string $rule
+     * @param mixed $default
+     */
+    function _addRule($rule, $default = null)
+    {
+        $this->_rules[$rule] = $default;
+    }
  
     /**#@-*/
 
