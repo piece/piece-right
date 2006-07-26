@@ -100,22 +100,24 @@ class Piece_Right_Validator_List extends Piece_Right_Validator_Common
         return true;
     }
 
-    // }}}
-    // {{{ clear()
-
-    /**
-     * Clears the values of all properties.
-     */
-    function clear()
-    {
-        $this->_elements = array();
-    }
-
     /**#@-*/
 
     /**#@+
      * @access private
      */
+
+    // }}}
+    // {{{ _initialize()
+
+    /**
+     * Initializes properties.
+     *
+     * @since Method available since Release 0.3.0
+     */
+    function _initialize()
+    {
+        $this->_elements = array();
+    }
  
     /**#@-*/
 

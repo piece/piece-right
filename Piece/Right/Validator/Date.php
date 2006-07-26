@@ -70,10 +70,10 @@ class Piece_Right_Validator_Date extends Piece_Right_Validator_Common
     var $_year;
     var $_month;
     var $_day;
-    var $_pattern = '/^(\d+)-(\d+)-(\d+)$/';
-    var $_patternYearPosition = 1;
-    var $_patternMonthPosition = 2;
-    var $_patternDayPosition = 3;
+    var $_pattern;
+    var $_patternYearPosition;
+    var $_patternMonthPosition;
+    var $_patternDayPosition;
 
     /**#@-*/
 
@@ -112,13 +112,21 @@ class Piece_Right_Validator_Date extends Piece_Right_Validator_Common
                          );
     }
 
+    /**#@-*/
+
+    /**#@+
+     * @access private
+     */
+
     // }}}
-    // {{{ clear()
+    // {{{ _initialize()
 
     /**
-     * Clears the values of all properties.
+     * Initializes properties.
+     *
+     * @since Method available since Release 0.3.0
      */
-    function clear()
+    function _initialize()
     {
         $this->_year = null;
         $this->_month = null;
@@ -128,12 +136,6 @@ class Piece_Right_Validator_Date extends Piece_Right_Validator_Common
         $this->_patternMonthPosition = 2;
         $this->_patternDayPosition = 3;
     }
-
-    /**#@-*/
-
-    /**#@+
-     * @access private
-     */
  
     /**#@-*/
 
