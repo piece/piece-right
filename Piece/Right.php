@@ -410,6 +410,7 @@ class Piece_Right
     {
         foreach ($validations as $validation) {
                 $validator = &Piece_Right_Validator_Factory::factory($validation['validator']);
+                $validator->setResults($this->_results);
                 $validator->setRules($validation['rules']);
                 if (!$validator->validate($value)) {
                     $this->_results->addError($name,
