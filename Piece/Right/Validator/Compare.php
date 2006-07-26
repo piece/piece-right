@@ -78,7 +78,7 @@ class Piece_Right_Validator_Compare extends Piece_Right_Validator_Common
     // {{{ validate()
 
     /**
-     * Checks whether a value is a valid date.
+     * Compares the value of a field to the value of another field.
      *
      * @param string $value
      * @return boolean
@@ -90,7 +90,7 @@ class Piece_Right_Validator_Compare extends Piece_Right_Validator_Common
             return false;
         }
 
-        return $value == $this->_results->getFieldValue($to);
+        return $value === $this->_results->getFieldValue($to);
     }
 
     /**#@-*/
