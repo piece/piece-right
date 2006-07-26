@@ -18,23 +18,18 @@ o Easy to extend with user defined validators</description>
   <email>iteman@users.sourceforge.net</email>
   <active>yes</active>
  </lead>
- <date>2006-07-23</date>
- <time>05:39:35</time>
+ <date>2006-07-26</date>
+ <time>11:35:46</time>
  <version>
-  <release>0.2.0</release>
-  <api>0.1.0</api>
+  <release>0.3.0</release>
+  <api>0.3.0</api>
  </version>
  <stability>
-  <release>alpha</release>
-  <api>alpha</api>
+  <release>beta</release>
+  <api>beta</api>
  </stability>
  <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
- <notes>This release includes one enhancement as follows:
-
-&lt;&lt;&lt; Enhancements &gt;&gt;&gt;
-
-* Piece_Right_Results
-- Added getFieldValue() method for getting the value of a field.</notes>
+ <notes>dummy</notes>
  <contents>
   <dir baseinstalldir="/" name="/">
    <dir name="data">
@@ -57,8 +52,19 @@ o Easy to extend with user defined validators</description>
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
      </dir> <!-- /Piece/Right/Config -->
+     <dir name="Filter">
+      <file name="Factory.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="JapaneseH2Z.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+     </dir> <!-- /Piece/Right/Filter -->
      <dir name="Validator">
       <file name="Common.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Date.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
       <file name="Factory.php" role="php">
@@ -67,13 +73,13 @@ o Easy to extend with user defined validators</description>
       <file name="Length.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
+      <file name="List.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
       <file name="Range.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
       <file name="Regex.php" role="php">
-       <tasks:replace from="@package_version@" to="version" type="package-info" />
-      </file>
-      <file name="Required.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
      </dir> <!-- /Piece/Right/Validator -->
@@ -105,8 +111,31 @@ o Easy to extend with user defined validators</description>
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
       </dir> <!-- /tests/Piece/Right/Config -->
+      <dir name="Filter">
+       <file name="Bar.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="FactoryTestCase.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="Foo.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="JapaneseH2ZTestCase.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="LowerCase.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="TestRunner.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+      </dir> <!-- /tests/Piece/Right/Filter -->
       <dir name="Validator">
        <file name="Bar.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="DateTestCase.php" role="test">
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
        <file name="FactoryTestCase.php" role="test">
@@ -121,13 +150,13 @@ o Easy to extend with user defined validators</description>
        <file name="LengthTestCase.php" role="test">
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
+       <file name="ListTestCase.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
        <file name="RangeTestCase.php" role="test">
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
        <file name="RegexTestCase.php" role="test">
-        <tasks:replace from="@package_version@" to="version" type="package-info" />
-       </file>
-       <file name="RequiredTestCase.php" role="test">
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
        <file name="TestRunner.php" role="test">
@@ -135,6 +164,9 @@ o Easy to extend with user defined validators</description>
        </file>
       </dir> <!-- /tests/Piece/Right/Validator -->
       <file name="ConfigTestCase.php" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="ResultsTestCase.php" role="test">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
       <file name="TestRunner.php" role="test">
@@ -193,22 +225,43 @@ o Easy to extend with user defined validators</description>
    <install as="Piece/Right/Config/FactoryTestCase.php" name="tests/Piece/Right/Config/FactoryTestCase.php" />
    <install as="Piece/Right/Config/TestRunner.php" name="tests/Piece/Right/Config/TestRunner.php" />
    <install as="Piece/Right/ConfigTestCase.php" name="tests/Piece/Right/ConfigTestCase.php" />
+   <install as="Piece/Right/Filter/Bar.php" name="tests/Piece/Right/Filter/Bar.php" />
+   <install as="Piece/Right/Filter/FactoryTestCase.php" name="tests/Piece/Right/Filter/FactoryTestCase.php" />
+   <install as="Piece/Right/Filter/Foo.php" name="tests/Piece/Right/Filter/Foo.php" />
+   <install as="Piece/Right/Filter/JapaneseH2ZTestCase.php" name="tests/Piece/Right/Filter/JapaneseH2ZTestCase.php" />
+   <install as="Piece/Right/Filter/LowerCase.php" name="tests/Piece/Right/Filter/LowerCase.php" />
+   <install as="Piece/Right/Filter/TestRunner.php" name="tests/Piece/Right/Filter/TestRunner.php" />
+   <install as="Piece/Right/ResultsTestCase.php" name="tests/Piece/Right/ResultsTestCase.php" />
    <install as="Piece/Right/TestRunner.php" name="tests/Piece/Right/TestRunner.php" />
    <install as="Piece/Right/ValidationErrorTestCase.php" name="tests/Piece/Right/ValidationErrorTestCase.php" />
    <install as="Piece/Right/Validator/Bar.php" name="tests/Piece/Right/Validator/Bar.php" />
+   <install as="Piece/Right/Validator/DateTestCase.php" name="tests/Piece/Right/Validator/DateTestCase.php" />
    <install as="Piece/Right/Validator/FactoryTestCase.php" name="tests/Piece/Right/Validator/FactoryTestCase.php" />
    <install as="Piece/Right/Validator/Foo.php" name="tests/Piece/Right/Validator/Foo.php" />
    <install as="Piece/Right/Validator/Invalid.php" name="tests/Piece/Right/Validator/Invalid.php" />
    <install as="Piece/Right/Validator/LengthTestCase.php" name="tests/Piece/Right/Validator/LengthTestCase.php" />
+   <install as="Piece/Right/Validator/ListTestCase.php" name="tests/Piece/Right/Validator/ListTestCase.php" />
    <install as="Piece/Right/Validator/RangeTestCase.php" name="tests/Piece/Right/Validator/RangeTestCase.php" />
    <install as="Piece/Right/Validator/RegexTestCase.php" name="tests/Piece/Right/Validator/RegexTestCase.php" />
-   <install as="Piece/Right/Validator/RequiredTestCase.php" name="tests/Piece/Right/Validator/RequiredTestCase.php" />
    <install as="Piece/Right/Validator/TestRunner.php" name="tests/Piece/Right/Validator/TestRunner.php" />
    <install as="Piece/RightTestCase.php" name="tests/Piece/RightTestCase.php" />
    <install as="Piece/TestRunner.php" name="tests/Piece/TestRunner.php" />
   </filelist>
  </phprelease>
  <changelog>
+  <release>
+   <version>
+    <release>0.3.0</release>
+    <api>0.3.0</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2006-07-26</date>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
+   <notes>dummy</notes>
+  </release>
   <release>
    <version>
     <release>0.2.0</release>

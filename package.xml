@@ -19,16 +19,11 @@ o Easy to extend with user defined validators
   </maintainer>
   </maintainers>
  <release>
-  <version>0.2.0</version>
-  <date>2006-07-23</date>
+  <version>0.3.0</version>
+  <date>2006-07-26</date>
   <license>BSD License (revised)</license>
-  <state>alpha</state>
-  <notes>This release includes one enhancement as follows:
-
-&lt;&lt;&lt; Enhancements &gt;&gt;&gt;
-
-* Piece_Right_Results
-- Added getFieldValue() method for getting the value of a field.
+  <state>beta</state>
+  <notes>dummy
   </notes>
   <deps>
    <dep type="php" rel="ge" version="4.3.0" optional="no"/>
@@ -58,8 +53,19 @@ o Easy to extend with user defined validators
         <replace from="@package_version@" to="version" type="package-info"/>
        </file>
       </dir> <!-- /Piece/Right/Config -->
+      <dir name="Filter">
+       <file role="php" name="Factory.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+       <file role="php" name="JapaneseH2Z.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+      </dir> <!-- /Piece/Right/Filter -->
       <dir name="Validator">
        <file role="php" name="Common.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+       <file role="php" name="Date.php">
         <replace from="@package_version@" to="version" type="package-info"/>
        </file>
        <file role="php" name="Factory.php">
@@ -68,13 +74,13 @@ o Easy to extend with user defined validators
        <file role="php" name="Length.php">
         <replace from="@package_version@" to="version" type="package-info"/>
        </file>
+       <file role="php" name="List.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
        <file role="php" name="Range.php">
         <replace from="@package_version@" to="version" type="package-info"/>
        </file>
        <file role="php" name="Regex.php">
-        <replace from="@package_version@" to="version" type="package-info"/>
-       </file>
-       <file role="php" name="Required.php">
         <replace from="@package_version@" to="version" type="package-info"/>
        </file>
       </dir> <!-- /Piece/Right/Validator -->
@@ -106,8 +112,31 @@ o Easy to extend with user defined validators
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
        </dir> <!-- /tests/Piece/Right/Config -->
+       <dir name="Filter">
+        <file role="test" name="Bar.php" install-as="Piece/Right/Filter/Bar.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="FactoryTestCase.php" install-as="Piece/Right/Filter/FactoryTestCase.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="Foo.php" install-as="Piece/Right/Filter/Foo.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="JapaneseH2ZTestCase.php" install-as="Piece/Right/Filter/JapaneseH2ZTestCase.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="LowerCase.php" install-as="Piece/Right/Filter/LowerCase.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="TestRunner.php" install-as="Piece/Right/Filter/TestRunner.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+       </dir> <!-- /tests/Piece/Right/Filter -->
        <dir name="Validator">
         <file role="test" name="Bar.php" install-as="Piece/Right/Validator/Bar.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="DateTestCase.php" install-as="Piece/Right/Validator/DateTestCase.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
         <file role="test" name="FactoryTestCase.php" install-as="Piece/Right/Validator/FactoryTestCase.php">
@@ -122,13 +151,13 @@ o Easy to extend with user defined validators
         <file role="test" name="LengthTestCase.php" install-as="Piece/Right/Validator/LengthTestCase.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
+        <file role="test" name="ListTestCase.php" install-as="Piece/Right/Validator/ListTestCase.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
         <file role="test" name="RangeTestCase.php" install-as="Piece/Right/Validator/RangeTestCase.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
         <file role="test" name="RegexTestCase.php" install-as="Piece/Right/Validator/RegexTestCase.php">
-         <replace from="@package_version@" to="version" type="package-info"/>
-        </file>
-        <file role="test" name="RequiredTestCase.php" install-as="Piece/Right/Validator/RequiredTestCase.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
         <file role="test" name="TestRunner.php" install-as="Piece/Right/Validator/TestRunner.php">
@@ -136,6 +165,9 @@ o Easy to extend with user defined validators
         </file>
        </dir> <!-- /tests/Piece/Right/Validator -->
        <file role="test" name="ConfigTestCase.php" install-as="Piece/Right/ConfigTestCase.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+       <file role="test" name="ResultsTestCase.php" install-as="Piece/Right/ResultsTestCase.php">
         <replace from="@package_version@" to="version" type="package-info"/>
        </file>
        <file role="test" name="TestRunner.php" install-as="Piece/Right/TestRunner.php">
@@ -160,6 +192,14 @@ o Easy to extend with user defined validators
   </filelist>
  </release>
  <changelog>
+   <release>
+    <version>0.3.0</version>
+    <date>2006-07-26</date>
+    <license>BSD License (revised)</license>
+    <state>beta</state>
+    <notes>dummy
+    </notes>
+   </release>
    <release>
     <version>0.2.0</version>
     <date>2006-07-23</date>

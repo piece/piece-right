@@ -41,14 +41,9 @@ require_once 'PEAR/PackageFileManager2.php';
 
 PEAR::staticPushErrorHandling(PEAR_ERROR_CALLBACK, create_function('$error', 'var_dump($error); exit();'));
 
-$version = '0.2.0';
-$apiVersion = '0.1.0';
-$notes = 'This release includes one enhancement as follows:
-
-<<< Enhancements >>>
-
-* Piece_Right_Results
-- Added getFieldValue() method for getting the value of a field.';
+$version = '0.3.0';
+$apiVersion = '0.3.0';
+$notes = 'dummy';
 
 $package = new PEAR_PackageFileManager2();
 $package->setOptions(array('filelistgenerator' => 'svn',
@@ -73,9 +68,9 @@ $package->setLicense('BSD License (revised)',
                      'http://www.opensource.org/licenses/bsd-license.php'
                      );
 $package->setAPIVersion($apiVersion);
-$package->setAPIStability('alpha');
+$package->setAPIStability('beta');
 $package->setReleaseVersion($version);
-$package->setReleaseStability('alpha');
+$package->setReleaseStability('beta');
 $package->setNotes($notes);
 $package->setPhpDep('4.3.0');
 $package->setPearinstallerDep('1.4.3');
