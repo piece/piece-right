@@ -113,6 +113,9 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $_POST['hobbies'] = array('wine', 'manga');
         $_POST['use_php'] = '1';
         $_POST['favorite_framework'] = 'Piece Framework';
+        $_POST['birthdayYear'] = '1976';
+        $_POST['birthdayMonth'] = '1';
+        $_POST['birthdayDay'] = '20';
         $dynamicConfig = &new Piece_Right_Config();
         $dynamicConfig->setRequired('phone');
         $dynamicConfig->addValidation('phone', 'Length', array('min' => 10, 'max' => 11));
@@ -124,6 +127,9 @@ class Piece_RightTestCase extends PHPUnit_TestCase
 
         $results = &$right->getResults();
 
+        unset($_POST['birthdayDay']);
+        unset($_POST['birthdayMonth']);
+        unset($_POST['birthdayYear']);
         unset($_POST['favorite_framework']);
         unset($_POST['use_php']);
         unset($_POST['hobbies']);
@@ -376,7 +382,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
 
         $results = &$right->getResults();
 
-        $this->assertEquals(3, $results->countErrors());
+        $this->assertTrue($results->countErrors());
 
         foreach (array_keys($fields) as $field) {
             $this->assertTrue(in_array($field, $results->getErrorFields()));
