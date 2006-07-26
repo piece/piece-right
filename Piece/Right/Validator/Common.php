@@ -63,6 +63,8 @@ class Piece_Right_Validator_Common
      * @access private
      */
 
+    var $_results;
+
     /**#@-*/
 
     /**#@+
@@ -119,6 +121,19 @@ class Piece_Right_Validator_Common
      * Clears the values of all properties.
      */
     function clear() {}
+
+    // }}}
+    // {{{ setResults()
+
+    /**
+     * Sets a Piece_Right_Results object.
+     *
+     * @param Piece_Right_Results $results
+     */
+    function setResults(&$results)
+    {
+        $this->_results = &$results;
+    }
 
     /**#@-*/
 
