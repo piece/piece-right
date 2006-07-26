@@ -179,6 +179,8 @@ class Piece_Right_Config
 
         if (array_key_exists('enabled', $elements)) {
             $this->_requiredFields[$field]['enabled'] = $elements['enabled'];
+        } else {
+            $this->_requiredFields[$field]['enabled'] = true;
         }
 
         if (array_key_exists('message', $elements)
