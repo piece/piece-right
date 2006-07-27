@@ -352,11 +352,44 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         unset($_SERVER['REQUEST_METHOD']);
     }
 
+    /**
+     * @since Method available since Release 0.3.0
+     */
     function testProblemThatNonRequiredFieldsCannotBeTurnedRequiredOn()
     {
         $this->_assertProblemThatNonRequiredFieldsCannotBeTurnedRequiredOn('param1', array('param2', 'param3'));
         $this->_assertProblemThatNonRequiredFieldsCannotBeTurnedRequiredOn('param2', array('param1', 'param3'));
         $this->_assertProblemThatNonRequiredFieldsCannotBeTurnedRequiredOn('param3', array('param1', 'param2'));
+    }
+
+    /**
+     * @since Method available since Release 0.3.0
+     */
+    function testRuleMessage()
+    {
+        $dynamicConfig = &new Piece_Right_Config();
+        $this->_assertRuleMessage('a', 'The value is too short.', $dynamicConfig);
+
+        $dynamicConfig = &new Piece_Right_Config();
+        $this->_assertRuleMessage('abcdefghijk', 'The value is too long.', $dynamicConfig);
+
+        $dynamicConfig = &new Piece_Right_Config();
+        $dynamicConfig->addValidation('foo', 'Length',
+                                      array('min' => 5,
+                                            'min_message' => 'The value is too short.',
+                                            'max' => 10,
+                                            'max_message' => 'The value is too long.')
+                                      );
+        $this->_assertRuleMessage('a', 'The value is too short.', $dynamicConfig);
+
+        $dynamicConfig = &new Piece_Right_Config();
+        $dynamicConfig->addValidation('foo', 'Length',
+                                      array('min' => 5,
+                                            'min_message' => 'The value is too short.',
+                                            'max' => 10,
+                                            'max_message' => 'The value is too long.')
+                                      );
+        $this->_assertRuleMessage('abcdefghijk', 'The value is too long.', $dynamicConfig);
     }
 
     /**#@-*/
@@ -365,6 +398,9 @@ class Piece_RightTestCase extends PHPUnit_TestCase
      * @access private
      */
 
+    /**
+     * @since Method available since Release 0.3.0
+     */
     function _assertWatchingFields($name, $value, $invalidFields)
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
@@ -395,6 +431,9 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         unset($_SERVER['REQUEST_METHOD']);
     }
 
+    /**
+     * @since Method available since Release 0.3.0
+     */
     function _assertProblemThatNonRequiredFieldsCannotBeTurnedRequiredOn($name, $invalidFields)
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
@@ -420,6 +459,31 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         }
 
         unset($_POST[$name]);
+        unset($_SERVER['REQUEST_METHOD']);
+    }
+
+    /**
+     * @since Method available since Release 0.3.0
+     */
+    function _assertRuleMessage($fieldValue, $expectedMessage, &$dynamicConfig)
+    {
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST['foo'] = $fieldValue;
+        $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
+
+        $this->assertFalse($right->validate('RuleMessage'));
+
+        $results = &$right->getResults();
+
+        $this->assertEquals(1, $results->countErrors());
+
+        foreach (array('foo') as $field) {
+            $this->assertTrue(in_array($field, $results->getErrorFields()));
+        }
+
+        $this->assertEquals($expectedMessage, $results->getErrorMessage('foo'));
+
+        unset($_POST['foo']);
         unset($_SERVER['REQUEST_METHOD']);
     }
 
