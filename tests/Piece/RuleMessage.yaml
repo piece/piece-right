@@ -1,0 +1,11 @@
+# $Id$
+- name: foo
+  required:
+  validator:
+    - name: Length
+      rule:
+        min: 5
+        min_message: The value is too short.
+        max: 10
+        max_message: The value is too long.
+      message: bar
