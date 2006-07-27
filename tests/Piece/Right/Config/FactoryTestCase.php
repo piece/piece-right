@@ -185,6 +185,24 @@ class Piece_Right_Config_FactoryTestCase extends PHPUnit_TestCase
         Piece_Right_Error::popCallback();
     }
 
+    /**
+     * @since Method available since Release 0.3.0
+     */
+    function testInvalidConfiguration()
+    {
+        Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
+
+        Piece_Right_Config_Factory::factory('InvalidConfiguration', dirname(__FILE__));
+
+        $this->assertTrue(Piece_Right_Error::hasErrors('exception'));
+
+        $error = Piece_Right_Error::pop();
+
+        $this->assertEquals(PIECE_RIGHT_ERROR_INVALID_CONFIGURATION, $error['code']);
+
+        Piece_Right_Error::popCallback();
+    }
+
     /**#@-*/
 
     /**#@+
