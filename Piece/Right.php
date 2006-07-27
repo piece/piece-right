@@ -380,11 +380,12 @@ class Piece_Right
                 $validator = &Piece_Right_Validator_Factory::factory($validation['validator']);
                 $validator->setResults($this->_results);
                 $validator->setRules($validation['rules']);
+                $validator->setMessage($validation['message']);
                 if (!$validator->validate($value)) {
                     $this->_results->addError($name,
                                               $validation['validator'],
-                                              $validation['message']
-);
+                                              $validator->getMessage()
+                                              );
                 }
         }
     }
