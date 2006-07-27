@@ -75,6 +75,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
      */
 
     var $_oldFilterDirectories;
+    var $_oldValidatorDirectories;
 
     /**#@-*/
 
@@ -87,10 +88,14 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         Piece_Right_Error::pushCallback(create_function('$error', 'var_dump($error); return ' . PEAR_ERRORSTACK_DIE . ';'));
         $this->_oldFilterDirectories = $GLOBALS['PIECE_RIGHT_Filter_Directories'];
         Piece_Right_Filter_Factory::addFilterDirectory(dirname(__FILE__) . '/..');
+        $this->_oldValidatorDirectories = $GLOBALS['PIECE_RIGHT_Validator_Directories'];
+        Piece_Right_Validator_Factory::addValidatorDirectory(dirname(__FILE__) . '/..');
     }
 
     function tearDown()
     {
+        $GLOBALS['PIECE_RIGHT_Validator_Instances'] = array();
+        $GLOBALS['PIECE_RIGHT_Validator_Directories'] = $this->_oldValidatorDirectories;
         $GLOBALS['PIECE_RIGHT_Filter_Instances'] = array();
         $GLOBALS['PIECE_RIGHT_Filter_Directories'] = $this->_oldFilterDirectories;
         $cache = &new Cache_Lite_File(array('cacheDir' => dirname(__FILE__) . '/',
@@ -182,10 +187,11 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $results = &$right->getResults();
 
         $this->assertEquals(3, $results->countErrors());
-        $errorFields = $results->getErrorFields();
+
         foreach (array('first_name', 'hobbies', 'favorite_framework') as $field) {
-            $this->assertTrue(in_array($field, $errorFields));
+            $this->assertTrue(in_array($field, $results->getErrorFields()), "The field [ $field ] is expected.");
         }
+
         $this->assertTrue($results->isError('first_name'));
         $this->assertFalse($results->isError('last_name'));
         $this->assertFalse($results->isError('phone'));
