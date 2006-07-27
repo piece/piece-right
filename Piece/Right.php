@@ -133,7 +133,7 @@ class Piece_Right
 
             $fieldValue = $this->_results->getFieldValue($fieldName);
 
-            if (!$this->_doValidation($fieldName, $fieldValue)) {
+            if (!$this->_checkValidationRequirement($fieldName, $fieldValue)) {
                 continue;
             }
 
@@ -334,16 +334,17 @@ class Piece_Right
     }
 
     // }}}
-    // {{{ _doValidation()
+    // {{{ _checkValidationRequirement()
 
     /**
      * Returns whether the current validation should be continued or not.
      *
      * @param string $name
      * @param string $value
+     * @return boolean
      * @since Method available since Release 0.3.0
      */
-    function _doValidation($name, $value)
+    function _checkValidationRequirement($name, $value)
     {
         if ($this->_config->isRequired($name)) {
             if ($this->_isEmpty($value)) {
