@@ -93,6 +93,7 @@ class Piece_Right_Config_Factory
      * @param string $configDirectory
      * @param string $cacheDirectory
      * @return Piece_Right_Config
+     * @throws PIECE_RIGHT_ERROR_INVALID_CONFIGURATION
      * @static
      */
     function &factory($validationSet = null, $configDirectory = null, $cacheDirectory = null)
@@ -149,6 +150,11 @@ class Piece_Right_Config_Factory
                                     );
             Piece_Right_Error::popCallback();
             $config = &Piece_Right_Config_Factory::_parseFile($configFile);
+            if (Piece_Right_Error::hasErrors('exception')) {
+                $return = null;
+                return $return;
+            }
+
             return $config;
         }
 
@@ -162,6 +168,11 @@ class Piece_Right_Config_Factory
                                     );
             Piece_Right_Error::popCallback();
             $config = &Piece_Right_Config_Factory::_parseFile($configFile);
+            if (Piece_Right_Error::hasErrors('exception')) {
+                $return = null;
+                return $return;
+            }
+
             return $config;
         }
 
@@ -187,6 +198,7 @@ class Piece_Right_Config_Factory
      * @param string $cacheDirectory
      * @param string $masterFile
      * @return Piece_Right_Config
+     * @throws PIECE_RIGHT_ERROR_INVALID_CONFIGURATION
      * @static
      */
     function &_getConfiguration($cacheDirectory, $masterFile)
@@ -210,11 +222,21 @@ class Piece_Right_Config_Factory
                                     );
             Piece_Right_Error::popCallback();
             $config = &Piece_Right_Config_Factory::_parseFile($masterFile);
+            if (Piece_Right_Error::hasErrors('exception')) {
+                $return = null;
+                return $return;
+            }
+
             return $config;
         }
 
         if (!$config) {
             $config = &Piece_Right_Config_Factory::_parseFile($masterFile);
+            if (Piece_Right_Error::hasErrors('exception')) {
+                $return = null;
+                return $return;
+            }
+
             $result = $cache->save($config);
             if (PEAR::isError($result)) {
                 Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
@@ -237,6 +259,7 @@ class Piece_Right_Config_Factory
      *
      * @param string $file
      * @return Piece_Right_Config
+     * @throws PIECE_RIGHT_ERROR_INVALID_CONFIGURATION
      * @static
      */
     function &_parseFile($file)
@@ -244,6 +267,16 @@ class Piece_Right_Config_Factory
         $config = &new Piece_Right_Config();
         $yaml = Spyc::YAMLLoad($file);
         foreach ($yaml as $validation) {
+            if (!array_key_exists('name', $validation)) {
+                Piece_Right_Error::push(PIECE_RIGHT_ERROR_INVALID_CONFIGURATION,
+                                        "A configuration in the configuration file [ $file ] has no 'name' element."
+                                        );
+                $return = null;
+                return $return;
+            }
+
+            $config->addField($validation['name']);
+
             if (array_key_exists('required', $validation)) {
                 $config->setRequired($validation['name'], (array)$validation['required']);
             }
