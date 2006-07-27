@@ -69,6 +69,7 @@ class Piece_Right_Config
     var $_validationSet = array();
     var $_filters = array();
     var $_watchers = array();
+    var $_forceValidationFields = array();
 
     /**#@-*/
 
@@ -391,6 +392,41 @@ class Piece_Right_Config
         if (!array_key_exists($field, $this->_validationSet)) {
             $this->_validationSet[$field] = array();
         }
+    }
+
+    // }}}
+    // {{{ setForceValidation()
+
+    /**
+     * Turns force validation on/off for the given field.
+     *
+     * @param string $field
+     * @param boolean $forceValidation
+     * @since Method available since Release 0.3.0
+     */
+    function setForceValidation($field, $forceValidation = true)
+    {
+        $this->addField($field);
+
+        $this->_forceValidationFields[$field] = $forceValidation;
+    }
+
+    // }}}
+    // {{{ forceValidation()
+
+    /**
+     * Forces validation for the given field.
+     *
+     * @param string $field
+     * @since Method available since Release 0.3.0
+     */
+    function forceValidation($field)
+    {
+        if (!array_key_exists($field, $this->_forceValidationFields)) {
+            return false;
+        }
+
+        return $this->_forceValidationFields[$field];
     }
 
     /**#@-*/
