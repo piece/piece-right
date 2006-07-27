@@ -398,6 +398,54 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $this->_assertRuleMessage('abcdefghijk', 'The value is too long.', $dynamicConfig);
     }
 
+    /**
+     * @since Method available since Release 0.3.0
+     */
+    function testForceValidationBasedOnWatcher()
+    {
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST['has_home_phone'] = 2;
+        $_POST['homePhone1'] = '';
+        $_POST['homePhone2'] = '';
+        $_POST['homePhone3'] = '';
+        $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
+
+        $this->assertTrue($right->validate('Foo'));
+
+        unset($_POST['homePhone3']);
+        unset($_POST['homePhone2']);
+        unset($_POST['homePhone1']);
+        unset($_POST['has_home_phone']);
+        unset($_SERVER['REQUEST_METHOD']);
+
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST['has_home_phone'] = 2;
+        $_POST['homePhone1'] = '1111';
+        $_POST['homePhone2'] = '';
+        $_POST['homePhone3'] = '';
+        $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
+
+        $this->assertFalse($right->validate('ForceValidationBasedOnWatcher'));
+
+        $results = &$right->getResults();
+
+        $this->assertEquals(3, $results->countErrors());
+
+        foreach (array('home_phone', 'homePhone2', 'homePhone3') as $field) {
+            $this->assertTrue(in_array($field, $results->getErrorFields()), "The field [ $field ] is expected.");
+        }
+
+        $this->assertEquals('Please input all fields of the home phone.', $results->getErrorMessage('home_phone'));
+        $this->assertEquals('The field is required.', $results->getErrorMessage('homePhone2'));
+        $this->assertEquals('The field is required.', $results->getErrorMessage('homePhone3'));
+
+        unset($_POST['homePhone3']);
+        unset($_POST['homePhone2']);
+        unset($_POST['homePhone1']);
+        unset($_POST['has_home_phone']);
+        unset($_SERVER['REQUEST_METHOD']);
+    }
+
     /**#@-*/
 
     /**#@+
