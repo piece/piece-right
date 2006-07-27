@@ -129,12 +129,12 @@ class Piece_Right
         $this->_results = &new Piece_Right_Results();
         $validationSet = $this->_config->getValidationSet();
 
-        $this->_filter($validationSet);
+        $this->_filter(array_keys($validationSet));
         if (Piece_Right_Error::hasErrors('exception')) {
             return;
         }
 
-        $this->_watch($validationSet);
+        $this->_watch(array_keys($validationSet));
 
         foreach ($validationSet as $fieldName => $validations) {
             $fieldValue = $this->_results->getFieldValue($fieldName);
@@ -257,14 +257,14 @@ class Piece_Right
     /**
      * Filters field values.
      *
-     * @param array $validationSet
+     * @param array $fields
      * @since Method available since Release 0.3.0
      * @throws PIECE_RIGHT_ERROR_NOT_FOUND
      * @throws PIECE_RIGHT_ERROR_INVALID_FILTER
      */
-    function _filter($validationSet)
+    function _filter($fields)
     {
-        foreach ($validationSet as $fieldName => $validations) {
+        foreach ($fields as $fieldName) {
             $fieldValue = call_user_func($this->_fieldValuesCallback, $fieldName);
             $filters = $this->_config->getFiltersByFieldName($fieldName);
             foreach ($filters as $filterName) {
@@ -291,12 +291,13 @@ class Piece_Right
      * Watches the target fields and turns the fields requirements
      * on/off.
      *
+     * @param array $fields
      * @param array $validationSet
      * @since Method available since Release 0.3.0
      */
-    function _watch($validationSet)
+    function _watch($fields)
     {
-        foreach ($validationSet as $fieldName => $validations) {
+        foreach ($fields as $fieldName) {
             $watcher = $this->_config->getWatcher($fieldName);
             if (!is_array($watcher)) {
                 continue;
