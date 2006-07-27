@@ -41,6 +41,7 @@ require_once 'Piece/Right/Config/Factory.php';
 require_once 'Piece/Right/Validator/Factory.php';
 require_once 'Piece/Right/Results.php';
 require_once 'Piece/Right/Filter/Factory.php';
+require_once 'Piece/Right/Error.php';
 
 // {{{ Piece_Right
 
@@ -115,6 +116,8 @@ class Piece_Right
      * @param Piece_Right_Config $dynamicConfig
      * @return boolean
      * @throws PIECE_RIGHT_ERROR_INVALID_CONFIGURATION
+     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
+     * @throws PIECE_RIGHT_ERROR_INVALID_FILTER
      */
     function validate($validationSetName = null, $dynamicConfig = null)
     {
@@ -127,6 +130,9 @@ class Piece_Right
         $validationSet = $this->_config->getValidationSet();
 
         $this->_filter($validationSet);
+        if (Piece_Right_Error::hasErrors('exception')) {
+            return;
+        }
 
         foreach ($validationSet as $fieldName => $validations) {
             $this->_watch($fieldName);
@@ -138,6 +144,9 @@ class Piece_Right
             }
 
             $this->_validate($fieldName, $fieldValue, $validations);
+            if (Piece_Right_Error::hasErrors('exception')) {
+                return;
+            }
         }
 
         return !(boolean)$this->_results->countErrors();
@@ -250,6 +259,8 @@ class Piece_Right
      *
      * @param array $validationSet
      * @since Method available since Release 0.3.0
+     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
+     * @throws PIECE_RIGHT_ERROR_INVALID_FILTER
      */
     function _filter($validationSet)
     {
@@ -259,6 +270,10 @@ class Piece_Right
             foreach ($filters as $filterName) {
                 if (!function_exists($filterName)) {
                     $filter = &Piece_Right_Filter_Factory::factory($filterName);
+                    if (Piece_Right_Error::hasErrors('exception')) {
+                        return;
+                    }
+
                     $fieldValue = $filter->filter($fieldValue);
                 } else {
                     $fieldValue = call_user_func($filterName, $fieldValue);
@@ -373,11 +388,17 @@ class Piece_Right
      * @param string $value
      * @param array  $validations
      * @since Method available since Release 0.3.0
+     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
+     * @throws PIECE_RIGHT_ERROR_INVALID_VALIDATOR
      */
     function _validate($name, $value, $validations)
     {
         foreach ($validations as $validation) {
                 $validator = &Piece_Right_Validator_Factory::factory($validation['validator']);
+                if (Piece_Right_Error::hasErrors('exception')) {
+                    return;
+                }
+
                 $validator->setResults($this->_results);
                 $validator->setRules($validation['rules']);
                 $validator->setMessage($validation['message']);
