@@ -65,6 +65,8 @@ class Piece_Right_Validator_Common
 
     var $_results;
     var $_rules = array();
+    var $_message;
+    var $_messages = array();
 
     /**#@-*/
 
@@ -113,6 +115,13 @@ class Piece_Right_Validator_Common
     {
         if (array_key_exists($rule, $this->_rules)) {
             $this->_rules[$rule] = $value;
+            return;
+        }
+
+        if (preg_match('/^(.+)_message$/', $rule, $matches)
+            && array_key_exists($matches[1], $this->_messages)
+            ) {
+            $this->setRuleMessage($matches[1], $value);
         }
     }
 
@@ -132,10 +141,12 @@ class Piece_Right_Validator_Common
     // {{{ clear()
 
     /**
-     * Clears the values of all properties.
+     * Clears some properties for the next use.
      */
     function clear()
     {
+        $this->_message = null;
+        $this->_messages = array();
         $this->_initialize();
     }
 
@@ -166,6 +177,48 @@ class Piece_Right_Validator_Common
         return $this->_rules[$rule];
     }
 
+    // }}}
+    // {{{ setRuleMessage()
+
+    /**
+     * Sets an error message for the given rule name.
+     *
+     * @param string $rule
+     * @param string $message
+     */
+    function setRuleMessage($rule, $message)
+    {
+        if (array_key_exists($rule, $this->_messages)) {
+            $this->_messages[$rule] = $message;
+        }
+    }
+
+    // }}}
+    // {{{ setMessage()
+
+    /**
+     * Sets an error message to the current validation.
+     *
+     * @param string $message
+     */
+    function setMessage($message)
+    {
+        $this->_message = $message;
+    }
+
+    // }}}
+    // {{{ getMessage()
+
+    /**
+     * Gets an error message for the current validation.
+     *
+     * @return string
+     */
+    function getMessage()
+    {
+        return $this->_message;
+    }
+
     /**#@-*/
 
     /**#@+
@@ -192,10 +245,28 @@ class Piece_Right_Validator_Common
      *
      * @param string $rule
      * @param mixed $default
+     * @param string $message
      */
-    function _addRule($rule, $default = null)
+    function _addRule($rule, $default = null, $message = null)
     {
         $this->_rules[$rule] = $default;
+        $this->_messages[$rule] = $message;
+    }
+
+    // }}}
+    // {{{ _setMessage()
+
+    /**
+     * Sets the error message of the given rule name to the current
+     * validation.
+     *
+     * @param string $rule
+     */
+    function _setMessage($rule)
+    {
+        if (array_key_exists($rule, $this->_messages)) {
+            $this->setMessage($this->_messages[$rule]);
+        }
     }
  
     /**#@-*/
