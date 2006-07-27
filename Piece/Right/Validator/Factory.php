@@ -166,7 +166,7 @@ class Piece_Right_Validator_Factory
         if (!file_exists($file)) {
             Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
             Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                    "The validator file for the class [ $validator ] not found.",
+                                    "The validator file [ $file ] for the class [ $validator ] not found.",
                                     'warning'
                                     );
             Piece_Right_Error::popCallback();
@@ -183,7 +183,7 @@ class Piece_Right_Validator_Factory
             return false;
         }
 
-        if (!@include_once $file) {
+        if (!include_once $file) {
             Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
             Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
                                     "The validator file [ $file ] not found or was not readable.",
