@@ -139,8 +139,10 @@ class Piece_Right
         foreach ($validationSet as $fieldName => $validations) {
             $fieldValue = $this->_results->getFieldValue($fieldName);
 
-            if (!$this->_checkValidationRequirement($fieldName, $fieldValue)) {
-                continue;
+            if (!$this->_config->forceValidation($fieldName)) {
+                if (!$this->_checkValidationRequirement($fieldName, $fieldValue)) {
+                    continue;
+                }
             }
 
             $this->_validate($fieldName, $fieldValue, $validations);
@@ -343,6 +345,13 @@ class Piece_Right
 
             foreach ($turnOnFields as $turnOnFieldName) {
                 $this->_config->setRequired($turnOnFieldName, array('enabled' => true));
+            }
+
+            if (array_key_exists('turnOnForceValidation', $watcher)
+                && $watcher['turnOnForceValidation']
+                && count($turnOnFields)
+                ) {
+                $this->_config->setForceValidation($fieldName);
             }
 
             if (array_key_exists('turnOff', $watcher)) {
