@@ -114,10 +114,15 @@ class Piece_Right
      * @param string             $validationSetName
      * @param Piece_Right_Config $dynamicConfig
      * @return boolean
+     * @throws PIECE_RIGHT_ERROR_INVALID_CONFIGURATION
      */
     function validate($validationSetName = null, $dynamicConfig = null)
     {
         $this->_configure($validationSetName, $dynamicConfig);
+        if (Piece_Right_Error::hasErrors('exception')) {
+            return;
+        }
+
         $this->_results = &new Piece_Right_Results();
         $validationSet = $this->_config->getValidationSet();
 
@@ -191,6 +196,7 @@ class Piece_Right
      *
      * @param string             $validationSet
      * @param Piece_Right_Config $dynamicConfig
+     * @throws PIECE_RIGHT_ERROR_INVALID_CONFIGURATION
      */
     function _configure($validationSet = null, $dynamicConfig = null)
     {
@@ -198,6 +204,9 @@ class Piece_Right
                                                               $this->_configDirectory,
                                                               $this->_cacheDirectory
                                                               );
+        if (Piece_Right_Error::hasErrors('exception')) {
+            return;
+        }
 
         if (is_a($dynamicConfig, 'Piece_Right_Config')) {
             $this->_config->merge($dynamicConfig);
