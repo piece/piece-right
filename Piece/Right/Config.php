@@ -91,9 +91,7 @@ class Piece_Right_Config
                            $message = null
                            )
     {
-        if (!array_key_exists($field, $this->_validationSet)) {
-            $this->_validationSet[$field] = array();
-        }
+        $this->addField($field);
 
         array_push($this->_validationSet[$field],
                    array('validator' => $validator,
@@ -167,9 +165,7 @@ class Piece_Right_Config
      */
     function setRequired($field, $elements = array())
     {
-        if (!array_key_exists($field, $this->_validationSet)) {
-            $this->_validationSet[$field] = array();
-        }
+        $this->addField($field);
 
         if (!array_key_exists($field, $this->_requiredFields)) {
             $this->_requiredFields[$field] = array('enabled' => true,
@@ -231,9 +227,7 @@ class Piece_Right_Config
      */
     function addFilter($field, $filter)
     {
-        if (!array_key_exists($field, $this->_validationSet)) {
-            $this->_validationSet[$field] = array();
-        }
+        $this->addField($field);
 
         if (!array_key_exists($field, $this->_filters)) {
             $this->_filters[$field] = array();
@@ -381,6 +375,22 @@ class Piece_Right_Config
     function getWatcher($field)
     {
         return array_key_exists($field, $this->_watchers) ? $this->_watchers[$field] : null;
+    }
+
+    // }}}
+    // {{{ addField()
+
+    /**
+     * Adds a field which will be validated.
+     *
+     * @param string $field
+     * @since Method available since Release 0.3.0
+     */
+    function addField($field)
+    {
+        if (!array_key_exists($field, $this->_validationSet)) {
+            $this->_validationSet[$field] = array();
+        }
     }
 
     /**#@-*/
