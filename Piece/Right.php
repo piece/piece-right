@@ -134,9 +134,9 @@ class Piece_Right
             return;
         }
 
-        foreach ($validationSet as $fieldName => $validations) {
-            $this->_watch($fieldName);
+        $this->_watch($validationSet);
 
+        foreach ($validationSet as $fieldName => $validations) {
             $fieldValue = $this->_results->getFieldValue($fieldName);
 
             if (!$this->_checkValidationRequirement($fieldName, $fieldValue)) {
@@ -291,59 +291,63 @@ class Piece_Right
      * Watches the target fields and turns the fields requirements
      * on/off.
      *
-     * @param string $fieldName
+     * @param array $validationSet
      * @since Method available since Release 0.3.0
      */
-    function _watch($fieldName)
+    function _watch($validationSet)
     {
-        $watcher = $this->_config->getWatcher($fieldName);
-        if (!is_array($watcher)) {
-            return;
-        }
-
-        $found = false;
-        foreach ($watcher['target'] as $target) {
-            if ($target['name'] == $fieldName) {
-                $found = true;
-                break;
-            }
-        }
-        if (!$found) {
-            $watcher['target'][] = array('name' => $fieldName);
-        }
-
-        if (!array_key_exists('turnOn', $watcher)) {
-            $watcher['turnOn'] = array();
-            foreach ($watcher['target'] as $target) {
-                $watcher['turnOn'][] = $target['name'];
-            }
-        }
-
-        if (!in_array($fieldName, $watcher['turnOn'])) {
-            $watcher['turnOn'][] = $fieldName;
-        }
-
-        $turnOnFields = array();
-        foreach ($watcher['target'] as $target) {
-            $targetValue = $this->_results->getFieldValue($target['name']);
-            if ($this->_isEmpty($targetValue)) {
+        foreach ($validationSet as $fieldName => $validations) {
+            $watcher = $this->_config->getWatcher($fieldName);
+            if (!is_array($watcher)) {
                 continue;
             }
 
-            if ($this->_shouldBeTurnedOn($target, $targetValue)) {
-                foreach ($watcher['turnOn'] as $turnOnFieldName) {
-                    $turnOnFields[] = $turnOnFieldName;
+            $found = false;
+            foreach ($watcher['target'] as $target) {
+                if ($target['name'] == $fieldName) {
+                    $found = true;
+                    break;
                 }
             }
-        }
+            if (!$found) {
+                $watcher['target'][] = array('name' => $fieldName);
+            }
 
-        foreach ($turnOnFields as $turnOnFieldName) {
-            $this->_config->setRequired($turnOnFieldName);
-        }
+            if (!array_key_exists('turnOn', $watcher)) {
+                $watcher['turnOn'] = array();
+                foreach ($watcher['target'] as $target) {
+                    if (!in_array($target['name'], $watcher['turnOn'])) {
+                        $watcher['turnOn'][] = $target['name'];
+                    }
+                }
+            }
 
-        if (array_key_exists('turnOff', $watcher)) {
-            foreach ($watcher['turnOff'] as $turnOffFieldName) {
-                $this->_config->setRequired($turnOffFieldName, array('enabled' => false));
+            if (!in_array($fieldName, $watcher['turnOn'])) {
+                $watcher['turnOn'][] = $fieldName;
+            }
+
+            $turnOnFields = array();
+            foreach ($watcher['target'] as $target) {
+                $targetValue = $this->_results->getFieldValue($target['name']);
+                if ($this->_isEmpty($targetValue)) {
+                    continue;
+                }
+
+                if ($this->_shouldBeTurnedOn($target, $targetValue)) {
+                    foreach ($watcher['turnOn'] as $turnOnFieldName) {
+                        $turnOnFields[] = $turnOnFieldName;
+                    }
+                }
+            }
+
+            foreach ($turnOnFields as $turnOnFieldName) {
+                $this->_config->setRequired($turnOnFieldName, array('enabled' => true));
+            }
+
+            if (array_key_exists('turnOff', $watcher)) {
+                foreach ($watcher['turnOff'] as $turnOffFieldName) {
+                    $this->_config->setRequired($turnOffFieldName, array('enabled' => false));
+                }
             }
         }
     }
