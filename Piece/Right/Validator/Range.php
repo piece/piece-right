@@ -87,6 +87,7 @@ class Piece_Right_Validator_Range extends Piece_Right_Validator_Common
         $min = $this->getRule('min');
         if (!is_null($min)) {
             if ($value < $min) {
+                $this->_setMessage('min');
                 return false;
             }
         }
@@ -94,6 +95,7 @@ class Piece_Right_Validator_Range extends Piece_Right_Validator_Common
         $max = $this->getRule('max');
         if (!is_null($max)) {
             if ($value > $max) {
+                $this->_setMessage('max');
                 return false;
             }
         }
