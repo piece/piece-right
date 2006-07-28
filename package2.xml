@@ -18,8 +18,8 @@ o Easy to extend with user defined validators</description>
   <email>iteman@users.sourceforge.net</email>
   <active>yes</active>
  </lead>
- <date>2006-07-26</date>
- <time>20:29:36</time>
+ <date>2006-07-28</date>
+ <time>12:16:07</time>
  <version>
   <release>0.3.0</release>
   <api>0.3.0</api>
@@ -62,6 +62,9 @@ o Easy to extend with user defined validators</description>
      </dir> <!-- /Piece/Right/Filter -->
      <dir name="Validator">
       <file name="Common.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Compare.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
       <file name="Date.php" role="php">
@@ -110,6 +113,9 @@ o Easy to extend with user defined validators</description>
        <file name="FactoryTestCase.php" role="test">
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
+       <file name="InvalidConfiguration.yaml" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
        <file name="TestRunner.php" role="test">
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
@@ -136,6 +142,9 @@ o Easy to extend with user defined validators</description>
       </dir> <!-- /tests/Piece/Right/Filter -->
       <dir name="Validator">
        <file name="Bar.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="CompareTestCase.php" role="test">
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
        <file name="DateTestCase.php" role="test">
@@ -182,7 +191,13 @@ o Easy to extend with user defined validators</description>
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
      </dir> <!-- /tests/Piece/Right -->
+     <file name="ForceValidationBasedOnWatcher.yaml" role="test">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
      <file name="RightTestCase.php" role="test">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="RuleMessage.yaml" role="test">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
      <file name="TestRunner.php" role="test">
@@ -228,7 +243,9 @@ o Easy to extend with user defined validators</description>
    <install as="piece-right.yaml" name="data/piece-right.yaml" />
    <install as="LICENSE" name="docs/LICENSE" />
    <install as="AllTestRunner.php" name="tests/AllTestRunner.php" />
+   <install as="Piece/ForceValidationBasedOnWatcher.yaml" name="tests/Piece/ForceValidationBasedOnWatcher.yaml" />
    <install as="Piece/Right/Config/FactoryTestCase.php" name="tests/Piece/Right/Config/FactoryTestCase.php" />
+   <install as="Piece/Right/Config/InvalidConfiguration.yaml" name="tests/Piece/Right/Config/InvalidConfiguration.yaml" />
    <install as="Piece/Right/Config/TestRunner.php" name="tests/Piece/Right/Config/TestRunner.php" />
    <install as="Piece/Right/ConfigTestCase.php" name="tests/Piece/Right/ConfigTestCase.php" />
    <install as="Piece/Right/Filter/Bar.php" name="tests/Piece/Right/Filter/Bar.php" />
@@ -241,6 +258,7 @@ o Easy to extend with user defined validators</description>
    <install as="Piece/Right/TestRunner.php" name="tests/Piece/Right/TestRunner.php" />
    <install as="Piece/Right/ValidationErrorTestCase.php" name="tests/Piece/Right/ValidationErrorTestCase.php" />
    <install as="Piece/Right/Validator/Bar.php" name="tests/Piece/Right/Validator/Bar.php" />
+   <install as="Piece/Right/Validator/CompareTestCase.php" name="tests/Piece/Right/Validator/CompareTestCase.php" />
    <install as="Piece/Right/Validator/DateTestCase.php" name="tests/Piece/Right/Validator/DateTestCase.php" />
    <install as="Piece/Right/Validator/FactoryTestCase.php" name="tests/Piece/Right/Validator/FactoryTestCase.php" />
    <install as="Piece/Right/Validator/Foo.php" name="tests/Piece/Right/Validator/Foo.php" />
@@ -252,6 +270,7 @@ o Easy to extend with user defined validators</description>
    <install as="Piece/Right/Validator/RegexTestCase.php" name="tests/Piece/Right/Validator/RegexTestCase.php" />
    <install as="Piece/Right/Validator/TestRunner.php" name="tests/Piece/Right/Validator/TestRunner.php" />
    <install as="Piece/RightTestCase.php" name="tests/Piece/RightTestCase.php" />
+   <install as="Piece/RuleMessage.yaml" name="tests/Piece/RuleMessage.yaml" />
    <install as="Piece/TestRunner.php" name="tests/Piece/TestRunner.php" />
   </filelist>
  </phprelease>
@@ -265,7 +284,7 @@ o Easy to extend with user defined validators</description>
     <release>beta</release>
     <api>beta</api>
    </stability>
-   <date>2006-07-26</date>
+   <date>2006-07-28</date>
    <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
    <notes>dummy</notes>
   </release>

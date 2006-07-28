@@ -20,7 +20,7 @@ o Easy to extend with user defined validators
   </maintainers>
  <release>
   <version>0.3.0</version>
-  <date>2006-07-26</date>
+  <date>2006-07-28</date>
   <license>BSD License (revised)</license>
   <state>beta</state>
   <notes>dummy
@@ -63,6 +63,9 @@ o Easy to extend with user defined validators
       </dir> <!-- /Piece/Right/Filter -->
       <dir name="Validator">
        <file role="php" name="Common.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+       <file role="php" name="Compare.php">
         <replace from="@package_version@" to="version" type="package-info"/>
        </file>
        <file role="php" name="Date.php">
@@ -111,6 +114,9 @@ o Easy to extend with user defined validators
         <file role="test" name="FactoryTestCase.php" install-as="Piece/Right/Config/FactoryTestCase.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
+        <file role="test" name="InvalidConfiguration.yaml" install-as="Piece/Right/Config/InvalidConfiguration.yaml">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
         <file role="test" name="TestRunner.php" install-as="Piece/Right/Config/TestRunner.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
@@ -137,6 +143,9 @@ o Easy to extend with user defined validators
        </dir> <!-- /tests/Piece/Right/Filter -->
        <dir name="Validator">
         <file role="test" name="Bar.php" install-as="Piece/Right/Validator/Bar.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="CompareTestCase.php" install-as="Piece/Right/Validator/CompareTestCase.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
         <file role="test" name="DateTestCase.php" install-as="Piece/Right/Validator/DateTestCase.php">
@@ -183,7 +192,13 @@ o Easy to extend with user defined validators
         <replace from="@package_version@" to="version" type="package-info"/>
        </file>
       </dir> <!-- /tests/Piece/Right -->
+      <file role="test" name="ForceValidationBasedOnWatcher.yaml" install-as="Piece/ForceValidationBasedOnWatcher.yaml">
+       <replace from="@package_version@" to="version" type="package-info"/>
+      </file>
       <file role="test" name="RightTestCase.php" install-as="Piece/RightTestCase.php">
+       <replace from="@package_version@" to="version" type="package-info"/>
+      </file>
+      <file role="test" name="RuleMessage.yaml" install-as="Piece/RuleMessage.yaml">
        <replace from="@package_version@" to="version" type="package-info"/>
       </file>
       <file role="test" name="TestRunner.php" install-as="Piece/TestRunner.php">
@@ -200,7 +215,7 @@ o Easy to extend with user defined validators
  <changelog>
    <release>
     <version>0.3.0</version>
-    <date>2006-07-26</date>
+    <date>2006-07-28</date>
     <license>BSD License (revised)</license>
     <state>beta</state>
     <notes>dummy
