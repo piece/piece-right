@@ -436,13 +436,53 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         }
 
         $this->assertEquals('Please input all fields of the home phone.', $results->getErrorMessage('home_phone'));
-        $this->assertEquals('The field is required.', $results->getErrorMessage('homePhone2'));
-        $this->assertEquals('The field is required.', $results->getErrorMessage('homePhone3'));
+        $this->assertEquals('This field is required.', $results->getErrorMessage('homePhone2'));
+        $this->assertEquals('This field is required.', $results->getErrorMessage('homePhone3'));
 
         unset($_POST['homePhone3']);
         unset($_POST['homePhone2']);
         unset($_POST['homePhone1']);
         unset($_POST['has_home_phone']);
+        unset($_SERVER['REQUEST_METHOD']);
+
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST['has_home_phone'] = 2;
+        $_POST['homePhone1'] = '1111';
+        $_POST['homePhone2'] = '2222';
+        $_POST['homePhone3'] = '3333';
+        $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
+
+        $this->assertTrue($right->validate('Foo'));
+
+        unset($_POST['homePhone3']);
+        unset($_POST['homePhone2']);
+        unset($_POST['homePhone1']);
+        unset($_POST['has_home_phone']);
+        unset($_SERVER['REQUEST_METHOD']);
+    }
+
+    /**
+     * @since Method available since Release 0.3.0
+     */
+    function testAppropriateValidationMessage()
+    {
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST['foo'] = '10';
+        $_POST['bar'] = '10';
+        $_POST['baz'] = '0';
+        $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
+
+        $this->assertFalse($right->validate('AppropriateValidationMessage'));
+
+        $results = &$right->getResults();
+
+        $this->assertEquals('Please select an element.', $results->getErrorMessage('foo'));
+        $this->assertEquals('The value is too big.', $results->getErrorMessage('bar'));
+        $this->assertEquals('The value is too small.', $results->getErrorMessage('baz'));
+
+        unset($_POST['baz']);
+        unset($_POST['bar']);
+        unset($_POST['foo']);
         unset($_SERVER['REQUEST_METHOD']);
     }
 
