@@ -1,0 +1,33 @@
+- name: foo
+  required:
+    message: This field is required.
+  validator:
+    - name: Range
+      rule:
+        min: 1
+        max: 5
+      message: Please select an element.
+
+- name: bar
+  required:
+    message: This field is required.
+  validator:
+    - name: Range
+      rule:
+        min: 1
+        min_message: The value is too small.
+        max: 5
+        max_message: The value is too big.
+      message: Please select an element.
+
+- name: baz
+  required:
+    message: This field is required.
+  validator:
+    - name: Range
+      rule:
+        min: 1
+        min_message: The value is too small.
+        max: 5
+        max_message: The value is too big.
+      message: Please select an element.
