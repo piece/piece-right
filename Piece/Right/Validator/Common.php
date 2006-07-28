@@ -264,7 +264,10 @@ class Piece_Right_Validator_Common
      */
     function _setMessage($rule)
     {
-        if (array_key_exists($rule, $this->_messages)) {
+        if (array_key_exists($rule, $this->_messages)
+            && !is_null($this->_messages[$rule])
+            && strlen($this->_messages[$rule])
+            ) {
             $this->setMessage($this->_messages[$rule]);
         }
     }
