@@ -408,20 +408,20 @@ class Piece_Right
     function _validate($name, $value, $validations)
     {
         foreach ($validations as $validation) {
-                $validator = &Piece_Right_Validator_Factory::factory($validation['validator']);
-                if (Piece_Right_Error::hasErrors('exception')) {
-                    return;
-                }
+            $validator = &Piece_Right_Validator_Factory::factory($validation['validator']);
+            if (Piece_Right_Error::hasErrors('exception')) {
+                return;
+            }
 
-                $validator->setResults($this->_results);
-                $validator->setRules($validation['rules']);
-                $validator->setMessage($validation['message']);
-                if (!$validator->validate($value)) {
-                    $this->_results->addError($name,
-                                              $validation['validator'],
-                                              $validator->getMessage()
-                                              );
-                }
+            $validator->setResults($this->_results);
+            $validator->setRules($validation['rules']);
+            $validator->setMessage($validation['message']);
+            if (!$validator->validate($value)) {
+                $this->_results->addError($name,
+                                          $validation['validator'],
+                                          $validator->getMessage()
+                                          );
+            }
         }
     }
 
