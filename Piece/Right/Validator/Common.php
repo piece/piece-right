@@ -67,6 +67,7 @@ class Piece_Right_Validator_Common
     var $_rules = array();
     var $_message;
     var $_messages = array();
+    var $_isArrayable = false;
 
     /**#@-*/
 
@@ -217,6 +218,19 @@ class Piece_Right_Validator_Common
     function getMessage()
     {
         return $this->_message;
+    }
+
+    // }}}
+    // {{{ isArrayable()
+
+    /**
+     * Returns whether the validator is arrayable or not.
+     *
+     * @return boolean
+     */
+    function isArrayable()
+    {
+        return $this->_isArrayable;
     }
 
     /**#@-*/
