@@ -278,7 +278,9 @@ class Piece_Right_Config_Factory
             $config->addField($validation['name']);
 
             if (array_key_exists('required', $validation)) {
-                $config->setRequired($validation['name'], (array)$validation['required']);
+                $config->setRequired($validation['name'],
+                                     (array)$validation['required']
+                                     );
             }
 
             if (array_key_exists('filter', $validation)
@@ -311,6 +313,23 @@ class Piece_Right_Config_Factory
                 && is_array($validation['pseudo'])
                 ) {
                 $config->setPseudo($validation['name'], $validation['pseudo']);
+            }
+
+            if (array_key_exists('description', $validation)) {
+                $config->setDescription($validation['name'],
+                                        $validation['description']
+                                        );
+            }
+
+            if (array_key_exists('messageVariable', $validation)
+                && is_array($validation['messageVariable'])
+                ) {
+                foreach ($validation['messageVariable'] as $name => $value) {
+                    $config->addMessageVariable($validation['name'],
+                                                $name,
+                                                $value
+                                                );
+                }
             }
         }
 
