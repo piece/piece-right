@@ -60,7 +60,7 @@ sequence:
                         - ">"
                         - "<="
                         - ">="
-                    "comparisonTo": { type: str, required: yes }
+                    "comparisonTo": { type: text, required: yes }
           "turnOn":
             type: seq
             required: no
@@ -71,3 +71,25 @@ sequence:
             required: no
             sequence:
             - type: str
+          "turnOnForceValidation": { type: bool, required: no }
+      "description": { type: str, required: no }
+      "pseudo":
+        type: map
+        required: no
+        mapping:
+          "format":
+            type: str
+            required: yes
+          "arg":
+            type: seq
+            required: no
+            sequence:
+            - type: str
+      "messageVariable":
+        type: map
+        required: no
+        mapping:
+          =:
+            type: text
+            required: yes
+      "forceValidation": { type: bool, required: no }
