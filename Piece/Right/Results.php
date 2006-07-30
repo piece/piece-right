@@ -199,6 +199,20 @@ class Piece_Right_Results
         return $this->_fieldValues[$name];
     }
 
+    // }}}
+    // {{{ getFieldNames()
+
+    /**
+     * Gets all field names of the current validation as an array.
+     *
+     * @return array
+     * @since Method available since Release 0.3.0
+     */
+    function getFieldNames()
+    {
+        return array_keys($this->_fieldValues);
+    }
+
     /**#@-*/
 
     /**#@+
