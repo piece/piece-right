@@ -350,7 +350,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $this->assertEquals(2, $results->countErrors());
 
         foreach (array('bar', 'baz') as $field) {
-            $this->assertTrue(in_array($field, $results->getErrorFields()));
+            $this->assertTrue(in_array($field, $results->getErrorFields()), "The field [ $field ] is expected.");
         }
 
         unset($_POST['qux']);
@@ -486,6 +486,31 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         unset($_SERVER['REQUEST_METHOD']);
     }
 
+    /**
+     * @since Method available since Release 0.3.0
+     */
+    function testPseudoField()
+    {
+        $dynamicConfig = &new Piece_Right_Config();
+        $dynamicConfig->setRequired('emailUser');
+        $dynamicConfig->addFilter('emailUser', 'strtolower');
+        $dynamicConfig->setRequired('emailHost');
+        $dynamicConfig->addFilter('emailHost', 'strtolower');
+        $dynamicConfig->setRequired('email');
+        $dynamicConfig->addValidation('email',
+                                      'Regex',
+                                      array('pattern' => '/^[^@]+@.+$/')
+                                      );
+        $dynamicConfig->setPseudo('email',
+                                  array('format' => '%s@%s',
+                                        'arg' => array('emailUser',
+                                                       'emailHost'))
+                                  );
+
+        $this->_assertPseudoField($dynamicConfig);
+        $this->_assertPseudoField(new Piece_Right_Config());
+    }
+
     /**#@-*/
 
     /**#@+
@@ -515,7 +540,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $results = &$right->getResults();
 
         foreach ($invalidFields as $field) {
-            $this->assertTrue(in_array($field, $results->getErrorFields()));
+            $this->assertTrue(in_array($field, $results->getErrorFields()), "The field [ $field ] is expected.");
         }
 
         unset($_POST[$name]);
@@ -549,7 +574,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $results = &$right->getResults();
 
         foreach ($invalidFields as $field) {
-            $this->assertTrue(in_array($field, $results->getErrorFields()));
+            $this->assertTrue(in_array($field, $results->getErrorFields()), "The field [ $field ] is expected.");
         }
 
         unset($_POST[$name]);
@@ -572,12 +597,35 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $this->assertEquals(1, $results->countErrors());
 
         foreach (array('foo') as $field) {
-            $this->assertTrue(in_array($field, $results->getErrorFields()));
+            $this->assertTrue(in_array($field, $results->getErrorFields()), "The field [ $field ] is expected.");
         }
 
         $this->assertEquals($expectedMessage, $results->getErrorMessage('foo'));
 
         unset($_POST['foo']);
+        unset($_SERVER['REQUEST_METHOD']);
+    }
+
+    /**
+     * @since Method available since Release 0.3.0
+     */
+    function _assertPseudoField(&$dynamicConfig)
+    {
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST['emailUser'] = 'ITEMAN';
+        $_POST['emailHost'] = 'SOURCEFORGE.NET';
+        $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
+
+        $this->assertTrue($right->validate('PseudoField', $dynamicConfig));
+
+        $results = &$right->getResults();
+
+        $this->assertEquals('iteman@sourceforge.net',
+                            $results->getFieldValue('email')
+                            );
+
+        unset($_POST['emailHost']);
+        unset($_POST['emailUser']);
         unset($_SERVER['REQUEST_METHOD']);
     }
 
