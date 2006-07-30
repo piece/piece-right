@@ -134,6 +134,8 @@ class Piece_Right
             return;
         }
 
+        $this->_generatePseudoFields(array_keys($validationSet));
+
         $this->_watch(array_keys($validationSet));
 
         foreach ($validationSet as $fieldName => $validations) {
@@ -205,13 +207,13 @@ class Piece_Right
      * Second this method merges the given configuretion into the loaded
      * configuration.
      *
-     * @param string             $validationSet
+     * @param string             $validationSetName
      * @param Piece_Right_Config $dynamicConfig
      * @throws PIECE_RIGHT_ERROR_INVALID_CONFIGURATION
      */
-    function _configure($validationSet = null, $dynamicConfig = null)
+    function _configure($validationSetName = null, $dynamicConfig = null)
     {
-        $this->_config = &Piece_Right_Config_Factory::factory($validationSet,
+        $this->_config = &Piece_Right_Config_Factory::factory($validationSetName,
                                                               $this->_configDirectory,
                                                               $this->_cacheDirectory
                                                               );
@@ -294,7 +296,6 @@ class Piece_Right
      * on/off.
      *
      * @param array $fields
-     * @param array $validationSet
      * @since Method available since Release 0.3.0
      */
     function _watch($fields)
@@ -438,15 +439,11 @@ class Piece_Right
      */
     function _shouldBeTurnedOn($target, $targetValue)
     {
-        if (!array_key_exists('trigger', $target)) {
-            return true;
-        }
-
         if (!array_key_exists('trigger', $target)
             || !array_key_exists('comparisonOperator', $target['trigger'])
             || !array_key_exists('comparisonTo', $target['trigger'])
             ) {
-            return false;
+            return true;
         }
 
         $turnOn = false;
@@ -487,6 +484,43 @@ class Piece_Right
         }
 
         return $turnOn;
+    }
+
+    // }}}
+    // {{{ _generatePseudoFields()
+
+    /**
+     * @param array $fields
+     * @since Method available since Release 0.3.0
+     */
+    function _generatePseudoFields($fields)
+    {
+        foreach ($fields as $fieldName) {
+            if (!$this->_config->isPseudo($fieldName)) {
+                continue;
+            }
+
+            $definition = $this->_config->getPseudoDefinition($fieldName);
+            if (!array_key_exists('format', $definition)) {
+                continue;
+            }
+
+            if (!array_key_exists('arg', $definition)
+                || !is_array($definition['arg'])
+                ) {
+                continue;
+            }
+
+            $args = array();
+            foreach ($definition['arg'] as $arg) {
+                $args[] = $this->_results->getFieldValue($arg);
+            }
+
+            $this->_results->setFieldValue($fieldName,
+                                           vsprintf($definition['format'],
+                                                    $args)
+                                           );
+        }
     }
 
     /**#@-*/
