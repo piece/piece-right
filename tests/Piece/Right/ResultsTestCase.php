@@ -86,6 +86,18 @@ class Piece_Right_ResultsTestCase extends PHPUnit_TestCase
         $this->assertEquals('baz', $results->getFieldValue('bar'));
     }
 
+    function testGettingFieldNames()
+    {
+        $results = &new Piece_Right_Results();
+        $results->setFieldValue('foo', 'bar');
+        $results->setFieldValue('bar', 'baz');
+        $fieldNames = $results->getFieldNames();
+
+        $this->assertEquals(2, count($fieldNames));
+        $this->assertContains('foo', $fieldNames);
+        $this->assertContains('bar', $fieldNames);
+    }
+
     /**#@-*/
 
     /**#@+
