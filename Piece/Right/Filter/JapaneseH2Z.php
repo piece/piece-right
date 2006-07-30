@@ -41,7 +41,8 @@
 // {{{ Piece_Right_Filter_JapaneseH2Z
 
 /**
- * A factory class for creating filter objects.
+ * A filter which is used to converts Japanese JIS X0201 kana to JIS X0208
+ * kana.
  *
  * @package    Piece_Right
  * @author     KUBO Atsuhiro <iteman@users.sourceforge.net>
