@@ -331,6 +331,12 @@ class Piece_Right_Config_Factory
                                                 );
                 }
             }
+
+            if (array_key_exists('forceValidation', $validation)) {
+                $config->setForceValidation($validation['name'],
+                                            $validation['forceValidation']
+                                            );
+            }
         }
 
         return $config;
