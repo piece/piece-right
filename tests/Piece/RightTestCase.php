@@ -653,7 +653,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_POST['emailUser'] = 'ITEMAN';
-        $_POST['emailHost'] = 'SOURCEFORGE.NET';
+        $_POST['emailHost'] = 'USERS.SOURCEFORGE.NET';
         $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
 
         if ($useDynamicConfiguration) {
@@ -664,7 +664,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
 
         $results = &$right->getResults();
 
-        $this->assertEquals('iteman@sourceforge.net',
+        $this->assertEquals('iteman@users.sourceforge.net',
                             $results->getFieldValue('email')
                             );
 
