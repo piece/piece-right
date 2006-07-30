@@ -11,6 +11,6 @@
     - name: Range
       rule:
         min: 20
-        min_message: "[%_field%] is must greater than %requirement%."
+        min_message: "[%_name%] is must greater than %requirement%."
   messageVariable:
     requirement: 20
