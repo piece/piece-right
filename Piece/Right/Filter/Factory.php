@@ -89,7 +89,6 @@ class Piece_Right_Filter_Factory
      * @param string $filter
      * @return mixed
      * @throws PIECE_RIGHT_ERROR_NOT_FOUND
-     * @throws PIECE_RIGHT_ERROR_INVALID_FILTER
      */
     function &factory($filter)
     {
