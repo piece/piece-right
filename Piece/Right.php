@@ -414,6 +414,16 @@ class Piece_Right
                 return;
             }
 
+            if (is_array($value) && !$validator->isArrayable()) {
+                Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
+                Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_ARRAYABLE,
+                                        "The value of the field [ $name ] is an array, but the validator [ {$validation['validator']} ] is not arrayable. This validation is skipped.",
+                                        'warning'
+                                        );
+                Piece_Right_Error::popCallback();
+                continue;
+            }
+
             $validator->setResults($this->_results);
             $validator->setRules($validation['rules']);
             $validator->setMessage($validation['message']);
