@@ -5,21 +5,36 @@
     http://pear.php.net/dtd/package-2.0.xsd">
  <name>Piece_Right</name>
  <channel>pear.hatotech.org</channel>
- <summary>A simple validation framework for PHP</summary>
- <description>Piece_Right is a simple validation framework for PHP.
+ <summary>A validation framework for PHP</summary>
+ <description>Piece_Right is a validation framework for PHP.
 The following is a list of features of Piece_Right.
-o Simple API
+o Extensible validator system
+o Extensible filter system
+o A lot of built-in validators
+o Another field watchers
+o Pseudo fields
+o Message variables
+o Force validation
 o YAML based configuration
 o Dynamic configuration
-o Easy to extend with user defined validators</description>
+
+The following is a list of built-in validators.
+o Compare
+o Date
+o JapaneseDate
+o Length
+o List
+o Range
+o Regex
+o WithMethod</description>
  <lead>
   <name>KUBO Atsuhiro</name>
   <user>iteman</user>
   <email>iteman@users.sourceforge.net</email>
   <active>yes</active>
  </lead>
- <date>2006-07-28</date>
- <time>12:16:07</time>
+ <date>2006-07-30</date>
+ <time>14:22:41</time>
  <version>
   <release>0.3.0</release>
   <api>0.3.0</api>
@@ -29,7 +44,111 @@ o Easy to extend with user defined validators</description>
   <api>beta</api>
  </stability>
  <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
- <notes>dummy</notes>
+ <notes>The first beta release of Piece_Right.
+This release includes a lot of enhancemens and several defect fixes as follows:
+
+&lt;&lt;&lt; Enhancements &gt;&gt;&gt;
+
+Kernel:
+
+* Piece_Right
+- Added support for filters.
+- Added support for &apos;watcher&apos;.
+- Added array support.
+- Added the code so as to set a Piece_Right_Results object to a validator object.
+- Added error handling for invalid configuration.
+- Added error handling for the factories of filters and validators.
+- Added support for forcing validation.
+- Added support for pseudo fields.
+- Added support for message variables.
+
+* Piece_Right_Config
+- Added setRequired()/isRequired()/getRequiredMessage() methods for handling required stuff.
+- Added support for filters.
+- Added support for merging filters and required fileds.
+- Added support for watchers.
+- Added addField() method for adding fields which will be validated.
+- Added setForceValidation() and forceValidation() method for forcing validation.
+- Added support for pseudo fields.
+- Added support for message variables.
+- Added missing support for force validations.
+
+* Piece_Right_Config_Factory
+- Added support for filters.
+- Added support for watchers.
+- Added error handling for invalid configuration.
+- Changed the code so as to call addField() method first.
+- Added support for pseudo fields.
+- Added support for message variables.
+- Added missing support for force validations.
+
+* Piece_Right_Validator_Common
+- Added setResults() method for setting a Piece_Right_Results object.
+- Added the constructor for initializing properties.
+- Added _initialize() method for initializing properties.
+- clear(): Added the code so as to call _initialize() method.
+- Changed the location of the rules from each property to $_rules.
+- Changed the method name from addRule() to setRule().
+- Added getRule() method for getting the validation rule of the given rule name.
+- Added _addRule() method for defining/initializing validation rules.
+- Added support for the error message of each rule.
+- Added support for the error message of the current validation.
+- Added $_arrayable property for indicating the validator is arrayable or not.
+- Added isArrayable() method for checking whether the validator is arrayable or not.
+
+* Piece_Right_Filter_Factory
+- A factory class for creating filter objects.
+
+* Piece_Right_Error
+- Added PIECE_RIGHT_ERROR_INVALID_CONFIGURATION constant.
+- Added PIECE_RIGHT_ERROR_NOT_ARRAYABLE constant.
+
+* Piece_Right_Results
+- Added getFieldNames() method to getting all field names of the current validation.
+
+Validators:
+
+* List
+- A validator which is used to check whether values are included in the definition.
+
+* Piece_Right_Validator_Date
+- A validator which is used to check whether a value is a valid date.
+
+* Piece_Right_Validator_JapaneseDate
+- A validator which is used to check whether a value is a valid japanese date.
+
+* Piece_Right_Validator_Compare
+- A validator which is used to compare the value of a field to the value of another field.
+
+* WithMethod
+- A validator which is used to validate the value of a field with an arbitrary method.
+
+* Regex
+- Changed the return value to false when the pattern is invalid.
+
+* Required
+- Removed.
+
+Filters:
+
+* JapaneseH2Z
+- A filter which is used to converts Japanese JIS X0201 kana to JIS X0208 kana.
+
+* JapaneseAlphaNumeric
+- A filter which is used to converts Japanese JISX 0208 alphabet characters and numeric characters to ASCII characters.
+
+&lt;&lt;&lt; Defect fixes &gt;&gt;&gt;
+
+* Piece_Right
+- Fixed the problem that the validation is influenced by the validation order.
+
+* Piece_Right_Config
+- setRequired(): Changed the code so as to keep the message on the filed if the given message is null.
+- Fixed the problem that non required fields cannot be turned required on.
+
+* Piece_Right_Filter_Factory
+* Piece_Right_Validator_Factory
+- Removed &apos;@&apos; operator from include_once.</notes>
  <contents>
   <dir baseinstalldir="/" name="/">
    <dir name="data">
@@ -54,6 +173,9 @@ o Easy to extend with user defined validators</description>
      </dir> <!-- /Piece/Right/Config -->
      <dir name="Filter">
       <file name="Factory.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="JapaneseAlphaNumeric.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
       <file name="JapaneseH2Z.php" role="php">
@@ -86,6 +208,9 @@ o Easy to extend with user defined validators</description>
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
       <file name="Regex.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="WithMethod.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
      </dir> <!-- /Piece/Right/Validator -->
@@ -128,6 +253,9 @@ o Easy to extend with user defined validators</description>
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
        <file name="Foo.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="JapaneseAlphaNumericTestCase.php" role="test">
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
        <file name="JapaneseH2ZTestCase.php" role="test">
@@ -177,6 +305,12 @@ o Easy to extend with user defined validators</description>
        <file name="TestRunner.php" role="test">
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
+       <file name="WithMethod.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="WithMethodTestCase.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
       </dir> <!-- /tests/Piece/Right/Validator -->
       <file name="ConfigTestCase.php" role="test">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
@@ -191,7 +325,19 @@ o Easy to extend with user defined validators</description>
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
      </dir> <!-- /tests/Piece/Right -->
+     <file name="AppropriateValidationMessage.yaml" role="test">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="ForceValidation.yaml" role="test">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
      <file name="ForceValidationBasedOnWatcher.yaml" role="test">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="MessageVariable.yaml" role="test">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="PseudoField.yaml" role="test">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
      <file name="RightTestCase.php" role="test">
@@ -243,7 +389,11 @@ o Easy to extend with user defined validators</description>
    <install as="piece-right.yaml" name="data/piece-right.yaml" />
    <install as="LICENSE" name="docs/LICENSE" />
    <install as="AllTestRunner.php" name="tests/AllTestRunner.php" />
+   <install as="Piece/AppropriateValidationMessage.yaml" name="tests/Piece/AppropriateValidationMessage.yaml" />
+   <install as="Piece/ForceValidation.yaml" name="tests/Piece/ForceValidation.yaml" />
    <install as="Piece/ForceValidationBasedOnWatcher.yaml" name="tests/Piece/ForceValidationBasedOnWatcher.yaml" />
+   <install as="Piece/MessageVariable.yaml" name="tests/Piece/MessageVariable.yaml" />
+   <install as="Piece/PseudoField.yaml" name="tests/Piece/PseudoField.yaml" />
    <install as="Piece/Right/Config/FactoryTestCase.php" name="tests/Piece/Right/Config/FactoryTestCase.php" />
    <install as="Piece/Right/Config/InvalidConfiguration.yaml" name="tests/Piece/Right/Config/InvalidConfiguration.yaml" />
    <install as="Piece/Right/Config/TestRunner.php" name="tests/Piece/Right/Config/TestRunner.php" />
@@ -251,6 +401,7 @@ o Easy to extend with user defined validators</description>
    <install as="Piece/Right/Filter/Bar.php" name="tests/Piece/Right/Filter/Bar.php" />
    <install as="Piece/Right/Filter/FactoryTestCase.php" name="tests/Piece/Right/Filter/FactoryTestCase.php" />
    <install as="Piece/Right/Filter/Foo.php" name="tests/Piece/Right/Filter/Foo.php" />
+   <install as="Piece/Right/Filter/JapaneseAlphaNumericTestCase.php" name="tests/Piece/Right/Filter/JapaneseAlphaNumericTestCase.php" />
    <install as="Piece/Right/Filter/JapaneseH2ZTestCase.php" name="tests/Piece/Right/Filter/JapaneseH2ZTestCase.php" />
    <install as="Piece/Right/Filter/LowerCase.php" name="tests/Piece/Right/Filter/LowerCase.php" />
    <install as="Piece/Right/Filter/TestRunner.php" name="tests/Piece/Right/Filter/TestRunner.php" />
@@ -269,6 +420,8 @@ o Easy to extend with user defined validators</description>
    <install as="Piece/Right/Validator/RangeTestCase.php" name="tests/Piece/Right/Validator/RangeTestCase.php" />
    <install as="Piece/Right/Validator/RegexTestCase.php" name="tests/Piece/Right/Validator/RegexTestCase.php" />
    <install as="Piece/Right/Validator/TestRunner.php" name="tests/Piece/Right/Validator/TestRunner.php" />
+   <install as="Piece/Right/Validator/WithMethod.php" name="tests/Piece/Right/Validator/WithMethod.php" />
+   <install as="Piece/Right/Validator/WithMethodTestCase.php" name="tests/Piece/Right/Validator/WithMethodTestCase.php" />
    <install as="Piece/RightTestCase.php" name="tests/Piece/RightTestCase.php" />
    <install as="Piece/RuleMessage.yaml" name="tests/Piece/RuleMessage.yaml" />
    <install as="Piece/TestRunner.php" name="tests/Piece/TestRunner.php" />
@@ -284,9 +437,113 @@ o Easy to extend with user defined validators</description>
     <release>beta</release>
     <api>beta</api>
    </stability>
-   <date>2006-07-28</date>
+   <date>2006-07-30</date>
    <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
-   <notes>dummy</notes>
+   <notes>The first beta release of Piece_Right.
+This release includes a lot of enhancemens and several defect fixes as follows:
+
+&lt;&lt;&lt; Enhancements &gt;&gt;&gt;
+
+Kernel:
+
+* Piece_Right
+- Added support for filters.
+- Added support for &apos;watcher&apos;.
+- Added array support.
+- Added the code so as to set a Piece_Right_Results object to a validator object.
+- Added error handling for invalid configuration.
+- Added error handling for the factories of filters and validators.
+- Added support for forcing validation.
+- Added support for pseudo fields.
+- Added support for message variables.
+
+* Piece_Right_Config
+- Added setRequired()/isRequired()/getRequiredMessage() methods for handling required stuff.
+- Added support for filters.
+- Added support for merging filters and required fileds.
+- Added support for watchers.
+- Added addField() method for adding fields which will be validated.
+- Added setForceValidation() and forceValidation() method for forcing validation.
+- Added support for pseudo fields.
+- Added support for message variables.
+- Added missing support for force validations.
+
+* Piece_Right_Config_Factory
+- Added support for filters.
+- Added support for watchers.
+- Added error handling for invalid configuration.
+- Changed the code so as to call addField() method first.
+- Added support for pseudo fields.
+- Added support for message variables.
+- Added missing support for force validations.
+
+* Piece_Right_Validator_Common
+- Added setResults() method for setting a Piece_Right_Results object.
+- Added the constructor for initializing properties.
+- Added _initialize() method for initializing properties.
+- clear(): Added the code so as to call _initialize() method.
+- Changed the location of the rules from each property to $_rules.
+- Changed the method name from addRule() to setRule().
+- Added getRule() method for getting the validation rule of the given rule name.
+- Added _addRule() method for defining/initializing validation rules.
+- Added support for the error message of each rule.
+- Added support for the error message of the current validation.
+- Added $_arrayable property for indicating the validator is arrayable or not.
+- Added isArrayable() method for checking whether the validator is arrayable or not.
+
+* Piece_Right_Filter_Factory
+- A factory class for creating filter objects.
+
+* Piece_Right_Error
+- Added PIECE_RIGHT_ERROR_INVALID_CONFIGURATION constant.
+- Added PIECE_RIGHT_ERROR_NOT_ARRAYABLE constant.
+
+* Piece_Right_Results
+- Added getFieldNames() method to getting all field names of the current validation.
+
+Validators:
+
+* List
+- A validator which is used to check whether values are included in the definition.
+
+* Piece_Right_Validator_Date
+- A validator which is used to check whether a value is a valid date.
+
+* Piece_Right_Validator_JapaneseDate
+- A validator which is used to check whether a value is a valid japanese date.
+
+* Piece_Right_Validator_Compare
+- A validator which is used to compare the value of a field to the value of another field.
+
+* WithMethod
+- A validator which is used to validate the value of a field with an arbitrary method.
+
+* Regex
+- Changed the return value to false when the pattern is invalid.
+
+* Required
+- Removed.
+
+Filters:
+
+* JapaneseH2Z
+- A filter which is used to converts Japanese JIS X0201 kana to JIS X0208 kana.
+
+* JapaneseAlphaNumeric
+- A filter which is used to converts Japanese JISX 0208 alphabet characters and numeric characters to ASCII characters.
+
+&lt;&lt;&lt; Defect fixes &gt;&gt;&gt;
+
+* Piece_Right
+- Fixed the problem that the validation is influenced by the validation order.
+
+* Piece_Right_Config
+- setRequired(): Changed the code so as to keep the message on the filed if the given message is null.
+- Fixed the problem that non required fields cannot be turned required on.
+
+* Piece_Right_Filter_Factory
+* Piece_Right_Validator_Factory
+- Removed &apos;@&apos; operator from include_once.</notes>
   </release>
   <release>
    <version>
