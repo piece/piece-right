@@ -70,6 +70,7 @@ class Piece_Right_Config
     var $_filters = array();
     var $_watchers = array();
     var $_forceValidationFields = array();
+    var $_pseudoFields = array();
 
     /**#@-*/
 
@@ -135,6 +136,9 @@ class Piece_Right_Config
 
         $watchers = $config->getWatchers();
         array_walk($watchers, array(&$this, 'mergeWatcher'));
+
+        $pseudoFields = $config->getPseudoFields();
+        array_walk($pseudoFields, array(&$this, 'mergePseudoFields'));
     }
 
     // }}}
@@ -144,7 +148,7 @@ class Piece_Right_Config
      * A callback that will be called by array_walk() function in merge()
      * method.
      *
-     * @param array $validations
+     * @param array  $validations
      * @param string $field
      */
     function mergeValidations($validations, $field)
@@ -273,7 +277,7 @@ class Piece_Right_Config
      * A callback that will be called by array_walk() function in merge()
      * method.
      *
-     * @param array $elements
+     * @param array  $elements
      * @param string $field
      * @since Method available since Release 0.3.0
      */
@@ -289,7 +293,7 @@ class Piece_Right_Config
      * A callback that will be called by array_walk() function in merge()
      * method.
      *
-     * @param array $filters
+     * @param array  $filters
      * @param string $field
      * @since Method available since Release 0.3.0
      */
@@ -354,7 +358,7 @@ class Piece_Right_Config
      * A callback that will be called by array_walk() function in merge()
      * method.
      *
-     * @param array $watcher
+     * @param array  $watcher
      * @param string $field
      * @since Method available since Release 0.3.0
      */
@@ -400,7 +404,7 @@ class Piece_Right_Config
     /**
      * Turns force validation on/off for the given field.
      *
-     * @param string $field
+     * @param string  $field
      * @param boolean $forceValidation
      * @since Method available since Release 0.3.0
      */
@@ -427,6 +431,82 @@ class Piece_Right_Config
         }
 
         return $this->_forceValidationFields[$field];
+    }
+
+    // }}}
+    // {{{ setPseudo()
+
+    /**
+     * Sets the given field as a pseudo field.
+     *
+     * @param string $field
+     * @param array  $definition
+     * @since Method available since Release 0.3.0
+     */
+    function setPseudo($field, $definition)
+    {
+        $this->addField($field);
+
+        $this->_pseudoFields[$field] = $definition;
+    }
+
+    // }}}
+    // {{{ isPseudo()
+
+    /**
+     * Returns whether the given field is pseudo or not.
+     *
+     * @return boolean
+     * @since Method available since Release 0.3.0
+     */
+    function isPseudo($field)
+    {
+        return array_key_exists($field, $this->_pseudoFields);
+    }
+
+    // }}}
+    // {{{ getPseudoDefinition()
+
+    /**
+     * Gets the pseudo definition for the given field.
+     *
+     * @param string $field
+     * @return array
+     * @since Method available since Release 0.3.0
+     */
+    function getPseudoDefinition($field)
+    {
+        return array_key_exists($field, $this->_pseudoFields) ? $this->_pseudoFields[$field] : null;
+    }
+
+    // }}}
+    // {{{ getPseudoFields()
+
+    /**
+     * Gets the elements of the pseudo fields as an array.
+     *
+     * @return array
+     * @since Method available since Release 0.3.0
+     */
+    function getPseudoFields()
+    {
+        return $this->_pseudoFields;
+    }
+
+    // }}}
+    // {{{ mergePseudoFields()
+
+    /**
+     * A callback that will be called by array_walk() function in merge()
+     * method.
+     *
+     * @param array  $definition
+     * @param string $field
+     * @since Method available since Release 0.3.0
+     */
+    function mergePseudoFields($definition, $field)
+    {
+        $this->setPseudo($field, $definition);
     }
 
     /**#@-*/
