@@ -264,7 +264,6 @@ class Piece_Right
      * @param array $fields
      * @since Method available since Release 0.3.0
      * @throws PIECE_RIGHT_ERROR_NOT_FOUND
-     * @throws PIECE_RIGHT_ERROR_INVALID_FILTER
      */
     function _filter($fields)
     {
