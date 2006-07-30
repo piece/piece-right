@@ -306,6 +306,12 @@ class Piece_Right_Config_Factory
                 ) {
                 $config->setWatcher($validation['name'], $validation['watcher']);
             }
+
+            if (array_key_exists('pseudo', $validation)
+                && is_array($validation['pseudo'])
+                ) {
+                $config->setPseudo($validation['name'], $validation['pseudo']);
+            }
         }
 
         return $config;
