@@ -71,6 +71,7 @@ class Piece_Right_Config
     var $_watchers = array();
     var $_forceValidationFields = array();
     var $_pseudoFields = array();
+    var $_messageVariables = array();
 
     /**#@-*/
 
@@ -106,7 +107,7 @@ class Piece_Right_Config
     // {{{ getValidationSet()
 
     /**
-     * Gets the validation set as an array.
+     * Gets all validation sets as an array.
      *
      * @return array
      */
@@ -139,6 +140,9 @@ class Piece_Right_Config
 
         $pseudoFields = $config->getPseudoFields();
         array_walk($pseudoFields, array(&$this, 'mergePseudoFields'));
+
+        $messageVariables = $config->getMessageVariables();
+        array_walk($messageVariables, array(&$this, 'mergeMessageVariables'));
     }
 
     // }}}
@@ -260,7 +264,7 @@ class Piece_Right_Config
     // {{{ getRequiredFields()
 
     /**
-     * Gets the elements of the required fields as an array.
+     * Gets all required fields for the current configuration.
      *
      * @return array
      * @since Method available since Release 0.3.0
@@ -308,7 +312,7 @@ class Piece_Right_Config
     // {{{ getFilters()
 
     /**
-     * Gets the all filters for the current configuration.
+     * Gets all filters for the current configuration.
      *
      * @return array
      * @since Method available since Release 0.3.0
@@ -341,7 +345,7 @@ class Piece_Right_Config
     // {{{ getWatchers()
 
     /**
-     * Gets the watchers for the current configuration.
+     * Gets all watchers for the current configuration.
      *
      * @return array
      * @since Method available since Release 0.3.0
@@ -395,6 +399,7 @@ class Piece_Right_Config
     {
         if (!array_key_exists($field, $this->_validationSet)) {
             $this->_validationSet[$field] = array();
+            $this->addMessageVariable($field, '_field', $field);
         }
     }
 
@@ -483,7 +488,7 @@ class Piece_Right_Config
     // {{{ getPseudoFields()
 
     /**
-     * Gets the elements of the pseudo fields as an array.
+     * Gets all pseudo fields for the current configuration.
      *
      * @return array
      * @since Method available since Release 0.3.0
@@ -507,6 +512,90 @@ class Piece_Right_Config
     function mergePseudoFields($definition, $field)
     {
         $this->setPseudo($field, $definition);
+    }
+
+    // }}}
+    // {{{ setDescription()
+
+    /**
+     * Sets the description of the given field.
+     *
+     * @param string $field
+     * @param string $description
+     * @since Method available since Release 0.3.0
+     */
+    function setDescription($field, $description)
+    {
+        $this->addMessageVariable($field, '_description', $description);
+    }
+
+    // }}}
+    // {{{ getMessageVariablesByFieldName()
+
+    /**
+     * Gets the message variables of the given field.
+     *
+     * @param string $field
+     * @return array
+     * @since Method available since Release 0.3.0
+     */
+    function getMessageVariablesByFieldName($field)
+    {
+        if (!array_key_exists($field, $this->_messageVariables)) {
+            return array();
+        }
+
+        return $this->_messageVariables[$field];
+    }
+
+    // }}}
+    // {{{ getMessageVariables()
+
+    /**
+     * Gets all message variables for the current configuration.
+     *
+     * @return array
+     * @since Method available since Release 0.3.0
+     */
+    function getMessageVariables()
+    {
+        return $this->_messageVariables;
+    }
+
+    // }}}
+    // {{{ mergeMesageVariables()
+
+    /**
+     * A callback that will be called by array_walk() function in merge()
+     * method.
+     *
+     * @param array  $variables
+     * @param string $field
+     * @since Method available since Release 0.3.0
+     */
+    function mergeMessageVariables($variables, $field)
+    {
+        foreach ($variables as $name => $value) {
+            $this->addMessageVariable($field, $name, $value);
+        }
+    }
+
+    // }}}
+    // {{{ addMessageVariable()
+
+    /**
+     * Adds a message variable for the given field.
+     *
+     * @param string $field
+     * @param string $name
+     * @param string $value
+     * @since Method available since Release 0.3.0
+     */
+    function addMessageVariable($field, $name, $value)
+    {
+        $this->addField($field);
+
+        $this->_messageVariables[$field][$name] = $value;
     }
 
     /**#@-*/
