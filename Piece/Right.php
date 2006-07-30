@@ -138,16 +138,16 @@ class Piece_Right
 
         $this->_watch(array_keys($validationSet));
 
-        foreach ($validationSet as $fieldName => $validations) {
-            $fieldValue = $this->_results->getFieldValue($fieldName);
+        foreach ($validationSet as $field => $validations) {
+            $fieldValue = $this->_results->getFieldValue($field);
 
-            if (!$this->_config->forceValidation($fieldName)) {
-                if (!$this->_checkValidationRequirement($fieldName, $fieldValue)) {
+            if (!$this->_config->forceValidation($field)) {
+                if (!$this->_checkValidationRequirement($field, $fieldValue)) {
                     continue;
                 }
             }
 
-            $this->_validate($fieldName, $fieldValue, $validations);
+            $this->_validate($field, $fieldValue, $validations);
             if (Piece_Right_Error::hasErrors('exception')) {
                 return;
             }
@@ -162,17 +162,17 @@ class Piece_Right
     /**
      * Gets the value of the given field name from PHP superglobals.
      *
-     * @param string $fieldName
+     * @param string $field
      * @return mixed
      * @static
      */
-    function getFieldValueFromSuperglobals($fieldName)
+    function getFieldValueFromSuperglobals($field)
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            return @$_POST[$fieldName];
+            return @$_POST[$field];
         }
 
-        return @$_GET[$fieldName];
+        return @$_GET[$field];
     }
 
     // }}}
@@ -267,9 +267,9 @@ class Piece_Right
      */
     function _filter($fields)
     {
-        foreach ($fields as $fieldName) {
-            $fieldValue = call_user_func($this->_fieldValuesCallback, $fieldName);
-            $filters = $this->_config->getFiltersByFieldName($fieldName);
+        foreach ($fields as $field) {
+            $fieldValue = call_user_func($this->_fieldValuesCallback, $field);
+            $filters = $this->_config->getFiltersByFieldName($field);
             foreach ($filters as $filterName) {
                 if (!function_exists($filterName)) {
                     $filter = &Piece_Right_Filter_Factory::factory($filterName);
@@ -283,7 +283,7 @@ class Piece_Right
                 }
             }
 
-            $this->_results->setFieldValue($fieldName, $fieldValue);
+            $this->_results->setFieldValue($field, $fieldValue);
         }
     }
 
@@ -299,21 +299,21 @@ class Piece_Right
      */
     function _watch($fields)
     {
-        foreach ($fields as $fieldName) {
-            $watcher = $this->_config->getWatcher($fieldName);
+        foreach ($fields as $field) {
+            $watcher = $this->_config->getWatcher($field);
             if (!is_array($watcher)) {
                 continue;
             }
 
             $found = false;
             foreach ($watcher['target'] as $target) {
-                if ($target['name'] == $fieldName) {
+                if ($target['name'] == $field) {
                     $found = true;
                     break;
                 }
             }
             if (!$found) {
-                $watcher['target'][] = array('name' => $fieldName);
+                $watcher['target'][] = array('name' => $field);
             }
 
             if (!array_key_exists('turnOn', $watcher)) {
@@ -325,8 +325,8 @@ class Piece_Right
                 }
             }
 
-            if (!in_array($fieldName, $watcher['turnOn'])) {
-                $watcher['turnOn'][] = $fieldName;
+            if (!in_array($field, $watcher['turnOn'])) {
+                $watcher['turnOn'][] = $field;
             }
 
             $turnOnFields = array();
@@ -351,7 +351,7 @@ class Piece_Right
                 && $watcher['turnOnForceValidation']
                 && count($turnOnFields)
                 ) {
-                $this->_config->setForceValidation($fieldName);
+                $this->_config->setForceValidation($field);
             }
 
             if (array_key_exists('turnOff', $watcher)) {
@@ -368,18 +368,18 @@ class Piece_Right
     /**
      * Returns whether the current validation should be continued or not.
      *
-     * @param string $name
+     * @param string $field
      * @param string $value
      * @return boolean
      * @since Method available since Release 0.3.0
      */
-    function _checkValidationRequirement($name, $value)
+    function _checkValidationRequirement($field, $value)
     {
-        if ($this->_config->isRequired($name)) {
+        if ($this->_config->isRequired($field)) {
             if ($this->_isEmpty($value)) {
-                $this->_results->addError($name,
+                $this->_results->addError($field,
                                           'required',
-                                          $this->_config->getRequiredMessage($name)
+                                          $this->_replaceMessage($field, $this->_config->getRequiredMessage($field))
                                           );
                 return false;
             }
@@ -398,14 +398,14 @@ class Piece_Right
     /**
      * Validates the value by the validations of the field.
      *
-     * @param string $name
+     * @param string $field
      * @param string $value
      * @param array  $validations
      * @since Method available since Release 0.3.0
      * @throws PIECE_RIGHT_ERROR_NOT_FOUND
      * @throws PIECE_RIGHT_ERROR_INVALID_VALIDATOR
      */
-    function _validate($name, $value, $validations)
+    function _validate($field, $value, $validations)
     {
         foreach ($validations as $validation) {
             $validator = &Piece_Right_Validator_Factory::factory($validation['validator']);
@@ -416,7 +416,7 @@ class Piece_Right
             if (is_array($value) && !$validator->isArrayable()) {
                 Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
                 Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_ARRAYABLE,
-                                        "The value of the field [ $name ] is an array, but the validator [ {$validation['validator']} ] is not arrayable. This validation is skipped.",
+                                        "The value of the field [ $field ] is an array, but the validator [ {$validation['validator']} ] is not arrayable. This validation is skipped.",
                                         'warning'
                                         );
                 Piece_Right_Error::popCallback();
@@ -427,9 +427,9 @@ class Piece_Right
             $validator->setRules($validation['rules']);
             $validator->setMessage($validation['message']);
             if (!$validator->validate($value)) {
-                $this->_results->addError($name,
+                $this->_results->addError($field,
                                           $validation['validator'],
-                                          $validator->getMessage()
+                                          $this->_replaceMessage($field, $validator->getMessage())
                                           );
             }
         }
@@ -504,12 +504,12 @@ class Piece_Right
      */
     function _generatePseudoFields($fields)
     {
-        foreach ($fields as $fieldName) {
-            if (!$this->_config->isPseudo($fieldName)) {
+        foreach ($fields as $field) {
+            if (!$this->_config->isPseudo($field)) {
                 continue;
             }
 
-            $definition = $this->_config->getPseudoDefinition($fieldName);
+            $definition = $this->_config->getPseudoDefinition($field);
             if (!array_key_exists('format', $definition)) {
                 continue;
             }
@@ -525,11 +525,31 @@ class Piece_Right
                 $args[] = $this->_results->getFieldValue($arg);
             }
 
-            $this->_results->setFieldValue($fieldName,
+            $this->_results->setFieldValue($field,
                                            vsprintf($definition['format'],
                                                     $args)
                                            );
         }
+    }
+
+    // }}}
+    // {{{ _replaceMessage()
+
+    /**
+     * Replaces the message with the message variables of the given field.
+     *
+     * @param string $field
+     * @param string $message
+     * @return string
+     * @since Method available since Release 0.3.0
+     */
+    function _replaceMessage($field, $message)
+    {
+        foreach ($this->_config->getMessageVariablesByFieldName($field) as $name => $value) {
+            $message = str_replace("%$name%", $value, $message);
+        }
+
+        return $message;
     }
 
     /**#@-*/
