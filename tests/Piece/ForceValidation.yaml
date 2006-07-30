@@ -1,0 +1,10 @@
+# $Id$
+- name: password
+  required:
+    message: "[%_name%] is required."
+  validator:
+    - name: Length
+      rule:
+        min: 6
+      message: "The password is invalid."
+  forceValidation: true
