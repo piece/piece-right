@@ -521,13 +521,34 @@ class Piece_RightTestCase extends PHPUnit_TestCase
                                     array('message' => '[%_description%] is required.')
                                     );
         $dynamicConfig->setRequired('age');
-        $dynamicConfig->addValidation('age', 'Range', array('min' => 20,
-                                                            'min_message' => '[%_field%] is must greater than %requirement%.'));
+        $dynamicConfig->addValidation('age',
+                                      'Range',
+                                      array('min' => 20,
+                                            'min_message' => '[%_name%] is must greater than %requirement%.')
+                                      );
         $dynamicConfig->addMessageVariable('age', 'requirement', 20);
         $dynamicConfig->setDescription('last_name', 'Last Name');
 
         $this->_assertMessageVariable(true, $dynamicConfig);
         $this->_assertMessageVariable(false, new Piece_Right_Config());
+    }
+
+    /**
+     * @since Method available since Release 0.3.0
+     */
+    function testForceValidation()
+    {
+        $dynamicConfig = &new Piece_Right_Config();
+        $dynamicConfig->setRequired('password', array('message' => '[%_name%] is required.'));
+        $dynamicConfig->addValidation('password',
+                                      'Length',
+                                      array('min' => 6),
+                                      'The password is invalid.'
+                                      );
+        $dynamicConfig->setForceValidation('password');
+
+        $this->_assertForceValidation(true, $dynamicConfig);
+        $this->_assertForceValidation(false, new Piece_Right_Config());
     }
 
     /**#@-*/
@@ -677,6 +698,29 @@ class Piece_RightTestCase extends PHPUnit_TestCase
                             );
 
         unset($_POST['age']);
+        unset($_SERVER['REQUEST_METHOD']);
+    }
+
+    /**
+     * @since Method available since Release 0.3.0
+     */
+    function _assertForceValidation($useDynamicConfiguration, &$dynamicConfig)
+    {
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
+
+        if ($useDynamicConfiguration) {
+            $this->assertFalse($right->validate('ForceValidation', $dynamicConfig));
+        } else {
+            $this->assertFalse($right->validate('ForceValidation'));
+        }
+
+        $results = &$right->getResults();
+
+        $this->assertEquals('The password is invalid.',
+                            $results->getErrorMessage('password')
+                            );
+
         unset($_SERVER['REQUEST_METHOD']);
     }
 
