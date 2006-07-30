@@ -68,6 +68,8 @@ class Piece_Right_Validator_List extends Piece_Right_Validator_Common
      * @access private
      */
 
+    var $_isArrayable = true;
+
     /**#@-*/
 
     /**#@+
@@ -86,7 +88,7 @@ class Piece_Right_Validator_List extends Piece_Right_Validator_Common
     function validate($value)
     {
         if (!is_array($value)) {
-            return false;
+            $value = (array)$value;
         }
 
         $elements = $this->getRule('elements');
