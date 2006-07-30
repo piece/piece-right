@@ -1,0 +1,21 @@
+- name: emailUser
+  required:
+  filter:
+    - strtolower
+
+- name: emailHost
+  required:
+  filter:
+    - strtolower
+
+- name: email
+  required:
+  validator:
+    - name: Regex
+      rule:
+        pattern: /^[^@]+@.+$/
+  pseudo:
+    format: %s@%s
+    arg:
+      - emailUser
+      - emailHost
