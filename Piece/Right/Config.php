@@ -139,10 +139,13 @@ class Piece_Right_Config
         array_walk($watchers, array(&$this, 'mergeWatcher'));
 
         $pseudoFields = $config->getPseudoFields();
-        array_walk($pseudoFields, array(&$this, 'mergePseudoFields'));
+        array_walk($pseudoFields, array(&$this, 'mergePseudoField'));
 
         $messageVariables = $config->getMessageVariables();
         array_walk($messageVariables, array(&$this, 'mergeMessageVariables'));
+
+        $forceValidationFields = $config->getForceValidationFields();
+        array_walk($forceValidationFields, array(&$this, 'mergeForceValidationField'));
     }
 
     // }}}
@@ -158,7 +161,11 @@ class Piece_Right_Config
     function mergeValidations($validations, $field)
     {
         foreach ($validations as $validation) {
-            $this->addValidation($field, $validation['validator'], $validation['rules']);
+            $this->addValidation($field,
+                                 $validation['validator'],
+                                 $validation['rules'],
+                                 $validation['message']
+                                 );
         }
     }
 
@@ -399,7 +406,7 @@ class Piece_Right_Config
     {
         if (!array_key_exists($field, $this->_validationSet)) {
             $this->_validationSet[$field] = array();
-            $this->addMessageVariable($field, '_field', $field);
+            $this->addMessageVariable($field, '_name', $field);
         }
     }
 
@@ -499,7 +506,7 @@ class Piece_Right_Config
     }
 
     // }}}
-    // {{{ mergePseudoFields()
+    // {{{ mergePseudoField()
 
     /**
      * A callback that will be called by array_walk() function in merge()
@@ -509,7 +516,7 @@ class Piece_Right_Config
      * @param string $field
      * @since Method available since Release 0.3.0
      */
-    function mergePseudoFields($definition, $field)
+    function mergePseudoField($definition, $field)
     {
         $this->setPseudo($field, $definition);
     }
@@ -596,6 +603,36 @@ class Piece_Right_Config
         $this->addField($field);
 
         $this->_messageVariables[$field][$name] = $value;
+    }
+
+    // }}}
+    // {{{ getForceValidationFields()
+
+    /**
+     * Gets all force validation fields for the current configuration.
+     *
+     * @return array
+     * @since Method available since Release 0.3.0
+     */
+    function getForceValidationFields()
+    {
+        return $this->_forceValidationFields;
+    }
+
+    // }}}
+    // {{{ mergeForceValidationField()
+
+    /**
+     * A callback that will be called by array_walk() function in merge()
+     * method.
+     *
+     * @param boolean $forceValidation
+     * @param string $field
+     * @since Method available since Release 0.3.0
+     */
+    function mergeForceValidationField($forceValidation, $field)
+    {
+        $this->setForceValidation($field, $forceValidation);
     }
 
     /**#@-*/
