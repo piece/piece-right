@@ -507,8 +507,27 @@ class Piece_RightTestCase extends PHPUnit_TestCase
                                                        'emailHost'))
                                   );
 
-        $this->_assertPseudoField($dynamicConfig);
-        $this->_assertPseudoField(new Piece_Right_Config());
+        $this->_assertPseudoField(true, $dynamicConfig);
+        $this->_assertPseudoField(false, new Piece_Right_Config());
+    }
+
+    /**
+     * @since Method available since Release 0.3.0
+     */
+    function testMessageVariable()
+    {
+        $dynamicConfig = &new Piece_Right_Config();
+        $dynamicConfig->setRequired('last_name',
+                                    array('message' => '[%_description%] is required.')
+                                    );
+        $dynamicConfig->setRequired('age');
+        $dynamicConfig->addValidation('age', 'Range', array('min' => 20,
+                                                            'min_message' => '[%_field%] is must greater than %requirement%.'));
+        $dynamicConfig->addMessageVariable('age', 'requirement', 20);
+        $dynamicConfig->setDescription('last_name', 'Last Name');
+
+        $this->_assertMessageVariable(true, $dynamicConfig);
+        $this->_assertMessageVariable(false, new Piece_Right_Config());
     }
 
     /**#@-*/
@@ -609,14 +628,18 @@ class Piece_RightTestCase extends PHPUnit_TestCase
     /**
      * @since Method available since Release 0.3.0
      */
-    function _assertPseudoField(&$dynamicConfig)
+    function _assertPseudoField($useDynamicConfiguration, &$dynamicConfig)
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_POST['emailUser'] = 'ITEMAN';
         $_POST['emailHost'] = 'SOURCEFORGE.NET';
         $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
 
-        $this->assertTrue($right->validate('PseudoField', $dynamicConfig));
+        if ($useDynamicConfiguration) {
+            $this->assertTrue($right->validate('PseudoField', $dynamicConfig));
+        } else {
+            $this->assertTrue($right->validate('PseudoField'));
+        }
 
         $results = &$right->getResults();
 
@@ -626,6 +649,34 @@ class Piece_RightTestCase extends PHPUnit_TestCase
 
         unset($_POST['emailHost']);
         unset($_POST['emailUser']);
+        unset($_SERVER['REQUEST_METHOD']);
+    }
+
+    /**
+     * @since Method available since Release 0.3.0
+     */
+    function _assertMessageVariable($useDynamicConfiguration, &$dynamicConfig)
+    {
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST['age'] = '18';
+        $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
+
+        if ($useDynamicConfiguration) {
+            $this->assertFalse($right->validate('MessageVariable', $dynamicConfig));
+        } else {
+            $this->assertFalse($right->validate('MessageVariable'));
+        }
+
+        $results = &$right->getResults();
+
+        $this->assertEquals('[Last Name] is required.',
+                            $results->getErrorMessage('last_name')
+                            );
+        $this->assertEquals('[age] is must greater than 20.',
+                            $results->getErrorMessage('age')
+                            );
+
+        unset($_POST['age']);
         unset($_SERVER['REQUEST_METHOD']);
     }
 
