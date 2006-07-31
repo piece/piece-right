@@ -41,7 +41,7 @@
 // {{{ Piece_Right_Filter_JapaneseAlphaNumeric
 
 /**
- * A filter which is used to converts Japanese JISX 0208 alphabet characters
+ * A filter which is used to converts Japanese JIS X 0208 alphabet characters
  * and numeric characters to ASCII characters.
  *
  * @package    Piece_Right
@@ -78,7 +78,7 @@ class Piece_Right_Filter_JapaneseAlphaNumeric
     // {{{ filter()
 
     /**
-     * Converts Japanese JISX 0208 alphabet characters and numeric characters
+     * Converts Japanese JIS X 0208 alphabet characters and numeric characters
      * to ASCII characters.
      *
      * @param string $value
