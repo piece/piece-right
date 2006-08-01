@@ -23,6 +23,12 @@
       rule:
         pattern: /^\d{1,4}-\d{1,4}-\d{1,4}$/
       message: Please input all fields of the home phone.
+  pseudo:
+    format: %s-%s-%s
+    arg:
+      - homePhone1
+      - homePhone2
+      - homePhone3
   watcher:
     target:
       - name: has_home_phone
@@ -41,7 +47,7 @@
 - name: has_home_phone
   required:
     message: This field is required.
-  validator: &has_phone
+  validator:
     - name: Range
       rule:
         min: 1
