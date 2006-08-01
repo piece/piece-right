@@ -410,7 +410,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $_POST['homePhone3'] = '';
         $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
 
-        $this->assertTrue($right->validate('Foo'));
+        $this->assertTrue($right->validate('ForceValidationBasedOnWatcher'));
 
         unset($_POST['homePhone3']);
         unset($_POST['homePhone2']);
