@@ -452,7 +452,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $_POST['homePhone3'] = '3333';
         $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
 
-        $this->assertTrue($right->validate('Foo'));
+        $this->assertTrue($right->validate('ForceValidationBasedOnWatcher'));
 
         unset($_POST['homePhone3']);
         unset($_POST['homePhone2']);
@@ -549,6 +549,53 @@ class Piece_RightTestCase extends PHPUnit_TestCase
 
         $this->_assertForceValidation(true, $dynamicConfig);
         $this->_assertForceValidation(false, new Piece_Right_Config());
+    }
+
+    /**
+     * @since Method available since Release 0.4.0
+     */
+    function testProblemThatValidationOfPseudoFieldsAreAlwaysInvoked()
+    {
+        $dynamicConfig = &new Piece_Right_Config();
+        $dynamicConfig->addField('homePhone1');
+        $dynamicConfig->addField('homePhone2');
+        $dynamicConfig->addField('homePhone3');
+        $dynamicConfig->setRequired('home_phone',
+                                    array('enabled' => false,
+                                          'message' => 'These fields are required.')
+                                    );
+        $dynamicConfig->addValidation('home_phone',
+                                      'Regex',
+                                      array('pattern' => '/^\d{1,4}-\d{1,4}-\d{1,4}$/'),
+                                      'Please input all fields of the home phone.'
+                                      );
+        $dynamicConfig->setPseudo('home_phone',
+                                  array('format' => '%s-%s-%s',
+                                        'arg' => array('homePhone1',
+                                                       'homePhone2',
+                                                       'homePhone3'))
+                                  );
+        $dynamicConfig->setWatcher('home_phone',
+                                   array('target' => array(array('name' => 'has_home_phone',
+                                                                 'trigger' => array('comparisonOperator' => '==', 'comparisonTo' => '1')),
+                                                           array('name' => 'has_home_phone',
+                                                                 'trigger' => array('comparisonOperator' => '==', 'comparisonTo' => '3')),
+                                                           array('name' => 'homePhone1'),
+                                                           array('name' => 'homePhone2'),
+                                                           array('name' => 'homePhone3')),
+                                         'turnOnForceValidation' => true)
+                                   );
+        $dynamicConfig->setRequired('has_home_phone',
+                                    array('message' => 'This field is required.')
+                                    );
+        $dynamicConfig->addValidation('has_home_phone',
+                                      'Range',
+                                      array('min' => 1, 'max' => 3),
+                                      'Please choice from these radios.'
+                                      );
+
+        $this->_assertProblemThatValidationOfPseudoFieldsAreAlwaysInvoked(false, $dynamicConfig);
+        $this->_assertProblemThatValidationOfPseudoFieldsAreAlwaysInvoked(false, new Piece_Right_Config());
     }
 
     /**#@-*/
@@ -721,6 +768,30 @@ class Piece_RightTestCase extends PHPUnit_TestCase
                             $results->getErrorMessage('password')
                             );
 
+        unset($_SERVER['REQUEST_METHOD']);
+    }
+
+    /**
+     * @since Method available since Release 0.4.0
+     */
+    function _assertProblemThatValidationOfPseudoFieldsAreAlwaysInvoked($useDynamicConfiguration, &$dynamicConfiga)
+    {
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST['has_home_phone'] = '2';
+        $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
+
+        if ($useDynamicConfiguration) {
+            $this->assertTrue($right->validate('ProblemThatValidationOfPseudoFieldsAreAlwaysInvoked', $dynamicConfig));
+        } else {
+            $this->assertTrue($right->validate('ProblemThatValidationOfPseudoFieldsAreAlwaysInvoked'));
+        }
+
+        $results = &$right->getResults();
+        foreach ($results->getErrorFields() as $field) {
+            print "$field => " . $results->getFieldValue($field) . ': ' . $results->getErrorMessage($field) . "\n";
+        }
+
+        unset($_POST['has_home_phone']);
         unset($_SERVER['REQUEST_METHOD']);
     }
 
