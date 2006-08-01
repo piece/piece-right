@@ -520,14 +520,22 @@ class Piece_Right
                 continue;
             }
 
+            $numberOfValidFields = 0;
             $args = array();
             foreach ($definition['arg'] as $arg) {
-                $args[] = $this->_results->getFieldValue($arg);
+                $fieldValue = $this->_results->getFieldValue($arg);
+                if (!is_null($fieldValue) && strlen($fieldValue)) {
+                    ++$numberOfValidFields;
+                }
+                $args[] = $fieldValue;
+            }
+
+            if (!$numberOfValidFields) {
+                continue;
             }
 
             $this->_results->setFieldValue($field,
-                                           vsprintf($definition['format'],
-                                                    $args)
+                                           vsprintf($definition['format'], $args)
                                            );
         }
     }
