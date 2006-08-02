@@ -42,113 +42,19 @@ require_once 'PEAR/PackageFileManager2.php';
 
 PEAR::staticPushErrorHandling(PEAR_ERROR_CALLBACK, create_function('$error', 'var_dump($error); exit();'));
 
-$version = '0.3.0';
+$version = '0.4.0';
 $apiVersion = '0.3.0';
-$notes = "The first beta release of Piece_Right.
-This release includes a lot of enhancemens and several defect fixes as follows:
+$notes = "This release includes an enhancement and a defect fix as follows:
 
 <<< Enhancements >>>
 
-Kernel:
-
-* Piece_Right
-- Added support for filters.
-- Added support for 'watcher'.
-- Added array support.
-- Added the code so as to set a Piece_Right_Results object to a validator object.
-- Added error handling for invalid configuration.
-- Added error handling for the factories of filters and validators.
-- Added support for forcing validation.
-- Added support for pseudo fields.
-- Added support for message variables.
-
-* Piece_Right_Config
-- Added setRequired()/isRequired()/getRequiredMessage() methods for handling required stuff.
-- Added support for filters.
-- Added support for merging filters and required fileds.
-- Added support for watchers.
-- Added addField() method for adding fields which will be validated.
-- Added setForceValidation() and forceValidation() method for forcing validation.
-- Added support for pseudo fields.
-- Added support for message variables.
-- Added missing support for force validations.
-
-* Piece_Right_Config_Factory
-- Added support for filters.
-- Added support for watchers.
-- Added error handling for invalid configuration.
-- Changed the code so as to call addField() method first.
-- Added support for pseudo fields.
-- Added support for message variables.
-- Added missing support for force validations.
-
-* Piece_Right_Validator_Common
-- Added setResults() method for setting a Piece_Right_Results object.
-- Added the constructor for initializing properties.
-- Added _initialize() method for initializing properties.
-- clear(): Added the code so as to call _initialize() method.
-- Changed the location of the rules from each property to \$_rules.
-- Changed the method name from addRule() to setRule().
-- Added getRule() method for getting the validation rule of the given rule name.
-- Added _addRule() method for defining/initializing validation rules.
-- Added support for the error message of each rule.
-- Added support for the error message of the current validation.
-- Added \$_arrayable property for indicating the validator is arrayable or not.
-- Added isArrayable() method for checking whether the validator is arrayable or not.
-
-* Piece_Right_Filter_Factory
-- A factory class for creating filter objects.
-
-* Piece_Right_Error
-- Added PIECE_RIGHT_ERROR_INVALID_CONFIGURATION constant.
-- Added PIECE_RIGHT_ERROR_NOT_ARRAYABLE constant.
-
 * Piece_Right_Results
-- Added getFieldNames() method to getting all field names of the current validation.
-
-Validators:
-
-* List
-- A validator which is used to check whether values are included in the definition.
-
-* Piece_Right_Validator_Date
-- A validator which is used to check whether a value is a valid date.
-
-* Piece_Right_Validator_JapaneseDate
-- A validator which is used to check whether a value is a valid japanese date.
-
-* Piece_Right_Validator_Compare
-- A validator which is used to compare the value of a field to the value of another field.
-
-* WithMethod
-- A validator which is used to validate the value of a field with an arbitrary method.
-
-* Regex
-- Changed the return value to false when the pattern is invalid.
-
-* Required
-- Removed.
-
-Filters:
-
-* JapaneseH2Z
-- A filter which is used to converts Japanese JIS X0201 kana to JIS X0208 kana.
-
-* JapaneseAlphaNumeric
-- A filter which is used to converts Japanese JISX 0208 alphabet characters and numeric characters to ASCII characters.
+- Added getValidFields() method for getting an array of the field names.
 
 <<< Defect fixes >>>
 
 * Piece_Right
-- Fixed the problem that the validation is influenced by the validation order.
-
-* Piece_Right_Config
-- setRequired(): Changed the code so as to keep the message on the filed if the given message is null.
-- Fixed the problem that non required fields cannot be turned required on.
-
-* Piece_Right_Filter_Factory
-* Piece_Right_Validator_Factory
-- Removed '@' operator from include_once.";
+- Fixed the problem that the validation of pseudo fields are always invoked. Pseudo fields will only be created when all fields specifying with 'arg' element are not empty.";
 
 $package = new PEAR_PackageFileManager2();
 $package->setOptions(array('filelistgenerator' => 'svn',
