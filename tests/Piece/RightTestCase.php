@@ -598,6 +598,39 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $this->_assertProblemThatValidationOfPseudoFieldsAreAlwaysInvoked(false, new Piece_Right_Config());
     }
 
+    /**
+     * @since Method available since Release 0.4.0
+     */
+    function testValidFieldNames()
+    {
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST['foo'] = 'foo';
+        $_POST['bar'] = '';
+        $_POST['baz'] = '0';
+
+        $dynamicConfig = &new Piece_Right_Config();
+        $dynamicConfig->setRequired('foo');
+        $dynamicConfig->setRequired('bar');
+        $dynamicConfig->addField('baz');
+        $right = &new Piece_Right();
+
+        $this->assertFalse($right->validate(null, $dynamicConfig));
+
+        $results = &$right->getResults();
+        foreach (array('bar') as $field) {
+            $this->assertTrue(in_array($field, $results->getErrorFields()), "The field [ $field ] is expected.");
+        }
+
+        foreach (array('foo', 'baz') as $field) {
+            $this->assertTrue(in_array($field, $results->getValidFields()), "The field [ $field ] is expected.");
+        }
+
+        unset($_POST['baz']);
+        unset($_POST['bar']);
+        unset($_POST['foo']);
+        unset($_SERVER['REQUEST_METHOD']);
+    }
+
     /**#@-*/
 
     /**#@+
