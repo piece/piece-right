@@ -213,6 +213,19 @@ class Piece_Right_Results
         return array_keys($this->_fieldValues);
     }
 
+    // }}}
+    // {{{ getValidFields()
+
+    /**
+     * Gets an array of the field names which have no errors.
+     *
+     * @return array
+     */
+    function getValidFields()
+    {
+        return array_keys(array_diff_assoc($this->_fieldValues, $this->_errors));
+    }
+
     /**#@-*/
 
     /**#@+
