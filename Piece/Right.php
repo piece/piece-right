@@ -75,6 +75,7 @@ class Piece_Right
     var $_fieldValuesCallback;
     var $_results;
     var $_config;
+    var $_payload;
 
     /**#@-*/
 
@@ -186,6 +187,19 @@ class Piece_Right
     function &getResults()
     {
         return $this->_results;
+    }
+
+    // }}}
+    // {{{ setPayload()
+
+    /**
+     * Sets the given payload.
+     *
+     * @param mixed &$payload
+     */
+    function setPayload(&$payload)
+    {
+        $this->_payload = &$payload;
     }
 
     /**#@-*/
@@ -426,7 +440,7 @@ class Piece_Right
             $validator->setResults($this->_results);
             $validator->setRules($validation['rules']);
             $validator->setMessage($validation['message']);
-            if (!$validator->validate($value)) {
+            if (!$validator->validate($value, $this->_payload)) {
                 $this->_results->addError($field,
                                           $validation['validator'],
                                           $this->_replaceMessage($field, $validator->getMessage())
