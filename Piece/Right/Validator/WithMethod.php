@@ -83,9 +83,10 @@ class Piece_Right_Validator_WithMethod extends Piece_Right_Validator_Common
      * Validates the value of a field with an arbitrary method.
      *
      * @param mixed $value
+     * @param mixed &$payload
      * @return boolean
      */
-    function validate($value)
+    function validate($value, &$payload)
     {
         $class = $this->getRule('class');
         $method = $this->getRule('method');
@@ -103,12 +104,12 @@ class Piece_Right_Validator_WithMethod extends Piece_Right_Validator_Common
 
         if (is_array($value)) {
             foreach ($value as $target) {
-                if (!call_user_func($callback, $value)) {
+                if (!call_user_func($callback, $value, $payload)) {
                     return false;
                 }
             }
         } else {
-            return call_user_func($callback, $value);
+            return call_user_func($callback, $value, $payload);
         }
     }
 
