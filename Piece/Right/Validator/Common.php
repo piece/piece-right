@@ -40,6 +40,8 @@
 // {{{ Piece_Right_Validator_Common
 
 /**
+ * The base class for Piece_Right validators.
+ *
  * @package    Piece_Right
  * @author     KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @copyright  2006 KUBO Atsuhiro <iteman@users.sourceforge.net>
@@ -133,10 +135,11 @@ class Piece_Right_Validator_Common
      * Checks whether a value is valid.
      *
      * @param string $value
+     * @param mixed  &$payload
      * @return boolean
      * @abstract
      */
-    function validate($value) {}
+    function validate($value, &$payload) {}
 
     // }}}
     // {{{ clear()
