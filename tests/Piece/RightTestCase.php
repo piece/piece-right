@@ -631,6 +631,28 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         unset($_SERVER['REQUEST_METHOD']);
     }
 
+    /**
+     * @since Method available since Release 0.5.0
+     */
+    function testPayload()
+    {
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST['foo'] = 'bar';
+        $payload = &new stdClass();
+        $payload->validatorCalled = false;
+
+        $dynamicConfig = &new Piece_Right_Config();
+        $dynamicConfig->addValidation('foo', 'PayloadTest');
+        $right = &new Piece_Right();
+        $right->setPayload($payload);
+
+        $this->assertTrue($right->validate(null, $dynamicConfig));
+        $this->assertTrue($payload->validatorCalled);
+
+        unset($_POST['foo']);
+        unset($_SERVER['REQUEST_METHOD']);
+    }
+
     /**#@-*/
 
     /**#@+
