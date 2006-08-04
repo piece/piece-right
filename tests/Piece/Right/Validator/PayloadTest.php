@@ -75,7 +75,6 @@ class Piece_Right_Validator_PayloadTest extends Piece_Right_Validator_Common
 
     function validate($value, &$payload)
     {
-        print "### c1 ###\n";
         $payload->validatorCalled = true;
         return true;
     }
