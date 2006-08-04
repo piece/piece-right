@@ -291,7 +291,7 @@ class Piece_Right
                         return;
                     }
 
-                    $fieldValue = $filter->filter($fieldValue);
+                    $fieldValue = $filter->filter($fieldValue, $this->_payload);
                 } else {
                     $fieldValue = call_user_func($filterName, $fieldValue);
                 }
