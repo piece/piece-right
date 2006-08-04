@@ -75,12 +75,12 @@ class WithMethod
      * @access public
      */
 
-    function isValid($value)
+    function isValid($value, &$payload)
     {
         return $value == 'foo';
     }
 
-    function isFoo($value)
+    function isFoo($value, &$payload)
     {
         return $value == $this->_foo;
     }

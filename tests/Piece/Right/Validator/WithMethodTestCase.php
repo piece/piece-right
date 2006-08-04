@@ -86,7 +86,7 @@ class Piece_Right_Validator_WithMethodTestCase extends PHPUnit_TestCase
                                    'method' => 'isValid')
                              );
 
-        $this->assertTrue($validator->validate('foo'));
+        $this->assertTrue($validator->validate('foo', new stdClass()));
 
         $validator = &new Piece_Right_Validator_WithMethod();
         $validator->setRules(array('class' => 'WithMethod',
@@ -94,7 +94,7 @@ class Piece_Right_Validator_WithMethodTestCase extends PHPUnit_TestCase
                                    'isStatic' => true)
                              );
 
-        $this->assertTrue($validator->validate('foo'));
+        $this->assertTrue($validator->validate('foo', new stdClass()));
 
         $validator = &new Piece_Right_Validator_WithMethod();
         $validator->setRules(array('class' => 'WithMethod',
@@ -102,7 +102,7 @@ class Piece_Right_Validator_WithMethodTestCase extends PHPUnit_TestCase
                                    'isStatic' => false)
                              );
 
-        $this->assertTrue($validator->validate('foo'));
+        $this->assertTrue($validator->validate('foo', new stdClass()));
     }
 
     function testFailure()
@@ -112,7 +112,7 @@ class Piece_Right_Validator_WithMethodTestCase extends PHPUnit_TestCase
                                    'method' => 'isValid')
                              );
 
-        $this->assertFalse($validator->validate('bar'));
+        $this->assertFalse($validator->validate('bar', new stdClass()));
 
         $validator = &new Piece_Right_Validator_WithMethod();
         $validator->setRules(array('class' => 'WithMethod',
@@ -120,7 +120,7 @@ class Piece_Right_Validator_WithMethodTestCase extends PHPUnit_TestCase
                                    'isStatic' => true)
                              );
 
-        $this->assertFalse($validator->validate('bar'));
+        $this->assertFalse($validator->validate('bar', new stdClass()));
 
         $validator = &new Piece_Right_Validator_WithMethod();
         $validator->setRules(array('class' => 'WithMethod',
@@ -128,7 +128,7 @@ class Piece_Right_Validator_WithMethodTestCase extends PHPUnit_TestCase
                                    'isStatic' => false)
                              );
 
-        $this->assertFalse($validator->validate('bar'));
+        $this->assertFalse($validator->validate('bar', new stdClass()));
     }
 
     /**#@+
