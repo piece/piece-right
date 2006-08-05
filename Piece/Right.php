@@ -196,6 +196,7 @@ class Piece_Right
      * Sets the given payload.
      *
      * @param mixed &$payload
+     * @since Method available since Release 0.5.0
      */
     function setPayload(&$payload)
     {
