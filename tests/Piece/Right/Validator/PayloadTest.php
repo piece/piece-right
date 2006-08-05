@@ -35,6 +35,7 @@
  * @version    SVN: $Id$
  * @link       http://iteman.typepad.jp/piece/
  * @see        Piece_RightTestCase
+ * @since      File available since Release 0.5.0
  */
 
 require_once 'Piece/Right/Validator/Common.php';
@@ -51,6 +52,7 @@ require_once 'Piece/Right/Validator/Common.php';
  * @version    Release: @package_version@
  * @link       http://iteman.typepad.jp/piece/
  * @see        Piece_RightTestCase
+ * @since      Class available since Release 0.5.0
  */
 class Piece_Right_Validator_PayloadTest extends Piece_Right_Validator_Common
 {
