@@ -26,17 +26,18 @@ o Length
 o List
 o Range
 o Regex
-o WithMethod</description>
+o WithMethod
+o Email</description>
  <lead>
   <name>KUBO Atsuhiro</name>
   <user>iteman</user>
   <email>iteman@users.sourceforge.net</email>
   <active>yes</active>
  </lead>
- <date>2006-08-02</date>
- <time>18:40:22</time>
+ <date>2006-08-05</date>
+ <time>04:36:52</time>
  <version>
-  <release>0.4.0</release>
+  <release>0.5.0</release>
   <api>0.3.0</api>
  </version>
  <stability>
@@ -44,17 +45,22 @@ o WithMethod</description>
   <api>beta</api>
  </stability>
  <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
- <notes>This release includes an enhancement and a defect fix as follows:
+ <notes>This release includes a few enhancement as follows:
 
 &lt;&lt;&lt; Enhancements &gt;&gt;&gt;
 
-* Piece_Right_Results
-- Added getValidFields() method for getting an array of the field names.
-
-&lt;&lt;&lt; Defect fixes &gt;&gt;&gt;
+Kernel:
 
 * Piece_Right
-- Fixed the problem that the validation of pseudo fields are always invoked. Pseudo fields will only be created when all fields specifying with &apos;arg&apos; element are not empty.</notes>
+- Added support for user defined payloads in validators and filters.
+
+Validators:
+
+* Email
+- A validator which is used to check whether a value is valid email address or not. This validator checks only addr-spec defined in RFC822.
+
+* WithMethod
+- Added support for payload.</notes>
  <contents>
   <dir baseinstalldir="/" name="/">
    <dir name="data">
@@ -96,6 +102,9 @@ o WithMethod</description>
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
       <file name="Date.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Email.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
       <file name="Factory.php" role="php">
@@ -170,6 +179,9 @@ o WithMethod</description>
        <file name="LowerCase.php" role="test">
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
+       <file name="PayloadTest.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
        <file name="TestRunner.php" role="test">
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
@@ -182,6 +194,9 @@ o WithMethod</description>
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
        <file name="DateTestCase.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="EmailTestCase.php" role="test">
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
        <file name="FactoryTestCase.php" role="test">
@@ -200,6 +215,9 @@ o WithMethod</description>
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
        <file name="ListTestCase.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="PayloadTest.php" role="test">
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
        <file name="RangeTestCase.php" role="test">
@@ -314,6 +332,7 @@ o WithMethod</description>
    <install as="Piece/Right/Filter/JapaneseAlphaNumericTestCase.php" name="tests/Piece/Right/Filter/JapaneseAlphaNumericTestCase.php" />
    <install as="Piece/Right/Filter/JapaneseH2ZTestCase.php" name="tests/Piece/Right/Filter/JapaneseH2ZTestCase.php" />
    <install as="Piece/Right/Filter/LowerCase.php" name="tests/Piece/Right/Filter/LowerCase.php" />
+   <install as="Piece/Right/Filter/PayloadTest.php" name="tests/Piece/Right/Filter/PayloadTest.php" />
    <install as="Piece/Right/Filter/TestRunner.php" name="tests/Piece/Right/Filter/TestRunner.php" />
    <install as="Piece/Right/ResultsTestCase.php" name="tests/Piece/Right/ResultsTestCase.php" />
    <install as="Piece/Right/TestRunner.php" name="tests/Piece/Right/TestRunner.php" />
@@ -321,12 +340,14 @@ o WithMethod</description>
    <install as="Piece/Right/Validator/Bar.php" name="tests/Piece/Right/Validator/Bar.php" />
    <install as="Piece/Right/Validator/CompareTestCase.php" name="tests/Piece/Right/Validator/CompareTestCase.php" />
    <install as="Piece/Right/Validator/DateTestCase.php" name="tests/Piece/Right/Validator/DateTestCase.php" />
+   <install as="Piece/Right/Validator/EmailTestCase.php" name="tests/Piece/Right/Validator/EmailTestCase.php" />
    <install as="Piece/Right/Validator/FactoryTestCase.php" name="tests/Piece/Right/Validator/FactoryTestCase.php" />
    <install as="Piece/Right/Validator/Foo.php" name="tests/Piece/Right/Validator/Foo.php" />
    <install as="Piece/Right/Validator/Invalid.php" name="tests/Piece/Right/Validator/Invalid.php" />
    <install as="Piece/Right/Validator/JapaneseDateTestCase.php" name="tests/Piece/Right/Validator/JapaneseDateTestCase.php" />
    <install as="Piece/Right/Validator/LengthTestCase.php" name="tests/Piece/Right/Validator/LengthTestCase.php" />
    <install as="Piece/Right/Validator/ListTestCase.php" name="tests/Piece/Right/Validator/ListTestCase.php" />
+   <install as="Piece/Right/Validator/PayloadTest.php" name="tests/Piece/Right/Validator/PayloadTest.php" />
    <install as="Piece/Right/Validator/RangeTestCase.php" name="tests/Piece/Right/Validator/RangeTestCase.php" />
    <install as="Piece/Right/Validator/RegexTestCase.php" name="tests/Piece/Right/Validator/RegexTestCase.php" />
    <install as="Piece/Right/Validator/TestRunner.php" name="tests/Piece/Right/Validator/TestRunner.php" />
@@ -338,6 +359,34 @@ o WithMethod</description>
   </filelist>
  </phprelease>
  <changelog>
+  <release>
+   <version>
+    <release>0.5.0</release>
+    <api>0.3.0</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2006-08-05</date>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
+   <notes>This release includes a few enhancement as follows:
+
+&lt;&lt;&lt; Enhancements &gt;&gt;&gt;
+
+Kernel:
+
+* Piece_Right
+- Added support for user defined payloads in validators and filters.
+
+Validators:
+
+* Email
+- A validator which is used to check whether a value is valid email address or not. This validator checks only addr-spec defined in RFC822.
+
+* WithMethod
+- Added support for payload.</notes>
+  </release>
   <release>
    <version>
     <release>0.4.0</release>

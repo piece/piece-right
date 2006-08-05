@@ -42,19 +42,24 @@ require_once 'PEAR/PackageFileManager2.php';
 
 PEAR::staticPushErrorHandling(PEAR_ERROR_CALLBACK, create_function('$error', 'var_dump($error); exit();'));
 
-$version = '0.4.0';
+$version = '0.5.0';
 $apiVersion = '0.3.0';
-$notes = "This release includes an enhancement and a defect fix as follows:
+$notes = "This release includes a few enhancement as follows:
 
 <<< Enhancements >>>
 
-* Piece_Right_Results
-- Added getValidFields() method for getting an array of the field names.
-
-<<< Defect fixes >>>
+Kernel:
 
 * Piece_Right
-- Fixed the problem that the validation of pseudo fields are always invoked. Pseudo fields will only be created when all fields specifying with 'arg' element are not empty.";
+- Added support for user defined payloads in validators and filters.
+
+Validators:
+
+* Email
+- A validator which is used to check whether a value is valid email address or not. This validator checks only addr-spec defined in RFC822.
+
+* WithMethod
+- Added support for payload.";
 
 $package = new PEAR_PackageFileManager2();
 $package->setOptions(array('filelistgenerator' => 'svn',
@@ -88,7 +93,8 @@ o Length
 o List
 o Range
 o Regex
-o WithMethod');
+o WithMethod
+o Email');
 $package->setChannel('pear.hatotech.org');
 $package->setLicense('BSD License (revised)',
                      'http://www.opensource.org/licenses/bsd-license.php'

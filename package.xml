@@ -24,6 +24,7 @@ o List
 o Range
 o Regex
 o WithMethod
+o Email
  </description>
  <maintainers>
   <maintainer>
@@ -34,21 +35,26 @@ o WithMethod
   </maintainer>
   </maintainers>
  <release>
-  <version>0.4.0</version>
-  <date>2006-08-02</date>
+  <version>0.5.0</version>
+  <date>2006-08-05</date>
   <license>BSD License (revised)</license>
   <state>beta</state>
-  <notes>This release includes an enhancement and a defect fix as follows:
+  <notes>This release includes a few enhancement as follows:
 
 &lt;&lt;&lt; Enhancements &gt;&gt;&gt;
 
-* Piece_Right_Results
-- Added getValidFields() method for getting an array of the field names.
-
-&lt;&lt;&lt; Defect fixes &gt;&gt;&gt;
+Kernel:
 
 * Piece_Right
-- Fixed the problem that the validation of pseudo fields are always invoked. Pseudo fields will only be created when all fields specifying with &apos;arg&apos; element are not empty.
+- Added support for user defined payloads in validators and filters.
+
+Validators:
+
+* Email
+- A validator which is used to check whether a value is valid email address or not. This validator checks only addr-spec defined in RFC822.
+
+* WithMethod
+- Added support for payload.
   </notes>
   <deps>
    <dep type="php" rel="ge" version="4.3.0" optional="no"/>
@@ -97,6 +103,9 @@ o WithMethod
         <replace from="@package_version@" to="version" type="package-info"/>
        </file>
        <file role="php" name="Date.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+       <file role="php" name="Email.php">
         <replace from="@package_version@" to="version" type="package-info"/>
        </file>
        <file role="php" name="Factory.php">
@@ -171,6 +180,9 @@ o WithMethod
         <file role="test" name="LowerCase.php" install-as="Piece/Right/Filter/LowerCase.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
+        <file role="test" name="PayloadTest.php" install-as="Piece/Right/Filter/PayloadTest.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
         <file role="test" name="TestRunner.php" install-as="Piece/Right/Filter/TestRunner.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
@@ -183,6 +195,9 @@ o WithMethod
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
         <file role="test" name="DateTestCase.php" install-as="Piece/Right/Validator/DateTestCase.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="EmailTestCase.php" install-as="Piece/Right/Validator/EmailTestCase.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
         <file role="test" name="FactoryTestCase.php" install-as="Piece/Right/Validator/FactoryTestCase.php">
@@ -201,6 +216,9 @@ o WithMethod
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
         <file role="test" name="ListTestCase.php" install-as="Piece/Right/Validator/ListTestCase.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="PayloadTest.php" install-as="Piece/Right/Validator/PayloadTest.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
         <file role="test" name="RangeTestCase.php" install-as="Piece/Right/Validator/RangeTestCase.php">
@@ -268,6 +286,29 @@ o WithMethod
   </filelist>
  </release>
  <changelog>
+   <release>
+    <version>0.5.0</version>
+    <date>2006-08-05</date>
+    <license>BSD License (revised)</license>
+    <state>beta</state>
+    <notes>This release includes a few enhancement as follows:
+
+&lt;&lt;&lt; Enhancements &gt;&gt;&gt;
+
+Kernel:
+
+* Piece_Right
+- Added support for user defined payloads in validators and filters.
+
+Validators:
+
+* Email
+- A validator which is used to check whether a value is valid email address or not. This validator checks only addr-spec defined in RFC822.
+
+* WithMethod
+- Added support for payload.
+    </notes>
+   </release>
    <release>
     <version>0.4.0</version>
     <date>2006-08-02</date>
