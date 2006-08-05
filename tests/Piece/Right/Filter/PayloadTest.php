@@ -35,7 +35,7 @@
  * @version    SVN: $Id$
  * @link       http://iteman.typepad.jp/piece/
  * @see        Piece_RightTestCase
- * @since      File available since Release 0.3.0
+ * @since      File available since Release 0.5.0
  */
 
 // {{{ Piece_Right_Filter_PayloadTest
@@ -50,7 +50,7 @@
  * @version    Release: @package_version@
  * @link       http://iteman.typepad.jp/piece/
  * @see        Piece_RightTestCase
- * @since      Class available since Release 0.3.0
+ * @since      Class available since Release 0.5.0
  */
 class Piece_Right_Filter_PayloadTest
 {
