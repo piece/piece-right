@@ -85,39 +85,37 @@ class Piece_Right_Validator_JapaneseDate extends Piece_Right_Validator_Common
      */
     function validate($value)
     {
-        $era = $this->getRule('era');
-        $eraMapping = $this->getRule('eraMapping');
-        $year = $this->getRule('year');
-        $month = $this->getRule('month');
-        $day = $this->getRule('day');
-        if (is_null($era) || is_null($year) || is_null($month) || is_null($day)) {
+        $pattern = $this->getRule('pattern');
+        if (!preg_match($pattern, $value, $matches)) {
             return false;
         }
 
-        $eraValue = $this->_results->getFieldValue($era);
-        $eraMapping = array_flip($eraMapping);
-        if (!array_key_exists($eraValue, $eraMapping)) {
+        $era = $matches[ $this->getRule('patternEraPosition') ];
+        $eraMapping = array_flip($this->getRule('eraMapping'));
+        if (!array_key_exists($era, $eraMapping)) {
             return false;
         }
 
-        $yearValue = $this->_results->getFieldValue($year);
-        switch ($eraMapping[$eraValue]) {
+        $year = $matches[ $this->getRule('patternYearPosition') ];
+        switch ($eraMapping[$era]) {
         case 'showa':
-            $adYear = 1926 - 1 + $yearValue;
+            $adYear = 1926 - 1 + $year;
             break;
         case 'heisei':
-            $adYear = 1989 - 1 + $yearValue;
+            $adYear = 1989 - 1 + $year;
             break;
         case 'taisho':
-            $adYear = 1912 - 1 + $yearValue;
+            $adYear = 1912 - 1 + $year;
             break;
         case 'meiji':
-            $adYear = 1868 - 1 + $yearValue;
+            $adYear = 1868 - 1 + $year;
             break;
+        default:
+            return false;
         }
 
-        return checkdate($this->_results->getFieldValue($month),
-                         $this->_results->getFieldValue($day),
+        return checkdate($matches[ $this->getRule('patternMonthPosition') ],
+                         $matches[ $this->getRule('patternDayPosition') ],
                          $adYear
                          );
     }
@@ -138,15 +136,16 @@ class Piece_Right_Validator_JapaneseDate extends Piece_Right_Validator_Common
      */
     function _initialize()
     {
-        $this->_addRule('era');
         $this->_addRule('eraMapping', array('meiji'  => 1,
                                             'taisho' => 2,
                                             'showa'  => 3,
                                             'heisei' => 4)
                         );
-        $this->_addRule('year');
-        $this->_addRule('month');
-        $this->_addRule('day');
+        $this->_addRule('pattern', '/^(\d+)-(\d+)-(\d+)-(\d+)$/');
+        $this->_addRule('patternEraPosition', 1);
+        $this->_addRule('patternYearPosition', 2);
+        $this->_addRule('patternMonthPosition', 3);
+        $this->_addRule('patternDayPosition', 4);
     }
  
     /**#@-*/
