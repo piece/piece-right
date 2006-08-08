@@ -1,3 +1,4 @@
+# $Id$
 - name: foo
   required:
     message: This field is required.
