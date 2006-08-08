@@ -659,6 +659,134 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         unset($_SERVER['REQUEST_METHOD']);
     }
 
+    /**
+     * @since Method available since Release 0.6.0
+     */
+    function testSeparatedDateValidationWithPseudoFieldIfPseudoFieldIsRequired()
+    {
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
+
+        $this->assertFalse($right->validate('SeparatedDateValidationWithPseudoFieldIfPseudoFieldIsRequired'));
+        $results = &$right->getResults();
+        $errorFields = $results->getErrorFields();
+
+        $this->assertEquals(1, count($errorFields));
+        $this->assertContains('birthday', $errorFields);
+        $this->assertEquals('[birthday] is required.', $results->getErrorMessage('birthday'));
+
+        unset($_SERVER['REQUEST_METHOD']);
+
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST['year'] = '1976';
+        $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
+
+        $this->assertFalse($right->validate('SeparatedDateValidationWithPseudoFieldIfPseudoFieldIsRequired'));
+
+        $results = &$right->getResults();
+        $errorFields = $results->getErrorFields();
+
+        $this->assertEquals(1, count($errorFields));
+        $this->assertContains('birthday', $errorFields);
+        $this->assertEquals('[birthday] is required.', $results->getErrorMessage('birthday'));
+
+        unset($_POST['year']);
+        unset($_SERVER['REQUEST_METHOD']);
+
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST['year'] = '1976';
+        $_POST['month'] = '1';
+        $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
+
+        $this->assertFalse($right->validate('SeparatedDateValidationWithPseudoFieldIfPseudoFieldIsRequired'));
+
+        $results = &$right->getResults();
+        $errorFields = $results->getErrorFields();
+
+        $this->assertEquals(1, count($errorFields));
+        $this->assertContains('birthday', $errorFields);
+        $this->assertEquals('[birthday] is required.', $results->getErrorMessage('birthday'));
+
+        unset($_POST['month']);
+        unset($_POST['year']);
+        unset($_SERVER['REQUEST_METHOD']);
+
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST['year'] = '1976';
+        $_POST['month'] = '1';
+        $_POST['day'] = '20';
+        $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
+
+        $this->assertTrue($right->validate('SeparatedDateValidationWithPseudoFieldIfPseudoFieldIsRequired'));
+
+        unset($_POST['day']);
+        unset($_POST['month']);
+        unset($_POST['year']);
+        unset($_SERVER['REQUEST_METHOD']);
+
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST['year'] = '1977';
+        $_POST['month'] = '2';
+        $_POST['day'] = '29';
+        $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
+
+        $this->assertFalse($right->validate('SeparatedDateValidationWithPseudoFieldIfPseudoFieldIsRequired'));
+
+        $results = &$right->getResults();
+        $errorFields = $results->getErrorFields();
+
+        $this->assertEquals(1, count($errorFields));
+        $this->assertContains('birthday', $errorFields);
+        $this->assertEquals('[birthday] is invalid.', $results->getErrorMessage('birthday'));
+
+        unset($_POST['day']);
+        unset($_POST['month']);
+        unset($_POST['year']);
+        unset($_SERVER['REQUEST_METHOD']);
+    }
+
+    /**
+     * @since Method available since Release 0.6.0
+     */
+    function testSeparatedDateValidationWithPseudoFieldIfPseudoFieldIsNotRequired()
+    {
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
+
+        $this->assertTrue($right->validate('SeparatedDateValidationWithPseudoFieldIfPseudoFieldIsNotRequired'));
+
+        unset($_SERVER['REQUEST_METHOD']);
+
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST['year'] = '1976';
+        $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
+
+        $this->assertFalse($right->validate('SeparatedDateValidationWithPseudoFieldIfPseudoFieldIsNotRequired'));
+
+        $results = &$right->getResults();
+        $errorFields = $results->getErrorFields();
+
+        $this->assertEquals(1, count($errorFields));
+        $this->assertContains('birthday', $errorFields);
+        $this->assertEquals('[birthday] is invalid.', $results->getErrorMessage('birthday'));
+
+        unset($_POST['year']);
+        unset($_SERVER['REQUEST_METHOD']);
+
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST['year'] = '1976';
+        $_POST['month'] = '1';
+        $_POST['day'] = '20';
+        $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
+
+        $this->assertTrue($right->validate('SeparatedDateValidationWithPseudoField'));
+
+        unset($_POST['day']);
+        unset($_POST['month']);
+        unset($_POST['year']);
+        unset($_SERVER['REQUEST_METHOD']);
+    }
+
     /**#@-*/
 
     /**#@+
@@ -835,7 +963,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
     /**
      * @since Method available since Release 0.4.0
      */
-    function _assertProblemThatValidationOfPseudoFieldsAreAlwaysInvoked($useDynamicConfiguration, &$dynamicConfiga)
+    function _assertProblemThatValidationOfPseudoFieldsAreAlwaysInvoked($useDynamicConfiguration, &$dynamicConfig)
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_POST['has_home_phone'] = '2';
