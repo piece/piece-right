@@ -545,7 +545,7 @@ class Piece_Right
                 $args[] = $fieldValue;
             }
 
-            if (!$numberOfValidFields) {
+            if ($numberOfValidFields < count($definition['arg'])) {
                 continue;
             }
 
