@@ -84,16 +84,6 @@ class Piece_Right_Validator_Date extends Piece_Right_Validator_Common
      */
     function validate($value)
     {
-        $year = $this->getRule('year');
-        $month = $this->getRule('month');
-        $day = $this->getRule('day');
-        if (!is_null($year) && !is_null($month) && !is_null($day)) {
-            return checkdate($this->_results->getFieldValue($month),
-                             $this->_results->getFieldValue($day),
-                             $this->_results->getFieldValue($year)
-                             );
-        }
-
         $pattern = $this->getRule('pattern');
         if (!preg_match($pattern, $value, $matches)) {
             return false;
@@ -121,9 +111,6 @@ class Piece_Right_Validator_Date extends Piece_Right_Validator_Common
      */
     function _initialize()
     {
-        $this->_addRule('year');
-        $this->_addRule('month');
-        $this->_addRule('day');
         $this->_addRule('pattern', '/^(\d+)-(\d+)-(\d+)$/');
         $this->_addRule('patternYearPosition', 1);
         $this->_addRule('patternMonthPosition', 2);
