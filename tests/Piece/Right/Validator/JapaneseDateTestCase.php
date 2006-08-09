@@ -80,57 +80,48 @@ class Piece_Right_Validator_JapaneseDateTestCase extends PHPUnit_TestCase
 
     function testSuccess()
     {
-        $results = &new Piece_Right_Results();
-        $results->setFieldValue('birthdayYearEra', '3');
-        $results->setFieldValue('birthdayYear', '51');
-        $results->setFieldValue('birthdayMonth', '2');
-        $results->setFieldValue('birthdayDay', '29');
         $validator = &new Piece_Right_Validator_JapaneseDate();
-        $validator->setResults($results);
-        $validator->setRules(array('era' => 'birthdayYearEra',
-                                   'year' => 'birthdayYear',
-                                   'month' => 'birthdayMonth',
-                                   'day' => 'birthdayDay')
+
+        $this->assertTrue($validator->validate('3-51-01-20'));
+
+        $validator = &new Piece_Right_Validator_JapaneseDate();
+        $validator->setRules(array('pattern' => '/^(\d)(\d{2})(\d{2})(\d{2})$/',
+                                   'patternEraPosition' => 1,
+                                   'patternYearPosition' => 2,
+                                   'patternMonthPosition' => 3,
+                                   'patternDayPosition' => 4)
                              );
 
-        $this->assertTrue($validator->validate('dummy'));
+        $this->assertTrue($validator->validate('3510120'));
 
-        $results = &new Piece_Right_Results();
-        $results->setFieldValue('birthdayYearEra', '1');
-        $results->setFieldValue('birthdayYear', '51');
-        $results->setFieldValue('birthdayMonth', '2');
-        $results->setFieldValue('birthdayDay', '29');
         $validator = &new Piece_Right_Validator_JapaneseDate();
-        $validator->setResults($results);
         $validator->setRules(array('eraMapping' => array('meiji'  => 4,
                                                          'taisho' => 3,
                                                          'showa'  => 1,
-                                                         'heisei' => 2),
-                                   'era' => 'birthdayYearEra',
-                                   'year' => 'birthdayYear',
-                                   'month' => 'birthdayMonth',
-                                   'day' => 'birthdayDay')
+                                                         'heisei' => 2))
                              );
 
-        $this->assertTrue($validator->validate('dummy'));
+        $this->assertTrue($validator->validate('1-51-01-20'));
     }
 
     function testFailure()
     {
-        $results = &new Piece_Right_Results();
-        $results->setFieldValue('birthdayYearEra', '3');
-        $results->setFieldValue('birthdayYear', '52');
-        $results->setFieldValue('birthdayMonth', '2');
-        $results->setFieldValue('birthdayDay', '29');
         $validator = &new Piece_Right_Validator_JapaneseDate();
-        $validator->setResults($results);
-        $validator->setRules(array('era' => 'birthdayYearEra',
-                                   'year' => 'birthdayYear',
-                                   'month' => 'birthdayMonth',
-                                   'day' => 'birthdayDay')
-                             );
 
-        $this->assertFalse($validator->validate('dummy'));
+        $this->assertFalse($validator->validate('3-52-2-29'));
+
+        $validator = &new Piece_Right_Validator_JapaneseDate();
+
+        $this->assertFalse($validator->validate('351120'));
+
+        $validator = &new Piece_Right_Validator_JapaneseDate();
+        $validator->setRules(array('pattern' => '/^(\d{2})(\d{2})(\d{2})$'));
+
+        $this->assertFalse(@$validator->validate('3510120'));
+
+        $validator = &new Piece_Right_Validator_JapaneseDate();
+
+        $this->assertFalse($validator->validate('10-52-2-29'));
     }
 
     /**#@+
