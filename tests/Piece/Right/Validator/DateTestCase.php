@@ -80,19 +80,6 @@ class Piece_Right_Validator_DateTestCase extends PHPUnit_TestCase
 
     function testSuccess()
     {
-        $results = &new Piece_Right_Results();
-        $results->setFieldValue('birthdayYear', '1976');
-        $results->setFieldValue('birthdayMonth', '1');
-        $results->setFieldValue('birthdayDay', '20');
-        $validator = &new Piece_Right_Validator_Date();
-        $validator->setResults($results);
-        $validator->setRules(array('year' => 'birthdayYear',
-                                   'month' => 'birthdayMonth',
-                                   'day' => 'birthdayDay')
-                             );
-
-        $this->assertTrue($validator->validate('dummy'));
-
         $validator = &new Piece_Right_Validator_Date();
 
         $this->assertTrue($validator->validate('1976-01-20'));
@@ -121,19 +108,6 @@ class Piece_Right_Validator_DateTestCase extends PHPUnit_TestCase
         $validator->setRules(array('pattern' => '/^(\d{4})(\d{2})$'));
 
         $this->assertFalse(@$validator->validate('19760120'));
-
-        $results = &new Piece_Right_Results();
-        $results->setFieldValue('birthdayYear', '1976');
-        $results->setFieldValue('birthdayMonth', '2');
-        $results->setFieldValue('birthdayDay', '30');
-        $validator = &new Piece_Right_Validator_Date();
-        $validator->setResults($results);
-        $validator->setRules(array('year' => 'birthdayYear',
-                                   'month' => 'birthdayMonth',
-                                   'day' => 'birthdayDay')
-                             );
-
-        $this->assertFalse($validator->validate('dummy'));
     }
 
     /**#@+
