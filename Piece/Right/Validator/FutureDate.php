@@ -39,7 +39,7 @@
 
 require_once 'Piece/Right/Validator/Date.php';
 
-// {{{ Piece_Right_Validator_Date
+// {{{ Piece_Right_Validator_FutureDate
 
 /**
  * A validator which is used to check whether a value is a valid date and the
