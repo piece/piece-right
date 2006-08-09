@@ -67,6 +67,10 @@ class Piece_Right_Validator_Date extends Piece_Right_Validator_Common
      * @access private
      */
 
+    var $_year;
+    var $_month;
+    var $_day;
+
     /**#@-*/
 
     /**#@+
@@ -89,10 +93,11 @@ class Piece_Right_Validator_Date extends Piece_Right_Validator_Common
             return false;
         }
 
-        return checkdate($matches[ $this->getRule('patternMonthPosition') ],
-                         $matches[ $this->getRule('patternDayPosition') ],
-                         $matches[ $this->getRule('patternYearPosition') ]
-                         );
+        $this->_year = $matches[ $this->getRule('patternYearPosition') ];
+        $this->_month = $matches[ $this->getRule('patternMonthPosition') ];
+        $this->_day = $matches[ $this->getRule('patternDayPosition') ];
+
+        return checkdate($this->_month, $this->_day, $this->_year);
     }
 
     /**#@-*/
@@ -115,6 +120,9 @@ class Piece_Right_Validator_Date extends Piece_Right_Validator_Common
         $this->_addRule('patternYearPosition', 1);
         $this->_addRule('patternMonthPosition', 2);
         $this->_addRule('patternDayPosition', 3);
+        $this->_year = null;
+        $this->_month = null;
+        $this->_day = null;
     }
  
     /**#@-*/
