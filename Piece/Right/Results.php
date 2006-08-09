@@ -69,6 +69,7 @@ class Piece_Right_Results
 
     var $_fieldValues = array();
     var $_errors = array();
+    var $_messageVariables = array();
 
     /**#@-*/
 
@@ -164,7 +165,9 @@ class Piece_Right_Results
     function getErrorMessage($field)
     {
         if ($this->isError($field)) {
-            return $this->_errors[$field]->getMessage();
+            return $this->_replaceMessage($field,
+                                          $this->_errors[$field]->getMessage()
+                                          );
         }
     }
 
@@ -226,11 +229,44 @@ class Piece_Right_Results
         return array_keys(array_diff_assoc($this->_fieldValues, $this->_errors));
     }
 
+    // }}}
+    // {{{ setMessageVariables()
+
+    /**
+     * Sets the message variables of the current validation.
+     *
+     * @param array $messageVariables
+     */
+    function setMessageVariables($messageVariables)
+    {
+        $this->_messageVariables = $messageVariables;
+    }
+
     /**#@-*/
 
     /**#@+
      * @access private
      */
+
+    // }}}
+    // {{{ _replaceMessage()
+
+    /**
+     * Replaces the message with the message variables of the given field.
+     *
+     * @param string $field
+     * @param string $message
+     * @return string
+     * @since Method available since Release 1.0.0
+     */
+    function _replaceMessage($field, $message)
+    {
+        foreach ($this->_messageVariables[$field] as $name => $value) {
+            $message = str_replace("%$name%", $value, $message);
+        }
+
+        return $message;
+    }
 
     /**#@-*/
 

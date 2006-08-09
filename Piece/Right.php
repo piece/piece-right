@@ -128,6 +128,7 @@ class Piece_Right
         }
 
         $this->_results = &new Piece_Right_Results();
+        $this->_results->setMessageVariables($this->_config->getMessageVariables());
         $validationSet = $this->_config->getValidationSet();
 
         $this->_filter(array_keys($validationSet));
@@ -394,7 +395,7 @@ class Piece_Right
             if ($this->_isEmpty($value)) {
                 $this->_results->addError($field,
                                           'required',
-                                          $this->_replaceMessage($field, $this->_config->getRequiredMessage($field))
+                                          $this->_config->getRequiredMessage($field)
                                           );
                 return false;
             }
@@ -444,7 +445,7 @@ class Piece_Right
             if (!$validator->validate($value, $this->_payload)) {
                 $this->_results->addError($field,
                                           $validation['validator'],
-                                          $this->_replaceMessage($field, $validator->getMessage())
+                                          $validator->getMessage()
                                           );
             }
         }
@@ -553,26 +554,6 @@ class Piece_Right
                                            vsprintf($definition['format'], $args)
                                            );
         }
-    }
-
-    // }}}
-    // {{{ _replaceMessage()
-
-    /**
-     * Replaces the message with the message variables of the given field.
-     *
-     * @param string $field
-     * @param string $message
-     * @return string
-     * @since Method available since Release 0.3.0
-     */
-    function _replaceMessage($field, $message)
-    {
-        foreach ($this->_config->getMessageVariablesByFieldName($field) as $name => $value) {
-            $message = str_replace("%$name%", $value, $message);
-        }
-
-        return $message;
     }
 
     /**#@-*/
