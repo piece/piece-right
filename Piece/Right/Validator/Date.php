@@ -93,9 +93,37 @@ class Piece_Right_Validator_Date extends Piece_Right_Validator_Common
             return false;
         }
 
-        $this->_year = $matches[ $this->getRule('patternYearPosition') ];
         $this->_month = $matches[ $this->getRule('patternMonthPosition') ];
         $this->_day = $matches[ $this->getRule('patternDayPosition') ];
+
+        $isJapaneseEra = $this->getRule('isJapaneseEra');
+        if (!$isJapaneseEra) {
+            $this->_year = $matches[ $this->getRule('patternYearPosition') ];
+        } else {
+            $era = $matches[ $this->getRule('patternEraPosition') ];
+            $eraMapping = array_flip($this->getRule('eraMapping'));
+            if (!array_key_exists($era, $eraMapping)) {
+                return false;
+            }
+
+            $year = $matches[ $this->getRule('patternYearPosition') ];
+            switch ($eraMapping[$era]) {
+            case 'showa':
+                $this->_year = 1926 - 1 + $year;
+                break;
+            case 'heisei':
+                $this->_year = 1989 - 1 + $year;
+                break;
+            case 'taisho':
+                $this->_year = 1912 - 1 + $year;
+                break;
+            case 'meiji':
+                $this->_year = 1868 - 1 + $year;
+                break;
+            default:
+                return false;
+            }
+        }
 
         return checkdate($this->_month, $this->_day, $this->_year);
     }
@@ -120,6 +148,13 @@ class Piece_Right_Validator_Date extends Piece_Right_Validator_Common
         $this->_addRule('patternYearPosition', 1);
         $this->_addRule('patternMonthPosition', 2);
         $this->_addRule('patternDayPosition', 3);
+        $this->_addRule('isJapaneseEra', false);
+        $this->_addRule('eraMapping', array('meiji'  => 1,
+                                            'taisho' => 2,
+                                            'showa'  => 3,
+                                            'heisei' => 4)
+                        );
+        $this->_addRule('patternEraPosition', 4);
         $this->_year = null;
         $this->_month = null;
         $this->_day = null;
