@@ -660,7 +660,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
     }
 
     /**
-     * @since Method available since Release 0.6.0
+     * @since Method available since Release 1.0.0
      */
     function testSeparatedDateValidationWithPseudoFieldIfPseudoFieldIsRequired()
     {
@@ -746,7 +746,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
     }
 
     /**
-     * @since Method available since Release 0.6.0
+     * @since Method available since Release 1.0.0
      */
     function testSeparatedDateValidationWithPseudoFieldIfPseudoFieldIsNotRequired()
     {
