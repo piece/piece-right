@@ -42,24 +42,33 @@ require_once 'PEAR/PackageFileManager2.php';
 
 PEAR::staticPushErrorHandling(PEAR_ERROR_CALLBACK, create_function('$error', 'var_dump($error); exit();'));
 
-$version = '0.5.0';
-$apiVersion = '0.3.0';
-$notes = "This release includes a few enhancement as follows:
+$version = '1.0.0';
+$apiVersion = '1.0.0';
+$notes = "The first stable release of Piece_Right.
+This release includes a few enhancement as follows:
 
 <<< Enhancements >>>
 
 Kernel:
 
 * Piece_Right
-- Added support for user defined payloads in validators and filters.
+- Changed the codition which a pseudo field is generated to the number of non-empty fields equal to the number of the pseudo field arguments.
+- Moved the code to replace messages with message variables to Piece_Right_Results class.
 
 Validators:
 
-* Email
-- A validator which is used to check whether a value is valid email address or not. This validator checks only addr-spec defined in RFC822.
+* Date
+- Removed 'year', 'month', 'day' from the rules. This validator no longer supports validations with specified fields. Use pseudo fields instead.
+- Added the capability to handle Japanese date based on JapaneseDate validator.
 
-* WithMethod
-- Added support for payload.";
+* FutureDate
+- A validator which is used to check whether a value is a valid date and the value is later than current date.
+
+* PastDate
+- A validator which is used to check whether a value is a valid date and the value is earlier than current date.
+
+* JapaneseDate
+- Removed.";
 
 $package = new PEAR_PackageFileManager2();
 $package->setOptions(array('filelistgenerator' => 'svn',
@@ -87,8 +96,7 @@ o Dynamic configuration
 
 The following is a list of built-in validators.
 o Compare
-o Date
-o JapaneseDate
+o Date, FutureDate, PastDate (including Japanese date support)
 o Length
 o List
 o Range
@@ -100,9 +108,9 @@ $package->setLicense('BSD License (revised)',
                      'http://www.opensource.org/licenses/bsd-license.php'
                      );
 $package->setAPIVersion($apiVersion);
-$package->setAPIStability('beta');
+$package->setAPIStability('stable');
 $package->setReleaseVersion($version);
-$package->setReleaseStability('beta');
+$package->setReleaseStability('stable');
 $package->setNotes($notes);
 $package->setPhpDep('4.3.0');
 $package->setPearinstallerDep('1.4.3');

@@ -17,8 +17,7 @@ o Dynamic configuration
 
 The following is a list of built-in validators.
 o Compare
-o Date
-o JapaneseDate
+o Date, FutureDate, PastDate (including Japanese date support)
 o Length
 o List
 o Range
@@ -35,26 +34,35 @@ o Email
   </maintainer>
   </maintainers>
  <release>
-  <version>0.5.0</version>
-  <date>2006-08-05</date>
+  <version>1.0.0</version>
+  <date>2006-08-10</date>
   <license>BSD License (revised)</license>
-  <state>beta</state>
-  <notes>This release includes a few enhancement as follows:
+  <state>stable</state>
+  <notes>The first stable release of Piece_Right.
+This release includes a few enhancement as follows:
 
 &lt;&lt;&lt; Enhancements &gt;&gt;&gt;
 
 Kernel:
 
 * Piece_Right
-- Added support for user defined payloads in validators and filters.
+- Changed the codition which a pseudo field is generated to the number of non-empty fields equal to the number of the pseudo field arguments.
+- Moved the code to replace messages with message variables to Piece_Right_Results class.
 
 Validators:
 
-* Email
-- A validator which is used to check whether a value is valid email address or not. This validator checks only addr-spec defined in RFC822.
+* Date
+- Removed &apos;year&apos;, &apos;month&apos;, &apos;day&apos; from the rules. This validator no longer supports validations with specified fields. Use pseudo fields instead.
+- Added the capability to handle Japanese date based on JapaneseDate validator.
 
-* WithMethod
-- Added support for payload.
+* FutureDate
+- A validator which is used to check whether a value is a valid date and the value is later than current date.
+
+* PastDate
+- A validator which is used to check whether a value is a valid date and the value is earlier than current date.
+
+* JapaneseDate
+- Removed.
   </notes>
   <deps>
    <dep type="php" rel="ge" version="4.3.0" optional="no"/>
@@ -111,13 +119,16 @@ Validators:
        <file role="php" name="Factory.php">
         <replace from="@package_version@" to="version" type="package-info"/>
        </file>
-       <file role="php" name="JapaneseDate.php">
+       <file role="php" name="FutureDate.php">
         <replace from="@package_version@" to="version" type="package-info"/>
        </file>
        <file role="php" name="Length.php">
         <replace from="@package_version@" to="version" type="package-info"/>
        </file>
        <file role="php" name="List.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+       <file role="php" name="PastDate.php">
         <replace from="@package_version@" to="version" type="package-info"/>
        </file>
        <file role="php" name="Range.php">
@@ -206,16 +217,19 @@ Validators:
         <file role="test" name="Foo.php" install-as="Piece/Right/Validator/Foo.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
-        <file role="test" name="Invalid.php" install-as="Piece/Right/Validator/Invalid.php">
+        <file role="test" name="FutureDateTestCase.php" install-as="Piece/Right/Validator/FutureDateTestCase.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
-        <file role="test" name="JapaneseDateTestCase.php" install-as="Piece/Right/Validator/JapaneseDateTestCase.php">
+        <file role="test" name="Invalid.php" install-as="Piece/Right/Validator/Invalid.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
         <file role="test" name="LengthTestCase.php" install-as="Piece/Right/Validator/LengthTestCase.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
         <file role="test" name="ListTestCase.php" install-as="Piece/Right/Validator/ListTestCase.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="PastDateTestCase.php" install-as="Piece/Right/Validator/PastDateTestCase.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
         <file role="test" name="PayloadTest.php" install-as="Piece/Right/Validator/PayloadTest.php">
@@ -274,6 +288,12 @@ Validators:
       <file role="test" name="RuleMessage.yaml" install-as="Piece/RuleMessage.yaml">
        <replace from="@package_version@" to="version" type="package-info"/>
       </file>
+      <file role="test" name="SeparatedDateValidationWithPseudoFieldIfPseudoFieldIsNotRequired.yaml" install-as="Piece/SeparatedDateValidationWithPseudoFieldIfPseudoFieldIsNotRequired.yaml">
+       <replace from="@package_version@" to="version" type="package-info"/>
+      </file>
+      <file role="test" name="SeparatedDateValidationWithPseudoFieldIfPseudoFieldIsRequired.yaml" install-as="Piece/SeparatedDateValidationWithPseudoFieldIfPseudoFieldIsRequired.yaml">
+       <replace from="@package_version@" to="version" type="package-info"/>
+      </file>
       <file role="test" name="TestRunner.php" install-as="Piece/TestRunner.php">
        <replace from="@package_version@" to="version" type="package-info"/>
       </file>
@@ -286,6 +306,38 @@ Validators:
   </filelist>
  </release>
  <changelog>
+   <release>
+    <version>1.0.0</version>
+    <date>2006-08-10</date>
+    <license>BSD License (revised)</license>
+    <state>stable</state>
+    <notes>The first stable release of Piece_Right.
+This release includes a few enhancement as follows:
+
+&lt;&lt;&lt; Enhancements &gt;&gt;&gt;
+
+Kernel:
+
+* Piece_Right
+- Changed the codition which a pseudo field is generated to the number of non-empty fields equal to the number of the pseudo field arguments.
+- Moved the code to replace messages with message variables to Piece_Right_Results class.
+
+Validators:
+
+* Date
+- Removed &apos;year&apos;, &apos;month&apos;, &apos;day&apos; from the rules. This validator no longer supports validations with specified fields. Use pseudo fields instead.
+- Added the capability to handle Japanese date based on JapaneseDate validator.
+
+* FutureDate
+- A validator which is used to check whether a value is a valid date and the value is later than current date.
+
+* PastDate
+- A validator which is used to check whether a value is a valid date and the value is earlier than current date.
+
+* JapaneseDate
+- Removed.
+    </notes>
+   </release>
    <release>
     <version>0.5.0</version>
     <date>2006-08-05</date>
