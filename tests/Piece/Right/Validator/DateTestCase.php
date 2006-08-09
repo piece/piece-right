@@ -92,6 +92,23 @@ class Piece_Right_Validator_DateTestCase extends PHPUnit_TestCase
                              );
 
         $this->assertTrue($validator->validate('19760120'));
+
+        $validator = &new Piece_Right_Validator_Date();
+        $validator->setRules(array('isJapaneseEra' => true,
+                                   'pattern' => '/^(\d+)-(\d+)-(\d+)-(\d+)$/'));
+
+        $this->assertTrue($validator->validate('51-01-20-3'));
+
+        $validator = &new Piece_Right_Validator_Date();
+        $validator->setRules(array('isJapaneseEra' => true,
+                                   'pattern' => '/^(\d)(\d{2})(\d{2})(\d{2})$/',
+                                   'patternEraPosition' => 1,
+                                   'patternYearPosition' => 2,
+                                   'patternMonthPosition' => 3,
+                                   'patternDayPosition' => 4)
+                             );
+
+        $this->assertTrue($validator->validate('3510120'));
     }
 
     function testFailure()
@@ -108,6 +125,29 @@ class Piece_Right_Validator_DateTestCase extends PHPUnit_TestCase
         $validator->setRules(array('pattern' => '/^(\d{4})(\d{2})$'));
 
         $this->assertFalse(@$validator->validate('19760120'));
+
+        $validator = &new Piece_Right_Validator_Date();
+        $validator->setRules(array('isJapaneseEra' => true,
+                                   'pattern' => '/^(\d+)-(\d+)-(\d+)-(\d+)$/'));
+
+        $this->assertFalse($validator->validate('52-2-29-3'));
+
+        $validator = &new Piece_Right_Validator_Date();
+        $validator->setRules(array('isJapaneseEra' => true,
+                                   'pattern' => '/^(\d+)-(\d+)-(\d+)-(\d+)$/'));
+
+        $this->assertFalse($validator->validate('351120'));
+
+        $validator = &new Piece_Right_Validator_Date();
+        $validator->setRules(array('isJapaneseEra' => true));
+
+        $this->assertFalse(@$validator->validate('3510120'));
+
+        $validator = &new Piece_Right_Validator_Date();
+        $validator->setRules(array('isJapaneseEra' => true,
+                                   'pattern' => '/^(\d+)-(\d+)-(\d+)-(\d+)$/'));
+
+        $this->assertFalse($validator->validate('51-2-29-10'));
     }
 
     /**#@+
