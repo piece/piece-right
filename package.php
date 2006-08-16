@@ -87,8 +87,8 @@ The following is a list of features of Piece_Right.
 o Extensible validator system
 o Extensible filter system
 o A lot of built-in validators
-o Another field watchers
 o Pseudo fields
+o Watching the specified fields
 o Message variables
 o Force validation
 o YAML based configuration
