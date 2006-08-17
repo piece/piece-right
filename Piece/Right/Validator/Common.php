@@ -246,9 +246,8 @@ class Piece_Right_Validator_Common
     // {{{ _initialize()
 
     /**
-     * Initializes properties.
+     * Defines and initializes the validation rules.
      *
-     * @abstract
      * @since Method available since Release 0.3.0
      */
     function _initialize() {}
