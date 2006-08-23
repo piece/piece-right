@@ -84,49 +84,6 @@ class Piece_Right_Validator_Email extends Piece_Right_Validator_Common
      */
 
     // }}}
-    // {{{ constructor
-
-    /**
-     * Initializes properties.
-     */
-    function Piece_Right_Validator_Email()
-    {
-        parent::Piece_Right_Validator_Common();
-
-        $esc        = '\\\\';
-        $period     = '\.';
-        $space      = '\040';
-        $tab        = '\t';
-        $openBR     = '\[';
-        $closeBR    = '\]';
-        $openParen  = '\(';
-        $closeParen = '\)';
-        $nonASCII   = '\x80-\xff'; 
-        $ctrl       = '\000-\037';
-        $crList     = '\n\015';
-        $qtext      = "[^$esc$nonASCII$crList\"]";
-        $dtext      = "[^$esc$nonASCII$crList$openBR$closeBR]";
-        $quotedPair = " $esc [^$nonASCII] ";
-        $ctext      = " [^$esc$nonASCII$crList()] ";
-        $cnested    = "$openParen$ctext*(?: $quotedPair $ctext* )*$closeParen";
-        $comment    = "$openParen$ctext*(?:(?: $quotedPair | $cnested )$ctext*)*$closeParen";
-        $x          = "[$space$tab]*(?: $comment [$space$tab]* )*";
-        $atomChar   = "[^($space)<>\@,;:\".$esc$openBR$closeBR$ctrl$nonASCII]";
-        $atom       = "$atomChar+(?!$atomChar)";
-        $quotedStr  = "\"$qtext *(?: $quotedPair $qtext * )*\"";
-        $word       = "(?:$atom|$quotedStr)";
-        $domainRef  = $atom;
-        $domainLit  = "$openBR(?: $dtext | $quotedPair )*$closeBR";
-        $subDomain  = "(?:$domainRef|$domainLit)$x";
-        $domain     = "$subDomain(?:$period $x $subDomain)*";
-        $localPart  = "$word $x(?:$period $x $word $x)*";
-        $localPartForDotBeforeAtmark = "$word $x(?:$period $x $word $x|$period)*";
-
-        $this->_addrSpec = "$localPart \@ $x $domain";
-        $this->_addrSpecForDotBeforeAtmark = "$localPartForDotBeforeAtmark \@ $x $domain";
-    }
-
-    // }}}
     // {{{ validate()
 
     /**
@@ -162,6 +119,38 @@ class Piece_Right_Validator_Email extends Piece_Right_Validator_Common
     function _initialize()
     {
         $this->_addRule('allowDotBeforeAtmark', false);
+
+        $esc        = '\\\\';
+        $period     = '\.';
+        $space      = '\040';
+        $tab        = '\t';
+        $openBR     = '\[';
+        $closeBR    = '\]';
+        $openParen  = '\(';
+        $closeParen = '\)';
+        $nonASCII   = '\x80-\xff';
+        $ctrl       = '\000-\037';
+        $crList     = '\n\015';
+        $qtext      = "[^$esc$nonASCII$crList\"]";
+        $dtext      = "[^$esc$nonASCII$crList$openBR$closeBR]";
+        $quotedPair = " $esc [^$nonASCII] ";
+        $ctext      = " [^$esc$nonASCII$crList()] ";
+        $cnested    = "$openParen$ctext*(?: $quotedPair $ctext* )*$closeParen";
+        $comment    = "$openParen$ctext*(?:(?: $quotedPair | $cnested )$ctext*)*$closeParen";
+        $x          = "[$space$tab]*(?: $comment [$space$tab]* )*";
+        $atomChar   = "[^($space)<>\@,;:\".$esc$openBR$closeBR$ctrl$nonASCII]";
+        $atom       = "$atomChar+(?!$atomChar)";
+        $quotedStr  = "\"$qtext *(?: $quotedPair $qtext * )*\"";
+        $word       = "(?:$atom|$quotedStr)";
+        $domainRef  = $atom;
+        $domainLit  = "$openBR(?: $dtext | $quotedPair )*$closeBR";
+        $subDomain  = "(?:$domainRef|$domainLit)$x";
+        $domain     = "$subDomain(?:$period $x $subDomain)*";
+        $localPart  = "$word $x(?:$period $x $word $x)*";
+        $localPartForDotBeforeAtmark = "$word $x(?:$period $x $word $x|$period)*";
+
+        $this->_addrSpec = "$localPart \@ $x $domain";
+        $this->_addrSpecForDotBeforeAtmark = "$localPartForDotBeforeAtmark \@ $x $domain";
     }
 
     /**#@-*/
