@@ -442,7 +442,8 @@ class Piece_Right
             $validator->setResults($this->_results);
             $validator->setRules($validation['rules']);
             $validator->setMessage($validation['message']);
-            if (!$validator->validate($value, $this->_payload)) {
+            $validator->setPayload($this->_payload);
+            if (!$validator->validate($value)) {
                 $this->_results->addError($field,
                                           $validation['validator'],
                                           $validator->getMessage()

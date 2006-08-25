@@ -75,9 +75,9 @@ class Piece_Right_Validator_PayloadTest extends Piece_Right_Validator_Common
      * @access public
      */
 
-    function validate($value, &$payload)
+    function validate($value)
     {
-        $payload->validatorCalled = true;
+        $this->_payload->validatorCalled = true;
         return true;
     }
 
