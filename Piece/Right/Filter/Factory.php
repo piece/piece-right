@@ -33,7 +33,7 @@
  * @copyright  2006 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
- * @link       http://iteman.typepad.jp/piece/
+ * @link       http://piece-framework.com/piece-right/
  * @since      File available since Release 0.3.0
  */
 
@@ -55,7 +55,7 @@ $GLOBALS['PIECE_RIGHT_Filter_Directories'] = array(dirname(__FILE__) . '/../../.
  * @copyright  2006 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
- * @link       http://iteman.typepad.jp/piece/
+ * @link       http://piece-framework.com/piece-right/
  * @since      Class available since Release 0.3.0
  */
 class Piece_Right_Filter_Factory

@@ -33,7 +33,7 @@
  * @copyright  2006 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
- * @link       http://iteman.typepad.jp/piece/
+ * @link       http://piece-framework.com/piece-right/
  * @see        Piece_Right_Validator_Factory
  */
 
@@ -49,7 +49,7 @@ require_once 'Piece/Right/Validator/Common.php';
  * @copyright  2006 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
- * @link       http://iteman.typepad.jp/piece/
+ * @link       http://piece-framework.com/piece-right/
  * @see        Piece_Right_Validator_Factory
  */
 class Piece_Right_Validator_Bar extends Piece_Right_Validator_Common

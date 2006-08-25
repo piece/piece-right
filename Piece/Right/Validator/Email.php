@@ -33,7 +33,7 @@
  * @copyright  2006 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
- * @link       http://iteman.typepad.jp/piece/
+ * @link       http://piece-framework.com/piece-right/
  * @link       http://www.ecodebank.com/details/?catid=8&catsubid=13&nid=7
  * @link       http://www.ietf.org/rfc/rfc0822.txt?number=822
  * @since      File available since Release 0.5.0
@@ -54,7 +54,7 @@ require_once 'Piece/Right/Validator/Common.php';
  * @copyright  2006 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
- * @link       http://iteman.typepad.jp/piece/
+ * @link       http://piece-framework.com/piece-right/
  * @link       http://www.ecodebank.com/details/?catid=8&catsubid=13&nid=7
  * @link       http://www.ietf.org/rfc/rfc0822.txt?number=822
  * @since      Class available since Release 0.5.0
