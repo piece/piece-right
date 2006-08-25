@@ -70,6 +70,7 @@ class Piece_Right_Validator_Common
     var $_message;
     var $_messages = array();
     var $_isArrayable = false;
+    var $_payload;
 
     /**#@-*/
 
@@ -234,6 +235,20 @@ class Piece_Right_Validator_Common
     function isArrayable()
     {
         return $this->_isArrayable;
+    }
+
+    // }}}
+    // {{{ setPayload()
+
+    /**
+     * Sets the given payload.
+     *
+     * @param mixed &$payload
+     * @since Method available since Release 1.1.0
+     */
+    function setPayload(&$payload)
+    {
+        $this->_payload = &$payload;
     }
 
     /**#@-*/
