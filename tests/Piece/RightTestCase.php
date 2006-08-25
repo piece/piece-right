@@ -640,10 +640,8 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $_POST['foo'] = 'bar';
         $payload = &new stdClass();
         $payload->validatorCalled = false;
-        $payload->bar = 'baz';
 
         $dynamicConfig = &new Piece_Right_Config();
-        $dynamicConfig->addFilter('foo', 'PayloadTest');
         $dynamicConfig->addValidation('foo', 'PayloadTest');
         $right = &new Piece_Right();
         $right->setPayload($payload);
@@ -652,7 +650,6 @@ class Piece_RightTestCase extends PHPUnit_TestCase
 
         $results = &$right->getResults();
 
-        $this->assertEquals('baz', $results->getFieldValue('foo'));
         $this->assertTrue($payload->validatorCalled);
 
         unset($_POST['foo']);
