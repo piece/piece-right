@@ -87,6 +87,7 @@ class Piece_Right_Validator_WithMethodTestCase extends PHPUnit_TestCase
                              );
 
         $this->assertTrue($validator->validate('foo', new stdClass()));
+        $this->assertTrue($validator->validate(array('foo', 'foo'), new stdClass()));
 
         $validator = &new Piece_Right_Validator_WithMethod();
         $validator->setRules(array('class' => 'WithMethod',
@@ -103,6 +104,12 @@ class Piece_Right_Validator_WithMethodTestCase extends PHPUnit_TestCase
                              );
 
         $this->assertTrue($validator->validate('foo', new stdClass()));
+
+        $validator = &new Piece_Right_Validator_WithMethod();
+        $validator->setRules(array('class' => 'WithMethod',
+                                   'method' => 'isFoo',
+                                   'isStatic' => false)
+                             );
     }
 
     function testFailure()
