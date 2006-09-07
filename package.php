@@ -42,33 +42,32 @@ require_once 'PEAR/PackageFileManager2.php';
 
 PEAR::staticPushErrorHandling(PEAR_ERROR_CALLBACK, create_function('$error', 'var_dump($error); exit();'));
 
-$version = '1.0.0';
-$apiVersion = '1.0.0';
+$version = '1.1.0';
+$apiVersion = '1.1.0';
 $notes = "The first stable release of Piece_Right.
-This release includes a few enhancement as follows:
+This release includes a few enhancement as follows and breaks backward compatibility as follows:
 
-<<< Enhancements >>>
+## Enhancements ##
 
-Kernel:
+### Kernel ###
 
-* Piece_Right
-- Changed the codition which a pseudo field is generated to the number of non-empty fields equal to the number of the pseudo field arguments.
-- Moved the code to replace messages with message variables to Piece_Right_Results class.
+##### Piece_Right #####
+- Changed the code so as to not set payloads to any filters.
 
-Validators:
+##### Piece_Right_Validator_Common #####
+- Changed the code so as to set payloads by setPayload() method instead of by validate() method.
 
-* Date
-- Removed 'year', 'month', 'day' from the rules. This validator no longer supports validations with specified fields. Use pseudo fields instead.
-- Added the capability to handle Japanese date based on JapaneseDate validator.
+### Validators ###
 
-* FutureDate
-- A validator which is used to check whether a value is a valid date and the value is later than current date.
+##### Email #####
+- Moved the code to build addr-spec values from the constructor to _initialize() method.
+- Removed the constructor.
 
-* PastDate
-- A validator which is used to check whether a value is a valid date and the value is earlier than current date.
+##### WithMethod #####
+- Fixed the problem that validate() method always returns null when an array is given.
 
-* JapaneseDate
-- Removed.";
+### Other Changes ###
+- Replaced the URL of Piece_Right's Web page with http://piece-framework.com/piece-right/.";
 
 $package = new PEAR_PackageFileManager2();
 $package->setOptions(array('filelistgenerator' => 'svn',

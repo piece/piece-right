@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<package packagerversion="1.4.9" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+<!-- $Id$ -->
+<package packagerversion="1.4.11" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
     http://pear.php.net/dtd/tasks-1.0.xsd
     http://pear.php.net/dtd/package-2.0
     http://pear.php.net/dtd/package-2.0.xsd">
@@ -11,8 +12,8 @@ The following is a list of features of Piece_Right.
 o Extensible validator system
 o Extensible filter system
 o A lot of built-in validators
-o Another field watchers
 o Pseudo fields
+o Watching the specified fields
 o Message variables
 o Force validation
 o YAML based configuration
@@ -33,11 +34,11 @@ o Email</description>
   <email>iteman@users.sourceforge.net</email>
   <active>yes</active>
  </lead>
- <date>2006-08-10</date>
- <time>17:11:40</time>
+ <date>2006-09-07</date>
+ <time>09:40:08</time>
  <version>
-  <release>1.0.0</release>
-  <api>1.0.0</api>
+  <release>1.1.0</release>
+  <api>1.1.0</api>
  </version>
  <stability>
   <release>stable</release>
@@ -45,30 +46,29 @@ o Email</description>
  </stability>
  <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
  <notes>The first stable release of Piece_Right.
-This release includes a few enhancement as follows:
+This release includes a few enhancement as follows and breaks backward compatibility as follows:
 
-&lt;&lt;&lt; Enhancements &gt;&gt;&gt;
+## Enhancements ##
 
-Kernel:
+### Kernel ###
 
-* Piece_Right
-- Changed the codition which a pseudo field is generated to the number of non-empty fields equal to the number of the pseudo field arguments.
-- Moved the code to replace messages with message variables to Piece_Right_Results class.
+##### Piece_Right #####
+- Changed the code so as to not set payloads to any filters.
 
-Validators:
+##### Piece_Right_Validator_Common #####
+- Changed the code so as to set payloads by setPayload() method instead of by validate() method.
 
-* Date
-- Removed &apos;year&apos;, &apos;month&apos;, &apos;day&apos; from the rules. This validator no longer supports validations with specified fields. Use pseudo fields instead.
-- Added the capability to handle Japanese date based on JapaneseDate validator.
+### Validators ###
 
-* FutureDate
-- A validator which is used to check whether a value is a valid date and the value is later than current date.
+##### Email #####
+- Moved the code to build addr-spec values from the constructor to _initialize() method.
+- Removed the constructor.
 
-* PastDate
-- A validator which is used to check whether a value is a valid date and the value is earlier than current date.
+##### WithMethod #####
+- Fixed the problem that validate() method always returns null when an array is given.
 
-* JapaneseDate
-- Removed.</notes>
+### Other Changes ###
+- Replaced the URL of Piece_Right&apos;s Web page with http://piece-framework.com/piece-right/.</notes>
  <contents>
   <dir baseinstalldir="/" name="/">
    <dir name="data">
@@ -188,9 +188,6 @@ Validators:
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
        <file name="LowerCase.php" role="test">
-        <tasks:replace from="@package_version@" to="version" type="package-info" />
-       </file>
-       <file name="PayloadTest.php" role="test">
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
        <file name="TestRunner.php" role="test">
@@ -352,7 +349,6 @@ Validators:
    <install as="Piece/Right/Filter/JapaneseAlphaNumericTestCase.php" name="tests/Piece/Right/Filter/JapaneseAlphaNumericTestCase.php" />
    <install as="Piece/Right/Filter/JapaneseH2ZTestCase.php" name="tests/Piece/Right/Filter/JapaneseH2ZTestCase.php" />
    <install as="Piece/Right/Filter/LowerCase.php" name="tests/Piece/Right/Filter/LowerCase.php" />
-   <install as="Piece/Right/Filter/PayloadTest.php" name="tests/Piece/Right/Filter/PayloadTest.php" />
    <install as="Piece/Right/Filter/TestRunner.php" name="tests/Piece/Right/Filter/TestRunner.php" />
    <install as="Piece/Right/ResultsTestCase.php" name="tests/Piece/Right/ResultsTestCase.php" />
    <install as="Piece/Right/TestRunner.php" name="tests/Piece/Right/TestRunner.php" />
@@ -384,6 +380,42 @@ Validators:
  <changelog>
   <release>
    <version>
+    <release>1.1.0</release>
+    <api>1.1.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2006-09-07</date>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
+   <notes>The first stable release of Piece_Right.
+This release includes a few enhancement as follows and breaks backward compatibility as follows:
+
+## Enhancements ##
+
+### Kernel ###
+
+##### Piece_Right #####
+- Changed the code so as to not set payloads to any filters.
+
+##### Piece_Right_Validator_Common #####
+- Changed the code so as to set payloads by setPayload() method instead of by validate() method.
+
+### Validators ###
+
+##### Email #####
+- Moved the code to build addr-spec values from the constructor to _initialize() method.
+- Removed the constructor.
+
+##### WithMethod #####
+- Fixed the problem that validate() method always returns null when an array is given.
+
+### Other Changes ###
+- Replaced the URL of Piece_Right&apos;s Web page with http://piece-framework.com/piece-right/.</notes>
+  </release>
+  <release>
+   <version>
     <release>1.0.0</release>
     <api>1.0.0</api>
    </version>
@@ -396,27 +428,27 @@ Validators:
    <notes>The first stable release of Piece_Right.
 This release includes a few enhancement as follows:
 
-&lt;&lt;&lt; Enhancements &gt;&gt;&gt;
+## Enhancements ##
 
-Kernel:
+### Kernel ###
 
-* Piece_Right
+##### Piece_Right #####
 - Changed the codition which a pseudo field is generated to the number of non-empty fields equal to the number of the pseudo field arguments.
 - Moved the code to replace messages with message variables to Piece_Right_Results class.
 
-Validators:
+### Validators ###
 
-* Date
+##### Date #####
 - Removed &apos;year&apos;, &apos;month&apos;, &apos;day&apos; from the rules. This validator no longer supports validations with specified fields. Use pseudo fields instead.
 - Added the capability to handle Japanese date based on JapaneseDate validator.
 
-* FutureDate
+##### FutureDate #####
 - A validator which is used to check whether a value is a valid date and the value is later than current date.
 
-* PastDate
+##### PastDate #####
 - A validator which is used to check whether a value is a valid date and the value is earlier than current date.
 
-* JapaneseDate
+##### JapaneseDate #####
 - Removed.</notes>
   </release>
   <release>
@@ -432,19 +464,19 @@ Validators:
    <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
    <notes>This release includes a few enhancement as follows:
 
-&lt;&lt;&lt; Enhancements &gt;&gt;&gt;
+## Enhancements ##
 
-Kernel:
+### Kernel ###
 
-* Piece_Right
+##### Piece_Right #####
 - Added support for user defined payloads in validators and filters.
 
-Validators:
+### Validators ###
 
-* Email
+##### Email #####
 - A validator which is used to check whether a value is valid email address or not. This validator checks only addr-spec defined in RFC822.
 
-* WithMethod
+##### WithMethod #####
 - Added support for payload.</notes>
   </release>
   <release>
@@ -460,14 +492,14 @@ Validators:
    <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
    <notes>This release includes an enhancement and a defect fix as follows:
 
-&lt;&lt;&lt; Enhancements &gt;&gt;&gt;
+## Enhancements ##
 
-* Piece_Right_Results
+##### Piece_Right_Results #####
 - Added getValidFields() method for getting an array of the field names.
 
-&lt;&lt;&lt; Defect fixes &gt;&gt;&gt;
+## Defect fixes ##
 
-* Piece_Right
+##### Piece_Right #####
 - Fixed the problem that the validation of pseudo fields are always invoked. Pseudo fields will only be created when all fields specifying with &apos;arg&apos; element are not empty.</notes>
   </release>
   <release>
@@ -481,14 +513,13 @@ Validators:
    </stability>
    <date>2006-07-30</date>
    <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
-   <notes>The first beta release of Piece_Right.
-This release includes a lot of enhancemens and several defect fixes as follows:
+   <notes>The first beta release of Piece_Right. This release includes a lot of enhancemens and several defect fixes as follows:
 
-&lt;&lt;&lt; Enhancements &gt;&gt;&gt;
+## Enhancements ##
 
-Kernel:
+### Kernel ###
 
-* Piece_Right
+##### Piece_Right #####
 - Added support for filters.
 - Added support for &apos;watcher&apos;.
 - Added array support.
@@ -499,7 +530,7 @@ Kernel:
 - Added support for pseudo fields.
 - Added support for message variables.
 
-* Piece_Right_Config
+##### Piece_Right_Config #####
 - Added setRequired()/isRequired()/getRequiredMessage() methods for handling required stuff.
 - Added support for filters.
 - Added support for merging filters and required fileds.
@@ -510,7 +541,7 @@ Kernel:
 - Added support for message variables.
 - Added missing support for force validations.
 
-* Piece_Right_Config_Factory
+##### Piece_Right_Config_Factory #####
 - Added support for filters.
 - Added support for watchers.
 - Added error handling for invalid configuration.
@@ -519,7 +550,7 @@ Kernel:
 - Added support for message variables.
 - Added missing support for force validations.
 
-* Piece_Right_Validator_Common
+##### Piece_Right_Validator_Common #####
 - Added setResults() method for setting a Piece_Right_Results object.
 - Added the constructor for initializing properties.
 - Added _initialize() method for initializing properties.
@@ -533,58 +564,58 @@ Kernel:
 - Added $_arrayable property for indicating the validator is arrayable or not.
 - Added isArrayable() method for checking whether the validator is arrayable or not.
 
-* Piece_Right_Filter_Factory
+##### Piece_Right_Filter_Factory #####
 - A factory class for creating filter objects.
 
-* Piece_Right_Error
+##### Piece_Right_Error #####
 - Added PIECE_RIGHT_ERROR_INVALID_CONFIGURATION constant.
 - Added PIECE_RIGHT_ERROR_NOT_ARRAYABLE constant.
 
-* Piece_Right_Results
+##### Piece_Right_Results #####
 - Added getFieldNames() method to getting all field names of the current validation.
 
-Validators:
+### Validators ###
 
-* List
+##### List #####
 - A validator which is used to check whether values are included in the definition.
 
-* Piece_Right_Validator_Date
+##### Piece_Right_Validator_Date #####
 - A validator which is used to check whether a value is a valid date.
 
-* Piece_Right_Validator_JapaneseDate
+##### Piece_Right_Validator_JapaneseDate #####
 - A validator which is used to check whether a value is a valid japanese date.
 
-* Piece_Right_Validator_Compare
+##### Piece_Right_Validator_Compare #####
 - A validator which is used to compare the value of a field to the value of another field.
 
-* WithMethod
+##### WithMethod #####
 - A validator which is used to validate the value of a field with an arbitrary method.
 
-* Regex
+##### Regex #####
 - Changed the return value to false when the pattern is invalid.
 
-* Required
+##### Required #####
 - Removed.
 
-Filters:
+### Filters ###
 
-* JapaneseH2Z
+##### JapaneseH2Z #####
 - A filter which is used to converts Japanese JIS X0201 kana to JIS X0208 kana.
 
-* JapaneseAlphaNumeric
+##### JapaneseAlphaNumeric #####
 - A filter which is used to converts Japanese JISX 0208 alphabet characters and numeric characters to ASCII characters.
 
-&lt;&lt;&lt; Defect fixes &gt;&gt;&gt;
+## Defect fixes ##
 
-* Piece_Right
+##### Piece_Right #####
 - Fixed the problem that the validation is influenced by the validation order.
 
-* Piece_Right_Config
+##### Piece_Right_Config #####
 - setRequired(): Changed the code so as to keep the message on the filed if the given message is null.
 - Fixed the problem that non required fields cannot be turned required on.
 
-* Piece_Right_Filter_Factory
-* Piece_Right_Validator_Factory
+##### Piece_Right_Filter_Factory #####
+##### Piece_Right_Validator_Factory #####
 - Removed &apos;@&apos; operator from include_once.</notes>
   </release>
   <release>
@@ -600,10 +631,11 @@ Filters:
    <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
    <notes>This release includes one enhancement as follows:
 
-&lt;&lt;&lt; Enhancements &gt;&gt;&gt;
+## Enhancements ##
 
-* Piece_Right_Results
-- Added getFieldValue() method for getting the value of a field.</notes>
+##### Piece_Right_Results #####
+- Added getFieldValue() method for getting the value of a field.
+   </notes>
   </release>
   <release>
    <version>
