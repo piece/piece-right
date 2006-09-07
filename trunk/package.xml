@@ -1,0 +1,540 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- $Id$ -->
+<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
+<package version="1.0" packagerversion="1.4.11">
+ <name>Piece_Right</name>
+ <summary>A validation framework for PHP</summary>
+ <description>Piece_Right is a validation framework for PHP.
+The following is a list of features of Piece_Right.
+o Extensible validator system
+o Extensible filter system
+o A lot of built-in validators
+o Pseudo fields
+o Watching the specified fields
+o Message variables
+o Force validation
+o YAML based configuration
+o Dynamic configuration
+
+The following is a list of built-in validators.
+o Compare
+o Date, FutureDate, PastDate (including Japanese date support)
+o Length
+o List
+o Range
+o Regex
+o WithMethod
+o Email
+ </description>
+ <maintainers>
+  <maintainer>
+   <user>iteman</user>
+   <name>KUBO Atsuhiro</name>
+   <email>iteman@users.sourceforge.net</email>
+   <role>lead</role>
+  </maintainer>
+  </maintainers>
+ <release>
+  <version>1.1.0</version>
+  <date>2006-09-07</date>
+  <license>BSD License (revised)</license>
+  <state>stable</state>
+  <notes>This release includes a few enhancement as follows and breaks backward compatibility as follows:
+
+## Enhancements ##
+
+### Kernel ###
+
+##### Piece_Right #####
+- Changed the code so as to not set payloads to any filters.
+
+##### Piece_Right_Validator_Common #####
+- Changed the code so as to set payloads by setPayload() method instead of by validate() method.
+
+### Validators ###
+
+##### Email #####
+- Moved the code to build addr-spec values from the constructor to _initialize() method.
+- Removed the constructor.
+
+##### WithMethod #####
+- Fixed the problem that validate() method always returns null when an array is given.
+
+### Other Changes ###
+- Replaced the URL of Piece_Right&apos;s Web page with http://piece-framework.com/piece-right/.
+  </notes>
+  <deps>
+   <dep type="php" rel="ge" version="4.3.0" optional="no"/>
+   <dep type="pkg" rel="ge" version="1.7.0" optional="no">Cache_Lite</dep>
+   <dep type="pkg" rel="ge" version="1.4.3" optional="no">PEAR</dep>
+   <dep type="pkg" rel="ge" version="0.3.0" optional="yes">Stagehand_TestRunner</dep>
+  </deps>
+  <filelist>
+   <dir name="/" baseinstalldir="/">
+    <dir name="data">
+     <file role="data" name="Example.yaml" install-as="Example.yaml">
+      <replace from="@package_version@" to="version" type="package-info"/>
+     </file>
+     <file role="data" name="piece-right.yaml" install-as="piece-right.yaml">
+      <replace from="@package_version@" to="version" type="package-info"/>
+     </file>
+    </dir> <!-- /data -->
+    <dir name="docs">
+     <file role="doc" name="LICENSE" install-as="LICENSE">
+      <replace from="@package_version@" to="version" type="package-info"/>
+     </file>
+    </dir> <!-- /docs -->
+    <dir name="Piece">
+     <dir name="Right">
+      <dir name="Config">
+       <file role="php" name="Factory.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+      </dir> <!-- /Piece/Right/Config -->
+      <dir name="Filter">
+       <file role="php" name="Factory.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+       <file role="php" name="JapaneseAlphaNumeric.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+       <file role="php" name="JapaneseH2Z.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+      </dir> <!-- /Piece/Right/Filter -->
+      <dir name="Validator">
+       <file role="php" name="Common.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+       <file role="php" name="Compare.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+       <file role="php" name="Date.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+       <file role="php" name="Email.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+       <file role="php" name="Factory.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+       <file role="php" name="FutureDate.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+       <file role="php" name="Length.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+       <file role="php" name="List.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+       <file role="php" name="PastDate.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+       <file role="php" name="Range.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+       <file role="php" name="Regex.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+       <file role="php" name="WithMethod.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+      </dir> <!-- /Piece/Right/Validator -->
+      <file role="php" name="Config.php">
+       <replace from="@package_version@" to="version" type="package-info"/>
+      </file>
+      <file role="php" name="Error.php">
+       <replace from="@package_version@" to="version" type="package-info"/>
+      </file>
+      <file role="php" name="Results.php">
+       <replace from="@package_version@" to="version" type="package-info"/>
+      </file>
+      <file role="php" name="ValidationError.php">
+       <replace from="@package_version@" to="version" type="package-info"/>
+      </file>
+     </dir> <!-- /Piece/Right -->
+     <file role="php" name="Right.php">
+      <replace from="@package_version@" to="version" type="package-info"/>
+     </file>
+    </dir> <!-- /Piece -->
+    <dir name="tests">
+     <dir name="Piece">
+      <dir name="Right">
+       <dir name="Config">
+        <file role="test" name="FactoryTestCase.php" install-as="Piece/Right/Config/FactoryTestCase.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="InvalidConfiguration.yaml" install-as="Piece/Right/Config/InvalidConfiguration.yaml">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="TestRunner.php" install-as="Piece/Right/Config/TestRunner.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+       </dir> <!-- /tests/Piece/Right/Config -->
+       <dir name="Filter">
+        <file role="test" name="Bar.php" install-as="Piece/Right/Filter/Bar.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="FactoryTestCase.php" install-as="Piece/Right/Filter/FactoryTestCase.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="Foo.php" install-as="Piece/Right/Filter/Foo.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="JapaneseAlphaNumericTestCase.php" install-as="Piece/Right/Filter/JapaneseAlphaNumericTestCase.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="JapaneseH2ZTestCase.php" install-as="Piece/Right/Filter/JapaneseH2ZTestCase.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="LowerCase.php" install-as="Piece/Right/Filter/LowerCase.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="TestRunner.php" install-as="Piece/Right/Filter/TestRunner.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+       </dir> <!-- /tests/Piece/Right/Filter -->
+       <dir name="Validator">
+        <file role="test" name="Bar.php" install-as="Piece/Right/Validator/Bar.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="CompareTestCase.php" install-as="Piece/Right/Validator/CompareTestCase.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="DateTestCase.php" install-as="Piece/Right/Validator/DateTestCase.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="EmailTestCase.php" install-as="Piece/Right/Validator/EmailTestCase.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="FactoryTestCase.php" install-as="Piece/Right/Validator/FactoryTestCase.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="Foo.php" install-as="Piece/Right/Validator/Foo.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="FutureDateTestCase.php" install-as="Piece/Right/Validator/FutureDateTestCase.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="Invalid.php" install-as="Piece/Right/Validator/Invalid.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="LengthTestCase.php" install-as="Piece/Right/Validator/LengthTestCase.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="ListTestCase.php" install-as="Piece/Right/Validator/ListTestCase.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="PastDateTestCase.php" install-as="Piece/Right/Validator/PastDateTestCase.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="PayloadTest.php" install-as="Piece/Right/Validator/PayloadTest.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="RangeTestCase.php" install-as="Piece/Right/Validator/RangeTestCase.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="RegexTestCase.php" install-as="Piece/Right/Validator/RegexTestCase.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="TestRunner.php" install-as="Piece/Right/Validator/TestRunner.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="WithMethod.php" install-as="Piece/Right/Validator/WithMethod.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="WithMethodTestCase.php" install-as="Piece/Right/Validator/WithMethodTestCase.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+       </dir> <!-- /tests/Piece/Right/Validator -->
+       <file role="test" name="ConfigTestCase.php" install-as="Piece/Right/ConfigTestCase.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+       <file role="test" name="ResultsTestCase.php" install-as="Piece/Right/ResultsTestCase.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+       <file role="test" name="TestRunner.php" install-as="Piece/Right/TestRunner.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+       <file role="test" name="ValidationErrorTestCase.php" install-as="Piece/Right/ValidationErrorTestCase.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+      </dir> <!-- /tests/Piece/Right -->
+      <file role="test" name="AppropriateValidationMessage.yaml" install-as="Piece/AppropriateValidationMessage.yaml">
+       <replace from="@package_version@" to="version" type="package-info"/>
+      </file>
+      <file role="test" name="ForceValidation.yaml" install-as="Piece/ForceValidation.yaml">
+       <replace from="@package_version@" to="version" type="package-info"/>
+      </file>
+      <file role="test" name="ForceValidationBasedOnWatcher.yaml" install-as="Piece/ForceValidationBasedOnWatcher.yaml">
+       <replace from="@package_version@" to="version" type="package-info"/>
+      </file>
+      <file role="test" name="MessageVariable.yaml" install-as="Piece/MessageVariable.yaml">
+       <replace from="@package_version@" to="version" type="package-info"/>
+      </file>
+      <file role="test" name="ProblemThatValidationOfPseudoFieldsAreAlwaysInvoked.yaml" install-as="Piece/ProblemThatValidationOfPseudoFieldsAreAlwaysInvoked.yaml">
+       <replace from="@package_version@" to="version" type="package-info"/>
+      </file>
+      <file role="test" name="PseudoField.yaml" install-as="Piece/PseudoField.yaml">
+       <replace from="@package_version@" to="version" type="package-info"/>
+      </file>
+      <file role="test" name="RightTestCase.php" install-as="Piece/RightTestCase.php">
+       <replace from="@package_version@" to="version" type="package-info"/>
+      </file>
+      <file role="test" name="RuleMessage.yaml" install-as="Piece/RuleMessage.yaml">
+       <replace from="@package_version@" to="version" type="package-info"/>
+      </file>
+      <file role="test" name="SeparatedDateValidationWithPseudoFieldIfPseudoFieldIsNotRequired.yaml" install-as="Piece/SeparatedDateValidationWithPseudoFieldIfPseudoFieldIsNotRequired.yaml">
+       <replace from="@package_version@" to="version" type="package-info"/>
+      </file>
+      <file role="test" name="SeparatedDateValidationWithPseudoFieldIfPseudoFieldIsRequired.yaml" install-as="Piece/SeparatedDateValidationWithPseudoFieldIfPseudoFieldIsRequired.yaml">
+       <replace from="@package_version@" to="version" type="package-info"/>
+      </file>
+      <file role="test" name="TestRunner.php" install-as="Piece/TestRunner.php">
+       <replace from="@package_version@" to="version" type="package-info"/>
+      </file>
+     </dir> <!-- /tests/Piece -->
+     <file role="test" name="AllTestRunner.php" install-as="AllTestRunner.php">
+      <replace from="@package_version@" to="version" type="package-info"/>
+     </file>
+    </dir> <!-- /tests -->
+   </dir> <!-- / -->
+  </filelist>
+ </release>
+ <changelog>
+   <release>
+    <version>1.1.0</version>
+    <date>2006-09-07</date>
+    <license>BSD License (revised)</license>
+    <state>stable</state>
+    <notes>This release includes a few enhancement as follows and breaks backward compatibility as follows:
+
+## Enhancements ##
+
+### Kernel ###
+
+##### Piece_Right #####
+- Changed the code so as to not set payloads to any filters.
+
+##### Piece_Right_Validator_Common #####
+- Changed the code so as to set payloads by setPayload() method instead of by validate() method.
+
+### Validators ###
+
+##### Email #####
+- Moved the code to build addr-spec values from the constructor to _initialize() method.
+- Removed the constructor.
+
+##### WithMethod #####
+- Fixed the problem that validate() method always returns null when an array is given.
+
+### Other Changes ###
+- Replaced the URL of Piece_Right&apos;s Web page with http://piece-framework.com/piece-right/.
+    </notes>
+   </release>
+   <release>
+    <version>1.0.0</version>
+    <date>2006-08-10</date>
+    <license>BSD License (revised)</license>
+    <state>stable</state>
+    <notes>The first stable release of Piece_Right. This release includes a few enhancement as follows:
+
+## Enhancements ##
+
+### Kernel ###
+
+##### Piece_Right #####
+- Changed the codition which a pseudo field is generated to the number of non-empty fields equal to the number of the pseudo field arguments.
+- Moved the code to replace messages with message variables to Piece_Right_Results class.
+
+### Validators ###
+
+##### Date #####
+- Removed &apos;year&apos;, &apos;month&apos;, &apos;day&apos; from the rules. This validator no longer supports validations with specified fields. Use pseudo fields instead.
+- Added the capability to handle Japanese date based on JapaneseDate validator.
+
+##### FutureDate #####
+- A validator which is used to check whether a value is a valid date and the value is later than current date.
+
+##### PastDate #####
+- A validator which is used to check whether a value is a valid date and the value is earlier than current date.
+
+##### JapaneseDate #####
+- Removed.
+    </notes>
+   </release>
+   <release>
+    <version>0.5.0</version>
+    <date>2006-08-05</date>
+    <license>BSD License (revised)</license>
+    <state>beta</state>
+    <notes>This release includes a few enhancement as follows:
+
+## Enhancements ##
+
+### Kernel ###
+
+##### Piece_Right #####
+- Added support for user defined payloads in validators and filters.
+
+### Validators ###
+
+##### Email #####
+- A validator which is used to check whether a value is valid email address or not. This validator checks only addr-spec defined in RFC822.
+
+##### WithMethod #####
+- Added support for payload.
+    </notes>
+   </release>
+   <release>
+    <version>0.4.0</version>
+    <date>2006-08-02</date>
+    <license>BSD License (revised)</license>
+    <state>beta</state>
+    <notes>This release includes an enhancement and a defect fix as follows:
+
+## Enhancements ##
+
+##### Piece_Right_Results #####
+- Added getValidFields() method for getting an array of the field names.
+
+## Defect fixes ##
+
+##### Piece_Right #####
+- Fixed the problem that the validation of pseudo fields are always invoked. Pseudo fields will only be created when all fields specifying with &apos;arg&apos; element are not empty.
+    </notes>
+   </release>
+   <release>
+    <version>0.3.0</version>
+    <date>2006-07-30</date>
+    <license>BSD License (revised)</license>
+    <state>beta</state>
+    <notes>The first beta release of Piece_Right. This release includes a lot of enhancemens and several defect fixes as follows:
+
+## Enhancements ##
+
+### Kernel ###
+
+##### Piece_Right #####
+- Added support for filters.
+- Added support for &apos;watcher&apos;.
+- Added array support.
+- Added the code so as to set a Piece_Right_Results object to a validator object.
+- Added error handling for invalid configuration.
+- Added error handling for the factories of filters and validators.
+- Added support for forcing validation.
+- Added support for pseudo fields.
+- Added support for message variables.
+
+##### Piece_Right_Config #####
+- Added setRequired()/isRequired()/getRequiredMessage() methods for handling required stuff.
+- Added support for filters.
+- Added support for merging filters and required fileds.
+- Added support for watchers.
+- Added addField() method for adding fields which will be validated.
+- Added setForceValidation() and forceValidation() method for forcing validation.
+- Added support for pseudo fields.
+- Added support for message variables.
+- Added missing support for force validations.
+
+##### Piece_Right_Config_Factory #####
+- Added support for filters.
+- Added support for watchers.
+- Added error handling for invalid configuration.
+- Changed the code so as to call addField() method first.
+- Added support for pseudo fields.
+- Added support for message variables.
+- Added missing support for force validations.
+
+##### Piece_Right_Validator_Common #####
+- Added setResults() method for setting a Piece_Right_Results object.
+- Added the constructor for initializing properties.
+- Added _initialize() method for initializing properties.
+- clear(): Added the code so as to call _initialize() method.
+- Changed the location of the rules from each property to $_rules.
+- Changed the method name from addRule() to setRule().
+- Added getRule() method for getting the validation rule of the given rule name.
+- Added _addRule() method for defining/initializing validation rules.
+- Added support for the error message of each rule.
+- Added support for the error message of the current validation.
+- Added $_arrayable property for indicating the validator is arrayable or not.
+- Added isArrayable() method for checking whether the validator is arrayable or not.
+
+##### Piece_Right_Filter_Factory #####
+- A factory class for creating filter objects.
+
+##### Piece_Right_Error #####
+- Added PIECE_RIGHT_ERROR_INVALID_CONFIGURATION constant.
+- Added PIECE_RIGHT_ERROR_NOT_ARRAYABLE constant.
+
+##### Piece_Right_Results #####
+- Added getFieldNames() method to getting all field names of the current validation.
+
+### Validators ###
+
+##### List #####
+- A validator which is used to check whether values are included in the definition.
+
+##### Piece_Right_Validator_Date #####
+- A validator which is used to check whether a value is a valid date.
+
+##### Piece_Right_Validator_JapaneseDate #####
+- A validator which is used to check whether a value is a valid japanese date.
+
+##### Piece_Right_Validator_Compare #####
+- A validator which is used to compare the value of a field to the value of another field.
+
+##### WithMethod #####
+- A validator which is used to validate the value of a field with an arbitrary method.
+
+##### Regex #####
+- Changed the return value to false when the pattern is invalid.
+
+##### Required #####
+- Removed.
+
+### Filters ###
+
+##### JapaneseH2Z #####
+- A filter which is used to converts Japanese JIS X0201 kana to JIS X0208 kana.
+
+##### JapaneseAlphaNumeric #####
+- A filter which is used to converts Japanese JISX 0208 alphabet characters and numeric characters to ASCII characters.
+
+## Defect fixes ##
+
+##### Piece_Right #####
+- Fixed the problem that the validation is influenced by the validation order.
+
+##### Piece_Right_Config #####
+- setRequired(): Changed the code so as to keep the message on the filed if the given message is null.
+- Fixed the problem that non required fields cannot be turned required on.
+
+##### Piece_Right_Filter_Factory #####
+##### Piece_Right_Validator_Factory #####
+- Removed &apos;@&apos; operator from include_once.
+    </notes>
+   </release>
+   <release>
+    <version>0.2.0</version>
+    <date>2006-07-23</date>
+    <license>BSD License (revised)</license>
+    <state>alpha</state>
+    <notes>This release includes one enhancement as follows:
+
+## Enhancements ##
+
+##### Piece_Right_Results #####
+- Added getFieldValue() method for getting the value of a field.
+    </notes>
+   </release>
+   <release>
+    <version>0.1.0</version>
+    <date>2006-07-20</date>
+    <license>BSD License (revised)</license>
+    <state>alpha</state>
+    <notes>The first alpha release of Piece_Right.
+    </notes>
+   </release>
+ </changelog>
+</package>

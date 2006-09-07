@@ -1,0 +1,54 @@
+# $Id$
+- name: homePhone1
+  required:
+    enabled: false
+    message: This field is required.
+
+- name: homePhone2
+  required:
+    enabled: false
+    message: This field is required.
+
+- name: homePhone3
+  required:
+    enabled: false
+    message: This field is required.
+
+- name: home_phone
+  required:
+    enabled: false
+    message: This field is required.
+  validator:
+    - name: Regex
+      rule:
+        pattern: /^\d{1,4}-\d{1,4}-\d{1,4}$/
+      message: Please input all fields of the home phone.
+  pseudo:
+    format: %s-%s-%s
+    arg:
+      - homePhone1
+      - homePhone2
+      - homePhone3
+  watcher:
+    target:
+      - name: has_home_phone
+        trigger:
+          comparisonOperator: ==
+          comparisonTo: 1
+      - name: has_home_phone
+        trigger:
+          comparisonOperator: ==
+          comparisonTo: 3
+      - name: homePhone1
+      - name: homePhone2
+      - name: homePhone3
+    turnOnForceValidation: true
+
+- name: has_home_phone
+  required:
+    message: This field is required.
+  validator:
+    - name: Range
+      rule:
+        min: 1
+        max: 3

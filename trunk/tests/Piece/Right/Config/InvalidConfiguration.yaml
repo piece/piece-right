@@ -1,0 +1,12 @@
+# $Id$
+- Name: foo
+  required:
+    message: bar
+  filter:
+     - trim
+  validator:
+    - name: Length
+      rule:
+        min: 1
+        max: 255
+      message: baz

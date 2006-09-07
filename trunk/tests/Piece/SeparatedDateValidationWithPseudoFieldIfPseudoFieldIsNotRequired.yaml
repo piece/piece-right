@@ -1,0 +1,28 @@
+# $Id$
+- name: year
+- name: month
+- name: day
+
+- name: birthday
+  validator:
+    - name: Date
+      rule:
+        pattern: /^(\d{4})(\d{2})(\d{2})$/
+        patternYearPosition: 1
+        patternMonthPosition: 2
+        patternDayPosition: 3
+      message: [%_name%] is invalid.
+  pseudo:
+    format: %04d%02d%02d
+    arg:
+      - year
+      - month
+      - day
+  watcher:
+    target:
+      - name: year
+      - name: month
+      - name: day
+    turnOn:
+      - birthday
+    turnOnForceValidation: true
