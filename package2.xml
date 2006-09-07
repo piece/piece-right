@@ -45,7 +45,7 @@ o Email</description>
   <api>stable</api>
  </stability>
  <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
- <notes>This release includes a few enhancement as follows and breaks backward compatibility as follows:
+ <notes>This release includes a few enhancement and breaks backward compatibility as follows:
 
 ## Enhancements ##
 
@@ -388,7 +388,7 @@ o Email</description>
    </stability>
    <date>2006-09-07</date>
    <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
-   <notes>This release includes a few enhancement as follows and breaks backward compatibility as follows:
+   <notes>This release includes a few enhancement and breaks backward compatibility as follows:
 
 ## Enhancements ##
 

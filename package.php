@@ -44,7 +44,7 @@ PEAR::staticPushErrorHandling(PEAR_ERROR_CALLBACK, create_function('$error', 'va
 
 $version = '1.1.0';
 $apiVersion = '1.1.0';
-$notes = "This release includes a few enhancement as follows and breaks backward compatibility as follows:
+$notes = "This release includes a few enhancement and breaks backward compatibility as follows:
 
 ## Enhancements ##
 
