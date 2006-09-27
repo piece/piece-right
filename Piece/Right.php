@@ -204,6 +204,35 @@ class Piece_Right
         $this->_payload = &$payload;
     }
 
+    // }}}
+    // {{{ isEmpty()
+
+    /**
+     * Returns whether a value of a field is empty or not.
+     *
+     * @param string $value
+     * @return boolean
+     * @since Method available since Release 0.3.0
+     */
+    function isEmpty($value)
+    {
+        if (is_null($value)) {
+            return true;
+        }
+
+        if (is_array($value)) {
+            if (!count($value)) {
+                return true;
+            }
+        } else {
+            if (!strlen($value)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**#@-*/
 
     /**#@+
@@ -240,35 +269,6 @@ class Piece_Right
         if (is_a($dynamicConfig, 'Piece_Right_Config')) {
             $this->_config->merge($dynamicConfig);
         }
-    }
-
-    // }}}
-    // {{{ _isEmpty()
-
-    /**
-     * Returns whether a value of a field is empty or not.
-     *
-     * @param string $value
-     * @return boolean
-     * @since Method available since Release 0.3.0
-     */
-    function _isEmpty($value)
-    {
-        if (is_null($value)) {
-            return true;
-        }
-
-        if (is_array($value)) {
-            if (!count($value)) {
-                return true;
-            }
-        } else {
-            if (!strlen($value)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     // }}}
@@ -348,7 +348,7 @@ class Piece_Right
             $turnOnFields = array();
             foreach ($watcher['target'] as $target) {
                 $targetValue = $this->_results->getFieldValue($target['name']);
-                if ($this->_isEmpty($targetValue)) {
+                if ($this->isEmpty($targetValue)) {
                     continue;
                 }
 
@@ -392,7 +392,7 @@ class Piece_Right
     function _checkValidationRequirement($field, $value)
     {
         if ($this->_config->isRequired($field)) {
-            if ($this->_isEmpty($value)) {
+            if ($this->isEmpty($value)) {
                 $this->_results->addError($field,
                                           'required',
                                           $this->_config->getRequiredMessage($field)
@@ -400,7 +400,7 @@ class Piece_Right
                 return false;
             }
         } else {
-            if ($this->_isEmpty($value)) {
+            if ($this->isEmpty($value)) {
                 return false;
             }
         }
