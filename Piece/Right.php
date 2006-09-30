@@ -4,7 +4,7 @@
 /**
  * PHP versions 4 and 5
  *
- * Copyright (c) 2006, KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * Copyright (c) 2006 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -181,7 +181,7 @@ class Piece_Right
     // {{{ getResults()
 
     /**
-     * Gets the Piece_Right_Results object for the current validation set.
+     * Gets the Piece_Right_Results object for the current validation.
      *
      * @return Piece_Right_Results
      */
@@ -212,6 +212,7 @@ class Piece_Right
      *
      * @param string $value
      * @return boolean
+     * @static
      * @since Method available since Release 0.3.0
      */
     function isEmpty($value)
@@ -231,6 +232,19 @@ class Piece_Right
         }
 
         return false;
+    }
+
+    // }}}
+    // {{{ getFieldValuesCallback()
+
+    /**
+     * Gets the callback to get field values for the current validation.
+     *
+     * @return callback
+     */
+    function getFieldValuesCallback()
+    {
+        return $this->_fieldValuesCallback;
     }
 
     /**#@-*/
@@ -348,7 +362,7 @@ class Piece_Right
             $turnOnFields = array();
             foreach ($watcher['target'] as $target) {
                 $targetValue = $this->_results->getFieldValue($target['name']);
-                if ($this->isEmpty($targetValue)) {
+                if (Piece_Right::isEmpty($targetValue)) {
                     continue;
                 }
 
@@ -392,7 +406,7 @@ class Piece_Right
     function _checkValidationRequirement($field, $value)
     {
         if ($this->_config->isRequired($field)) {
-            if ($this->isEmpty($value)) {
+            if (Piece_Right::isEmpty($value)) {
                 $this->_results->addError($field,
                                           'required',
                                           $this->_config->getRequiredMessage($field)
@@ -400,7 +414,7 @@ class Piece_Right
                 return false;
             }
         } else {
-            if ($this->isEmpty($value)) {
+            if (Piece_Right::isEmpty($value)) {
                 return false;
             }
         }
@@ -417,9 +431,9 @@ class Piece_Right
      * @param string $field
      * @param string $value
      * @param array  $validations
-     * @since Method available since Release 0.3.0
      * @throws PIECE_RIGHT_ERROR_NOT_FOUND
      * @throws PIECE_RIGHT_ERROR_INVALID_VALIDATOR
+     * @since Method available since Release 0.3.0
      */
     function _validate($field, $value, $validations)
     {
