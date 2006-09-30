@@ -37,7 +37,7 @@
  * @since      File available since Release 0.1.0
  */
 
-require_once 'Piece/Right/ValidationError.php';
+require_once 'Piece/Right/Validation/Error.php';
 
 // {{{ Piece_Right_Results
 
@@ -119,7 +119,7 @@ class Piece_Right_Results
         if ($this->isError($field)) {
             $error = &$this->_errors[$field];
         } else {
-            $error = &new Piece_Right_ValidationError();
+            $error = &new Piece_Right_Validation_Error();
             $this->_errors[$field] = &$error;
         }
 

@@ -40,6 +40,9 @@
 
 require_once 'PHPUnit.php';
 require_once 'Piece/Right/Validation/Script.php';
+require_once 'Piece/Right/Error.php';
+require_once 'Cache/Lite/File.php';
+require_once 'Piece/Right/Config.php';
 
 // {{{ Piece_Right_Validation_ScriptTestCase
 
@@ -108,7 +111,6 @@ class Piece_Right_Validation_ScriptTestCase extends PHPUnit_TestCase
                                       );
         $cache->clean();
         Piece_Right_Error::clearErrors();
-        Piece_Right_Error::popCallback();
     }
 
     function testSuccessToValidate()

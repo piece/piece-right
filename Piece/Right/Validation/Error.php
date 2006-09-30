@@ -4,7 +4,7 @@
 /**
  * PHP versions 4 and 5
  *
- * Copyright (c) 2006, KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * Copyright (c) 2006 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,7 +37,7 @@
  * @since      File available since Release 0.1.0
  */
 
-// {{{ Piece_Right_ValidationError
+// {{{ Piece_Right_Validation_Error
 
 /**
  * The holder of validation results.
@@ -50,7 +50,7 @@
  * @link       http://piece-framework.com/piece-right/
  * @since      Class available since Release 0.1.0
  */
-class Piece_Right_ValidationError
+class Piece_Right_Validation_Error
 {
 
     // {{{ properties

@@ -4,7 +4,7 @@
 /**
  * PHP versions 4 and 5
  *
- * Copyright (c) 2006, KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * Copyright (c) 2006 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,17 +34,17 @@
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @link       http://piece-framework.com/piece-right/
- * @see        Piece_Right_ValidationError
+ * @see        Piece_Right_Validation_Error
  * @since      File available since Release 0.1.0
  */
 
 require_once 'PHPUnit.php';
-require_once 'Piece/Right/ValidationError.php';
+require_once 'Piece/Right/Validation/Error.php';
 
-// {{{ Piece_Right_ValidationErrorTestCase
+// {{{ Piece_Right_Validation_ErrorTestCase
 
 /**
- * TestCase for Piece_Right_ValidationError
+ * TestCase for Piece_Right_Validation_Error
  *
  * @package    Piece_Right
  * @author     KUBO Atsuhiro <iteman@users.sourceforge.net>
@@ -52,10 +52,10 @@ require_once 'Piece/Right/ValidationError.php';
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @link       http://piece-framework.com/piece-right/
- * @see        Piece_Right_ValidationError
+ * @see        Piece_Right_Validation_Error
  * @since      Class available since Release 0.1.0
  */
-class Piece_Right_ValidationErrorTestCase extends PHPUnit_TestCase
+class Piece_Right_Validation_ErrorTestCase extends PHPUnit_TestCase
 {
 
     // {{{ properties
@@ -78,12 +78,12 @@ class Piece_Right_ValidationErrorTestCase extends PHPUnit_TestCase
 
     function testCheckingNumberOfErrors()
     {
-        $error = &new Piece_Right_ValidationError();
+        $error = &new Piece_Right_Validation_Error();
         $error->add('Required', 'The field [ foo ] is required.');
 
         $this->assertTrue($error->countErrors());
 
-        $error = &new Piece_Right_ValidationError();
+        $error = &new Piece_Right_Validation_Error();
 
         $this->assertFalse($error->countErrors());
     }
@@ -92,7 +92,7 @@ class Piece_Right_ValidationErrorTestCase extends PHPUnit_TestCase
     {
         $message1 = 'The field [ foo ] is required.';
         $message2 = 'The field length must be greater than 5 characters.';
-        $error = &new Piece_Right_ValidationError();
+        $error = &new Piece_Right_Validation_Error();
         $error->add('Required', $message1);
         $error->add('Length', $message2);
 
