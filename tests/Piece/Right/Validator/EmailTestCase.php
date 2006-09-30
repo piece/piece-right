@@ -4,7 +4,7 @@
 /**
  * PHP versions 4 and 5
  *
- * Copyright (c) 2006, KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * Copyright (c) 2006 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -75,7 +75,6 @@ class Piece_Right_Validator_EmailTestCase extends PHPUnit_TestCase
     /**#@+
      * @access public
      */
-    /**#@-*/
 
     function testSuccess()
     {
@@ -106,6 +105,8 @@ class Piece_Right_Validator_EmailTestCase extends PHPUnit_TestCase
 
         $this->assertFalse($validator->validate('foo.@.org'));
     }
+
+    /**#@-*/
 
     /**#@+
      * @access private
