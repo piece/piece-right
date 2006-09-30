@@ -42,7 +42,8 @@ require_once 'Piece/Right.php';
 // {{{ Piece_Right_Validation_Script
 
 /**
- * A validation script for applications using Piece_Right.
+ * A validation script which will be used to run a typical process of
+ * validation with Piece_Right.
  *
  * @package    Piece_Right
  * @author     KUBO Atsuhiro <iteman@users.sourceforge.net>
