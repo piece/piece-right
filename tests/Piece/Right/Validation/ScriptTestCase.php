@@ -98,8 +98,8 @@ class Piece_Right_Validation_ScriptTestCase extends PHPUnit_TestCase
 
     function tearDown()
     {
-        foreach (array_keys($this->_fields) as $name) {
-            unset($_POST[$name]);
+        foreach (array_keys($this->_fields) as $field) {
+            unset($_POST[$field]);
         }
         unset($_SERVER['REQUEST_METHOD']);
         $this->_postRunCallbackCalled = false;
