@@ -14,7 +14,7 @@
   validator:
     - name: Regex
       rule:
-        pattern: /^[^@]+@.+$/
+        pattern: "/^[^@]+@.+$/"
   pseudo:
     format: %s@%s
     arg:

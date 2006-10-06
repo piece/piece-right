@@ -37,7 +37,7 @@
       - age
   validator:
     - name: Date
-      message: [%_name%] is invalid.
+      message: "[%_name%] is invalid."
   pseudo:
     format: %04d-%02d-%02d
     arg:
