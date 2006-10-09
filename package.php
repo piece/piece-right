@@ -42,31 +42,25 @@ require_once 'PEAR/PackageFileManager2.php';
 
 PEAR::staticPushErrorHandling(PEAR_ERROR_CALLBACK, create_function('$error', 'var_dump($error); exit();'));
 
-$version = '1.1.0';
+$version = '1.2.0';
 $apiVersion = '1.1.0';
-$notes = "This release includes a few enhancement and breaks backward compatibility as follows:
+$releaseStability = 'stable';
+$notes = 'This is the first release with the new PEAR Channel Server pear.piece-framework.com.
+This release includes a new class Piece_Right_Validation_Script. It will be used to run a typical process of validation with Piece_Right. See the following release notes for details.
 
 ## Enhancements ##
 
 ### Kernel ###
 
+##### Piece_Right_Validation_Script #####
+- A new class for running a typical process of validation with Piece_Right.
+
 ##### Piece_Right #####
-- Changed the code so as to not set payloads to any filters.
+- Moved _isEmpty() method to public.
+- Added getFieldValuesCallback() for getting the callback to get field values for the current validation.
 
-##### Piece_Right_Validator_Common #####
-- Changed the code so as to set payloads by setPayload() method instead of by validate() method.
-
-### Validators ###
-
-##### Email #####
-- Moved the code to build addr-spec values from the constructor to _initialize() method.
-- Removed the constructor.
-
-##### WithMethod #####
-- Fixed the problem that validate() method always returns null when an array is given.
-
-### Other Changes ###
-- Replaced the URL of Piece_Right's Web page with http://piece-framework.com/piece-right/.";
+##### Piece_Right_Validation_Error #####
+- Changed the class name from Piece_Right_ValidationError.';
 
 $package = new PEAR_PackageFileManager2();
 $package->setOptions(array('filelistgenerator' => 'svn',
@@ -74,7 +68,10 @@ $package->setOptions(array('filelistgenerator' => 'svn',
                            'simpleoutput'      => true,
                            'baseinstalldir'    => '/',
                            'packagefile'       => 'package2.xml',
-                           'packagedirectory'  => '.')
+                           'packagedirectory'  => '.',
+                           'dir_roles'         => array('data' => 'data',
+                                                        'tests' => 'test',
+                                                        'docs' => 'doc'))
                      );
 
 $package->setPackage('Piece_Right');
@@ -101,14 +98,14 @@ o Range
 o Regex
 o WithMethod
 o Email');
-$package->setChannel('pear.hatotech.org');
+$package->setChannel('pear.piece-framework.com');
 $package->setLicense('BSD License (revised)',
                      'http://www.opensource.org/licenses/bsd-license.php'
                      );
 $package->setAPIVersion($apiVersion);
 $package->setAPIStability('stable');
 $package->setReleaseVersion($version);
-$package->setReleaseStability('stable');
+$package->setReleaseStability($releaseStability);
 $package->setNotes($notes);
 $package->setPhpDep('4.3.0');
 $package->setPearinstallerDep('1.4.3');

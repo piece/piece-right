@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!-- $Id$ -->
 <!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
-<package version="1.0" packagerversion="1.4.11">
+<package version="1.0" packagerversion="1.5.0a1">
  <name>Piece_Right</name>
  <summary>A validation framework for PHP</summary>
  <description>Piece_Right is a validation framework for PHP.
@@ -35,39 +35,32 @@ o Email
   </maintainer>
   </maintainers>
  <release>
-  <version>1.1.0</version>
-  <date>2006-09-07</date>
+  <version>1.2.0</version>
+  <date>2006-10-09</date>
   <license>BSD License (revised)</license>
   <state>stable</state>
-  <notes>This release includes a few enhancement and breaks backward compatibility as follows:
+  <notes>This is the first release with the new PEAR Channel Server pear.piece-framework.com.
+This release includes a new class Piece_Right_Validation_Script. It will be used to run a typical process of validation with Piece_Right. See the following release notes for details.
 
 ## Enhancements ##
 
 ### Kernel ###
 
+##### Piece_Right_Validation_Script #####
+- A new class for running a typical process of validation with Piece_Right.
+
 ##### Piece_Right #####
-- Changed the code so as to not set payloads to any filters.
+- Moved _isEmpty() method to public.
+- Added getFieldValuesCallback() for getting the callback to get field values for the current validation.
 
-##### Piece_Right_Validator_Common #####
-- Changed the code so as to set payloads by setPayload() method instead of by validate() method.
-
-### Validators ###
-
-##### Email #####
-- Moved the code to build addr-spec values from the constructor to _initialize() method.
-- Removed the constructor.
-
-##### WithMethod #####
-- Fixed the problem that validate() method always returns null when an array is given.
-
-### Other Changes ###
-- Replaced the URL of Piece_Right&apos;s Web page with http://piece-framework.com/piece-right/.
+##### Piece_Right_Validation_Error #####
+- Changed the class name from Piece_Right_ValidationError.
   </notes>
   <deps>
    <dep type="php" rel="ge" version="4.3.0" optional="no"/>
    <dep type="pkg" rel="ge" version="1.7.0" optional="no">Cache_Lite</dep>
    <dep type="pkg" rel="ge" version="1.4.3" optional="no">PEAR</dep>
-   <dep type="pkg" rel="ge" version="0.3.0" optional="yes">Stagehand_TestRunner</dep>
+   <dep type="pkg" rel="ge" version="0.4.0" optional="yes">Stagehand_TestRunner</dep>
   </deps>
   <filelist>
    <dir name="/" baseinstalldir="/">
@@ -102,6 +95,14 @@ o Email
         <replace from="@package_version@" to="version" type="package-info"/>
        </file>
       </dir> <!-- /Piece/Right/Filter -->
+      <dir name="Validation">
+       <file role="php" name="Error.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+       <file role="php" name="Script.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+      </dir> <!-- /Piece/Right/Validation -->
       <dir name="Validator">
        <file role="php" name="Common.php">
         <replace from="@package_version@" to="version" type="package-info"/>
@@ -149,9 +150,6 @@ o Email
       <file role="php" name="Results.php">
        <replace from="@package_version@" to="version" type="package-info"/>
       </file>
-      <file role="php" name="ValidationError.php">
-       <replace from="@package_version@" to="version" type="package-info"/>
-      </file>
      </dir> <!-- /Piece/Right -->
      <file role="php" name="Right.php">
       <replace from="@package_version@" to="version" type="package-info"/>
@@ -194,6 +192,20 @@ o Email
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
        </dir> <!-- /tests/Piece/Right/Filter -->
+       <dir name="Validation">
+        <file role="test" name="ErrorTestCase.php" install-as="Piece/Right/Validation/ErrorTestCase.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="Script.yaml" install-as="Piece/Right/Validation/Script.yaml">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="ScriptTestCase.php" install-as="Piece/Right/Validation/ScriptTestCase.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="TestRunner.php" install-as="Piece/Right/Validation/TestRunner.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+       </dir> <!-- /tests/Piece/Right/Validation -->
        <dir name="Validator">
         <file role="test" name="Bar.php" install-as="Piece/Right/Validator/Bar.php">
          <replace from="@package_version@" to="version" type="package-info"/>
@@ -256,9 +268,6 @@ o Email
        <file role="test" name="TestRunner.php" install-as="Piece/Right/TestRunner.php">
         <replace from="@package_version@" to="version" type="package-info"/>
        </file>
-       <file role="test" name="ValidationErrorTestCase.php" install-as="Piece/Right/ValidationErrorTestCase.php">
-        <replace from="@package_version@" to="version" type="package-info"/>
-       </file>
       </dir> <!-- /tests/Piece/Right -->
       <file role="test" name="AppropriateValidationMessage.yaml" install-as="Piece/AppropriateValidationMessage.yaml">
        <replace from="@package_version@" to="version" type="package-info"/>
@@ -302,6 +311,29 @@ o Email
   </filelist>
  </release>
  <changelog>
+   <release>
+    <version>1.2.0</version>
+    <date>2006-10-09</date>
+    <license>BSD License (revised)</license>
+    <state>stable</state>
+    <notes>This is the first release with the new PEAR Channel Server pear.piece-framework.com.
+This release includes a new class Piece_Right_Validation_Script. It will be used to run a typical process of validation with Piece_Right. See the following release notes for details.
+
+## Enhancements ##
+
+### Kernel ###
+
+##### Piece_Right_Validation_Script #####
+- A new class for running a typical process of validation with Piece_Right.
+
+##### Piece_Right #####
+- Moved _isEmpty() method to public.
+- Added getFieldValuesCallback() for getting the callback to get field values for the current validation.
+
+##### Piece_Right_Validation_Error #####
+- Changed the class name from Piece_Right_ValidationError.
+    </notes>
+   </release>
    <release>
     <version>1.1.0</version>
     <date>2006-09-07</date>

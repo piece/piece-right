@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- $Id$ -->
-<package packagerversion="1.4.11" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+<package packagerversion="1.5.0a1" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
     http://pear.php.net/dtd/tasks-1.0.xsd
     http://pear.php.net/dtd/package-2.0
     http://pear.php.net/dtd/package-2.0.xsd">
  <name>Piece_Right</name>
- <channel>pear.hatotech.org</channel>
+ <channel>pear.piece-framework.com</channel>
  <summary>A validation framework for PHP</summary>
  <description>Piece_Right is a validation framework for PHP.
 The following is a list of features of Piece_Right.
@@ -34,10 +34,10 @@ o Email</description>
   <email>iteman@users.sourceforge.net</email>
   <active>yes</active>
  </lead>
- <date>2006-09-07</date>
- <time>09:40:08</time>
+ <date>2006-10-09</date>
+ <time>13:28:26</time>
  <version>
-  <release>1.1.0</release>
+  <release>1.2.0</release>
   <api>1.1.0</api>
  </version>
  <stability>
@@ -45,29 +45,22 @@ o Email</description>
   <api>stable</api>
  </stability>
  <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
- <notes>This release includes a few enhancement and breaks backward compatibility as follows:
+ <notes>This is the first release with the new PEAR Channel Server pear.piece-framework.com.
+This release includes a new class Piece_Right_Validation_Script. It will be used to run a typical process of validation with Piece_Right. See the following release notes for details.
 
 ## Enhancements ##
 
 ### Kernel ###
 
+##### Piece_Right_Validation_Script #####
+- A new class for running a typical process of validation with Piece_Right.
+
 ##### Piece_Right #####
-- Changed the code so as to not set payloads to any filters.
+- Moved _isEmpty() method to public.
+- Added getFieldValuesCallback() for getting the callback to get field values for the current validation.
 
-##### Piece_Right_Validator_Common #####
-- Changed the code so as to set payloads by setPayload() method instead of by validate() method.
-
-### Validators ###
-
-##### Email #####
-- Moved the code to build addr-spec values from the constructor to _initialize() method.
-- Removed the constructor.
-
-##### WithMethod #####
-- Fixed the problem that validate() method always returns null when an array is given.
-
-### Other Changes ###
-- Replaced the URL of Piece_Right&apos;s Web page with http://piece-framework.com/piece-right/.</notes>
+##### Piece_Right_Validation_Error #####
+- Changed the class name from Piece_Right_ValidationError.</notes>
  <contents>
   <dir baseinstalldir="/" name="/">
    <dir name="data">
@@ -101,6 +94,14 @@ o Email</description>
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
      </dir> <!-- /Piece/Right/Filter -->
+     <dir name="Validation">
+      <file name="Error.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Script.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+     </dir> <!-- /Piece/Right/Validation -->
      <dir name="Validator">
       <file name="Common.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
@@ -148,9 +149,6 @@ o Email</description>
      <file name="Results.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
-     <file name="ValidationError.php" role="php">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
     </dir> <!-- /Piece/Right -->
     <file name="Right.php" role="php">
      <tasks:replace from="@package_version@" to="version" type="package-info" />
@@ -193,6 +191,20 @@ o Email</description>
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
       </dir> <!-- /tests/Piece/Right/Filter -->
+      <dir name="Validation">
+       <file name="ErrorTestCase.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="Script.yaml" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="ScriptTestCase.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="TestRunner.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+      </dir> <!-- /tests/Piece/Right/Validation -->
       <dir name="Validator">
        <file name="Bar.php" role="test">
         <tasks:replace from="@package_version@" to="version" type="package-info" />
@@ -253,9 +265,6 @@ o Email</description>
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
       <file name="TestRunner.php" role="test">
-       <tasks:replace from="@package_version@" to="version" type="package-info" />
-      </file>
-      <file name="ValidationErrorTestCase.php" role="test">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
      </dir> <!-- /tests/Piece/Right -->
@@ -321,8 +330,8 @@ o Email</description>
   <optional>
    <package>
     <name>Stagehand_TestRunner</name>
-    <channel>pear.hatotech.org</channel>
-    <min>0.3.0</min>
+    <channel>pear.piece-framework.com</channel>
+    <min>0.4.0</min>
    </package>
   </optional>
  </dependencies>
@@ -351,7 +360,10 @@ o Email</description>
    <install as="Piece/Right/Filter/TestRunner.php" name="tests/Piece/Right/Filter/TestRunner.php" />
    <install as="Piece/Right/ResultsTestCase.php" name="tests/Piece/Right/ResultsTestCase.php" />
    <install as="Piece/Right/TestRunner.php" name="tests/Piece/Right/TestRunner.php" />
-   <install as="Piece/Right/ValidationErrorTestCase.php" name="tests/Piece/Right/ValidationErrorTestCase.php" />
+   <install as="Piece/Right/Validation/ErrorTestCase.php" name="tests/Piece/Right/Validation/ErrorTestCase.php" />
+   <install as="Piece/Right/Validation/Script.yaml" name="tests/Piece/Right/Validation/Script.yaml" />
+   <install as="Piece/Right/Validation/ScriptTestCase.php" name="tests/Piece/Right/Validation/ScriptTestCase.php" />
+   <install as="Piece/Right/Validation/TestRunner.php" name="tests/Piece/Right/Validation/TestRunner.php" />
    <install as="Piece/Right/Validator/Bar.php" name="tests/Piece/Right/Validator/Bar.php" />
    <install as="Piece/Right/Validator/CompareTestCase.php" name="tests/Piece/Right/Validator/CompareTestCase.php" />
    <install as="Piece/Right/Validator/DateTestCase.php" name="tests/Piece/Right/Validator/DateTestCase.php" />
@@ -377,6 +389,34 @@ o Email</description>
   </filelist>
  </phprelease>
  <changelog>
+  <release>
+   <version>
+    <release>1.2.0</release>
+    <api>1.1.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2006-10-09</date>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
+   <notes>This is the first release with the new PEAR Channel Server pear.piece-framework.com.
+This release includes a new class Piece_Right_Validation_Script. It will be used to run a typical process of validation with Piece_Right. See the following release notes for details.
+
+## Enhancements ##
+
+### Kernel ###
+
+##### Piece_Right_Validation_Script #####
+- A new class for running a typical process of validation with Piece_Right.
+
+##### Piece_Right #####
+- Moved _isEmpty() method to public.
+- Added getFieldValuesCallback() for getting the callback to get field values for the current validation.
+
+##### Piece_Right_Validation_Error #####
+- Changed the class name from Piece_Right_ValidationError.</notes>
+  </release>
   <release>
    <version>
     <release>1.1.0</release>
@@ -631,8 +671,7 @@ o Email</description>
 ## Enhancements ##
 
 ##### Piece_Right_Results #####
-- Added getFieldValue() method for getting the value of a field.
-   </notes>
+- Added getFieldValue() method for getting the value of a field.</notes>
   </release>
   <release>
    <version>
