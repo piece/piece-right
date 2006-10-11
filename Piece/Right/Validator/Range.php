@@ -84,6 +84,10 @@ class Piece_Right_Validator_Range extends Piece_Right_Validator_Common
      */
     function validate($value)
     {
+        if (!is_numeric($value)) {
+            return false;
+        }
+
         $min = $this->getRule('min');
         if (!is_null($min)) {
             if ($value < $min) {

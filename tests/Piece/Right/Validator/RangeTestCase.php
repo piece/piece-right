@@ -111,6 +111,53 @@ class Piece_Right_Validator_RangeTestCase extends PHPUnit_TestCase
         $this->assertFalse($validator->validate(3));
     }
 
+    function testNotNumeric()
+    {
+        $validator = &new Piece_Right_Validator_Range();
+        $validator->setRules(array('max' => 2147483647));
+
+        $this->assertFalse($validator->validate("spam"));
+    }
+    
+    function testNumericSuccess()
+    {
+        $validator = &new Piece_Right_Validator_Range();
+        $validator->setRules(array('min' => -1, 'max' => 17));
+
+        $this->assertTrue($validator->validate('0'));
+        $this->assertTrue($validator->validate('0.5'));
+        $this->assertTrue($validator->validate('.5'));
+        $this->assertTrue($validator->validate('0x10'));
+        $this->assertTrue($validator->validate('1e-1'));
+        
+        $validator = &new Piece_Right_Validator_Range();
+        $validator->setRules(array('min' => 0, 'max' => 10.5));
+
+        $this->assertTrue($validator->validate('.5'));
+        $this->assertTrue($validator->validate('10.5'));
+        $this->assertTrue($validator->validate('1E+1'));
+        $this->assertTrue($validator->validate('0x0A'));
+    }
+
+    function testNumericFailure()
+    {
+        $validator = &new Piece_Right_Validator_Range();
+        $validator->setRules(array('min' => -1, 'max' => 1));
+
+        $this->assertFalse($validator->validate('2'));
+        $this->assertFalse($validator->validate('1.1'));
+        $this->assertFalse($validator->validate('1e+1'));
+        $this->assertFalse($validator->validate('0x10'));
+        
+        $validator = &new Piece_Right_Validator_Range();
+        $validator->setRules(array('min' => 1, 'max' => 10.5));
+
+        $this->assertFalse($validator->validate('.5'));
+        $this->assertFalse($validator->validate('10.6'));
+        $this->assertFalse($validator->validate('2e+1'));
+        $this->assertFalse($validator->validate('0x0B'));
+    }
+
     /**#@+
      * @access private
      */
