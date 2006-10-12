@@ -67,6 +67,8 @@ class Piece_Right_Validator_Range extends Piece_Right_Validator_Common
      * @access private
      */
 
+    var $_clearPattern;
+
     /**#@-*/
 
     /**#@+
@@ -84,8 +86,16 @@ class Piece_Right_Validator_Range extends Piece_Right_Validator_Common
      */
     function validate($value)
     {
-        if (!is_numeric($value)) {
-            return false;
+
+        $useClear = $this->getRule('useClear');
+        if (!$useClear) {
+            if (!is_numeric($value)) {
+                return false;
+            }
+        } else {
+            if (!preg_match("/^{$this->_clearPattern}$/", $value)) {
+                return false;
+            }
         }
 
         $min = $this->getRule('min');
@@ -125,6 +135,14 @@ class Piece_Right_Validator_Range extends Piece_Right_Validator_Common
     {
         $this->_addRule('min');
         $this->_addRule('max');
+        $this->_addRule('useClear', false);
+
+        $decimal = '(?:[1-9][0-9]*|0)';
+        $integer = "[+-]?$decimal";
+        $lnum    = '[0-9]+';
+        $dnum    = "(?:[0-9]*\.$lnum|$lnum\.[0-9]*)";
+        $float   = "[+-]?(?:$lnum|$dnum)";
+        $this->_clearPattern = "(?:$integer|$float)";
     }
  
     /**#@-*/

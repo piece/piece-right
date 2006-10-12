@@ -116,7 +116,7 @@ class Piece_Right_Validator_RangeTestCase extends PHPUnit_TestCase
         $validator = &new Piece_Right_Validator_Range();
         $validator->setRules(array('max' => 2147483647));
 
-        $this->assertFalse($validator->validate("spam"));
+        $this->assertFalse($validator->validate('spam'));
     }
     
     function testNumericSuccess()
@@ -156,6 +156,35 @@ class Piece_Right_Validator_RangeTestCase extends PHPUnit_TestCase
         $this->assertFalse($validator->validate('10.6'));
         $this->assertFalse($validator->validate('2e+1'));
         $this->assertFalse($validator->validate('0x0B'));
+    }
+
+    function testClearNumeric()
+    {
+        $validator = &new Piece_Right_Validator_Range();
+        $validator->setRules(array('max' => 2147483647,
+                                   'useClear' => true)
+                             );
+
+        $this->assertTrue($validator->validate('0'));
+        $this->assertTrue($validator->validate('+0'));
+        $this->assertTrue($validator->validate('-0'));
+        $this->assertTrue($validator->validate('1'));
+        $this->assertTrue($validator->validate('+1'));
+        $this->assertTrue($validator->validate('-1'));
+        $this->assertTrue($validator->validate('0.5'));
+        $this->assertTrue($validator->validate('+0.5'));
+        $this->assertTrue($validator->validate('-0.5'));
+        $this->assertTrue($validator->validate('.5'));
+        $this->assertTrue($validator->validate('+.5'));
+        $this->assertTrue($validator->validate('-.5'));
+        $this->assertTrue($validator->validate('123'));
+        $this->assertTrue($validator->validate('+123'));
+        $this->assertTrue($validator->validate('-123'));
+
+        $this->assertFalse($validator->validate('- 1'));
+        $this->assertFalse($validator->validate('foo'));
+        $this->assertFalse($validator->validate('1e-1'));
+        $this->assertFalse($validator->validate('0x0A'));
     }
 
     /**#@+
