@@ -53,7 +53,7 @@ require_once 'Piece/Right/Validator/Range.php';
  * @version    Release: @package_version@
  * @link       http://piece-framework.com/piece-right/
  * @see        Piece_Right_Validator_Range
- * @since      File available since Release 0.1.0
+ * @since      Class available since Release 0.1.0
  */
 class Piece_Right_Validator_RangeTestCase extends PHPUnit_TestCase
 {
@@ -75,7 +75,6 @@ class Piece_Right_Validator_RangeTestCase extends PHPUnit_TestCase
     /**#@+
      * @access public
      */
-    /**#@-*/
 
     function testSuccess()
     {
@@ -111,32 +110,56 @@ class Piece_Right_Validator_RangeTestCase extends PHPUnit_TestCase
         $this->assertFalse($validator->validate(3));
     }
 
-    function testNotNumeric()
-    {
-        $validator = &new Piece_Right_Validator_Range();
-        $validator->setRules(array('max' => 2147483647));
-
-        $this->assertFalse($validator->validate('spam'));
-    }
-    
     function testNumericSuccess()
     {
         $validator = &new Piece_Right_Validator_Range();
         $validator->setRules(array('min' => -1, 'max' => 17));
 
         $this->assertTrue($validator->validate('0'));
+
+        $validator = &new Piece_Right_Validator_Range();
+        $validator->setRules(array('min' => -1,
+                                   'max' => 17,
+                                   'useFloat' => true)
+                             );
+
         $this->assertTrue($validator->validate('0.5'));
         $this->assertTrue($validator->validate('.5'));
+
+        $validator = &new Piece_Right_Validator_Range();
+        $validator->setRules(array('min' => -1,
+                                   'max' => 17,
+                                   'allowHexadecimal' => true)
+                             );
+
         $this->assertTrue($validator->validate('0x10'));
+
+        $validator = &new Piece_Right_Validator_Range();
+        $validator->setRules(array('min' => -1,
+                                   'max' => 17,
+                                   'allowExponent' => true)
+                             );
+
         $this->assertTrue($validator->validate('1e-1'));
         
         $validator = &new Piece_Right_Validator_Range();
-        $validator->setRules(array('min' => 0, 'max' => 10.5));
+        $validator->setRules(array('min' => 0,
+                                   'max' => 10.5,
+                                   'useFloat' => true)
+                             );
 
         $this->assertTrue($validator->validate('.5'));
         $this->assertTrue($validator->validate('10.5'));
-        $this->assertTrue($validator->validate('1E+1'));
+
+        $validator = &new Piece_Right_Validator_Range();
+        $validator->setRules(array('min' => 0,
+                                   'max' => 10.5,
+                                   'allowHexadecimal' => true,
+                                   'allowExponent' => true)
+                             );
+
         $this->assertTrue($validator->validate('0x0A'));
+        $this->assertTrue($validator->validate('1E+1'));
     }
 
     function testNumericFailure()
@@ -145,47 +168,46 @@ class Piece_Right_Validator_RangeTestCase extends PHPUnit_TestCase
         $validator->setRules(array('min' => -1, 'max' => 1));
 
         $this->assertFalse($validator->validate('2'));
+
+        $validator = &new Piece_Right_Validator_Range();
+        $validator->setRules(array('min' => -1,
+                                   'max' => 1,
+                                   'useFloat' => true)
+                             );
+
         $this->assertFalse($validator->validate('1.1'));
-        $this->assertFalse($validator->validate('1e+1'));
+
+        $validator = &new Piece_Right_Validator_Range();
+        $validator->setRules(array('min' => -1,
+                                   'max' => 1,
+                                   'allowHexadecimal' => true,
+                                   'allowExponent' => true)
+                             );
+
         $this->assertFalse($validator->validate('0x10'));
+        $this->assertFalse($validator->validate('1e+1'));
         
         $validator = &new Piece_Right_Validator_Range();
-        $validator->setRules(array('min' => 1, 'max' => 10.5));
+        $validator->setRules(array('min' => 1,
+                                   'max' => 10.5,
+                                   'useFloat' => true)
+                             );
 
         $this->assertFalse($validator->validate('.5'));
         $this->assertFalse($validator->validate('10.6'));
-        $this->assertFalse($validator->validate('2e+1'));
-        $this->assertFalse($validator->validate('0x0B'));
-    }
 
-    function testClearNumeric()
-    {
         $validator = &new Piece_Right_Validator_Range();
-        $validator->setRules(array('max' => 2147483647,
-                                   'useClear' => true)
+        $validator->setRules(array('min' => 1,
+                                   'max' => 10.5,
+                                   'allowHexadecimal' => true,
+                                   'allowExponent' => true)
                              );
 
-        $this->assertTrue($validator->validate('0'));
-        $this->assertTrue($validator->validate('+0'));
-        $this->assertTrue($validator->validate('-0'));
-        $this->assertTrue($validator->validate('1'));
-        $this->assertTrue($validator->validate('+1'));
-        $this->assertTrue($validator->validate('-1'));
-        $this->assertTrue($validator->validate('0.5'));
-        $this->assertTrue($validator->validate('+0.5'));
-        $this->assertTrue($validator->validate('-0.5'));
-        $this->assertTrue($validator->validate('.5'));
-        $this->assertTrue($validator->validate('+.5'));
-        $this->assertTrue($validator->validate('-.5'));
-        $this->assertTrue($validator->validate('123'));
-        $this->assertTrue($validator->validate('+123'));
-        $this->assertTrue($validator->validate('-123'));
-
-        $this->assertFalse($validator->validate('- 1'));
-        $this->assertFalse($validator->validate('foo'));
-        $this->assertFalse($validator->validate('1e-1'));
-        $this->assertFalse($validator->validate('0x0A'));
+        $this->assertFalse($validator->validate('0x0B'));
+        $this->assertFalse($validator->validate('2e+1'));
     }
+
+    /**#@-*/
 
     /**#@+
      * @access private

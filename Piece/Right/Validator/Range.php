@@ -34,10 +34,11 @@
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @link       http://piece-framework.com/piece-right/
+ * @see        Piece_Right_Validator_Numeric
  * @since      File available since Release 0.1.0
  */
 
-require_once 'Piece/Right/Validator/Common.php';
+require_once 'Piece/Right/Validator/Numeric.php';
 
 // {{{ Piece_Right_Validator_Range
 
@@ -50,9 +51,10 @@ require_once 'Piece/Right/Validator/Common.php';
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @link       http://piece-framework.com/piece-right/
+ * @see        Piece_Right_Validator_Numeric
  * @since      Class available since Release 0.1.0
  */
-class Piece_Right_Validator_Range extends Piece_Right_Validator_Common
+class Piece_Right_Validator_Range extends Piece_Right_Validator_Numeric
 {
 
     // {{{ properties
@@ -66,8 +68,6 @@ class Piece_Right_Validator_Range extends Piece_Right_Validator_Common
     /**#@+
      * @access private
      */
-
-    var $_clearPattern;
 
     /**#@-*/
 
@@ -86,16 +86,8 @@ class Piece_Right_Validator_Range extends Piece_Right_Validator_Common
      */
     function validate($value)
     {
-
-        $useClear = $this->getRule('useClear');
-        if (!$useClear) {
-            if (!is_numeric($value)) {
-                return false;
-            }
-        } else {
-            if (!preg_match("/^{$this->_clearPattern}$/", $value)) {
-                return false;
-            }
+        if (!parent::validate($value)) {
+            return false;
         }
 
         $min = $this->getRule('min');
@@ -133,16 +125,9 @@ class Piece_Right_Validator_Range extends Piece_Right_Validator_Common
      */
     function _initialize()
     {
+        parent::_initialize();
         $this->_addRule('min');
         $this->_addRule('max');
-        $this->_addRule('useClear', false);
-
-        $decimal = '(?:[1-9][0-9]*|0)';
-        $integer = "[+-]?$decimal";
-        $lnum    = '[0-9]+';
-        $dnum    = "(?:[0-9]*\.$lnum|$lnum\.[0-9]*)";
-        $float   = "[+-]?(?:$lnum|$dnum)";
-        $this->_clearPattern = "(?:$integer|$float)";
     }
  
     /**#@-*/
