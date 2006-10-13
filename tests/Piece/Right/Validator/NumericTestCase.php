@@ -216,6 +216,14 @@ class Piece_Right_Validator_NumericTestCase extends PHPUnit_TestCase
         $this->assertTrue($validator->validate('1.2e+3'));
     }
 
+    function testNotNumeric()
+    {
+        $validator = &new Piece_Right_Validator_Numeric();
+
+        $this->assertFalse($validator->validate('foo'));
+        $this->assertFalse($validator->validate('12-34'));
+    }
+
     /**#@-*/
 
     /**#@+

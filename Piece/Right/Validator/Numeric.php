@@ -151,7 +151,7 @@ class Piece_Right_Validator_Numeric extends Piece_Right_Validator_Common
                 break;
             }
 
-            break;
+            return false;
         }
 
         if (($value + 0.0) != ($value + 0)) {
@@ -205,26 +205,71 @@ class Piece_Right_Validator_Numeric extends Piece_Right_Validator_Common
         $this->_addRule('useFloat', false);
     }
 
+    // }}}
+    // {{{ _isDecimal()
+
+    /**
+     * Checks whether a value is a decimal or not.
+     *
+     * @param mixed $value
+     * @return boolean
+     */
     function _isDecimal($value)
     {
         return preg_match('/^[+-]?(?:[1-9][0-9]*|0)$/', $value);
     }
 
+    // }}}
+    // {{{ _isOctal()
+
+    /**
+     * Checks whether a value is a octal or not.
+     *
+     * @param mixed $value
+     * @return boolean
+     */
     function _isOctal($value)
     {
         return preg_match('/^[+-]?0[0-7]+$/', $value);
     }
 
+    // }}}
+    // {{{ _isHexadecimal()
+
+    /**
+     * Checks whether a value is a hexadecimal or not.
+     *
+     * @param mixed $value
+     * @return boolean
+     */
     function _isHexadecimal($value)
     {
         return preg_match('/^[+-]?0[xX][0-9a-fA-F]+$/', $value);
     }
 
+    // }}}
+    // {{{ _isFloat()
+
+    /**
+     * Checks whether a value is a floating point number or not.
+     *
+     * @param mixed $value
+     * @return boolean
+     */
     function _isFloat($value)
     {
         return preg_match('/^[+-]?(?:[0-9]*\.[0-9]+|[0-9]+\.[0-9]*)$/', $value);
     }
 
+    // }}}
+    // {{{ _isExponent()
+
+    /**
+     * Checks whether a value is an exponent or not.
+     *
+     * @param mixed $value
+     * @return boolean
+     */
     function _isExponent($value)
     {
         return preg_match('/^(?:[0-9]+|(?:[0-9]*\.[0-9]+|[0-9]+\.[0-9]*))[eE][+-]?[0-9]+$/', $value);
