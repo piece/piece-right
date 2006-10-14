@@ -226,7 +226,7 @@ class Piece_Right_Results
      */
     function getValidFields()
     {
-        return array_keys(array_diff_assoc($this->_fieldValues, $this->_errors));
+        return array_diff(array_keys($this->_fieldValues), array_keys($this->_errors));
     }
 
     // }}}
