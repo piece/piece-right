@@ -136,11 +136,10 @@ class Piece_Right_Validator_Common
      * Checks whether a value is valid.
      *
      * @param string $value
-     * @param mixed  &$payload
      * @return boolean
      * @abstract
      */
-    function validate($value, &$payload) {}
+    function validate($value) {}
 
     // }}}
     // {{{ clear()
