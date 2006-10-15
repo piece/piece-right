@@ -42,25 +42,25 @@ require_once 'PEAR/PackageFileManager2.php';
 
 PEAR::staticPushErrorHandling(PEAR_ERROR_CALLBACK, create_function('$error', 'var_dump($error); exit();'));
 
-$version = '1.2.0';
+$version = '1.3.0';
 $apiVersion = '1.1.0';
 $releaseStability = 'stable';
-$notes = 'This is the first release with the new PEAR Channel Server pear.piece-framework.com.
-This release includes a new class Piece_Right_Validation_Script. It will be used to run a typical process of validation with Piece_Right. See the following release notes for details.
+$notes = "## Enhancements ##
 
-## Enhancements ##
+### Validators ###
+
+##### Range, Numeric #####
+- Added the code so as to check whether a value is a numeric, and extracted its features as Numeric validator. Thanks to Chihiro Sakatoku <csakatoku@mac.com> for good advices and the patches.
+
+## Defect Fixes ##
 
 ### Kernel ###
 
-##### Piece_Right_Validation_Script #####
-- A new class for running a typical process of validation with Piece_Right.
+##### Piece_Right_Results #####
+- Fixed a fatal error where 'Object of class Piece_Right_Validation_Error could not be converted to string' raised with PHP 5.2.0 RC5. Thanks to Chihiro Sakatoku <csakatoku@mac.com> for the patches.
 
-##### Piece_Right #####
-- Moved _isEmpty() method to public.
-- Added getFieldValuesCallback() for getting the callback to get field values for the current validation.
-
-##### Piece_Right_Validation_Error #####
-- Changed the class name from Piece_Right_ValidationError.';
+##### Piece_Right_Validator_Common #####
+- Removed unused argument $payload from validate() method. Thanks to Chihiro Sakatoku <csakatoku@mac.com> for the patches.";
 
 $package = new PEAR_PackageFileManager2();
 $package->setOptions(array('filelistgenerator' => 'svn',
