@@ -4,7 +4,7 @@
 /**
  * PHP versions 4 and 5
  *
- * Copyright (c) 2006, KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * Copyright (c) 2006 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -41,15 +41,18 @@
 require_once 'PHPUnit.php';
 require_once 'Piece/Right/Validator/File.php';
 
-// {{{ Piece_Right_Validator_FileTestCase
+// {{{ constants
 
 if (function_exists('finfo_file')
     || function_exists('mime_content_type')
     || substr(PHP_OS, 0, 3) != 'WIN') {
-    define ('SKIP_LIBMAGIC_TEST', 0);
+    define('SKIP_LIBMAGIC_TEST', 0);
 } else {
-    define ('SKIP_LIBMAGIC_TEST', 1);
+    define('SKIP_LIBMAGIC_TEST', 1);
 }
+
+// }}}
+// {{{ Piece_Right_Validator_FileTestCase
 
 /**
  * TestCase for Piece_Right_Validator_File
@@ -83,44 +86,40 @@ class Piece_Right_Validator_FileTestCase extends PHPUnit_TestCase
     /**#@+
      * @access public
      */
-    /**#@-*/
 
     function testSuccess()
     {
         $size = filesize(__FILE__);
-        $f = array(
-            'tmp_name' => __FILE__,
-            'name' => basename(__FILE__),
-            'type' => 'text/plain',
-            'size' => $size,
-            'error' => UPLOAD_ERR_OK
-        );
-        
+        $f = array('tmp_name' => __FILE__,
+                   'name' => basename(__FILE__),
+                   'type' => 'text/plain',
+                   'size' => $size,
+                   'error' => UPLOAD_ERR_OK
+                   );
+
         $validator = &new Piece_Right_Validator_File();
-        $validator->setRules(array(
-                        'minSize' => $size,
-                        'maxSize' => $size,
-                        'mimetype' => 'text/.+'
-                    ));
+        $validator->setRules(array('minSize' => $size,
+                                   'maxSize' => $size,
+                                   'mimetype' => 'text/.+')
+                             );
         $this->assertTrue($validator->validate($f));
-        
+
         $validator = &new Piece_Right_Validator_File();
         $validator->setRules(array(
                         'mimetype' => '^application/.+$'
                     ));
         $this->assertFalse($validator->validate($f));
     }
-    
+
     function testFailure()
     {
-        $f = array(
-            'tmp_name' => __FILE__,
-            'name' => basename(__FILE__),
-            'type' => 'text/plain',
-            'size' => 0,
-            'error' => UPLOAD_ERR_NO_FILE
-        );
-        
+        $f = array('tmp_name' => __FILE__,
+                   'name' => basename(__FILE__),
+                   'type' => 'text/plain',
+                   'size' => 0,
+                   'error' => UPLOAD_ERR_NO_FILE
+                   );
+
         $validator = &new Piece_Right_Validator_File();
         $this->assertFalse($validator->validate($f));
     }
@@ -128,61 +127,56 @@ class Piece_Right_Validator_FileTestCase extends PHPUnit_TestCase
     function testFileDoesNotExist()
     {
         $notExistFile = dirname(__FILE__). '/NotExistFile.txt';
-        $f = array(
-            'tmp_name' => $notExistFile,
-            'name' => $notExistFile,
-            'type' => 'text/plain',
-            'size' => 100,
-            'error' => 0
-        );
-        
+        $f = array('tmp_name' => $notExistFile,
+                   'name' => $notExistFile,
+                   'type' => 'text/plain',
+                   'size' => 100,
+                   'error' => 0
+                   );
+
         $validator = &new Piece_Right_Validator_File();
-        $validator->setRules(array(
-                        'mimetype' => 'text/.+',
-                        'useMagic'=>true
-                    ));
+        $validator->setRules(array('mimetype' => 'text/.+',
+                                   'useMagic'=>true)
+                             );
         $this->assertFalse($validator->validate($f));
     }
 
     function testMimeType()
     {
         $size = filesize(__FILE__);
-        $f = array(
-            'tmp_name' => __FILE__,
-            'name' => basename(__FILE__),
-            'type' => 'text/plain',
-            'size' => $size,
-            'error' => UPLOAD_ERR_OK
-        );
-    
+        $f = array('tmp_name' => __FILE__,
+                   'name' => basename(__FILE__),
+                   'type' => 'text/plain',
+                   'size' => $size,
+                   'error' => UPLOAD_ERR_OK
+                   );
+
         $validator = &new Piece_Right_Validator_File();
         $validator->setRules(array('mimetype' => '^text/.+$'));
         $this->assertTrue($validator->validate($f));
     }
-    
+
     function testUseMagicSuccess()
     {
         if (SKIP_LIBMAGIC_TEST) {
             return;
         }
-    
+
         $size = filesize(__FILE__);
-        $f = array(
-            'tmp_name' => __FILE__,
-            'name' => basename(__FILE__),
-            'type' => 'spam/egg',
-            'size' => $size,
-            'error' => UPLOAD_ERR_OK
-        );
-    
+        $f = array('tmp_name' => __FILE__,
+                   'name' => basename(__FILE__),
+                   'type' => 'spam/egg',
+                   'size' => $size,
+                   'error' => UPLOAD_ERR_OK
+                   );
+
         $validator = &new Piece_Right_Validator_File();
-        $validator->setRules(array(
-                        'mimetype' => '^text/.+$',
-                        'useMagic'=>true
-                    ));
+        $validator->setRules(array('mimetype' => '^text/.+$',
+                                   'useMagic'=>true)
+                             );
         $this->assertTrue($validator->validate($f));
     }
-    
+
     function testUseMagicFail()
     {
         if (SKIP_LIBMAGIC_TEST) {
@@ -190,22 +184,20 @@ class Piece_Right_Validator_FileTestCase extends PHPUnit_TestCase
         }
 
         $size = filesize(__FILE__);
-        $f = array(
-            'tmp_name' => __FILE__,
-            'name' => basename(__FILE__),
-            'type' => 'application/spam',
-            'size' => $size,
-            'error' => UPLOAD_ERR_OK
-        );
-    
+        $f = array('tmp_name' => __FILE__,
+                   'name' => basename(__FILE__),
+                   'type' => 'application/spam',
+                   'size' => $size,
+                   'error' => UPLOAD_ERR_OK
+                   );
+
         $validator = &new Piece_Right_Validator_File();
-        $validator->setRules(array(
-                        'mimetype' => '^application/.+$',
-                        'useMagic'=>true
-                    ));
+        $validator->setRules(array('mimetype' => '^application/.+$',
+                                   'useMagic'=>true)
+                             );
         $this->assertFalse($validator->validate($f));
     }
-    
+
     function testMultipleFiles()
     {
         $size = filesize(__FILE__);
@@ -217,29 +209,30 @@ class Piece_Right_Validator_FileTestCase extends PHPUnit_TestCase
             $files['size'][$i] = $size;
             $files['error'][$i] = UPLOAD_ERR_OK;
         }
-    
+
         $validator = &new Piece_Right_Validator_File();
-        $validator->setRules(array(
-                        'maxSize'=>$size,
-                        'minSize'=>$size,
-                        'mimetype' => '^text/.+$'
-                    ));
+        $validator->setRules(array('maxSize' => $size,
+                                   'minSize' => $size,
+                                   'mimetype' => '^text/.+$')
+                             );
         $this->assertTrue($validator->validate($files));
-        
+
         $files['tmp_name'][] = __FILE__;
         $files['name'][] = basename(__FILE__);
         $files['type'][] = 'image/jpeg';
         $files['size'][] = $size;
         $files['error'][] = UPLOAD_ERR_OK;
-        
+
         $validator = &new Piece_Right_Validator_File();
-        $validator->setRules(array(
-                        'maxSize'=>$size,
-                        'minSize'=>$size,
-                        'mimetype' => '^text/.+$'
-                    ));
+        $validator->setRules(array('maxSize' => $size,
+                                   'minSize' => $size,
+                                   'mimetype' => '^text/.+$')
+                             );
         $this->assertFalse($validator->validate($files));
     }
+
+    /**#@-*/
+
     /**#@+
      * @access private
      */

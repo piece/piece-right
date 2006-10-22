@@ -4,7 +4,7 @@
 /**
  * PHP versions 4 and 5
  *
- * Copyright (c) 2006, KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * Copyright (c) 2006 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -41,17 +41,19 @@
 require_once 'PHPUnit.php';
 require_once 'Piece/Right/Validator/Image.php';
 
-// {{{ Piece_Right_Validator_ImageTestCase
+// {{{ constants
 
 if (function_exists('getimagesize')) {
-    define ('SKIP_IMAGE_TEST', 0);
-}
-else {
-    define ('SKIP_IMAGE_TEST', 1);
+    define('SKIP_IMAGE_TEST', 0);
+} else {
+    define('SKIP_IMAGE_TEST', 1);
 }
 
-define ('TEST_IMAGE_WIDTH', 175);
-define ('TEST_IMAGE_HEIGHT', 175);
+define('TEST_IMAGE_WIDTH', 175);
+define('TEST_IMAGE_HEIGHT', 175);
+
+// }}}
+// {{{ Piece_Right_Validator_ImageTestCase
 
 /**
  * TestCase for Piece_Right_Validator_Image
@@ -79,7 +81,8 @@ class Piece_Right_Validator_ImageTestCase extends PHPUnit_TestCase
     /**#@+
      * @access private
      */
-    var $images;
+
+    var $_images;
 
     /**#@-*/
 
@@ -93,23 +96,24 @@ class Piece_Right_Validator_ImageTestCase extends PHPUnit_TestCase
         if (SKIP_IMAGE_TEST) {
             return;
         }
+
         $tmp = array();
-        foreach(array(
-            'jpg'=>'jpeg',
-            'png'=>'png',
-            'tif'=>'tiff',
-            'gif'=>'gif',
-            'bmp'=>'bmp') as $ext => $mime) {
+        foreach (array('jpg'=>'jpeg',
+                       'png'=>'png',
+                       'tif'=>'tiff',
+                       'gif'=>'gif',
+                       'bmp'=>'bmp') as $ext => $mime
+                 ) {
             $filename = dirname(__FILE__). "/images/image.{$ext}";
-            $tmp[] = array(
-                'name'       => $filename,
-                'type'       => "image/{$mime}",
-                'size'       => filesize($filename),
-                'tmp_name'   => $filename,
-                'error'      => 0);
+            $tmp[] = array('name'     => $filename,
+                           'type'     => "image/{$mime}",
+                           'size'     => filesize($filename),
+                           'tmp_name' => $filename,
+                           'error'    => 0
+                           );
         }
-        
-        $this->images = $tmp;
+
+        $this->_images = $tmp;
     }
 
     function testSuccess()
@@ -118,46 +122,46 @@ class Piece_Right_Validator_ImageTestCase extends PHPUnit_TestCase
             return;
         }
 
-        foreach($this->images as $target) {
+        foreach($this->_images as $target) {
             $size = $target['size'];
             $validator = &new Piece_Right_Validator_Image();
-            $validator->setRules(array(
-                            'minSize' => $size,
-                            'maxSize' => $size,
-                            'mimetype'=>'image/.*'));
+            $validator->setRules(array('minSize' => $size,
+                                       'maxSize' => $size,
+                                       'mimetype'=>'image/.*')
+                                 );
             $this->assertTrue($validator->validate($target));
         }
     }
 
     function testFailure()
-    {   
+    {
         if (SKIP_IMAGE_TEST) {
             return;
         }
-           
-        foreach($this->images as $target) {
+
+        foreach($this->_images as $target) {
             $size = $target['size'];
             $validator = &new Piece_Right_Validator_Image();
-            $validator->setRules(array(
-                            'minSize' => $size + 1,
-                            'maxSize' => $size - 1));
+            $validator->setRules(array('minSize' => $size + 1,
+                                       'maxSize' => $size - 1)
+                                 );
             $this->assertFalse($validator->validate($target));
         }
     }
-    
+
     function testNotImageFile()
     {
         if (SKIP_IMAGE_TEST) {
             return;
         }
-        
-        $file = array(
-                'name'       => __FILE__,
-                'type'       => "image/jpeg",
-                'size'       => filesize(__FILE__),
-                'tmp_name'   => __FILE__,
-                'error'      => 0);
-        
+
+        $file = array('name'     => __FILE__,
+                      'type'     => 'image/jpeg',
+                      'size'     => filesize(__FILE__),
+                      'tmp_name' => __FILE__,
+                      'error'    => 0
+                      );
+
         $validator = &new Piece_Right_Validator_Image();
         $this->assertFalse($validator->validate($file));
     }
@@ -167,109 +171,109 @@ class Piece_Right_Validator_ImageTestCase extends PHPUnit_TestCase
         if (SKIP_IMAGE_TEST) {
             return;
         }
-        
+
         $validator = &new Piece_Right_Validator_Image();
         $validator->setRules(array('minWidth' => TEST_IMAGE_WIDTH));
-        
-        foreach($this->images as $target) {
+
+        foreach($this->_images as $target) {
             $this->assertTrue($validator->validate($target));
         }
-        
+
         $validator = &new Piece_Right_Validator_Image();
         $validator->setRules(array('maxWidth' => TEST_IMAGE_WIDTH));
-        
-        foreach($this->images as $target) {
+
+        foreach($this->_images as $target) {
             $this->assertTrue($validator->validate($target));
         }
     }
-    
+
     function testWidthFailure()
     {
         if (SKIP_IMAGE_TEST) {
             return;
         }
-        
+
         $validator = &new Piece_Right_Validator_Image();
         $validator->setRules(array('minWidth' => TEST_IMAGE_WIDTH + 1));
-        
-        foreach($this->images as $target) {
+
+        foreach($this->_images as $target) {
             $this->assertFalse($validator->validate($target));
         }
-        
+
         $validator = &new Piece_Right_Validator_Image();
         $validator->setRules(array('maxWidth' => TEST_IMAGE_WIDTH  - 1));
-        
-        foreach($this->images as $target) {
+
+        foreach($this->_images as $target) {
             $this->assertFalse($validator->validate($target));
         }
     }
-    
+
     function testHeightSuccess()
     {
         if (SKIP_IMAGE_TEST) {
             return;
         }
-        
+
         $validator = &new Piece_Right_Validator_Image();
         $validator->setRules(array('minHeight' => TEST_IMAGE_HEIGHT));
-        
-        foreach($this->images as $target) {
+
+        foreach($this->_images as $target) {
             $this->assertTrue($validator->validate($target));
         }
-        
+
         $validator = &new Piece_Right_Validator_Image();
         $validator->setRules(array('maxHeight' => TEST_IMAGE_HEIGHT));
-        
-        foreach($this->images as $target) {
+
+        foreach($this->_images as $target) {
             $this->assertTrue($validator->validate($target));
         }
     }
-    
+
     function testHeightFailure()
     {
         if (SKIP_IMAGE_TEST) {
             return;
         }
-        
+
         $validator = &new Piece_Right_Validator_Image();
         $validator->setRules(array('minHeight' => TEST_IMAGE_HEIGHT + 1));
-        
-        foreach($this->images as $target) {
+
+        foreach($this->_images as $target) {
             $this->assertFalse($validator->validate($target));
         }
-        
+
         $validator = &new Piece_Right_Validator_Image();
         $validator->setRules(array('maxHeight' => TEST_IMAGE_HEIGHT  - 1));
-        
-        foreach($this->images as $target) {
+
+        foreach($this->_images as $target) {
             $this->assertFalse($validator->validate($target));
         }
     }
-    
+
     function testTypeSuccess()
     {
         if (SKIP_IMAGE_TEST) {
             return;
         }
-        
+
         $validator = &new Piece_Right_Validator_Image();
         $validator->setRules(array('mimetype' => 'image/.*'));
-        
-        foreach($this->images as $target) {
+
+        foreach($this->_images as $target) {
             $this->assertTrue($validator->validate($target));
         }
     }
-    
+
     function testTypeFailure()
     {
         if (SKIP_IMAGE_TEST) {
             return;
         }
-        
+
         $validator = &new Piece_Right_Validator_Image();
         $validator->setRules(array('mimetype' => 'image/psd'));
-        
-        foreach($this->images as $target) {
+
+        foreach($this->_images as $target) {
             $this->assertFalse($validator->validate($target));
         }
     }

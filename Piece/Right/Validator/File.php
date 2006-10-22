@@ -4,7 +4,7 @@
 /**
  * PHP versions 4 and 5
  *
- * Copyright (c) 2006, KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * Copyright (c) 2006 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,6 +54,7 @@ require_once 'Piece/Right/Validator/Common.php';
  */
 class Piece_Right_Validator_File extends Piece_Right_Validator_Common
 {
+
     // {{{ properties
 
     /**#@+
@@ -80,8 +81,8 @@ class Piece_Right_Validator_File extends Piece_Right_Validator_Common
     /**
      * Validate given file(s).
      *
-     * @param  array $value the array of uploaded file(s).
-     * @return bool true if passes, false if not.
+     * @param array $value the array of uploaded file(s).
+     * @return boolean true if passes, false if not.
      */
     function validate($value)
     {
@@ -92,35 +93,32 @@ class Piece_Right_Validator_File extends Piece_Right_Validator_Common
         if (!array_key_exists('error', $value)
             || !array_key_exists('tmp_name', $value)
             || !array_key_exists('size', $value)
-            || !array_key_exists('type', $value)) {
+            || !array_key_exists('type', $value)
+            ) {
             return false;
         }
 
         if (!is_array($value['error'])) {
-            // create an new array,
-            // array('name'=>array('a'), 'error'=>array(0)...)
-            // from the given array,
-            // array('name'=>'a', 'error'=>0, ...)
-            $value = array_map(create_function(
-                                '$v',
-                                'return array($v);'
-                               ), $value);
+
+            /*
+             * create an new array,
+             * array('name'=>array('a'), 'error'=>array(0)...)
+             * from the given array,
+             * array('name'=>'a', 'error'=>0, ...)
+             */
+            $value = array_map(create_function('$v', 'return array($v);'), $value);
         }
 
         for ($i = 0; $i < count($value['error']); $i++) {
             if ($value['error'][$i]) {
                 return false;
             }
-            
-            if (!$this->_validateFile(
-                            $value['tmp_name'][$i],
-                            $value['size'][$i],
-                            $value['type'][$i])
-                ) {
+
+            if (!$this->_validateFile($value['tmp_name'][$i], $value['size'][$i], $value['type'][$i])) {
                 return false;
             }
         }
-        
+
         return true;
     }
 
@@ -140,7 +138,7 @@ class Piece_Right_Validator_File extends Piece_Right_Validator_Common
      * @param integer $size     the file size.
      * @param string  $mime     the mime type which is retrieved
      *                          from HTTP request headers.
-     * @return bool true if the file passes the validation, false if not.
+     * @return boolean true if the file passes the validation, false if not.
      * @see Piece_Right_Validator_File
      */
     function _validateFile($filename, $size, $mime)
@@ -158,28 +156,27 @@ class Piece_Right_Validator_File extends Piece_Right_Validator_Common
         }
 
         if (!$this->_validateMimeType($mime)) {
-            $this->_setMessage("mimetype");
+            $this->_setMessage('mimetype');
             return false;
         }
-        
+
         return true;
     }
-    
+
     // }}}
     // {{{ _inRange()
-    
+
     /**
-     * Utility function to check the given numeric value is
-     * in range.
+     * Utility function to check the given numeric value is in range.
      *
-     * @param  string $key   the prefix of the rule.
-     * @param  string $value the numberic string to be compared.
-     * @return bool true if the value in range, false if not.
+     * @param string $key   the prefix of the rule.
+     * @param string $value the numberic string to be compared.
+     * @return boolean true if the value in range, false if not.
      */
     function _inRange($key, $value)
     {
         $key = ucfirst($key);
-    
+
         $max = $this->getRule("max{$key}");
         if (!is_null($max)) {
             if ($value > $max) {
@@ -187,7 +184,7 @@ class Piece_Right_Validator_File extends Piece_Right_Validator_Common
                 return false;
             }
         }
-        
+
         $min = $this->getRule("min{$key}");
         if (!is_null($min)) {
             if ($value < $min) {
@@ -195,18 +192,18 @@ class Piece_Right_Validator_File extends Piece_Right_Validator_Common
                 return false;
             }
         }
-        
+
         return true;
     }
-    
+
     // }}}
     // {{{ _validateMimeType()
-    
+
     /**
-     * Validate the given mime-type
+     * Validate the given mime-type.
      *
-     * @param  $mime string the mime-type.
-     * @return bool true if the pattern maches, false if not.
+     * @param $mime string the mime-type.
+     * @return boolean true if the pattern maches, false if not.
      */
     function _validateMimeType($mime)
     {
@@ -214,27 +211,29 @@ class Piece_Right_Validator_File extends Piece_Right_Validator_Common
         if (is_null($pattern)) {
             return true;
         }
+
         return preg_match("!{$pattern}!", $mime);
     }
 
     // }}}
     // {{{ _detectMimeType()
-        
+
     /**
      * Detect the mime-type of the given file.
      *
-     * @param  string $filename the file name to be checked.
-     * @return mixed  the mime-type string, or false if failed.
+     * @param string $filename the file name to be checked.
+     * @return mixed the mime-type string, or false if failed.
      */
-    function _detectMimeType($filename) {
+    function _detectMimeType($filename)
+    {
         if (!is_file($filename) || !is_readable($filename)) {
             return false;
         }
-    
+
         if (function_exists('finfo_file')) {
             return $this->_detectMimeWithFileinfo($filename);
         }
-    
+
         if (function_exists('mime_content_type')) {
             return mime_content_type($filename);
         }
@@ -248,11 +247,11 @@ class Piece_Right_Validator_File extends Piece_Right_Validator_Common
 
     // }}}
     // {{{ _detectMimeWithFileinfo()
-    
+
     /**
      * Detect the mime-type of the given file using FileInfo extension.
      *
-     * @param  string $filename the file name to be checked.
+     * @param string $filename the file name to be checked.
      * @return mixed the mime-type string, or false if failed.
      * @see http://www.php.net/manual/en/ref.fileinfo.php
      */
@@ -269,8 +268,6 @@ class Piece_Right_Validator_File extends Piece_Right_Validator_Common
 
     /**
      * Initializes properties.
-     *
-     * @since Method available since Release 0.3.0
      */
     function _initialize()
     {
@@ -279,7 +276,7 @@ class Piece_Right_Validator_File extends Piece_Right_Validator_Common
         $this->_addRule('mimetype', null);
         $this->_addRule('useMagic', false);
     }
- 
+
     /**#@-*/
 
     // }}}
