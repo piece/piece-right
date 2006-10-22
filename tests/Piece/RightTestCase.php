@@ -784,6 +784,256 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         unset($_SERVER['REQUEST_METHOD']);
     }
 
+    /**
+     * @since Method available since Release 1.3.0
+     */
+    function testFileUploadSuccess()
+    {
+        $size = filesize(__FILE__);
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_FILES['userfile'] = array('tmp_name' => __FILE__,
+                                    'name'     => __FILE__,
+                                    'size'     => $size,
+                                    'type'     => 'text/plain',
+                                    'error'    => 0
+                                    );
+
+        $dynamicConfig = &new Piece_Right_Config();
+        $dynamicConfig->setRequired('userfile');
+        $dynamicConfig->addValidation('userfile',
+                                      'File',
+                                      array('maxSize'  => $size,
+                                            'minSize'  => $size,
+                                            'mimetype' => 'text')
+                                      );
+        $right = &new Piece_Right(dirname(__FILE__) . '/../../data',
+                                  dirname(__FILE__));
+
+        $this->assertTrue($right->validate(null, $dynamicConfig));
+
+        unset($_FILES['userfile']);
+
+        for ($i = 0; $i < 5; ++$i) {
+            $_FILES['userfile']['tmp_name'][$i] = __FILE__;
+            $_FILES['userfile']['name'][$i] = __FILE__;
+            $_FILES['userfile']['type'][$i] = 'text/plain';
+            $_FILES['userfile']['size'][$i] = $size;
+            $_FILES['userfile']['error'][$i] = 0;
+        }
+        $this->assertTrue($right->validate(null, $dynamicConfig));
+    }
+
+    /**
+     * @since Method available since Release 1.3.0
+     */
+    function testFileUploadFailure()
+    {
+        $size = filesize(__FILE__);
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_FILES['userfile'] = array('tmp_name' => __FILE__,
+                                    'name'     => __FILE__,
+                                    'size'     => $size,
+                                    'type'     => 'image/jpeg',
+                                    'error'    => 0
+                                    );
+
+        $dynamicConfig = &new Piece_Right_Config();
+        $dynamicConfig->setRequired('userfile');
+        $dynamicConfig->addValidation('userfile',
+                                      'File',
+                                      array('maxSize' => $size - 1,
+                                            'maxSize_message' => 'too large')
+                                      );
+        $right = &new Piece_Right(dirname(__FILE__) . '/../../data',
+                                  dirname(__FILE__));
+
+        $this->assertFalse($right->validate(null, $dynamicConfig));
+        $results = &$right->getResults();
+        $this->assertTrue($results->isError('userfile'));
+        $this->assertEquals('too large', $results->getErrorMessage('userfile'));
+
+        $dynamicConfig = &new Piece_Right_Config();
+        $dynamicConfig->setRequired('userfile');
+        $dynamicConfig->addValidation('userfile',
+                                      'File',
+                                      array('minSize' => $size + 1,
+                                            'minSize_message' => 'too small')
+                                      );
+        $right = &new Piece_Right(dirname(__FILE__) . '/../../data',
+                                  dirname(__FILE__));
+
+        $this->assertFalse($right->validate(null, $dynamicConfig));
+        $results = &$right->getResults();
+        $this->assertTrue($results->isError('userfile'));
+        $this->assertEquals('too small', $results->getErrorMessage('userfile'));
+
+        $dynamicConfig = &new Piece_Right_Config();
+        $dynamicConfig->setRequired('userfile');
+        $dynamicConfig->addValidation('userfile',
+                                      'File',
+                                      array('maxSize' => $size,
+                                            'maxSize_message' => 'too large',
+                                            'mimetype' => 'text/.+'),
+                                      'invalid file'
+                                      );
+        $right = &new Piece_Right(dirname(__FILE__) . '/../../data',
+                                  dirname(__FILE__));
+
+        $this->assertFalse($right->validate(null, $dynamicConfig));
+        $results = &$right->getResults();
+        $this->assertTrue($results->isError('userfile'));
+        $this->assertEquals('invalid file', $results->getErrorMessage('userfile'));
+
+        unset($_FILES['userfile']);
+    }
+
+    /**
+     * @since Method available since Release 1.3.0
+     */
+    function testImageUploadSuccess()
+    {
+        $width  = 175;
+        $height = 175;
+
+        $imagedir = dirname(__FILE__). '/Right/Validator/images';
+        $image = $imagedir.'/image.jpg';
+        $size = filesize($image);
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_FILES['userimage'] = array('tmp_name' => $image,
+                                     'name'     => $image,
+                                     'size'     => $size,
+                                     'type'     => 'image/jpeg',
+                                     'error'    => 0
+                                     );
+
+        $dynamicConfig = &new Piece_Right_Config();
+        $dynamicConfig->setRequired('userimage');
+        $dynamicConfig->addValidation('userimage',
+                                      'Image',
+                                      array('maxSize'   => $size,
+                                            'minSize'   => $size,
+                                            'maxWidth'  => $width,
+                                            'minWidth'  => $width,
+                                            'maxHeight' => $height,
+                                            'minHeight' => $height,
+                                            'mimetype'  => 'jpeg')
+                                      );
+
+        $right = &new Piece_Right(dirname(__FILE__) . '/../../data',
+                                  dirname(__FILE__));
+
+        $this->assertTrue($right->validate(null, $dynamicConfig));
+
+        unset($_FILES['userimage']);
+
+        foreach (array('bmp', 'gif', 'jpg', 'png', 'tif') as $i => $ext) {
+            $imagefile = "{$imagedir}/image.{$ext}";
+
+            /*
+             * the mime-type in the following array is not a valid mime-type,
+             * but this is intentional. Our image validator should
+             * ignore this value since mime-type in HTTP requests is not
+             * trustworthy and we MUST check the uploaded data
+             * by GD, or by some other ways which are equivalent to GD.
+             */
+            $_FILES['userimage']['tmp_name'][$i] = $imagefile;
+            $_FILES['userimage']['name'][$i] = $imagefile;
+            $_FILES['userimage']['type'][$i] = 'do/not/trust/this/value';
+            $_FILES['userimage']['size'][$i] = filesize($imagefile);
+            $_FILES['userimage']['error'][$i] = 0;
+        }
+
+        $dynamicConfig = &new Piece_Right_Config();
+        $dynamicConfig->setRequired('userimage');
+        $dynamicConfig->addValidation('userimage',
+                                      'Image',
+                                      array('maxWidth'  => $width,
+                                            'minWidth'  => $width,
+                                            'maxHeight' => $height,
+                                            'minHeight' => $height,
+                                            'mimetype'  =>'image/.+')
+                                      );
+        $this->assertTrue($right->validate(null, $dynamicConfig));
+
+        unset($_FILES['userimage']);
+    }
+
+    /**
+     * @since Method available since Release 1.3.0
+     */
+    function testImageUploadFailure()
+    {
+        $width  = 175;
+        $height = 175;
+
+        $imagedir = dirname(__FILE__). '/Right/Validator/images';
+        $image = $imagedir.'/image.jpg';
+        $size = filesize($image);
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_FILES['userimage'] = array('tmp_name' => $image,
+                                     'name'     => $image,
+                                     'size'     => $size,
+                                     'type'     => 'image/jpeg',
+                                     'error'    => 0
+                                     );
+
+        $rules = array(array('maxSize'=> $size - 1,
+                             'maxSize_message' => 'too large size'),
+                       array('minSize' => $size + 1,
+                             'minSize_message' => 'too smalls size'),
+                       array('maxWidth' => $width - 1,
+                             'maxWidth_message' => 'too large width'),
+                       array('minWidth' => $width + 1,
+                             'minWidth_message' => 'too small width'),
+                       array('maxHeight' => $height - 1,
+                             'maxHeight_message' => 'too large height'),
+                       array('minHeight' => $height + 1,
+                             'minHeight_message' => 'too small height')
+                       );
+
+        $right = &new Piece_Right(dirname(__FILE__) . '/../../data',
+                                  dirname(__FILE__));
+
+        foreach ($rules as $rule) {
+            $dynamicConfig = &new Piece_Right_Config();
+            $dynamicConfig->setRequired('userimage');
+            $dynamicConfig->addValidation('userimage', 'Image', $rule);
+            $this->assertFalse($right->validate(null, $dynamicConfig));
+
+            $message = next($rule);
+
+            $results = &$right->getResults();
+            $this->assertTrue($results->isError('userimage'));
+            $this->assertEquals($message, $results->getErrorMessage('userimage'));
+        }
+
+        unset($_FILES['userimage']);
+
+        $dynamicConfig = &new Piece_Right_Config();
+        $dynamicConfig->setRequired('userimage');
+        $dynamicConfig->addValidation('userimage',
+                                      'Image',
+                                      array('mimetype'         => 'image/psd',
+                                            'mimetype_message' => 'must be psd')
+                                      );
+
+        foreach (array('bmp', 'gif', 'jpg', 'png', 'tif') as $ext) {
+            $imagefile = "{$imagedir}/image.{$ext}";
+            $_FILES['userimage'] = array('tmp_name' => $imagefile,
+                                         'name'     => $imagefile,
+                                         'size'     => filesize($imagefile),
+                                         'type'     => 'do/not/trust/this/value',
+                                         'error'    => 0
+                                         );
+
+            $this->assertFalse($right->validate(null, $dynamicConfig));
+            $results = &$right->getResults();
+            $this->assertTrue($results->isError('userimage'));
+            $this->assertTrue('must be psd', $results->getErrorMessages('userimage'));
+        }
+        unset($_FILES['userimage']);
+    }
+
     /**#@-*/
 
     /**#@+
@@ -801,7 +1051,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $_POST['country'] = 'Japan';
         $_POST['hobbies'] = array('programming');
         $_POST[$name] = $value;
-        
+
         $dynamicConfig = &new Piece_Right_Config();
         $dynamicConfig->setRequired('age');
         $right = &new Piece_Right(dirname(__FILE__) . '/../../data',

@@ -170,11 +170,15 @@ class Piece_Right
      */
     function getFieldValueFromSuperglobals($field)
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            return @$_POST[$field];
+        if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+            return @$_GET[$field];
         }
 
-        return @$_GET[$field];
+        if (isset($_FILES[$field])) {
+            return $_FILES[$field];
+        }
+
+        return @$_POST[$field];
     }
 
     // }}}
