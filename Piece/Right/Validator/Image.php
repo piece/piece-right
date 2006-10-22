@@ -4,7 +4,7 @@
 /**
  * PHP versions 4 and 5
  *
- * Copyright (c) 2006, KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * Copyright (c) 2006 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,6 +53,7 @@ require_once 'Piece/Right/Validator/File.php';
  */
 class Piece_Right_Validator_Image extends Piece_Right_Validator_File
 {
+
     // {{{ properties
 
     /**#@+
@@ -77,8 +78,8 @@ class Piece_Right_Validator_Image extends Piece_Right_Validator_File
     /**
      * Validate the given file(s).
      *
-     * @param  array $value the array of uploaded file(s).
-     * @return bool  true if passes, false if not.
+     * @param array $value the array of uploaded file(s).
+     * @return boolean true if passes, false if not.
      * @see Piece_Right_Validator_File
      */
     function validate($value)
@@ -86,11 +87,11 @@ class Piece_Right_Validator_Image extends Piece_Right_Validator_File
         if (!function_exists('getimagesize')) {
             return false;
         }
-        
+
         if (parent::validate($value)) {
             return true;
         }
-        
+
         return false;
     }
 
@@ -102,7 +103,7 @@ class Piece_Right_Validator_Image extends Piece_Right_Validator_File
 
     // }}}
     // {{{ _validateFile()
-    
+
     /**
      * Validate a file.
      * Note that the 3rd parameter $mime will be ignored and
@@ -113,7 +114,7 @@ class Piece_Right_Validator_Image extends Piece_Right_Validator_File
      * @param integer $size     the file size.
      * @param string  $mime     the mime type which is retrieved
      *                          from HTTP request headers.
-     * @return bool   true if the file passes the validation, false if not.
+     * @return boolean true if the file passes the validation, false if not.
      * @see Piece_Right_Validator_File
      */
     function _validateFile($filename, $size, $mime)
@@ -121,20 +122,20 @@ class Piece_Right_Validator_Image extends Piece_Right_Validator_File
         if (!is_file($filename) || !is_readable($filename)) {
            return false;
         }
-        
+
         $info = getimagesize($filename);
         if ($info === false || !isset($info['mime'])) {
             return false;
         }
-        
+
         list($width, $height, $typeFlag) = $info;
         $mime = $info['mime'];
         if (!$this->_validateMimeType($mime)) {
-            $this->_setMessage("mimetype");
+            $this->_setMessage('mimetype');
             return false;
         }
-        
-        foreach(array('size', 'width', 'height') as $rule) {
+
+        foreach (array('size', 'width', 'height') as $rule) {
             if (!$this->_inRange($rule, $$rule)) {
                 return false;
             }
@@ -148,20 +149,16 @@ class Piece_Right_Validator_Image extends Piece_Right_Validator_File
 
     /**
      * Initializes properties.
-     *
-     * @since Method available since Release 0.3.0
      */
     function _initialize()
     {
-        $this->_addRule('mimetype', null);
-        $this->_addRule('maxSize', null);
-        $this->_addRule('minSize', null);
+        parent::_initialize();
         $this->_addRule('maxWidth', null);
         $this->_addRule('minWidth', 0);
         $this->_addRule('maxHeight', null);
         $this->_addRule('minHeight', 0);
     }
- 
+
     /**#@-*/
 
     // }}}
