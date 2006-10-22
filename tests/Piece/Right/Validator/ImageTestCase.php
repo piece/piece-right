@@ -122,7 +122,7 @@ class Piece_Right_Validator_ImageTestCase extends PHPUnit_TestCase
             return;
         }
 
-        foreach($this->_images as $target) {
+        foreach ($this->_images as $target) {
             $size = $target['size'];
             $validator = &new Piece_Right_Validator_Image();
             $validator->setRules(array('minSize' => $size,
@@ -139,7 +139,7 @@ class Piece_Right_Validator_ImageTestCase extends PHPUnit_TestCase
             return;
         }
 
-        foreach($this->_images as $target) {
+        foreach ($this->_images as $target) {
             $size = $target['size'];
             $validator = &new Piece_Right_Validator_Image();
             $validator->setRules(array('minSize' => $size + 1,
@@ -175,14 +175,14 @@ class Piece_Right_Validator_ImageTestCase extends PHPUnit_TestCase
         $validator = &new Piece_Right_Validator_Image();
         $validator->setRules(array('minWidth' => TEST_IMAGE_WIDTH));
 
-        foreach($this->_images as $target) {
+        foreach ($this->_images as $target) {
             $this->assertTrue($validator->validate($target));
         }
 
         $validator = &new Piece_Right_Validator_Image();
         $validator->setRules(array('maxWidth' => TEST_IMAGE_WIDTH));
 
-        foreach($this->_images as $target) {
+        foreach ($this->_images as $target) {
             $this->assertTrue($validator->validate($target));
         }
     }
@@ -196,14 +196,14 @@ class Piece_Right_Validator_ImageTestCase extends PHPUnit_TestCase
         $validator = &new Piece_Right_Validator_Image();
         $validator->setRules(array('minWidth' => TEST_IMAGE_WIDTH + 1));
 
-        foreach($this->_images as $target) {
+        foreach ($this->_images as $target) {
             $this->assertFalse($validator->validate($target));
         }
 
         $validator = &new Piece_Right_Validator_Image();
         $validator->setRules(array('maxWidth' => TEST_IMAGE_WIDTH  - 1));
 
-        foreach($this->_images as $target) {
+        foreach ($this->_images as $target) {
             $this->assertFalse($validator->validate($target));
         }
     }
@@ -217,14 +217,14 @@ class Piece_Right_Validator_ImageTestCase extends PHPUnit_TestCase
         $validator = &new Piece_Right_Validator_Image();
         $validator->setRules(array('minHeight' => TEST_IMAGE_HEIGHT));
 
-        foreach($this->_images as $target) {
+        foreach ($this->_images as $target) {
             $this->assertTrue($validator->validate($target));
         }
 
         $validator = &new Piece_Right_Validator_Image();
         $validator->setRules(array('maxHeight' => TEST_IMAGE_HEIGHT));
 
-        foreach($this->_images as $target) {
+        foreach ($this->_images as $target) {
             $this->assertTrue($validator->validate($target));
         }
     }
@@ -238,14 +238,14 @@ class Piece_Right_Validator_ImageTestCase extends PHPUnit_TestCase
         $validator = &new Piece_Right_Validator_Image();
         $validator->setRules(array('minHeight' => TEST_IMAGE_HEIGHT + 1));
 
-        foreach($this->_images as $target) {
+        foreach ($this->_images as $target) {
             $this->assertFalse($validator->validate($target));
         }
 
         $validator = &new Piece_Right_Validator_Image();
         $validator->setRules(array('maxHeight' => TEST_IMAGE_HEIGHT  - 1));
 
-        foreach($this->_images as $target) {
+        foreach ($this->_images as $target) {
             $this->assertFalse($validator->validate($target));
         }
     }
@@ -259,7 +259,7 @@ class Piece_Right_Validator_ImageTestCase extends PHPUnit_TestCase
         $validator = &new Piece_Right_Validator_Image();
         $validator->setRules(array('mimetype' => 'image/.*'));
 
-        foreach($this->_images as $target) {
+        foreach ($this->_images as $target) {
             $this->assertTrue($validator->validate($target));
         }
     }
@@ -273,7 +273,7 @@ class Piece_Right_Validator_ImageTestCase extends PHPUnit_TestCase
         $validator = &new Piece_Right_Validator_Image();
         $validator->setRules(array('mimetype' => 'image/psd'));
 
-        foreach($this->_images as $target) {
+        foreach ($this->_images as $target) {
             $this->assertFalse($validator->validate($target));
         }
     }
