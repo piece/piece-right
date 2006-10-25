@@ -43,12 +43,6 @@ require_once 'Piece/Right/Validator/Image.php';
 
 // {{{ constants
 
-if (function_exists('getimagesize')) {
-    define('SKIP_IMAGE_TEST', 0);
-} else {
-    define('SKIP_IMAGE_TEST', 1);
-}
-
 define('TEST_IMAGE_WIDTH', 175);
 define('TEST_IMAGE_HEIGHT', 175);
 
@@ -93,10 +87,6 @@ class Piece_Right_Validator_ImageTestCase extends PHPUnit_TestCase
 
     function setUp()
     {
-        if (SKIP_IMAGE_TEST) {
-            return;
-        }
-
         $tmp = array();
         foreach (array('jpg'=>'jpeg',
                        'png'=>'png',
@@ -118,10 +108,6 @@ class Piece_Right_Validator_ImageTestCase extends PHPUnit_TestCase
 
     function testSuccess()
     {
-        if (SKIP_IMAGE_TEST) {
-            return;
-        }
-
         foreach ($this->_images as $target) {
             $size = $target['size'];
             $validator = &new Piece_Right_Validator_Image();
@@ -135,10 +121,6 @@ class Piece_Right_Validator_ImageTestCase extends PHPUnit_TestCase
 
     function testFailure()
     {
-        if (SKIP_IMAGE_TEST) {
-            return;
-        }
-
         foreach ($this->_images as $target) {
             $size = $target['size'];
             $validator = &new Piece_Right_Validator_Image();
@@ -151,10 +133,6 @@ class Piece_Right_Validator_ImageTestCase extends PHPUnit_TestCase
 
     function testNotImageFile()
     {
-        if (SKIP_IMAGE_TEST) {
-            return;
-        }
-
         $file = array('name'     => __FILE__,
                       'type'     => 'image/jpeg',
                       'size'     => filesize(__FILE__),
@@ -168,10 +146,6 @@ class Piece_Right_Validator_ImageTestCase extends PHPUnit_TestCase
 
     function testWidthSuccess()
     {
-        if (SKIP_IMAGE_TEST) {
-            return;
-        }
-
         $validator = &new Piece_Right_Validator_Image();
         $validator->setRules(array('minWidth' => TEST_IMAGE_WIDTH));
 
@@ -189,10 +163,6 @@ class Piece_Right_Validator_ImageTestCase extends PHPUnit_TestCase
 
     function testWidthFailure()
     {
-        if (SKIP_IMAGE_TEST) {
-            return;
-        }
-
         $validator = &new Piece_Right_Validator_Image();
         $validator->setRules(array('minWidth' => TEST_IMAGE_WIDTH + 1));
 
@@ -210,10 +180,6 @@ class Piece_Right_Validator_ImageTestCase extends PHPUnit_TestCase
 
     function testHeightSuccess()
     {
-        if (SKIP_IMAGE_TEST) {
-            return;
-        }
-
         $validator = &new Piece_Right_Validator_Image();
         $validator->setRules(array('minHeight' => TEST_IMAGE_HEIGHT));
 
@@ -231,10 +197,6 @@ class Piece_Right_Validator_ImageTestCase extends PHPUnit_TestCase
 
     function testHeightFailure()
     {
-        if (SKIP_IMAGE_TEST) {
-            return;
-        }
-
         $validator = &new Piece_Right_Validator_Image();
         $validator->setRules(array('minHeight' => TEST_IMAGE_HEIGHT + 1));
 
@@ -252,10 +214,6 @@ class Piece_Right_Validator_ImageTestCase extends PHPUnit_TestCase
 
     function testTypeSuccess()
     {
-        if (SKIP_IMAGE_TEST) {
-            return;
-        }
-
         $validator = &new Piece_Right_Validator_Image();
         $validator->setRules(array('mimetype' => 'image/.*'));
 
@@ -266,10 +224,6 @@ class Piece_Right_Validator_ImageTestCase extends PHPUnit_TestCase
 
     function testTypeFailure()
     {
-        if (SKIP_IMAGE_TEST) {
-            return;
-        }
-
         $validator = &new Piece_Right_Validator_Image();
         $validator->setRules(array('mimetype' => 'image/psd'));
 
