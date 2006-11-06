@@ -363,7 +363,12 @@ class Piece_Right
                 $watcher['turnOn'][] = $field;
             }
 
+            if (!array_key_exists('turnOff', $watcher)) {
+                $watcher['turnOff'] = array();
+            }
+
             $turnOnFields = array();
+            $turnOffFields = array();
             foreach ($watcher['target'] as $target) {
                 $targetValue = $this->_results->getFieldValue($target['name']);
                 if (Piece_Right::isEmpty($targetValue)) {
@@ -374,6 +379,10 @@ class Piece_Right
                     foreach ($watcher['turnOn'] as $turnOnFieldName) {
                         $turnOnFields[] = $turnOnFieldName;
                     }
+
+                    foreach ($watcher['turnOff'] as $turnOffFieldName) {
+                        $turnOffFields[] = $turnOffFieldName;
+                    }
                 }
             }
 
@@ -381,17 +390,15 @@ class Piece_Right
                 $this->_config->setRequired($turnOnFieldName, array('enabled' => true));
             }
 
+            foreach ($turnOffFields as $turnOffFieldName) {
+                $this->_config->setRequired($turnOffFieldName, array('enabled' => false));
+            }
+
             if (array_key_exists('turnOnForceValidation', $watcher)
                 && $watcher['turnOnForceValidation']
                 && count($turnOnFields)
                 ) {
                 $this->_config->setForceValidation($field);
-            }
-
-            if (array_key_exists('turnOff', $watcher)) {
-                foreach ($watcher['turnOff'] as $turnOffFieldName) {
-                    $this->_config->setRequired($turnOffFieldName, array('enabled' => false));
-                }
             }
         }
     }
