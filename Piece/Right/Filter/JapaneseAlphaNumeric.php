@@ -71,7 +71,6 @@ class Piece_Right_Filter_JapaneseAlphaNumeric
 
     /**#@+
      * @access public
-     * @static
      */
 
     // }}}

@@ -71,7 +71,6 @@ class Piece_Right_Filter_JapaneseH2Z
 
     /**#@+
      * @access public
-     * @static
      */
 
     // }}}
