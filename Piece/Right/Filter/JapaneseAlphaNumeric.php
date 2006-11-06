@@ -37,7 +37,6 @@
  * @since      File available since Release 0.3.0
  */
 
-// }}}
 // {{{ Piece_Right_Filter_JapaneseAlphaNumeric
 
 /**
@@ -81,7 +80,7 @@ class Piece_Right_Filter_JapaneseAlphaNumeric
      * to ASCII characters.
      *
      * @param string $value
-     * @return mixed
+     * @return string
      */
     function filter($value)
     {

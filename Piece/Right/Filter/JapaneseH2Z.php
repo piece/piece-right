@@ -37,7 +37,6 @@
  * @since      File available since Release 0.3.0
  */
 
-// }}}
 // {{{ Piece_Right_Filter_JapaneseH2Z
 
 /**
