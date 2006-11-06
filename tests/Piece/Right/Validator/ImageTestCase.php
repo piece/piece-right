@@ -83,16 +83,15 @@ class Piece_Right_Validator_ImageTestCase extends PHPUnit_TestCase
     /**#@+
      * @access public
      */
-    /**#@-*/
 
     function setUp()
     {
         $tmp = array();
-        foreach (array('jpg'=>'jpeg',
-                       'png'=>'png',
-                       'tif'=>'tiff',
-                       'gif'=>'gif',
-                       'bmp'=>'bmp') as $ext => $mime
+        foreach (array('jpg' => 'jpeg',
+                       'png' => 'png',
+                       'tif' => 'tiff',
+                       'gif' => 'gif',
+                       'bmp' => 'bmp') as $ext => $mime
                  ) {
             $filename = dirname(__FILE__). "/images/image.{$ext}";
             $tmp[] = array('name'     => $filename,
@@ -231,6 +230,8 @@ class Piece_Right_Validator_ImageTestCase extends PHPUnit_TestCase
             $this->assertFalse($validator->validate($target));
         }
     }
+
+    /**#@-*/
 
     /**#@+
      * @access private
