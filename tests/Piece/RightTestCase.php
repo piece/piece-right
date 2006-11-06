@@ -1039,110 +1039,10 @@ class Piece_RightTestCase extends PHPUnit_TestCase
      */
     function testTurnOff()
     {
-        $_SERVER['REQUEST_METHOD'] = 'POST';
-        $_POST['home_phone'] = '';
-        $_POST['mobile_phone'] = '';
-
-        $dynamicConfig = &new Piece_Right_Config();
-        $dynamicConfig->setRequired('home_phone');
-        $dynamicConfig->addValidation('home_phone', 'Length', array('min' => 10, 'max' => 11));
-        $dynamicConfig->setRequired('mobile_phone');
-        $dynamicConfig->addValidation('mobile_phone', 'Length', array('min' => 10, 'max' => 11));
-        $dynamicConfig->setWatcher('home_phone',
-                                   array('target' => array(array('name' => 'home_phone')),
-                                         'turnOff' => array('mobile_phone'))
-                                   );
-        $dynamicConfig->setWatcher('mobile_phone',
-                                   array('target' => array(array('name' => 'mobile_phone')),
-                                         'turnOff' => array('home_phone'))
-                                   );
-        $right = &new Piece_Right();
-
-        $this->assertFalse($right->validate(null, $dynamicConfig));
-
-        $results = &$right->getResults();
-        foreach (array('home_phone', 'mobile_phone') as $field) {
-            $this->assertTrue(in_array($field, $results->getErrorFields()), "The field [ $field ] is expected.");
-        }
-
-        unset($_POST['home_phone']);
-        unset($_POST['mobile_phone']);
-        unset($_SERVER['REQUEST_METHOD']);
-
-        $_SERVER['REQUEST_METHOD'] = 'POST';
-        $_POST['home_phone'] = '0123456789';
-        $_POST['mobile_phone'] = '';
-
-        $dynamicConfig = &new Piece_Right_Config();
-        $dynamicConfig->setRequired('home_phone');
-        $dynamicConfig->addValidation('home_phone', 'Length', array('min' => 10, 'max' => 11));
-        $dynamicConfig->setRequired('mobile_phone');
-        $dynamicConfig->addValidation('mobile_phone', 'Length', array('min' => 10, 'max' => 11));
-        $dynamicConfig->setWatcher('home_phone',
-                                   array('target' => array(array('name' => 'home_phone')),
-                                         'turnOff' => array('mobile_phone'))
-                                   );
-        $dynamicConfig->setWatcher('mobile_phone',
-                                   array('target' => array(array('name' => 'mobile_phone')),
-                                         'turnOff' => array('home_phone'))
-                                   );
-        $right = &new Piece_Right();
-
-        $this->assertTrue($right->validate(null, $dynamicConfig));
-
-        unset($_POST['home_phone']);
-        unset($_POST['mobile_phone']);
-        unset($_SERVER['REQUEST_METHOD']);
-
-        $_SERVER['REQUEST_METHOD'] = 'POST';
-        $_POST['home_phone'] = '';
-        $_POST['mobile_phone'] = '0123456789';
-
-        $dynamicConfig = &new Piece_Right_Config();
-        $dynamicConfig->setRequired('home_phone');
-        $dynamicConfig->addValidation('home_phone', 'Length', array('min' => 10, 'max' => 11));
-        $dynamicConfig->setRequired('mobile_phone');
-        $dynamicConfig->addValidation('mobile_phone', 'Length', array('min' => 10, 'max' => 11));
-        $dynamicConfig->setWatcher('home_phone',
-                                   array('target' => array(array('name' => 'home_phone')),
-                                         'turnOff' => array('mobile_phone'))
-                                   );
-        $dynamicConfig->setWatcher('mobile_phone',
-                                   array('target' => array(array('name' => 'mobile_phone')),
-                                         'turnOff' => array('home_phone'))
-                                   );
-        $right = &new Piece_Right();
-
-        $this->assertTrue($right->validate(null, $dynamicConfig));
-
-        unset($_POST['home_phone']);
-        unset($_POST['mobile_phone']);
-        unset($_SERVER['REQUEST_METHOD']);
-
-        $_SERVER['REQUEST_METHOD'] = 'POST';
-        $_POST['home_phone'] = '0123456789';
-        $_POST['mobile_phone'] = '0123456789';
-
-        $dynamicConfig = &new Piece_Right_Config();
-        $dynamicConfig->setRequired('home_phone');
-        $dynamicConfig->addValidation('home_phone', 'Length', array('min' => 10, 'max' => 11));
-        $dynamicConfig->setRequired('mobile_phone');
-        $dynamicConfig->addValidation('mobile_phone', 'Length', array('min' => 10, 'max' => 11));
-        $dynamicConfig->setWatcher('home_phone',
-                                   array('target' => array(array('name' => 'home_phone')),
-                                         'turnOff' => array('mobile_phone'))
-                                   );
-        $dynamicConfig->setWatcher('mobile_phone',
-                                   array('target' => array(array('name' => 'mobile_phone')),
-                                         'turnOff' => array('home_phone'))
-                                   );
-        $right = &new Piece_Right();
-
-        $this->assertTrue($right->validate(null, $dynamicConfig));
-
-        unset($_POST['home_phone']);
-        unset($_POST['mobile_phone']);
-        unset($_SERVER['REQUEST_METHOD']);
+        $this->_assertTurnOff('', '', false);
+        $this->_assertTurnOff('0123456789', '', true);
+        $this->_assertTurnOff('', '0123456789', true);
+        $this->_assertTurnOff('0123456789', '0123456789', true);
     }
 
     /**#@-*/
@@ -1339,6 +1239,46 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         }
 
         unset($_POST['has_home_phone']);
+        unset($_SERVER['REQUEST_METHOD']);
+    }
+
+    /**
+     * @since Method available since Release 1.3.0
+     */
+    function _assertTurnOff($homePhone, $mobilePhone, $result)
+    {
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST['home_phone'] = $homePhone;
+        $_POST['mobile_phone'] = $mobilePhone;
+
+        $dynamicConfig = &new Piece_Right_Config();
+        $dynamicConfig->setRequired('home_phone');
+        $dynamicConfig->addValidation('home_phone', 'Length', array('min' => 10, 'max' => 11));
+        $dynamicConfig->setRequired('mobile_phone');
+        $dynamicConfig->addValidation('mobile_phone', 'Length', array('min' => 10, 'max' => 11));
+        $dynamicConfig->setWatcher('home_phone',
+                                   array('target' => array(array('name' => 'home_phone')),
+                                         'turnOff' => array('mobile_phone'))
+                                   );
+        $dynamicConfig->setWatcher('mobile_phone',
+                                   array('target' => array(array('name' => 'mobile_phone')),
+                                         'turnOff' => array('home_phone'))
+                                   );
+        $right = &new Piece_Right();
+
+        if ($result) {
+            $this->assertTrue($right->validate(null, $dynamicConfig));
+        } else {
+            $this->assertFalse($right->validate(null, $dynamicConfig));
+
+            $results = &$right->getResults();
+            foreach (array('home_phone', 'mobile_phone') as $field) {
+                $this->assertTrue(in_array($field, $results->getErrorFields()), "The field [ $field ] is expected.");
+            }
+        }
+
+        unset($_POST['home_phone']);
+        unset($_POST['mobile_phone']);
         unset($_SERVER['REQUEST_METHOD']);
     }
 
