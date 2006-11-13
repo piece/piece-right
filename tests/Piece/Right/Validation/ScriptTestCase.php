@@ -113,6 +113,14 @@ class Piece_Right_Validation_ScriptTestCase extends PHPUnit_TestCase
         Piece_Right_Error::clearErrors();
     }
 
+    function turnOnPostRunCallbackCalled($validationSet, &$results)
+    {
+        $this->_postRunCallbackCalled = true;
+        $this->_resultsViaCallback = &$results;
+
+        $this->assertTrue('Script', $validationSet);
+    }
+
     function testSuccessToValidate()
     {
         $config = &new Piece_Right_Config();
@@ -157,12 +165,21 @@ class Piece_Right_Validation_ScriptTestCase extends PHPUnit_TestCase
         }
     }
 
-    function turnOnPostRunCallbackCalled($validationSet, $results)
+    function testResultsByReference()
     {
-        $this->_postRunCallbackCalled = true;
-        $this->_resultsViaCallback = $results;
+        $config = &new Piece_Right_Config();
+        $config->addValidation('email', 'Email');
+        $container = &new stdClass();
+        $script = &new Piece_Right_Validation_Script(dirname(__FILE__),
+                                                     dirname(__FILE__),
+                                                     null,
+                                                     array(&$this, 'turnOnPostRunCallbackCalled')
+                                                     );
+        $results = &$script->run('Script', $container, $config);
+        $results->foo = 'bar';
 
-        $this->assertTrue('Script', $validationSet);
+        $this->assertTrue(array_key_exists('foo', $this->_resultsViaCallback));
+        $this->assertEquals($results->foo, $this->_resultsViaCallback->foo);
     }
 
     /**#@-*/

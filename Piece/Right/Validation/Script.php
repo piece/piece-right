@@ -115,11 +115,11 @@ class Piece_Right_Validation_Script
      * @param boolean            $keepOriginalFieldValue
      * @return Piece_Right_Results
      */
-    function run($validationSet,
-                 &$container,
-                 $config,
-                 $keepOriginalFieldValue = true
-                 )
+    function &run($validationSet,
+                  &$container,
+                  $config,
+                  $keepOriginalFieldValue = true
+                  )
     {
         $right = &new Piece_Right($this->_configDirectory,
                                   $this->_cacheDirectory,
@@ -145,7 +145,9 @@ class Piece_Right_Validation_Script
         }
 
         if (!is_null($this->_postRunCallback)) {
-            call_user_func($this->_postRunCallback, $validationSet, $results);
+            call_user_func_array($this->_postRunCallback,
+                                 array($validationSet, &$results)
+                                 );
         }
 
         return $results;
