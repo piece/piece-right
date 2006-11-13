@@ -165,6 +165,9 @@ class Piece_Right_Validation_ScriptTestCase extends PHPUnit_TestCase
         }
     }
 
+    /**
+     * @since Method available since Release 1.3.0
+     */
     function testResultsByReference()
     {
         $config = &new Piece_Right_Config();
