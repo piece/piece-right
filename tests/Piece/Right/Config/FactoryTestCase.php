@@ -95,14 +95,14 @@ class Piece_Right_Config_FactoryTestCase extends PHPUnit_TestCase
         Piece_Right_Error::popCallback();
     }
 
-    function testCreating()
+    function testCreate()
     {
         $this->assertTrue(is_a(Piece_Right_Config_Factory::factory(),
                                'Piece_Right_Config')
                           );
     }
 
-    function testCreatingUsingConfigurationFile()
+    function testCreateUsingConfigurationFile()
     {
         $config = &Piece_Right_Config_Factory::factory('Example',
                                                        dirname(__FILE__) . '/../../../../data',
@@ -131,7 +131,7 @@ class Piece_Right_Config_FactoryTestCase extends PHPUnit_TestCase
         $this->assertNull($validationSet['country'][0]['message']);
     }
 
-    function testCreatingIfConfigurationDirectoryNotFound()
+    function testCreateIfConfigurationDirectoryNotFound()
     {
         Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
 
@@ -149,7 +149,7 @@ class Piece_Right_Config_FactoryTestCase extends PHPUnit_TestCase
         Piece_Right_Error::popCallback();
     }
 
-    function testCreatingIfConfigurationFileNotFound()
+    function testCreateIfConfigurationFileNotFound()
     {
         Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
 
@@ -167,7 +167,7 @@ class Piece_Right_Config_FactoryTestCase extends PHPUnit_TestCase
         Piece_Right_Error::popCallback();
     }
 
-    function testNoCachingIfCacheDirectoryNotFound()
+    function testNotCacheIfCacheDirectoryNotFound()
     {
         Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
 
