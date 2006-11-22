@@ -465,6 +465,10 @@ class Piece_Right
                                         'warning'
                                         );
                 Piece_Right_Error::popCallback();
+                $this->_results->addError($field,
+                                          $validation['validator'],
+                                          $validator->getMessage()
+                                          );
                 continue;
             }
 

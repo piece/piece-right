@@ -250,13 +250,14 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $dynamicConfig->addValidation('bar', 'Length', array('min' => 5));
         $dynamicConfig->addFilter('baz', 'LowerCase');
         $dynamicConfig->addFilter('baz', 'trim');
+        $dynamicConfig->addValidation('baz', 'Length', array('min' => 5));
         $right = &new Piece_Right();
 
         $this->assertFalse($right->validate('Example', $dynamicConfig));
 
         $results = &$right->getResults();
 
-        $this->assertEquals(1, $results->countErrors());
+        $this->assertEquals(2, $results->countErrors());
         $this->assertFalse($results->isError('foo'));
         $this->assertTrue($results->isError('bar'));
         $this->assertEquals('this text is written in lower case', $results->getFieldValue('foo'));
