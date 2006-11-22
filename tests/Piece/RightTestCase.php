@@ -260,6 +260,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $this->assertEquals(2, $results->countErrors());
         $this->assertFalse($results->isError('foo'));
         $this->assertTrue($results->isError('bar'));
+        $this->assertTrue($results->isError('baz'));
         $this->assertEquals('this text is written in lower case', $results->getFieldValue('foo'));
         $this->assertEquals('this', $results->getFieldValue('bar'));
 
