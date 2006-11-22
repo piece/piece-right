@@ -273,6 +273,7 @@ class Piece_Right
      * @param string             $validationSetName
      * @param Piece_Right_Config $dynamicConfig
      * @throws PIECE_RIGHT_ERROR_INVALID_CONFIGURATION
+     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
      */
     function _configure($validationSetName = null, $dynamicConfig = null)
     {

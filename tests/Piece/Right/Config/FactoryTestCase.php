@@ -157,8 +157,8 @@ class Piece_Right_Config_FactoryTestCase extends PHPUnit_TestCase
                                                        dirname(__FILE__) . '/../../../../tests',
                                                        dirname(__FILE__)
                                                        );
-        $this->assertTrue(is_a($config, 'Piece_Right_Config'));
-        $this->assertTrue(Piece_Right_Error::hasErrors('warning'));
+        $this->assertTrue(is_null($config));
+        $this->assertTrue(Piece_Right_Error::hasErrors('exception'));
 
         $error = Piece_Right_Error::pop();
 

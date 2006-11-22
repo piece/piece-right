@@ -94,6 +94,7 @@ class Piece_Right_Config_Factory
      * @param string $cacheDirectory
      * @return Piece_Right_Config
      * @throws PIECE_RIGHT_ERROR_INVALID_CONFIGURATION
+     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
      * @static
      */
     function &factory($validationSet = null, $configDirectory = null, $cacheDirectory = null)
@@ -117,25 +118,19 @@ class Piece_Right_Config_Factory
         $configFile = "$configDirectory/$validationSet.yaml";
 
         if (!file_exists($configFile)) {
-            Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
             Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                    "The configuration file [ $configFile ] not found.",
-                                    'warning'
+                                    "The configuration file [ $configFile ] not found."
                                     );
-            Piece_Right_Error::popCallback();
-            $config = &new Piece_Right_Config();
-            return $config;
+            $return = null;
+            return $return;
         }
 
         if (!is_readable($configFile)) {
-            Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
             Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_READABLE,
-                                    "The configuration file [ $configFile ] was not readable.",
-                                    'warning'
+                                    "The configuration file [ $configFile ] was not readable."
                                     );
-            Piece_Right_Error::popCallback();
-            $config = &new Piece_Right_Config();
-            return $config;
+            $return = null;
+            return $return;
         }
 
         if (is_null($cacheDirectory)) {

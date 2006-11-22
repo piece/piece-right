@@ -776,7 +776,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $_POST['day'] = '20';
         $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
 
-        $this->assertTrue($right->validate('SeparatedDateValidationWithPseudoField'));
+        $this->assertTrue($right->validate('SeparatedDateValidationWithPseudoFieldIfPseudoFieldIsNotRequired'));
 
         unset($_POST['day']);
         unset($_POST['month']);
