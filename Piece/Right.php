@@ -76,6 +76,7 @@ class Piece_Right
     var $_results;
     var $_config;
     var $_payload;
+    var $_currentFilter;
 
     /**#@-*/
 
@@ -312,10 +313,12 @@ class Piece_Right
                         return;
                     }
 
-                    $fieldValue = $filter->filter($fieldValue);
+                    $this->_currentFilter = array(&$filter, 'filter');
                 } else {
-                    $fieldValue = call_user_func($filterName, $fieldValue);
+                    $this->_currentFilter = $filterName;
                 }
+
+                $fieldValue = $this->_invokeFilter($fieldValue);
             }
 
             $this->_results->setFieldValue($field, $fieldValue);
@@ -581,6 +584,25 @@ class Piece_Right
                                            vsprintf($definition['format'], $args)
                                            );
         }
+    }
+
+    // }}}
+    // {{{ _invokeFilter()
+
+    /**
+     * Filters a field value.
+     *
+     * @param mixed $value
+     * @return mixed
+     * @since Method available since Release 1.3.0
+     */
+    function _invokeFilter($value)
+    {
+        if (!is_array($value)) {
+            return call_user_func($this->_currentFilter, $value);
+        }
+
+        return array_map(array(&$this, __FUNCTION__), $value);
     }
 
     /**#@-*/

@@ -240,6 +240,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_POST['foo'] = ' THIS TEXT IS WRITTEN IN LOWER CASE ';
         $_POST['bar'] = ' THIS ';
+        $_POST['baz'] = array(' FOO ', array(' BAR '), 'baz' => ' BAZ ');
         $dynamicConfig = &new Piece_Right_Config();
         $dynamicConfig->addFilter('foo', 'LowerCase');
         $dynamicConfig->addFilter('foo', 'trim');
@@ -247,6 +248,8 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $dynamicConfig->addFilter('bar', 'LowerCase');
         $dynamicConfig->addFilter('bar', 'trim');
         $dynamicConfig->addValidation('bar', 'Length', array('min' => 5));
+        $dynamicConfig->addFilter('baz', 'LowerCase');
+        $dynamicConfig->addFilter('baz', 'trim');
         $right = &new Piece_Right();
 
         $this->assertFalse($right->validate('Example', $dynamicConfig));
@@ -259,6 +262,16 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $this->assertEquals('this text is written in lower case', $results->getFieldValue('foo'));
         $this->assertEquals('this', $results->getFieldValue('bar'));
 
+        $baz = $results->getFieldValue('baz');
+
+        $this->assertEquals('foo', $baz[0]);
+
+        $baz1 = $baz[1];
+
+        $this->assertEquals('bar', $baz1[0]);
+        $this->assertEquals('baz', $baz['baz']);
+
+        unset($_POST['baz']);
         unset($_POST['bar']);
         unset($_POST['foo']);
         unset($_SERVER['REQUEST_METHOD']);
