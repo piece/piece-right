@@ -72,6 +72,7 @@ class Piece_Right_Validation_Script
     var $_cacheDirectory;
     var $_fieldValuesCallback;
     var $_postRunCallback;
+    var $_payload;
 
     /**#@-*/
 
@@ -125,6 +126,11 @@ class Piece_Right_Validation_Script
                                   $this->_cacheDirectory,
                                   $this->_fieldValuesCallback
                                   );
+
+        if (!is_null($this->_payload)) {
+            $right->setPayload($this->_payload);
+        }
+
         $result = $right->validate($validationSet, $config);
         $results = $right->getResults();
 
@@ -151,6 +157,20 @@ class Piece_Right_Validation_Script
         }
 
         return $results;
+    }
+
+    // }}}
+    // {{{ setPayload()
+
+    /**
+     * Sets the given payload.
+     *
+     * @param mixed &$payload
+     * @since Method available since Release 1.3.0
+     */
+    function setPayload(&$payload)
+    {
+        $this->_payload = &$payload;
     }
 
     /**#@-*/

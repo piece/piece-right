@@ -43,6 +43,7 @@ require_once 'Piece/Right/Validation/Script.php';
 require_once 'Piece/Right/Error.php';
 require_once 'Cache/Lite/File.php';
 require_once 'Piece/Right/Config.php';
+require_once 'Piece/Right/Validator/Factory.php';
 
 // {{{ Piece_Right_Validation_ScriptTestCase
 
@@ -183,6 +184,32 @@ class Piece_Right_Validation_ScriptTestCase extends PHPUnit_TestCase
 
         $this->assertTrue(array_key_exists('foo', $this->_resultsViaCallback));
         $this->assertEquals($results->foo, $this->_resultsViaCallback->foo);
+    }
+
+    /**
+     * @since Method available since Release 1.3.0
+     */
+    function testPayload()
+    {
+        $originalValidatorDirectories = $GLOBALS['PIECE_RIGHT_Validator_Directories'];
+        Piece_Right_Validator_Factory::addValidatorDirectory(dirname(__FILE__));
+        $config = &new Piece_Right_Config();
+        $config->addValidation('email', 'ScriptPayloadTest');
+        $container = &new stdClass();
+        $payload = &new stdClass();
+        $script = &new Piece_Right_Validation_Script(dirname(__FILE__),
+                                                     dirname(__FILE__),
+                                                     null,
+                                                     array(&$this, 'turnOnPostRunCallbackCalled')
+                                                     );
+        $script->setPayload($payload);
+        $results = $script->run('Script', $container, $config);
+
+        $this->assertEquals(0, $results->countErrors());
+        $this->assertTrue(array_key_exists('foo', $payload));
+        $this->assertEquals('bar', $payload->foo);
+
+        $GLOBALS['PIECE_RIGHT_Validator_Directories'] = $originalValidatorDirectories;
     }
 
     /**#@-*/
