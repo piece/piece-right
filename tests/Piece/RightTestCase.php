@@ -531,21 +531,23 @@ class Piece_RightTestCase extends PHPUnit_TestCase
      */
     function testMessageVariable()
     {
-        $dynamicConfig = &new Piece_Right_Config();
-        $dynamicConfig->setRequired('last_name',
-                                    array('message' => '[%_description%] is required.')
-                                    );
-        $dynamicConfig->setRequired('age');
-        $dynamicConfig->addValidation('age',
-                                      'Range',
-                                      array('min' => 20,
-                                            'min_message' => '[%_name%] is must greater than %requirement%.')
-                                      );
-        $dynamicConfig->addMessageVariable('age', 'requirement', 20);
-        $dynamicConfig->setDescription('last_name', 'Last Name');
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST['age'] = '18';
+        $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
 
-        $this->_assertMessageVariable(true, $dynamicConfig);
-        $this->_assertMessageVariable(false, new Piece_Right_Config());
+        $this->assertFalse($right->validate('MessageVariable'));
+
+        $results = &$right->getResults();
+
+        $this->assertEquals('[Last Name] is required.',
+                            $results->getErrorMessage('last_name')
+                            );
+        $this->assertEquals('[age] is must greater than %_min%.',
+                            $results->getErrorMessage('age')
+                            );
+
+        unset($_POST['age']);
+        unset($_SERVER['REQUEST_METHOD']);
     }
 
     /**
@@ -1179,34 +1181,6 @@ class Piece_RightTestCase extends PHPUnit_TestCase
 
         unset($_POST['emailHost']);
         unset($_POST['emailUser']);
-        unset($_SERVER['REQUEST_METHOD']);
-    }
-
-    /**
-     * @since Method available since Release 0.3.0
-     */
-    function _assertMessageVariable($useDynamicConfiguration, &$dynamicConfig)
-    {
-        $_SERVER['REQUEST_METHOD'] = 'POST';
-        $_POST['age'] = '18';
-        $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
-
-        if ($useDynamicConfiguration) {
-            $this->assertFalse($right->validate('MessageVariable', $dynamicConfig));
-        } else {
-            $this->assertFalse($right->validate('MessageVariable'));
-        }
-
-        $results = &$right->getResults();
-
-        $this->assertEquals('[Last Name] is required.',
-                            $results->getErrorMessage('last_name')
-                            );
-        $this->assertEquals('[age] is must greater than 20.',
-                            $results->getErrorMessage('age')
-                            );
-
-        unset($_POST['age']);
         unset($_SERVER['REQUEST_METHOD']);
     }
 

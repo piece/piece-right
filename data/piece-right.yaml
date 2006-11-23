@@ -85,11 +85,4 @@ sequence:
             required: no
             sequence:
             - type: str
-      "messageVariable":
-        type: map
-        required: no
-        mapping:
-          =:
-            type: text
-            required: yes
       "forceValidation": { type: bool, required: no }
