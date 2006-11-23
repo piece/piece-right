@@ -220,7 +220,7 @@ class Piece_Right_Validator_Common
      */
     function getMessage()
     {
-        return $this->_message;
+        return $this->_replaceMessage($this->_message);
     }
 
     // }}}
@@ -300,6 +300,27 @@ class Piece_Right_Validator_Common
             ) {
             $this->setMessage($this->_messages[$rule]);
         }
+    }
+
+    // }}}
+    // {{{ _replaceMessage()
+
+    /**
+     * Replaces the message with each rule value.
+     *
+     * @param string $message
+     * @return string
+     * @since Method available since Release 1.3.0
+     */
+    function _replaceMessage($message)
+    {
+        foreach ($this->_rules as $name => $value) {
+            if (!is_array($value)) {
+                $message = str_replace("%$name%", $value, $message);
+            }
+        }
+
+        return $message;
     }
  
     /**#@-*/

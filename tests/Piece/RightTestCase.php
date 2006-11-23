@@ -533,19 +533,25 @@ class Piece_RightTestCase extends PHPUnit_TestCase
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_POST['age'] = '18';
+        $_POST['phone'] = '01234567891';
         $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
 
         $this->assertFalse($right->validate('MessageVariable'));
 
         $results = &$right->getResults();
 
+        $this->assertEquals(3, $results->countErrors());
         $this->assertEquals('[Last Name] is required.',
                             $results->getErrorMessage('last_name')
                             );
-        $this->assertEquals('[age] is must greater than %_min%.',
+        $this->assertEquals('[age] is must greater than 20.',
                             $results->getErrorMessage('age')
                             );
+        $this->assertEquals('[phone] is must less than 10.',
+                            $results->getErrorMessage('phone')
+                            );
 
+        unset($_POST['phone']);
         unset($_POST['age']);
         unset($_SERVER['REQUEST_METHOD']);
     }

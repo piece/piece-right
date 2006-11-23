@@ -11,4 +11,12 @@
     - name: Range
       rule:
         min: 20
-        min_message: "[%_name%] is must greater than %_min%."
+        min_message: "[%_name%] is must greater than %min%."
+
+- name: phone
+  validator:
+    - name: Length
+      rule:
+        max: 10
+        max_message: "[%_name%] is must less than %max%."
+
