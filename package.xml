@@ -25,6 +25,8 @@ o Range
 o Regex
 o WithMethod
 o Email
+o File
+o Image
  </description>
  <maintainers>
   <maintainer>
@@ -35,26 +37,72 @@ o Email
   </maintainer>
   </maintainers>
  <release>
-  <version>1.2.0</version>
-  <date>2006-10-09</date>
+  <version>1.3.0</version>
+  <date>2006-11-26</date>
   <license>BSD License (revised)</license>
   <state>stable</state>
-  <notes>This is the first release with the new PEAR Channel Server pear.piece-framework.com.
-This release includes a new class Piece_Right_Validation_Script. It will be used to run a typical process of validation with Piece_Right. See the following release notes for details.
+  <notes>This release includes two new validators File and Image, a lot of enhancements, and several fixes. See the following release notes for details.
 
 ## Enhancements ##
 
+### Validators ###
+
+##### Range, Numeric #####
+
+- Added the code so as to check whether a value is a numeric, and extracted its features as Numeric validator. Thanks to Chihiro Sakatoku &lt;csakatoku@mac.com&gt; for good advices and the patches.
+
+##### File #####
+
+- A validator which is used to validate a file.
+
+##### Image #####
+
+- A validator to check files are valid image files.
+
 ### Kernel ###
 
+##### Piece_Right #####
+
+- Changed support file uploads in Piece_Right.
+- Added support for filtering all values in an array. (Ticket #3)
+
+##### Piece_Right_Config_Factory #####
+
+- Changed so as to raise an exception if the file corresponding to a validation set not found or not readable. (Ticket #3)
+- Removed the feature of defining message variables in validation definition file. (Ticket #7)
+
 ##### Piece_Right_Validation_Script #####
-- A new class for running a typical process of validation with Piece_Right.
+
+- Changed so as to pass a Piece_Right_Results object to the post run callback by reference, and return the Piece_Right_Results object by reference. (Ticket #9)
+- Added setPayload() and changed so as to be able to pass a user defined payload to validators.
+
+##### Piece_Right_Validator_Common #####
+
+- Added a feature to replace message variables in a error message with
+  the value of each rule if the value is not an array. (Ticket #8)
+
+### Filters ###
+
+##### Empty2NULL #####
+
+- A filter which is used to replace an empty string with null.
+
+## Defect Fixes ##
+
+### Kernel ###
+
+##### Piece_Right_Results #####
+
+- Fixed a fatal error where &apos;Object of class Piece_Right_Validation_Error could not be converted to string&apos; raised with PHP 5.2.0 RC5. Thanks to Chihiro Sakatoku &lt;csakatoku@mac.com&gt; for the patches.
+
+##### Piece_Right_Validator_Common #####
+
+- Removed unused argument $payload from validate() method. Thanks to Chihiro Sakatoku &lt;csakatoku@mac.com&gt; for the patches.
 
 ##### Piece_Right #####
-- Moved _isEmpty() method to public.
-- Added getFieldValuesCallback() for getting the callback to get field values for the current validation.
 
-##### Piece_Right_Validation_Error #####
-- Changed the class name from Piece_Right_ValidationError.
+- Fixed the problem that the fields which are specified to turn off always turn off even though what the target field values are.
+- Fixed so as to set an error if a field value is an array and a validator is not arrayable.
   </notes>
   <deps>
    <dep type="php" rel="ge" version="4.3.0" optional="no"/>
@@ -85,6 +133,9 @@ This release includes a new class Piece_Right_Validation_Script. It will be used
        </file>
       </dir> <!-- /Piece/Right/Config -->
       <dir name="Filter">
+       <file role="php" name="Empty2NULL.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
        <file role="php" name="Factory.php">
         <replace from="@package_version@" to="version" type="package-info"/>
        </file>
@@ -119,13 +170,22 @@ This release includes a new class Piece_Right_Validation_Script. It will be used
        <file role="php" name="Factory.php">
         <replace from="@package_version@" to="version" type="package-info"/>
        </file>
+       <file role="php" name="File.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
        <file role="php" name="FutureDate.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+       <file role="php" name="Image.php">
         <replace from="@package_version@" to="version" type="package-info"/>
        </file>
        <file role="php" name="Length.php">
         <replace from="@package_version@" to="version" type="package-info"/>
        </file>
        <file role="php" name="List.php">
+        <replace from="@package_version@" to="version" type="package-info"/>
+       </file>
+       <file role="php" name="Numeric.php">
         <replace from="@package_version@" to="version" type="package-info"/>
        </file>
        <file role="php" name="PastDate.php">
@@ -193,6 +253,15 @@ This release includes a new class Piece_Right_Validation_Script. It will be used
         </file>
        </dir> <!-- /tests/Piece/Right/Filter -->
        <dir name="Validation">
+        <dir name="Piece">
+         <dir name="Right">
+          <dir name="Validator">
+           <file role="test" name="ScriptPayloadTest.php" install-as="Piece/Right/Validation/Piece/Right/Validator/ScriptPayloadTest.php">
+            <replace from="@package_version@" to="version" type="package-info"/>
+           </file>
+          </dir> <!-- /tests/Piece/Right/Validation/Piece/Right/Validator -->
+         </dir> <!-- /tests/Piece/Right/Validation/Piece/Right -->
+        </dir> <!-- /tests/Piece/Right/Validation/Piece -->
         <file role="test" name="ErrorTestCase.php" install-as="Piece/Right/Validation/ErrorTestCase.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
@@ -207,6 +276,18 @@ This release includes a new class Piece_Right_Validation_Script. It will be used
         </file>
        </dir> <!-- /tests/Piece/Right/Validation -->
        <dir name="Validator">
+        <dir name="images">
+         <file role="test" name="image.bmp" install-as="Piece/Right/Validator/images/image.bmp">
+         </file>
+         <file role="test" name="image.gif" install-as="Piece/Right/Validator/images/image.gif">
+         </file>
+         <file role="test" name="image.jpg" install-as="Piece/Right/Validator/images/image.jpg">
+         </file>
+         <file role="test" name="image.png" install-as="Piece/Right/Validator/images/image.png">
+         </file>
+         <file role="test" name="image.tif" install-as="Piece/Right/Validator/images/image.tif">
+         </file>
+        </dir> <!-- /tests/Piece/Right/Validator/images -->
         <file role="test" name="Bar.php" install-as="Piece/Right/Validator/Bar.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
@@ -222,10 +303,16 @@ This release includes a new class Piece_Right_Validation_Script. It will be used
         <file role="test" name="FactoryTestCase.php" install-as="Piece/Right/Validator/FactoryTestCase.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
+        <file role="test" name="FileTestCase.php" install-as="Piece/Right/Validator/FileTestCase.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
         <file role="test" name="Foo.php" install-as="Piece/Right/Validator/Foo.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
         <file role="test" name="FutureDateTestCase.php" install-as="Piece/Right/Validator/FutureDateTestCase.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="ImageTestCase.php" install-as="Piece/Right/Validator/ImageTestCase.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
         <file role="test" name="Invalid.php" install-as="Piece/Right/Validator/Invalid.php">
@@ -235,6 +322,9 @@ This release includes a new class Piece_Right_Validation_Script. It will be used
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
         <file role="test" name="ListTestCase.php" install-as="Piece/Right/Validator/ListTestCase.php">
+         <replace from="@package_version@" to="version" type="package-info"/>
+        </file>
+        <file role="test" name="NumericTestCase.php" install-as="Piece/Right/Validator/NumericTestCase.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
         <file role="test" name="PastDateTestCase.php" install-as="Piece/Right/Validator/PastDateTestCase.php">
@@ -311,6 +401,75 @@ This release includes a new class Piece_Right_Validation_Script. It will be used
   </filelist>
  </release>
  <changelog>
+   <release>
+    <version>1.3.0</version>
+    <date>2006-11-26</date>
+    <license>BSD License (revised)</license>
+    <state>stable</state>
+    <notes>This release includes two new validators File and Image, a lot of enhancements, and several fixes. See the following release notes for details.
+
+## Enhancements ##
+
+### Validators ###
+
+##### Range, Numeric #####
+
+- Added the code so as to check whether a value is a numeric, and extracted its features as Numeric validator. Thanks to Chihiro Sakatoku &lt;csakatoku@mac.com&gt; for good advices and the patches.
+
+##### File #####
+
+- A validator which is used to validate a file.
+
+##### Image #####
+
+- A validator to check files are valid image files.
+
+### Kernel ###
+
+##### Piece_Right #####
+
+- Changed support file uploads in Piece_Right.
+- Added support for filtering all values in an array. (Ticket #3)
+
+##### Piece_Right_Config_Factory #####
+
+- Changed so as to raise an exception if the file corresponding to a validation set not found or not readable. (Ticket #3)
+- Removed the feature of defining message variables in validation definition file. (Ticket #7)
+
+##### Piece_Right_Validation_Script #####
+
+- Changed so as to pass a Piece_Right_Results object to the post run callback by reference, and return the Piece_Right_Results object by reference. (Ticket #9)
+- Added setPayload() and changed so as to be able to pass a user defined payload to validators.
+
+##### Piece_Right_Validator_Common #####
+
+- Added a feature to replace message variables in a error message with
+  the value of each rule if the value is not an array. (Ticket #8)
+
+### Filters ###
+
+##### Empty2NULL #####
+
+- A filter which is used to replace an empty string with null.
+
+## Defect Fixes ##
+
+### Kernel ###
+
+##### Piece_Right_Results #####
+
+- Fixed a fatal error where &apos;Object of class Piece_Right_Validation_Error could not be converted to string&apos; raised with PHP 5.2.0 RC5. Thanks to Chihiro Sakatoku &lt;csakatoku@mac.com&gt; for the patches.
+
+##### Piece_Right_Validator_Common #####
+
+- Removed unused argument $payload from validate() method. Thanks to Chihiro Sakatoku &lt;csakatoku@mac.com&gt; for the patches.
+
+##### Piece_Right #####
+
+- Fixed the problem that the fields which are specified to turn off always turn off even though what the target field values are.
+- Fixed so as to set an error if a field value is an array and a validator is not arrayable.
+    </notes>
+   </release>
    <release>
     <version>1.2.0</version>
     <date>2006-10-09</date>
