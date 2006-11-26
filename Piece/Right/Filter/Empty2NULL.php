@@ -40,7 +40,7 @@
 // {{{ Piece_Right_Filter_Empty2NULL
 
 /**
- * A filter which is used to replaces an empty string with null.
+ * A filter which is used to replace an empty string with null.
  *
  * @package    Piece_Right
  * @author     KUBO Atsuhiro <iteman@users.sourceforge.net>
