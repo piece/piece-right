@@ -85,7 +85,7 @@ class Piece_Right_Validator_FactoryTestCase extends PHPUnit_TestCase
 
     function tearDown()
     {
-        $GLOBALS['PIECE_RIGHT_Validator_Instances'] = array();
+        Piece_Right_Validator_Factory::setValidatorDirectories($this->_oldValidatorDirectories);
         Piece_Right_Validator_Factory::setValidatorDirectories($this->_oldValidatorDirectories);
         Piece_Right_Error::clearErrors();
         Piece_Right_Error::popCallback();

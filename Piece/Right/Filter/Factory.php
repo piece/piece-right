@@ -150,6 +150,17 @@ class Piece_Right_Filter_Factory
         return $oldDirectories;
     }
 
+    // }}}
+    // {{{ clearInstances()
+
+    /**
+     * Clears the filter instances.
+     */
+    function clearInstances()
+    {
+        $GLOBALS['PIECE_RIGHT_Filter_Instances'] = array();
+    }
+
     /**#@-*/
 
     /**#@+

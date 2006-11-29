@@ -94,7 +94,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
     {
         $GLOBALS['PIECE_RIGHT_Validator_Instances'] = array();
         Piece_Right_Validator_Factory::setValidatorDirectories($this->_oldValidatorDirectories);
-        $GLOBALS['PIECE_RIGHT_Filter_Instances'] = array();
+        Piece_Right_Filter_Factory::clearInstances();
         Piece_Right_Filter_Factory::setFilterDirectories($this->_oldFilterDirectories);
         $cache = &new Cache_Lite_File(array('cacheDir' => dirname(__FILE__) . '/',
                                             'masterFile' => '',

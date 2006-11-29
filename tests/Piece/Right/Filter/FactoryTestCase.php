@@ -87,7 +87,7 @@ class Piece_Right_Filter_FactoryTestCase extends PHPUnit_TestCase
 
     function tearDown()
     {
-        $GLOBALS['PIECE_RIGHT_Filter_Instances'] = array();
+        Piece_Right_Filter_Factory::clearInstances();
         Piece_Right_Filter_Factory::setFilterDirectories($this->_oldFilterDirectories);
         Piece_Right_Error::clearErrors();
         Piece_Right_Error::popCallback();
