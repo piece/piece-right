@@ -124,11 +124,28 @@ class Piece_Right_Filter_Factory
     /**
      * Adds a filter directory.
      *
-     * @param string $filterDirectory
+     * @param string $directory
      */
-    function addFilterDirectory($filterDirectory)
+    function addFilterDirectory($directory)
     {
-        array_unshift($GLOBALS['PIECE_RIGHT_Filter_Directories'], $filterDirectory);
+        $oldDirectories = $GLOBALS['PIECE_RIGHT_Filter_Directories'];
+        array_unshift($GLOBALS['PIECE_RIGHT_Filter_Directories'], $directory);
+        return $oldDirectories;
+    }
+
+    // }}}
+    // {{{ setFilterDirectories()
+
+    /**
+     * Sets the directories as the filter directories.
+     *
+     * @param array $directories
+     */
+    function setFilterDirectories($directories)
+    {
+        $oldDirectories = $GLOBALS['PIECE_RIGHT_Filter_Directories'];
+        $GLOBALS['PIECE_RIGHT_Filter_Directories'] = $directories;
+        return $oldDirectories;
     }
 
     /**#@-*/
