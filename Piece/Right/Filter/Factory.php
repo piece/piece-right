@@ -161,6 +161,19 @@ class Piece_Right_Filter_Factory
         $GLOBALS['PIECE_RIGHT_Filter_Instances'] = array();
     }
 
+    // }}}
+    // {{{ getFilterDirectories()
+
+    /**
+     * Gets the filter directories.
+     *
+     * @return array
+     */
+    function getFilterDirectories()
+    {
+        return $GLOBALS['PIECE_RIGHT_Filter_Directories'];
+    }
+
     /**#@-*/
 
     /**#@+
