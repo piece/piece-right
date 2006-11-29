@@ -87,14 +87,13 @@ class Piece_RightTestCase extends PHPUnit_TestCase
     {
         Piece_Right_Error::pushCallback(create_function('$error', 'var_dump($error); return ' . PEAR_ERRORSTACK_DIE . ';'));
         $this->_oldFilterDirectories = Piece_Right_Filter_Factory::addFilterDirectory(dirname(__FILE__) . '/..');
-        $this->_oldValidatorDirectories = $GLOBALS['PIECE_RIGHT_Validator_Directories'];
-        Piece_Right_Validator_Factory::addValidatorDirectory(dirname(__FILE__) . '/..');
+        $this->_oldValidatorDirectories = Piece_Right_Validator_Factory::addValidatorDirectory(dirname(__FILE__) . '/..');
     }
 
     function tearDown()
     {
         $GLOBALS['PIECE_RIGHT_Validator_Instances'] = array();
-        $GLOBALS['PIECE_RIGHT_Validator_Directories'] = $this->_oldValidatorDirectories;
+        Piece_Right_Validator_Factory::setValidatorDirectories($this->_oldValidatorDirectories);
         $GLOBALS['PIECE_RIGHT_Filter_Instances'] = array();
         Piece_Right_Filter_Factory::setFilterDirectories($this->_oldFilterDirectories);
         $cache = &new Cache_Lite_File(array('cacheDir' => dirname(__FILE__) . '/',

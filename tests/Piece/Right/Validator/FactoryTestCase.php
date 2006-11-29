@@ -80,14 +80,13 @@ class Piece_Right_Validator_FactoryTestCase extends PHPUnit_TestCase
     function setUp()
     {
         Piece_Right_Error::pushCallback(create_function('$error', 'var_dump($error); return ' . PEAR_ERRORSTACK_DIE . ';'));
-        $this->_oldValidatorDirectories = $GLOBALS['PIECE_RIGHT_Validator_Directories'];
-        Piece_Right_Validator_Factory::addValidatorDirectory(dirname(__FILE__) . '/../../..');
+        $this->_oldValidatorDirectories = Piece_Right_Validator_Factory::addValidatorDirectory(dirname(__FILE__) . '/../../..');
     }
 
     function tearDown()
     {
         $GLOBALS['PIECE_RIGHT_Validator_Instances'] = array();
-        $GLOBALS['PIECE_RIGHT_Validator_Directories'] = $this->_oldValidatorDirectories;
+        Piece_Right_Validator_Factory::setValidatorDirectories($this->_oldValidatorDirectories);
         Piece_Right_Error::clearErrors();
         Piece_Right_Error::popCallback();
     }

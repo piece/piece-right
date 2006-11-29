@@ -136,10 +136,29 @@ class Piece_Right_Validator_Factory
      * Adds a validator directory.
      *
      * @param string $validatorDirectory
+     * @return array
      */
     function addValidatorDirectory($validatorDirectory)
     {
+        $oldDirectories = $GLOBALS['PIECE_RIGHT_Validator_Directories'];
         array_unshift($GLOBALS['PIECE_RIGHT_Validator_Directories'], $validatorDirectory);
+        return $oldDirectories;
+    }
+
+    // }}}
+    // {{{ setValidatorDirectories()
+
+    /**
+     * Sets the directories as the validator directories.
+     *
+     * @param array $directories
+     * @return array
+     */
+    function setValidatorDirectories($directories)
+    {
+        $oldDirectories = $GLOBALS['PIECE_RIGHT_Validator_Directories'];
+        $GLOBALS['PIECE_RIGHT_Validator_Directories'] = $directories;
+        return $oldDirectories;
     }
 
     /**#@-*/

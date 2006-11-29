@@ -191,8 +191,7 @@ class Piece_Right_Validation_ScriptTestCase extends PHPUnit_TestCase
      */
     function testPayload()
     {
-        $originalValidatorDirectories = $GLOBALS['PIECE_RIGHT_Validator_Directories'];
-        Piece_Right_Validator_Factory::addValidatorDirectory(dirname(__FILE__));
+        $oldValidatorDirectories = Piece_Right_Validator_Factory::addValidatorDirectory(dirname(__FILE__));
         $config = &new Piece_Right_Config();
         $config->addValidation('email', 'ScriptPayloadTest');
         $container = &new stdClass();
@@ -209,7 +208,7 @@ class Piece_Right_Validation_ScriptTestCase extends PHPUnit_TestCase
         $this->assertTrue(array_key_exists('foo', $payload));
         $this->assertEquals('bar', $payload->foo);
 
-        $GLOBALS['PIECE_RIGHT_Validator_Directories'] = $originalValidatorDirectories;
+        Piece_Right_Validator_Factory::setValidatorDirectories($oldValidatorDirectories);
     }
 
     /**#@-*/
