@@ -37,7 +37,7 @@ o Image</description>
   <active>yes</active>
  </lead>
  <date>2006-11-29</date>
- <time>11:29:12</time>
+ <time>12:05:19</time>
  <version>
   <release>1.4.0</release>
   <api>1.1.0</api>
@@ -58,12 +58,14 @@ o Image</description>
 - Changed addFilterDirectory() to return the old filter directories. (Ticket #14)
 - Added setFilterDirectories() to set the directories as the filter directories. (Ticket #14)
 - Added clearInstances() to clear all instances of filters. (Ticket #15)
+- Added getFilterDirectories() to get the filter directories. (Ticket #16)
 
 ##### Piece_Right_Validator_Factory #####
 
 - Changed addValidatorDirectory() to return the old validator directories. (Ticket #14)
 - Added setValidatorDirectories() to set the directories as the validator directories. (Ticket #14)
-- Added clearInstances() to clear all instances of validators. (Ticket #15)</notes>
+- Added clearInstances() to clear all instances of validators. (Ticket #15)
+- Added getValidatorDirectories() to get the validator directories. (Ticket #16)</notes>
  <contents>
   <dir baseinstalldir="/" name="/">
    <dir name="data">
@@ -470,12 +472,14 @@ o Image</description>
 - Changed addFilterDirectory() to return the old filter directories. (Ticket #14)
 - Added setFilterDirectories() to set the directories as the filter directories. (Ticket #14)
 - Added clearInstances() to clear all instances of filters. (Ticket #15)
+- Added getFilterDirectories() to get the filter directories. (Ticket #16)
 
 ##### Piece_Right_Validator_Factory #####
 
 - Changed addValidatorDirectory() to return the old validator directories. (Ticket #14)
 - Added setValidatorDirectories() to set the directories as the validator directories. (Ticket #14)
-- Added clearInstances() to clear all instances of validators. (Ticket #15)</notes>
+- Added clearInstances() to clear all instances of validators. (Ticket #15)
+- Added getValidatorDirectories() to get the validator directories. (Ticket #16)</notes>
   </release>
   <release>
    <version>

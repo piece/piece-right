@@ -56,12 +56,14 @@ $notes = 'This release includes a few enhancements for instance caching of valid
 - Changed addFilterDirectory() to return the old filter directories. (Ticket #14)
 - Added setFilterDirectories() to set the directories as the filter directories. (Ticket #14)
 - Added clearInstances() to clear all instances of filters. (Ticket #15)
+- Added getFilterDirectories() to get the filter directories. (Ticket #16)
 
 ##### Piece_Right_Validator_Factory #####
 
 - Changed addValidatorDirectory() to return the old validator directories. (Ticket #14)
 - Added setValidatorDirectories() to set the directories as the validator directories. (Ticket #14)
-- Added clearInstances() to clear all instances of validators. (Ticket #15)';
+- Added clearInstances() to clear all instances of validators. (Ticket #15)
+- Added getValidatorDirectories() to get the validator directories. (Ticket #16)';
 
 $package = new PEAR_PackageFileManager2();
 $package->setOptions(array('filelistgenerator' => 'svn',
