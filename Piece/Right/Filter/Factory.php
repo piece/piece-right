@@ -125,6 +125,7 @@ class Piece_Right_Filter_Factory
      * Adds a filter directory.
      *
      * @param string $directory
+     * @return array
      */
     function addFilterDirectory($directory)
     {
@@ -140,6 +141,7 @@ class Piece_Right_Filter_Factory
      * Sets the directories as the filter directories.
      *
      * @param array $directories
+     * @return array
      */
     function setFilterDirectories($directories)
     {
