@@ -161,6 +161,17 @@ class Piece_Right_Validator_Factory
         return $oldDirectories;
     }
 
+    // }}}
+    // {{{ clearInstances()
+
+    /**
+     * Clears the validator instances.
+     */
+    function clearInstances()
+    {
+        $GLOBALS['PIECE_RIGHT_Validator_Instances'] = array();
+    }
+
     /**#@-*/
 
     /**#@+

@@ -92,7 +92,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
 
     function tearDown()
     {
-        $GLOBALS['PIECE_RIGHT_Validator_Instances'] = array();
+        Piece_Right_Validator_Factory::clearInstances();
         Piece_Right_Validator_Factory::setValidatorDirectories($this->_oldValidatorDirectories);
         Piece_Right_Filter_Factory::clearInstances();
         Piece_Right_Filter_Factory::setFilterDirectories($this->_oldFilterDirectories);
