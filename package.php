@@ -42,71 +42,26 @@ require_once 'PEAR/PackageFileManager2.php';
 
 PEAR::staticPushErrorHandling(PEAR_ERROR_CALLBACK, create_function('$error', 'var_dump($error); exit();'));
 
-$version = '1.3.0';
+$version = '1.4.0';
 $apiVersion = '1.1.0';
 $releaseStability = 'stable';
-$notes = "This release includes two new validators File and Image, a lot of enhancements, and several fixes. See the following release notes for details.
+$notes = 'This release includes a few enhancements for instance caching of validators and filters. See the following release notes for details.
 
 ## Enhancements ##
 
-### Validators ###
-
-##### Range, Numeric #####
-
-- Added the code so as to check whether a value is a numeric, and extracted its features as Numeric validator. Thanks to Chihiro Sakatoku <csakatoku@mac.com> for good advices and the patches.
-
-##### File #####
-
-- A validator which is used to validate a file.
-
-##### Image #####
-
-- A validator to check files are valid image files.
-
 ### Kernel ###
 
-##### Piece_Right #####
+##### Piece_Right_Filter_Factory #####
 
-- Changed support file uploads in Piece_Right.
-- Added support for filtering all values in an array. (Ticket #3)
+- Changed addFilterDirectory() to return the old filter directories. (Ticket #14)
+- Added setFilterDirectories() to set the directories as the filter directories. (Ticket #14)
+- Added clearInstances() to clear all instances of filters. (Ticket #15)
 
-##### Piece_Right_Config_Factory #####
+##### Piece_Right_Validator_Factory #####
 
-- Changed so as to raise an exception if the file corresponding to a validation set not found or not readable. (Ticket #3)
-- Removed the feature of defining message variables in validation definition file. (Ticket #7)
-
-##### Piece_Right_Validation_Script #####
-
-- Changed so as to pass a Piece_Right_Results object to the post run callback by reference, and return the Piece_Right_Results object by reference. (Ticket #9)
-- Added setPayload() and changed so as to be able to pass a user defined payload to validators.
-
-##### Piece_Right_Validator_Common #####
-
-- Added a feature to replace message variables in a error message with
-  the value of each rule if the value is not an array. (Ticket #8)
-
-### Filters ###
-
-##### Empty2NULL #####
-
-- A filter which is used to replace an empty string with null.
-
-## Defect Fixes ##
-
-### Kernel ###
-
-##### Piece_Right_Results #####
-
-- Fixed a fatal error where 'Object of class Piece_Right_Validation_Error could not be converted to string' raised with PHP 5.2.0 RC5. Thanks to Chihiro Sakatoku <csakatoku@mac.com> for the patches.
-
-##### Piece_Right_Validator_Common #####
-
-- Removed unused argument \$payload from validate() method. Thanks to Chihiro Sakatoku <csakatoku@mac.com> for the patches.
-
-##### Piece_Right #####
-
-- Fixed the problem that the fields which are specified to turn off always turn off even though what the target field values are.
-- Fixed so as to set an error if a field value is an array and a validator is not arrayable.";
+- Changed addValidatorDirectory() to return the old validator directories. (Ticket #14)
+- Added setValidatorDirectories() to set the directories as the validator directories. (Ticket #14)
+- Added clearInstances() to clear all instances of validators. (Ticket #15)';
 
 $package = new PEAR_PackageFileManager2();
 $package->setOptions(array('filelistgenerator' => 'svn',
