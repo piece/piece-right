@@ -172,6 +172,19 @@ class Piece_Right_Validator_Factory
         $GLOBALS['PIECE_RIGHT_Validator_Instances'] = array();
     }
 
+    // }}}
+    // {{{ getValidatorDirectories()
+
+    /**
+     * Gets the validator directories.
+     *
+     * @return array
+     */
+    function getValidatorDirectories()
+    {
+        return $GLOBALS['PIECE_RIGHT_Validator_Directories'];
+    }
+
     /**#@-*/
 
     /**#@+
