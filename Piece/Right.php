@@ -175,7 +175,7 @@ class Piece_Right
             return @$_GET[$field];
         }
 
-        if (isset($_FILES[$field])) {
+        if (array_key_exists($field, $_FILES)) {
             return $_FILES[$field];
         }
 
