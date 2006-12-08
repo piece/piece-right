@@ -827,8 +827,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
                                             'minSize'  => $size,
                                             'mimetype' => 'text')
                                       );
-        $right = &new Piece_Right(dirname(__FILE__) . '/../../data',
-                                  dirname(__FILE__));
+        $right = &new Piece_Right();
 
         $this->assertTrue($right->validate(null, $dynamicConfig));
 
@@ -841,7 +840,10 @@ class Piece_RightTestCase extends PHPUnit_TestCase
             $_FILES['userfile']['size'][$i] = $size;
             $_FILES['userfile']['error'][$i] = 0;
         }
+
         $this->assertTrue($right->validate(null, $dynamicConfig));
+
+        unset($_FILES['userfile']);
     }
 
     /**
@@ -865,11 +867,12 @@ class Piece_RightTestCase extends PHPUnit_TestCase
                                       array('maxSize' => $size - 1,
                                             'maxSize_message' => 'too large')
                                       );
-        $right = &new Piece_Right(dirname(__FILE__) . '/../../data',
-                                  dirname(__FILE__));
+        $right = &new Piece_Right();
 
         $this->assertFalse($right->validate(null, $dynamicConfig));
+
         $results = &$right->getResults();
+
         $this->assertTrue($results->isError('userfile'));
         $this->assertEquals('too large', $results->getErrorMessage('userfile'));
 
@@ -880,11 +883,12 @@ class Piece_RightTestCase extends PHPUnit_TestCase
                                       array('minSize' => $size + 1,
                                             'minSize_message' => 'too small')
                                       );
-        $right = &new Piece_Right(dirname(__FILE__) . '/../../data',
-                                  dirname(__FILE__));
+        $right = &new Piece_Right();
 
         $this->assertFalse($right->validate(null, $dynamicConfig));
+
         $results = &$right->getResults();
+
         $this->assertTrue($results->isError('userfile'));
         $this->assertEquals('too small', $results->getErrorMessage('userfile'));
 
@@ -897,11 +901,12 @@ class Piece_RightTestCase extends PHPUnit_TestCase
                                             'mimetype' => 'text/.+'),
                                       'invalid file'
                                       );
-        $right = &new Piece_Right(dirname(__FILE__) . '/../../data',
-                                  dirname(__FILE__));
+        $right = &new Piece_Right();
 
         $this->assertFalse($right->validate(null, $dynamicConfig));
+
         $results = &$right->getResults();
+
         $this->assertTrue($results->isError('userfile'));
         $this->assertEquals('invalid file', $results->getErrorMessage('userfile'));
 
@@ -940,8 +945,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
                                             'mimetype'  => 'jpeg')
                                       );
 
-        $right = &new Piece_Right(dirname(__FILE__) . '/../../data',
-                                  dirname(__FILE__));
+        $right = &new Piece_Right();
 
         $this->assertTrue($right->validate(null, $dynamicConfig));
 
@@ -974,6 +978,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
                                             'minHeight' => $height,
                                             'mimetype'  =>'image/.+')
                                       );
+
         $this->assertTrue($right->validate(null, $dynamicConfig));
 
         unset($_FILES['userimage']);
@@ -1012,13 +1017,13 @@ class Piece_RightTestCase extends PHPUnit_TestCase
                              'minHeight_message' => 'too small height')
                        );
 
-        $right = &new Piece_Right(dirname(__FILE__) . '/../../data',
-                                  dirname(__FILE__));
+        $right = &new Piece_Right();
 
         foreach ($rules as $rule) {
             $dynamicConfig = &new Piece_Right_Config();
             $dynamicConfig->setRequired('userimage');
             $dynamicConfig->addValidation('userimage', 'Image', $rule);
+
             $this->assertFalse($right->validate(null, $dynamicConfig));
 
             $message = next($rule);
@@ -1048,10 +1053,13 @@ class Piece_RightTestCase extends PHPUnit_TestCase
                                          );
 
             $this->assertFalse($right->validate(null, $dynamicConfig));
+
             $results = &$right->getResults();
+
             $this->assertTrue($results->isError('userimage'));
             $this->assertTrue('must be psd', $results->getErrorMessages('userimage'));
         }
+
         unset($_FILES['userimage']);
     }
 
