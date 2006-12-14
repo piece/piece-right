@@ -38,6 +38,7 @@
  */
 
 require_once 'Piece/Right.php';
+require_once 'Piece/Right/Error.php';
 
 // {{{ Piece_Right_Validation_Script
 
@@ -115,6 +116,9 @@ class Piece_Right_Validation_Script
      * @param Piece_Right_Config $config
      * @param boolean            $keepOriginalFieldValue
      * @return Piece_Right_Results
+     * @throws PIECE_RIGHT_ERROR_INVALID_CONFIGURATION
+     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
+     * @throws PIECE_RIGHT_ERROR_INVALID_FILTER
      */
     function &run($validationSet,
                   &$container,
@@ -131,7 +135,14 @@ class Piece_Right_Validation_Script
             $right->setPayload($this->_payload);
         }
 
+        Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
         $result = $right->validate($validationSet, $config);
+        Piece_Right_Error::popCallback();
+        if (Piece_Right_Error::hasErrors('exception')) {
+            $return = null;
+            return $return;
+        }
+
         $results = $right->getResults();
 
         if ($result) {
