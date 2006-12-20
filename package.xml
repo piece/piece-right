@@ -3,9 +3,11 @@
 <!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
 <package version="1.0" packagerversion="1.5.0RC1">
  <name>Piece_Right</name>
- <summary>A validation framework for PHP</summary>
+ <summary>A Validation Framework for PHP</summary>
  <description>Piece_Right is a validation framework for PHP.
+
 The following is a list of features of Piece_Right.
+
 o Extensible validator system
 o Extensible filter system
 o A lot of built-in validators
@@ -17,6 +19,7 @@ o YAML based configuration
 o Dynamic configuration
 
 The following is a list of built-in validators.
+
 o Compare
 o Date, FutureDate, PastDate (including Japanese date support)
 o Length
@@ -38,14 +41,19 @@ o Image
   </maintainers>
  <release>
   <version>1.4.0</version>
-  <date>2006-11-29</date>
+  <date>2006-12-20</date>
   <license>BSD License (revised)</license>
   <state>stable</state>
-  <notes>This release includes a few enhancements for instance caching of validators and filters. See the following release notes for details.
+  <notes>This release includes a few enhancements for instance caching of validators and filters, and two minor fixes. See the following release notes for details.
 
 ## Enhancements ##
 
 ### Kernel ###
+
+- Changed addValidatorDirectory() to return the old validator directories. (Ticket #14)
+- Added setValidatorDirectories() to set the directories as the validator directories. (Ticket #14)
+- Added clearInstances() to clear all instances of validators. (Ticket #15)
+- Added getValidatorDirectories() to get the validator directories. (Ticket #16)
 
 ##### Piece_Right_Filter_Factory #####
 
@@ -54,12 +62,12 @@ o Image
 - Added clearInstances() to clear all instances of filters. (Ticket #15)
 - Added getFilterDirectories() to get the filter directories. (Ticket #16)
 
-##### Piece_Right_Validator_Factory #####
+## Defect Fixes ##
 
-- Changed addValidatorDirectory() to return the old validator directories. (Ticket #14)
-- Added setValidatorDirectories() to set the directories as the validator directories. (Ticket #14)
-- Added clearInstances() to clear all instances of validators. (Ticket #15)
-- Added getValidatorDirectories() to get the validator directories. (Ticket #16)
+##### Piece_Right_Validation_Script #####
+
+- Added missing error handling.
+- Added a missing require_once statement.
   </notes>
   <deps>
    <dep type="php" rel="ge" version="4.3.0" optional="no"/>
@@ -70,15 +78,15 @@ o Image
   <filelist>
    <dir name="/" baseinstalldir="/">
     <dir name="data">
-     <file role="data" name="Example.yaml" install-as="Example.yaml">
+     <file role="data" name="Example.yaml">
       <replace from="@package_version@" to="version" type="package-info"/>
      </file>
-     <file role="data" name="piece-right.yaml" install-as="piece-right.yaml">
+     <file role="data" name="piece-right.yaml">
       <replace from="@package_version@" to="version" type="package-info"/>
      </file>
     </dir> <!-- /data -->
     <dir name="docs">
-     <file role="doc" name="LICENSE" install-as="LICENSE">
+     <file role="doc" name="LICENSE">
       <replace from="@package_version@" to="version" type="package-info"/>
      </file>
     </dir> <!-- /docs -->
@@ -176,36 +184,36 @@ o Image
      <dir name="Piece">
       <dir name="Right">
        <dir name="Config">
-        <file role="test" name="FactoryTestCase.php" install-as="Piece/Right/Config/FactoryTestCase.php">
+        <file role="test" name="FactoryTestCase.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
-        <file role="test" name="InvalidConfiguration.yaml" install-as="Piece/Right/Config/InvalidConfiguration.yaml">
+        <file role="test" name="InvalidConfiguration.yaml">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
-        <file role="test" name="TestRunner.php" install-as="Piece/Right/Config/TestRunner.php">
+        <file role="test" name="TestRunner.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
        </dir> <!-- /tests/Piece/Right/Config -->
        <dir name="Filter">
-        <file role="test" name="Bar.php" install-as="Piece/Right/Filter/Bar.php">
+        <file role="test" name="Bar.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
-        <file role="test" name="FactoryTestCase.php" install-as="Piece/Right/Filter/FactoryTestCase.php">
+        <file role="test" name="FactoryTestCase.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
-        <file role="test" name="Foo.php" install-as="Piece/Right/Filter/Foo.php">
+        <file role="test" name="Foo.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
-        <file role="test" name="JapaneseAlphaNumericTestCase.php" install-as="Piece/Right/Filter/JapaneseAlphaNumericTestCase.php">
+        <file role="test" name="JapaneseAlphaNumericTestCase.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
-        <file role="test" name="JapaneseH2ZTestCase.php" install-as="Piece/Right/Filter/JapaneseH2ZTestCase.php">
+        <file role="test" name="JapaneseH2ZTestCase.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
-        <file role="test" name="LowerCase.php" install-as="Piece/Right/Filter/LowerCase.php">
+        <file role="test" name="LowerCase.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
-        <file role="test" name="TestRunner.php" install-as="Piece/Right/Filter/TestRunner.php">
+        <file role="test" name="TestRunner.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
        </dir> <!-- /tests/Piece/Right/Filter -->
@@ -213,144 +221,144 @@ o Image
         <dir name="Piece">
          <dir name="Right">
           <dir name="Validator">
-           <file role="test" name="ScriptPayloadTest.php" install-as="Piece/Right/Validation/Piece/Right/Validator/ScriptPayloadTest.php">
+           <file role="test" name="ScriptPayloadTest.php">
             <replace from="@package_version@" to="version" type="package-info"/>
            </file>
           </dir> <!-- /tests/Piece/Right/Validation/Piece/Right/Validator -->
          </dir> <!-- /tests/Piece/Right/Validation/Piece/Right -->
         </dir> <!-- /tests/Piece/Right/Validation/Piece -->
-        <file role="test" name="ErrorTestCase.php" install-as="Piece/Right/Validation/ErrorTestCase.php">
+        <file role="test" name="ErrorTestCase.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
-        <file role="test" name="Script.yaml" install-as="Piece/Right/Validation/Script.yaml">
+        <file role="test" name="Script.yaml">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
-        <file role="test" name="ScriptTestCase.php" install-as="Piece/Right/Validation/ScriptTestCase.php">
+        <file role="test" name="ScriptTestCase.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
-        <file role="test" name="TestRunner.php" install-as="Piece/Right/Validation/TestRunner.php">
+        <file role="test" name="TestRunner.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
        </dir> <!-- /tests/Piece/Right/Validation -->
        <dir name="Validator">
         <dir name="images">
-         <file role="test" name="image.bmp" install-as="Piece/Right/Validator/images/image.bmp">
+         <file role="test" name="image.bmp">
          </file>
-         <file role="test" name="image.gif" install-as="Piece/Right/Validator/images/image.gif">
+         <file role="test" name="image.gif">
          </file>
-         <file role="test" name="image.jpg" install-as="Piece/Right/Validator/images/image.jpg">
+         <file role="test" name="image.jpg">
          </file>
-         <file role="test" name="image.png" install-as="Piece/Right/Validator/images/image.png">
+         <file role="test" name="image.png">
          </file>
-         <file role="test" name="image.tif" install-as="Piece/Right/Validator/images/image.tif">
+         <file role="test" name="image.tif">
          </file>
         </dir> <!-- /tests/Piece/Right/Validator/images -->
-        <file role="test" name="Bar.php" install-as="Piece/Right/Validator/Bar.php">
+        <file role="test" name="Bar.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
-        <file role="test" name="CompareTestCase.php" install-as="Piece/Right/Validator/CompareTestCase.php">
+        <file role="test" name="CompareTestCase.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
-        <file role="test" name="DateTestCase.php" install-as="Piece/Right/Validator/DateTestCase.php">
+        <file role="test" name="DateTestCase.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
-        <file role="test" name="EmailTestCase.php" install-as="Piece/Right/Validator/EmailTestCase.php">
+        <file role="test" name="EmailTestCase.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
-        <file role="test" name="FactoryTestCase.php" install-as="Piece/Right/Validator/FactoryTestCase.php">
+        <file role="test" name="FactoryTestCase.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
-        <file role="test" name="FileTestCase.php" install-as="Piece/Right/Validator/FileTestCase.php">
+        <file role="test" name="FileTestCase.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
-        <file role="test" name="Foo.php" install-as="Piece/Right/Validator/Foo.php">
+        <file role="test" name="Foo.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
-        <file role="test" name="FutureDateTestCase.php" install-as="Piece/Right/Validator/FutureDateTestCase.php">
+        <file role="test" name="FutureDateTestCase.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
-        <file role="test" name="ImageTestCase.php" install-as="Piece/Right/Validator/ImageTestCase.php">
+        <file role="test" name="ImageTestCase.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
-        <file role="test" name="Invalid.php" install-as="Piece/Right/Validator/Invalid.php">
+        <file role="test" name="Invalid.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
-        <file role="test" name="LengthTestCase.php" install-as="Piece/Right/Validator/LengthTestCase.php">
+        <file role="test" name="LengthTestCase.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
-        <file role="test" name="ListTestCase.php" install-as="Piece/Right/Validator/ListTestCase.php">
+        <file role="test" name="ListTestCase.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
-        <file role="test" name="NumericTestCase.php" install-as="Piece/Right/Validator/NumericTestCase.php">
+        <file role="test" name="NumericTestCase.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
-        <file role="test" name="PastDateTestCase.php" install-as="Piece/Right/Validator/PastDateTestCase.php">
+        <file role="test" name="PastDateTestCase.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
-        <file role="test" name="PayloadTest.php" install-as="Piece/Right/Validator/PayloadTest.php">
+        <file role="test" name="PayloadTest.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
-        <file role="test" name="RangeTestCase.php" install-as="Piece/Right/Validator/RangeTestCase.php">
+        <file role="test" name="RangeTestCase.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
-        <file role="test" name="RegexTestCase.php" install-as="Piece/Right/Validator/RegexTestCase.php">
+        <file role="test" name="RegexTestCase.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
-        <file role="test" name="TestRunner.php" install-as="Piece/Right/Validator/TestRunner.php">
+        <file role="test" name="TestRunner.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
-        <file role="test" name="WithMethod.php" install-as="Piece/Right/Validator/WithMethod.php">
+        <file role="test" name="WithMethod.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
-        <file role="test" name="WithMethodTestCase.php" install-as="Piece/Right/Validator/WithMethodTestCase.php">
+        <file role="test" name="WithMethodTestCase.php">
          <replace from="@package_version@" to="version" type="package-info"/>
         </file>
        </dir> <!-- /tests/Piece/Right/Validator -->
-       <file role="test" name="ConfigTestCase.php" install-as="Piece/Right/ConfigTestCase.php">
+       <file role="test" name="ConfigTestCase.php">
         <replace from="@package_version@" to="version" type="package-info"/>
        </file>
-       <file role="test" name="ResultsTestCase.php" install-as="Piece/Right/ResultsTestCase.php">
+       <file role="test" name="ResultsTestCase.php">
         <replace from="@package_version@" to="version" type="package-info"/>
        </file>
-       <file role="test" name="TestRunner.php" install-as="Piece/Right/TestRunner.php">
+       <file role="test" name="TestRunner.php">
         <replace from="@package_version@" to="version" type="package-info"/>
        </file>
       </dir> <!-- /tests/Piece/Right -->
-      <file role="test" name="AppropriateValidationMessage.yaml" install-as="Piece/AppropriateValidationMessage.yaml">
+      <file role="test" name="AppropriateValidationMessage.yaml">
        <replace from="@package_version@" to="version" type="package-info"/>
       </file>
-      <file role="test" name="ForceValidation.yaml" install-as="Piece/ForceValidation.yaml">
+      <file role="test" name="ForceValidation.yaml">
        <replace from="@package_version@" to="version" type="package-info"/>
       </file>
-      <file role="test" name="ForceValidationBasedOnWatcher.yaml" install-as="Piece/ForceValidationBasedOnWatcher.yaml">
+      <file role="test" name="ForceValidationBasedOnWatcher.yaml">
        <replace from="@package_version@" to="version" type="package-info"/>
       </file>
-      <file role="test" name="MessageVariable.yaml" install-as="Piece/MessageVariable.yaml">
+      <file role="test" name="MessageVariable.yaml">
        <replace from="@package_version@" to="version" type="package-info"/>
       </file>
-      <file role="test" name="ProblemThatValidationOfPseudoFieldsAreAlwaysInvoked.yaml" install-as="Piece/ProblemThatValidationOfPseudoFieldsAreAlwaysInvoked.yaml">
+      <file role="test" name="ProblemThatValidationOfPseudoFieldsAreAlwaysInvoked.yaml">
        <replace from="@package_version@" to="version" type="package-info"/>
       </file>
-      <file role="test" name="PseudoField.yaml" install-as="Piece/PseudoField.yaml">
+      <file role="test" name="PseudoField.yaml">
        <replace from="@package_version@" to="version" type="package-info"/>
       </file>
-      <file role="test" name="RightTestCase.php" install-as="Piece/RightTestCase.php">
+      <file role="test" name="RightTestCase.php">
        <replace from="@package_version@" to="version" type="package-info"/>
       </file>
-      <file role="test" name="RuleMessage.yaml" install-as="Piece/RuleMessage.yaml">
+      <file role="test" name="RuleMessage.yaml">
        <replace from="@package_version@" to="version" type="package-info"/>
       </file>
-      <file role="test" name="SeparatedDateValidationWithPseudoFieldIfPseudoFieldIsNotRequired.yaml" install-as="Piece/SeparatedDateValidationWithPseudoFieldIfPseudoFieldIsNotRequired.yaml">
+      <file role="test" name="SeparatedDateValidationWithPseudoFieldIfPseudoFieldIsNotRequired.yaml">
        <replace from="@package_version@" to="version" type="package-info"/>
       </file>
-      <file role="test" name="SeparatedDateValidationWithPseudoFieldIfPseudoFieldIsRequired.yaml" install-as="Piece/SeparatedDateValidationWithPseudoFieldIfPseudoFieldIsRequired.yaml">
+      <file role="test" name="SeparatedDateValidationWithPseudoFieldIfPseudoFieldIsRequired.yaml">
        <replace from="@package_version@" to="version" type="package-info"/>
       </file>
-      <file role="test" name="TestRunner.php" install-as="Piece/TestRunner.php">
+      <file role="test" name="TestRunner.php">
        <replace from="@package_version@" to="version" type="package-info"/>
       </file>
      </dir> <!-- /tests/Piece -->
-     <file role="test" name="AllTestRunner.php" install-as="AllTestRunner.php">
+     <file role="test" name="AllTestRunner.php">
       <replace from="@package_version@" to="version" type="package-info"/>
      </file>
     </dir> <!-- /tests -->
@@ -360,14 +368,19 @@ o Image
  <changelog>
    <release>
     <version>1.4.0</version>
-    <date>2006-11-29</date>
+    <date>2006-12-20</date>
     <license>BSD License (revised)</license>
     <state>stable</state>
-    <notes>This release includes a few enhancements for instance caching of validators and filters. See the following release notes for details.
+    <notes>This release includes a few enhancements for instance caching of validators and filters, and two minor fixes. See the following release notes for details.
 
 ## Enhancements ##
 
 ### Kernel ###
+
+- Changed addValidatorDirectory() to return the old validator directories. (Ticket #14)
+- Added setValidatorDirectories() to set the directories as the validator directories. (Ticket #14)
+- Added clearInstances() to clear all instances of validators. (Ticket #15)
+- Added getValidatorDirectories() to get the validator directories. (Ticket #16)
 
 ##### Piece_Right_Filter_Factory #####
 
@@ -376,13 +389,13 @@ o Image
 - Added clearInstances() to clear all instances of filters. (Ticket #15)
 - Added getFilterDirectories() to get the filter directories. (Ticket #16)
 
-##### Piece_Right_Validator_Factory #####
+## Defect Fixes ##
 
-- Changed addValidatorDirectory() to return the old validator directories. (Ticket #14)
-- Added setValidatorDirectories() to set the directories as the validator directories. (Ticket #14)
-- Added clearInstances() to clear all instances of validators. (Ticket #15)
-- Added getValidatorDirectories() to get the validator directories. (Ticket #16)
-    </notes>
+##### Piece_Right_Validation_Script #####
+
+- Added missing error handling.
+- Added a missing require_once statement.
+     </notes>
    </release>
    <release>
     <version>1.3.0</version>

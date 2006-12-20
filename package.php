@@ -45,11 +45,16 @@ PEAR::staticPushErrorHandling(PEAR_ERROR_CALLBACK, create_function('$error', 'va
 $version = '1.4.0';
 $apiVersion = '1.1.0';
 $releaseStability = 'stable';
-$notes = 'This release includes a few enhancements for instance caching of validators and filters. See the following release notes for details.
+$notes = 'This release includes a few enhancements for instance caching of validators and filters, and two minor fixes. See the following release notes for details.
 
 ## Enhancements ##
 
 ### Kernel ###
+
+- Changed addValidatorDirectory() to return the old validator directories. (Ticket #14)
+- Added setValidatorDirectories() to set the directories as the validator directories. (Ticket #14)
+- Added clearInstances() to clear all instances of validators. (Ticket #15)
+- Added getValidatorDirectories() to get the validator directories. (Ticket #16)
 
 ##### Piece_Right_Filter_Factory #####
 
@@ -58,12 +63,12 @@ $notes = 'This release includes a few enhancements for instance caching of valid
 - Added clearInstances() to clear all instances of filters. (Ticket #15)
 - Added getFilterDirectories() to get the filter directories. (Ticket #16)
 
-##### Piece_Right_Validator_Factory #####
+## Defect Fixes ##
 
-- Changed addValidatorDirectory() to return the old validator directories. (Ticket #14)
-- Added setValidatorDirectories() to set the directories as the validator directories. (Ticket #14)
-- Added clearInstances() to clear all instances of validators. (Ticket #15)
-- Added getValidatorDirectories() to get the validator directories. (Ticket #16)';
+##### Piece_Right_Validation_Script #####
+
+- Added missing error handling.
+- Added a missing require_once statement.';
 
 $package = new PEAR_PackageFileManager2();
 $package->setOptions(array('filelistgenerator' => 'svn',
@@ -79,9 +84,11 @@ $package->setOptions(array('filelistgenerator' => 'svn',
 
 $package->setPackage('Piece_Right');
 $package->setPackageType('php');
-$package->setSummary('A validation framework for PHP');
+$package->setSummary('A Validation Framework for PHP');
 $package->setDescription('Piece_Right is a validation framework for PHP.
+
 The following is a list of features of Piece_Right.
+
 o Extensible validator system
 o Extensible filter system
 o A lot of built-in validators
@@ -93,6 +100,7 @@ o YAML based configuration
 o Dynamic configuration
 
 The following is a list of built-in validators.
+
 o Compare
 o Date, FutureDate, PastDate (including Japanese date support)
 o Length
