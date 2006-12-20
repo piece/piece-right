@@ -84,7 +84,7 @@ $package->setOptions(array('filelistgenerator' => 'svn',
 
 $package->setPackage('Piece_Right');
 $package->setPackageType('php');
-$package->setSummary('A Validation Framework for PHP');
+$package->setSummary('A validation framework for PHP');
 $package->setDescription('Piece_Right is a validation framework for PHP.
 
 The following is a list of features of Piece_Right.
