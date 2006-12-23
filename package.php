@@ -49,6 +49,8 @@ $notes = 'This release includes a few enhancements for instance caching of valid
 
 ## Enhancements ##
 
+##### Piece_Right_Validator_Factory #####
+
 ### Kernel ###
 
 - Changed addValidatorDirectory() to return the old validator directories. (Ticket #14)
