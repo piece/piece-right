@@ -51,6 +51,8 @@ $notes = 'This release includes a few enhancements for instance caching of valid
 
 ### Kernel ###
 
+##### Piece_Right_Validator_Factory #####
+
 - Changed addValidatorDirectory() to return the old validator directories. (Ticket #14)
 - Added setValidatorDirectories() to set the directories as the validator directories. (Ticket #14)
 - Added clearInstances() to clear all instances of validators. (Ticket #15)
