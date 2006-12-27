@@ -111,6 +111,7 @@ class Piece_Right_Config_Factory
                                     'warning'
                                     );
             Piece_Right_Error::popCallback();
+
             $config = &new Piece_Right_Config();
             return $config;
         }
@@ -144,7 +145,8 @@ class Piece_Right_Config_Factory
                                     'warning'
                                     );
             Piece_Right_Error::popCallback();
-            $config = &Piece_Right_Config_Factory::_parseFile($configFile);
+
+            $config = &Piece_Right_Config_Factory::_getConfigurationFromFile($configFile);
             if (Piece_Right_Error::hasErrors('exception')) {
                 $return = null;
                 return $return;
@@ -162,7 +164,8 @@ class Piece_Right_Config_Factory
                                     'warning'
                                     );
             Piece_Right_Error::popCallback();
-            $config = &Piece_Right_Config_Factory::_parseFile($configFile);
+
+            $config = &Piece_Right_Config_Factory::_getConfigurationFromFile($configFile);
             if (Piece_Right_Error::hasErrors('exception')) {
                 $return = null;
                 return $return;
@@ -171,10 +174,7 @@ class Piece_Right_Config_Factory
             return $config;
         }
 
-        $config = &Piece_Right_Config_Factory::_getConfiguration($cacheDirectory,
-                                                                 $configFile
-                                                                 );
-
+        $config = &Piece_Right_Config_Factory::_getConfiguration($configFile, $cacheDirectory);
         return $config;
     }
 
@@ -190,13 +190,13 @@ class Piece_Right_Config_Factory
     /**
      * Gets a Piece_Right_Config object from a configuration file or a cache.
      *
-     * @param string $cacheDirectory
      * @param string $masterFile
+     * @param string $cacheDirectory
      * @return Piece_Right_Config
      * @throws PIECE_RIGHT_ERROR_INVALID_CONFIGURATION
      * @static
      */
-    function &_getConfiguration($cacheDirectory, $masterFile)
+    function &_getConfiguration($masterFile, $cacheDirectory)
     {
         $cache = &new Cache_Lite_File(array('cacheDir' => "$cacheDirectory/",
                                             'masterFile' => $masterFile,
@@ -216,7 +216,8 @@ class Piece_Right_Config_Factory
                                     'warning'
                                     );
             Piece_Right_Error::popCallback();
-            $config = &Piece_Right_Config_Factory::_parseFile($masterFile);
+
+            $config = &Piece_Right_Config_Factory::_getConfigurationFromFile($masterFile);
             if (Piece_Right_Error::hasErrors('exception')) {
                 $return = null;
                 return $return;
@@ -226,7 +227,7 @@ class Piece_Right_Config_Factory
         }
 
         if (!$config) {
-            $config = &Piece_Right_Config_Factory::_parseFile($masterFile);
+            $config = &Piece_Right_Config_Factory::_getConfigurationFromFile($masterFile);
             if (Piece_Right_Error::hasErrors('exception')) {
                 $return = null;
                 return $return;
@@ -247,7 +248,7 @@ class Piece_Right_Config_Factory
     }
 
     // }}}
-    // {{{ _parseFile()
+    // {{{ _getConfigurationFromFile()
 
     /**
      * Parses the given file and returns a Piece_Right_Config object.
@@ -257,7 +258,7 @@ class Piece_Right_Config_Factory
      * @throws PIECE_RIGHT_ERROR_INVALID_CONFIGURATION
      * @static
      */
-    function &_parseFile($file)
+    function &_getConfigurationFromFile($file)
     {
         $config = &new Piece_Right_Config();
         $yaml = Spyc::YAMLLoad($file);
