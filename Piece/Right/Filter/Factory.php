@@ -4,7 +4,7 @@
 /**
  * PHP versions 4 and 5
  *
- * Copyright (c) 2006 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -30,7 +30,7 @@
  *
  * @package    Piece_Right
  * @author     KUBO Atsuhiro <iteman@users.sourceforge.net>
- * @copyright  2006 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @link       http://piece-framework.com/piece-right/
@@ -43,6 +43,7 @@ require_once 'Piece/Right/Error.php';
 
 $GLOBALS['PIECE_RIGHT_Filter_Instances'] = array();
 $GLOBALS['PIECE_RIGHT_Filter_Directories'] = array(dirname(__FILE__) . '/../../..');
+$GLOBALS['PIECE_RIGHT_Filter_Prefixes'] = array('Piece_Right_Filter');
 
 // }}}
 // {{{ Piece_Right_Filter_Factory
@@ -52,7 +53,7 @@ $GLOBALS['PIECE_RIGHT_Filter_Directories'] = array(dirname(__FILE__) . '/../../.
  *
  * @package    Piece_Right
  * @author     KUBO Atsuhiro <iteman@users.sourceforge.net>
- * @copyright  2006 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @link       http://piece-framework.com/piece-right/
@@ -86,36 +87,28 @@ class Piece_Right_Filter_Factory
     /**
      * Creates a filter object from the filter directories.
      *
-     * @param string $filter
+     * @param string $filterName
      * @return mixed
      * @throws PIECE_RIGHT_ERROR_NOT_FOUND
+     * @throws PIECE_RIGHT_ERROR_INVALID_FILTER
      */
-    function &factory($filter)
+    function &factory($filterName)
     {
-        $filter = "Piece_Right_Filter_$filter";
-        if (!array_key_exists($filter, $GLOBALS['PIECE_RIGHT_Filter_Instances'])) {
-            $found = false;
-            foreach ($GLOBALS['PIECE_RIGHT_Filter_Directories'] as $filterDirectory) {
-                $found = Piece_Right_Filter_Factory::_load($filter, $filterDirectory);
-                if ($found) {
-                    break;
-                }
-            }
-
-            if (!$found) {
+        if (!array_key_exists($filterName, $GLOBALS['PIECE_RIGHT_Filter_Instances'])) {
+            $filterClass = Piece_Right_Filter_Factory::_findFilterClass($filterName);
+            if (is_null($filterClass)) {
                 Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                        "The filter [ $filter ] not found in the following directories:\n" .
+                                        "The filter [ $filterName ] not found in the following directories:\n" .
                                         implode("\n", $GLOBALS['PIECE_RIGHT_Filter_Directories'])
                                         );
                 $return = null;
                 return $return;
             }
 
-            $instance = &new $filter();
-            $GLOBALS['PIECE_RIGHT_Filter_Instances'][$filter] = &$instance;
+            $GLOBALS['PIECE_RIGHT_Filter_Instances'][$filterName] = &new $filterClass();
         }
 
-        return $GLOBALS['PIECE_RIGHT_Filter_Instances'][$filter];
+        return $GLOBALS['PIECE_RIGHT_Filter_Instances'][$filterName];
     }
 
     // }}}
@@ -124,11 +117,11 @@ class Piece_Right_Filter_Factory
     /**
      * Adds a filter directory.
      *
-     * @param string $directory
+     * @param string $filterDirectory
      */
-    function addFilterDirectory($directory)
+    function addFilterDirectory($filterDirectory)
     {
-        array_unshift($GLOBALS['PIECE_RIGHT_Filter_Directories'], $directory);
+        array_unshift($GLOBALS['PIECE_RIGHT_Filter_Directories'], $filterDirectory);
     }
 
     // }}}
@@ -142,6 +135,19 @@ class Piece_Right_Filter_Factory
         $GLOBALS['PIECE_RIGHT_Filter_Instances'] = array();
     }
 
+    // }}}
+    // {{{ addFilterPrefix()
+
+    /**
+     * Adds a prefix for a filter.
+     *
+     * @param string $filterPrefix
+     */
+    function addFilterPrefix($filterPrefix)
+    {
+        array_unshift($GLOBALS['PIECE_RIGHT_Filter_Prefixes'], $filterPrefix);
+    }
+
     /**#@-*/
 
     /**#@+
@@ -149,24 +155,24 @@ class Piece_Right_Filter_Factory
      */
 
     // }}}
-    // {{{ _load()
+    // {{{ _loadFromDirectory()
 
     /**
-     * Loads a filter corresponding to the given filter name.
+     * Loads a filter from the given directory.
      *
-     * @param string $filter
+     * @param string $filterClass
      * @param string $filterDirectory
      * @return boolean
      * @static
      */
-    function _load($filter, $filterDirectory)
+    function _loadFromDirectory($filterClass, $filterDirectory)
     {
-        $file = "$filterDirectory/" . str_replace('_', '/', $filter) . '.php';
+        $file = "$filterDirectory/" . str_replace('_', '/', $filterClass) . '.php';
 
         if (!file_exists($file)) {
             Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
             Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                    "The filter file [ $file ] for the class [ $filter ] not found.",
+                                    "The filter file [ $file ] for the class [ $filterClass ] not found.",
                                     'warning'
                                     );
             Piece_Right_Error::popCallback();
@@ -193,13 +199,73 @@ class Piece_Right_Filter_Factory
             return false;
         }
 
+        return Piece_Right_Filter_Factory::_loaded($filterClass);
+    }
+
+    // }}}
+    // {{{ _loaded()
+
+    /**
+     * Returns whether the given filter has already been loaded or not.
+     *
+     * @param string $filterClass
+     * @return boolean
+     * @static
+     */
+    function _loaded($filterClass)
+    {
         if (version_compare(phpversion(), '5.0.0', '<')) {
-            $found = class_exists($filter);
+            return class_exists($filterClass);
         } else {
-            $found = class_exists($filter, false);
+            return class_exists($filterClass, false);
+        }
+    }
+
+    // }}}
+    // {{{ _findFilterClass()
+
+    /**
+     * Finds a filter class from the filter directories and the prefixes.
+     *
+     * @param string $filterName
+     * @return string
+     */
+    function _findFilterClass($filterName)
+    {
+        foreach ($GLOBALS['PIECE_RIGHT_Filter_Prefixes'] as $prefixAlias) {
+            $filterClass = Piece_Right_Filter_Factory::_getFilterClass($filterName, $prefixAlias);
+            if (Piece_Right_Filter_Factory::_loaded($filterClass)) {
+                return $filterClass;
+            }
         }
 
-        return $found;
+        foreach ($GLOBALS['PIECE_RIGHT_Filter_Directories'] as $filterDirectory) {
+            foreach ($GLOBALS['PIECE_RIGHT_Filter_Prefixes'] as $prefixAlias) {
+                $filterClass = Piece_Right_Filter_Factory::_getFilterClass($filterName, $prefixAlias);
+                if (Piece_Right_Filter_Factory::_loadFromDirectory($filterClass, $filterDirectory)) {
+                    return $filterClass;
+                }
+            }
+        }
+    }
+
+    // }}}
+    // {{{ _getFilterClass()
+
+    /**
+     * Gets the class name for a given filter name with a prefix alias.
+     *
+     * @param string $filterName
+     * @param string $prefixAlias
+     * @return string
+     */
+    function _getFilterClass($filterName, $prefixAlias)
+    {
+        if ($prefixAlias) {
+            return "{$prefixAlias}_{$filterName}";
+        } else {
+            return $filterName;
+        }
     }
 
     /**#@-*/
