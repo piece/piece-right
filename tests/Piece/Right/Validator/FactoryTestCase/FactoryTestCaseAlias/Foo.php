@@ -35,11 +35,12 @@
  * @version    SVN: $Id$
  * @link       http://piece-framework.com/piece-right/
  * @see        Piece_Right_Validator_Factory
+ * @since      File available since Release 1.5.0
  */
 
 require_once 'Piece/Right/Validator/Common.php';
 
-// {{{ Piece_Right_Validator_Foo
+// {{{ FactoryTestCaseAlias_Foo
 
 /**
  * A class for unit tests.
@@ -51,8 +52,9 @@ require_once 'Piece/Right/Validator/Common.php';
  * @version    Release: @package_version@
  * @link       http://piece-framework.com/piece-right/
  * @see        Piece_Right_Validator_Factory
+ * @since      Class available since Release 1.5.0
  */
-class Piece_Right_Validator_Foo extends Piece_Right_Validator_Common
+class FactoryTestCaseAlias_Foo extends Piece_Right_Validator_Common
 {
 
     // {{{ properties

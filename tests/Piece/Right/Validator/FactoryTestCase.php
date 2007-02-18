@@ -70,6 +70,7 @@ class Piece_Right_Validator_FactoryTestCase extends PHPUnit_TestCase
      */
 
     var $_oldValidatorDirectories;
+    var $_oldPrefixes;
 
     /**#@-*/
 
@@ -81,11 +82,14 @@ class Piece_Right_Validator_FactoryTestCase extends PHPUnit_TestCase
     {
         Piece_Right_Error::pushCallback(create_function('$error', 'var_dump($error); return ' . PEAR_ERRORSTACK_DIE . ';'));
         $this->_oldValidatorDirectories = $GLOBALS['PIECE_RIGHT_Validator_Directories'];
-        Piece_Right_Validator_Factory::addValidatorDirectory(dirname(__FILE__) . '/../../..');
+        Piece_Right_Validator_Factory::addValidatorDirectory(dirname(__FILE__) . '/FactoryTestCase');
+        $this->_oldPrefixes = $GLOBALS['PIECE_RIGHT_Validator_Prefixes'];
     }
 
     function tearDown()
     {
+        $GLOBALS['PIECE_RIGHT_Validator_Prefixes'] = $this->_oldPrefixes;
+        Piece_Right_Validator_Factory::clearInstances();
         $GLOBALS['PIECE_RIGHT_Validator_Directories'] = $this->_oldValidatorDirectories;
         Piece_Right_Error::clearErrors();
         Piece_Right_Error::popCallback();
@@ -123,19 +127,56 @@ class Piece_Right_Validator_FactoryTestCase extends PHPUnit_TestCase
 
     function testFactory()
     {
-        $fooValidator = &Piece_Right_Validator_Factory::factory('Foo');
+        $fooValidator = &Piece_Right_Validator_Factory::factory('FactoryTestCase_Foo');
 
-        $this->assertTrue(is_a($fooValidator, 'Piece_Right_Validator_Foo'));
+        $this->assertTrue(is_a($fooValidator, 'Piece_Right_Validator_FactoryTestcase_Foo'));
 
-        $barValidator = &Piece_Right_Validator_Factory::factory('Bar');
+        $barValidator = &Piece_Right_Validator_Factory::factory('FactoryTestCase_Bar');
 
-        $this->assertTrue(is_a($barValidator, 'Piece_Right_Validator_Bar'));
+        $this->assertTrue(is_a($barValidator, 'Piece_Right_Validator_FactoryTestCase_Bar'));
 
         $fooValidator->baz = 'qux';
 
-        $validator = &Piece_Right_Validator_Factory::factory('Foo');
+        $validator = &Piece_Right_Validator_Factory::factory('FactoryTestCase_Foo');
 
         $this->assertTrue(array_key_exists('baz', $fooValidator));
+    }
+
+    /**
+     * @since Method available since Release 1.5.0
+     */
+    function testAlias()
+    {
+        Piece_Right_Validator_Factory::addValidatorPrefix('FactoryTestCaseAlias');
+        $foo = &Piece_Right_Validator_Factory::factory('Foo');
+
+        $this->assertTrue(is_object($foo));
+        $this->assertTrue(is_a($foo, 'FactoryTestCaseAlias_Foo'));
+    }
+
+    /**
+     * @since Method available since Release 1.5.0
+     */
+    function testAliasWithEmptyPrefix()
+    {
+        Piece_Right_Validator_Factory::addValidatorPrefix('');
+        $bar = &Piece_Right_Validator_Factory::factory('Bar');
+
+        $this->assertTrue(is_object($bar));
+        $this->assertTrue(is_a($bar, 'Bar'));
+    }
+
+    /**
+     * @since Method available since Release 1.5.0
+     */
+    function testCreateExistingClass()
+    {
+        Piece_Right_Validator_Factory::addValidatorPrefix('FactoryTestCaseAlias');
+        $foo = &Piece_Right_Validator_Factory::factory('FactoryTestCase_Foo');
+
+        $this->assertTrue(is_object($foo));
+        $this->assertFalse(is_a($foo, 'FactoryTestCaseAlias_FactoryTestCase_Foo'));
+        $this->assertTrue(is_a($foo, 'Piece_Right_Validator_FactoryTestCase_Foo'));
     }
 
     /**#@-*/
