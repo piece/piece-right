@@ -42,10 +42,13 @@ require_once 'PEAR/PackageFileManager2.php';
 
 PEAR::staticPushErrorHandling(PEAR_ERROR_CALLBACK, create_function('$error', 'var_dump($error); exit();'));
 
-$version = '1.4.0';
+$version = '1.5.0';
 $apiVersion = '1.1.0';
 $releaseStability = 'stable';
-$notes = 'This release includes a few enhancements for instance caching of validators and filters, and two minor fixes. See the following release notes for details.
+$notes = 'A new release of Piece_Right is now available.
+This release includes two features "Validator Aliases" and "Filter Aliases". They can be used multiple aliases as the name of a validator/filter class by setting multiple prefixes.
+
+See the following release notes for details.
 
 ## Enhancements ##
 
@@ -53,24 +56,15 @@ $notes = 'This release includes a few enhancements for instance caching of valid
 
 ##### Piece_Right_Validator_Factory #####
 
-- Changed addValidatorDirectory() to return the old validator directories. (Ticket #14)
-- Added setValidatorDirectories() to set the directories as the validator directories. (Ticket #14)
-- Added clearInstances() to clear all instances of validators. (Ticket #15)
-- Added getValidatorDirectories() to get the validator directories. (Ticket #16)
+- Revemod setValidatorDirectories() and getValidatorDirectories().
+- Changed addValidatorDirectory() so as to not return value.
+- Added a feature named "Validator Aliases" so that this feature can be used multiple aliases as the name of a validator class by setting multiple prefixes. (Ticket #18)
 
 ##### Piece_Right_Filter_Factory #####
 
-- Changed addFilterDirectory() to return the old filter directories. (Ticket #14)
-- Added setFilterDirectories() to set the directories as the filter directories. (Ticket #14)
-- Added clearInstances() to clear all instances of filters. (Ticket #15)
-- Added getFilterDirectories() to get the filter directories. (Ticket #16)
-
-## Defect Fixes ##
-
-##### Piece_Right_Validation_Script #####
-
-- Added missing error handling.
-- Added a missing require_once statement.';
+- Removed setFilterDirectories() and getFilterDirectories().
+- Changed addFilterDirectory() so as to not return value.
+- Added a feature named "Filter Aliases" so that this feature can be used multiple aliases as the name of a validator class by setting multiple prefixes. (Ticket #19)';
 
 $package = new PEAR_PackageFileManager2();
 $package->setOptions(array('filelistgenerator' => 'svn',
@@ -124,6 +118,9 @@ $package->setReleaseStability($releaseStability);
 $package->setNotes($notes);
 $package->setPhpDep('4.3.0');
 $package->setPearinstallerDep('1.4.3');
+$package->addPackageDepWithChannel('required', 'Cache_Lite', 'pear.php.net', '1.7.0');
+$package->addPackageDepWithChannel('required', 'PEAR', 'pear.php.net', '1.4.3');
+$package->addPackageDepWithChannel('optional', 'Stagehand_TestRunner', 'pear.piece-framework.com', '0.4.0');
 $package->addMaintainer('lead', 'iteman', 'KUBO Atsuhiro', 'iteman@users.sourceforge.net');
 $package->addIgnore(array('package.php', 'package.xml', 'package2.xml'));
 $package->addGlobalReplacement('package-info', '@package_version@', 'version');

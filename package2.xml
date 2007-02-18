@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- $Id$ -->
-<package packagerversion="1.5.0RC1" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+<package packagerversion="1.5.0" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
     http://pear.php.net/dtd/tasks-1.0.xsd
     http://pear.php.net/dtd/package-2.0
     http://pear.php.net/dtd/package-2.0.xsd">
  <name>Piece_Right</name>
  <channel>pear.piece-framework.com</channel>
- <summary>A Validation Framework for PHP</summary>
+ <summary>A validation framework for PHP</summary>
  <description>Piece_Right is a validation framework for PHP.
 
 The following is a list of features of Piece_Right.
@@ -39,10 +39,10 @@ o Image</description>
   <email>iteman@users.sourceforge.net</email>
   <active>yes</active>
  </lead>
- <date>2006-12-20</date>
- <time>12:23:00</time>
+ <date>2007-02-19</date>
+ <time>00:18:26</time>
  <version>
-  <release>1.4.0</release>
+  <release>1.5.0</release>
   <api>1.1.0</api>
  </version>
  <stability>
@@ -50,7 +50,10 @@ o Image</description>
   <api>stable</api>
  </stability>
  <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
- <notes>This release includes a few enhancements for instance caching of validators and filters, and two minor fixes. See the following release notes for details.
+ <notes>A new release of Piece_Right is now available.
+This release includes two features &quot;Validator Aliases&quot; and &quot;Filter Aliases&quot;. They can be used multiple aliases as the name of a validator/filter class by setting multiple prefixes.
+
+See the following release notes for details.
 
 ## Enhancements ##
 
@@ -58,24 +61,15 @@ o Image</description>
 
 ##### Piece_Right_Validator_Factory #####
 
-- Changed addValidatorDirectory() to return the old validator directories. (Ticket #14)
-- Added setValidatorDirectories() to set the directories as the validator directories. (Ticket #14)
-- Added clearInstances() to clear all instances of validators. (Ticket #15)
-- Added getValidatorDirectories() to get the validator directories. (Ticket #16)
+- Revemod setValidatorDirectories() and getValidatorDirectories().
+- Changed addValidatorDirectory() so as to not return value.
+- Added a feature named &quot;Validator Aliases&quot; so that this feature can be used multiple aliases as the name of a validator class by setting multiple prefixes. (Ticket #18)
 
 ##### Piece_Right_Filter_Factory #####
 
-- Changed addFilterDirectory() to return the old filter directories. (Ticket #14)
-- Added setFilterDirectories() to set the directories as the filter directories. (Ticket #14)
-- Added clearInstances() to clear all instances of filters. (Ticket #15)
-- Added getFilterDirectories() to get the filter directories. (Ticket #16)
-
-## Defect Fixes ##
-
-##### Piece_Right_Validation_Script #####
-
-- Added missing error handling.
-- Added a missing require_once statement.</notes>
+- Removed setFilterDirectories() and getFilterDirectories().
+- Changed addFilterDirectory() so as to not return value.
+- Added a feature named &quot;Filter Aliases&quot; so that this feature can be used multiple aliases as the name of a validator class by setting multiple prefixes. (Ticket #19)</notes>
  <contents>
   <dir baseinstalldir="/" name="/">
    <dir name="data">
@@ -196,13 +190,31 @@ o Image</description>
        </file>
       </dir> <!-- /tests/Piece/Right/Config -->
       <dir name="Filter">
-       <file name="Bar.php" role="test">
-        <tasks:replace from="@package_version@" to="version" type="package-info" />
-       </file>
+       <dir name="FactoryTestCase">
+        <dir name="FactoryTestCaseAlias">
+         <file name="FooFilter.php" role="test">
+          <tasks:replace from="@package_version@" to="version" type="package-info" />
+         </file>
+        </dir> <!-- /tests/Piece/Right/Filter/FactoryTestCase/FactoryTestCaseAlias -->
+        <dir name="Piece">
+         <dir name="Right">
+          <dir name="Filter">
+           <dir name="FactoryTestCase">
+            <file name="Bar.php" role="test">
+             <tasks:replace from="@package_version@" to="version" type="package-info" />
+            </file>
+            <file name="Foo.php" role="test">
+             <tasks:replace from="@package_version@" to="version" type="package-info" />
+            </file>
+           </dir> <!-- /tests/Piece/Right/Filter/FactoryTestCase/Piece/Right/Filter/FactoryTestCase -->
+          </dir> <!-- /tests/Piece/Right/Filter/FactoryTestCase/Piece/Right/Filter -->
+         </dir> <!-- /tests/Piece/Right/Filter/FactoryTestCase/Piece/Right -->
+        </dir> <!-- /tests/Piece/Right/Filter/FactoryTestCase/Piece -->
+        <file name="BarFilter.php" role="test">
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
+       </dir> <!-- /tests/Piece/Right/Filter/FactoryTestCase -->
        <file name="FactoryTestCase.php" role="test">
-        <tasks:replace from="@package_version@" to="version" type="package-info" />
-       </file>
-       <file name="Foo.php" role="test">
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
        <file name="JapaneseAlphaNumericTestCase.php" role="test">
@@ -242,6 +254,38 @@ o Image</description>
        </file>
       </dir> <!-- /tests/Piece/Right/Validation -->
       <dir name="Validator">
+       <dir name="FactoryTestCase">
+        <dir name="FactoryTestCaseAlias">
+         <dir name="FactoryTestCase">
+          <file name="Foo.php" role="test">
+           <tasks:replace from="@package_version@" to="version" type="package-info" />
+          </file>
+         </dir> <!-- /tests/Piece/Right/Validator/FactoryTestCase/FactoryTestCaseAlias/FactoryTestCase -->
+         <file name="FooValidator.php" role="test">
+          <tasks:replace from="@package_version@" to="version" type="package-info" />
+         </file>
+        </dir> <!-- /tests/Piece/Right/Validator/FactoryTestCase/FactoryTestCaseAlias -->
+        <dir name="Piece">
+         <dir name="Right">
+          <dir name="Validator">
+           <dir name="FactoryTestCase">
+            <file name="Bar.php" role="test">
+             <tasks:replace from="@package_version@" to="version" type="package-info" />
+            </file>
+            <file name="Foo.php" role="test">
+             <tasks:replace from="@package_version@" to="version" type="package-info" />
+            </file>
+           </dir> <!-- /tests/Piece/Right/Validator/FactoryTestCase/Piece/Right/Validator/FactoryTestCase -->
+           <file name="Invalid.php" role="test">
+            <tasks:replace from="@package_version@" to="version" type="package-info" />
+           </file>
+          </dir> <!-- /tests/Piece/Right/Validator/FactoryTestCase/Piece/Right/Validator -->
+         </dir> <!-- /tests/Piece/Right/Validator/FactoryTestCase/Piece/Right -->
+        </dir> <!-- /tests/Piece/Right/Validator/FactoryTestCase/Piece -->
+        <file name="BarValidator.php" role="test">
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
+       </dir> <!-- /tests/Piece/Right/Validator/FactoryTestCase -->
        <dir name="images">
         <file name="image.bmp" role="test">
          <tasks:replace from="@package_version@" to="version" type="package-info" />
@@ -259,9 +303,6 @@ o Image</description>
          <tasks:replace from="@package_version@" to="version" type="package-info" />
         </file>
        </dir> <!-- /tests/Piece/Right/Validator/images -->
-       <file name="Bar.php" role="test">
-        <tasks:replace from="@package_version@" to="version" type="package-info" />
-       </file>
        <file name="CompareTestCase.php" role="test">
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
@@ -277,16 +318,10 @@ o Image</description>
        <file name="FileTestCase.php" role="test">
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
-       <file name="Foo.php" role="test">
-        <tasks:replace from="@package_version@" to="version" type="package-info" />
-       </file>
        <file name="FutureDateTestCase.php" role="test">
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
        <file name="ImageTestCase.php" role="test">
-        <tasks:replace from="@package_version@" to="version" type="package-info" />
-       </file>
-       <file name="Invalid.php" role="test">
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
        <file name="LengthTestCase.php" role="test">
@@ -399,6 +434,38 @@ o Image</description>
  </dependencies>
  <phprelease/>
  <changelog>
+  <release>
+   <version>
+    <release>1.5.0</release>
+    <api>1.1.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2007-02-19</date>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
+   <notes>A new release of Piece_Right is now available.
+This release includes two features &quot;Validator Aliases&quot; and &quot;Filter Aliases&quot;. They can be used multiple aliases as the name of a validator/filter class by setting multiple prefixes.
+
+See the following release notes for details.
+
+## Enhancements ##
+
+### Kernel ###
+
+##### Piece_Right_Validator_Factory #####
+
+- Revemod setValidatorDirectories() and getValidatorDirectories().
+- Changed addValidatorDirectory() so as to not return value.
+- Added a feature named &quot;Validator Aliases&quot; so that this feature can be used multiple aliases as the name of a validator class by setting multiple prefixes. (Ticket #18)
+
+##### Piece_Right_Filter_Factory #####
+
+- Removed setFilterDirectories() and getFilterDirectories().
+- Changed addFilterDirectory() so as to not return value.
+- Added a feature named &quot;Filter Aliases&quot; so that this feature can be used multiple aliases as the name of a validator class by setting multiple prefixes. (Ticket #19)</notes>
+  </release>
   <release>
    <version>
     <release>1.4.0</release>
