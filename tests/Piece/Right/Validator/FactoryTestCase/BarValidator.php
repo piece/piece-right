@@ -40,7 +40,7 @@
 
 require_once 'Piece/Right/Validator/Common.php';
 
-// {{{ Bar
+// {{{ BarValidator
 
 /**
  * A class for unit tests.
@@ -54,7 +54,7 @@ require_once 'Piece/Right/Validator/Common.php';
  * @see        Piece_Right_Validator_Factory
  * @since      Class available since Release 1.5.0
  */
-class Bar extends Piece_Right_Validator_Common
+class BarValidator extends Piece_Right_Validator_Common
 {
 
     // {{{ properties

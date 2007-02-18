@@ -148,10 +148,10 @@ class Piece_Right_Validator_FactoryTestCase extends PHPUnit_TestCase
     function testAlias()
     {
         Piece_Right_Validator_Factory::addValidatorPrefix('FactoryTestCaseAlias');
-        $foo = &Piece_Right_Validator_Factory::factory('Foo');
+        $foo = &Piece_Right_Validator_Factory::factory('FooValidator');
 
         $this->assertTrue(is_object($foo));
-        $this->assertTrue(is_a($foo, 'FactoryTestCaseAlias_Foo'));
+        $this->assertTrue(is_a($foo, 'FactoryTestCaseAlias_FooValidator'));
     }
 
     /**
@@ -160,10 +160,10 @@ class Piece_Right_Validator_FactoryTestCase extends PHPUnit_TestCase
     function testAliasWithEmptyPrefix()
     {
         Piece_Right_Validator_Factory::addValidatorPrefix('');
-        $bar = &Piece_Right_Validator_Factory::factory('Bar');
+        $bar = &Piece_Right_Validator_Factory::factory('BarValidator');
 
         $this->assertTrue(is_object($bar));
-        $this->assertTrue(is_a($bar, 'Bar'));
+        $this->assertTrue(is_a($bar, 'BarValidator'));
     }
 
     /**
