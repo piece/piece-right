@@ -93,7 +93,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
     function tearDown()
     {
         Piece_Right_Validator_Factory::clearInstances();
-        Piece_Right_Validator_Factory::setValidatorDirectories($this->_oldValidatorDirectories);
+        $GLOBALS['PIECE_RIGHT_Validator_Directories'] = $this->_oldValidatorDirectories;
         Piece_Right_Filter_Factory::clearInstances();
         Piece_Right_Filter_Factory::setFilterDirectories($this->_oldFilterDirectories);
         $cache = &new Cache_Lite_File(array('cacheDir' => dirname(__FILE__) . '/',

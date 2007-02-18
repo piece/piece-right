@@ -146,22 +146,6 @@ class Piece_Right_Validator_Factory
     }
 
     // }}}
-    // {{{ setValidatorDirectories()
-
-    /**
-     * Sets the directories as the validator directories.
-     *
-     * @param array $directories
-     * @return array
-     */
-    function setValidatorDirectories($directories)
-    {
-        $oldDirectories = $GLOBALS['PIECE_RIGHT_Validator_Directories'];
-        $GLOBALS['PIECE_RIGHT_Validator_Directories'] = $directories;
-        return $oldDirectories;
-    }
-
-    // }}}
     // {{{ clearInstances()
 
     /**
@@ -170,19 +154,6 @@ class Piece_Right_Validator_Factory
     function clearInstances()
     {
         $GLOBALS['PIECE_RIGHT_Validator_Instances'] = array();
-    }
-
-    // }}}
-    // {{{ getValidatorDirectories()
-
-    /**
-     * Gets the validator directories.
-     *
-     * @return array
-     */
-    function getValidatorDirectories()
-    {
-        return $GLOBALS['PIECE_RIGHT_Validator_Directories'];
     }
 
     /**#@-*/

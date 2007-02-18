@@ -208,7 +208,7 @@ class Piece_Right_Validation_ScriptTestCase extends PHPUnit_TestCase
         $this->assertTrue(array_key_exists('foo', $payload));
         $this->assertEquals('bar', $payload->foo);
 
-        Piece_Right_Validator_Factory::setValidatorDirectories($oldValidatorDirectories);
+        $GLOBALS['PIECE_RIGHT_Validator_Directories'] = $oldValidatorDirectories;
     }
 
     /**#@-*/
