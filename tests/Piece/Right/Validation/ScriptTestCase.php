@@ -191,7 +191,8 @@ class Piece_Right_Validation_ScriptTestCase extends PHPUnit_TestCase
      */
     function testPayload()
     {
-        $oldValidatorDirectories = Piece_Right_Validator_Factory::addValidatorDirectory(dirname(__FILE__));
+        $oldValidatorDirectories = $GLOBALS['PIECE_RIGHT_Validator_Directories'];
+        Piece_Right_Validator_Factory::addValidatorDirectory(dirname(__FILE__));
         $config = &new Piece_Right_Config();
         $config->addValidation('email', 'ScriptPayloadTest');
         $container = &new stdClass();
