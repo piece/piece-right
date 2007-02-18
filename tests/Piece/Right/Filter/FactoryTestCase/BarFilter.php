@@ -35,10 +35,10 @@
  * @version    SVN: $Id$
  * @link       http://piece-framework.com/piece-right/
  * @see        Piece_Right_Filter_Factory
- * @since      File available since Release 0.3.0
+ * @since      File available since Release 1.5.0
  */
 
-// {{{ Piece_Right_Filter_Bar
+// {{{ BarFilter
 
 /**
  * A class for unit tests.
@@ -50,9 +50,9 @@
  * @version    Release: @package_version@
  * @link       http://piece-framework.com/piece-right/
  * @see        Piece_Right_Filter_Factory
- * @since      Class available since Release 0.3.0
+ * @since      Class available since Release 1.5.0
  */
-class Piece_Right_Filter_Bar
+class BarFilter
 {
 
     // {{{ properties

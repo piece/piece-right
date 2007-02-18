@@ -83,7 +83,7 @@ class Piece_Right_Filter_FactoryTestCase extends PHPUnit_TestCase
     {
         Piece_Right_Error::pushCallback(create_function('$error', 'var_dump($error); return ' . PEAR_ERRORSTACK_DIE . ';'));
         $this->_oldFilterDirectories = $GLOBALS['PIECE_RIGHT_Filter_Directories'];
-        Piece_Right_Filter_Factory::addFilterDirectory(dirname(__FILE__) . '/../../..');
+        Piece_Right_Filter_Factory::addFilterDirectory(dirname(__FILE__) . '/FactoryTestCase');
     }
 
     function tearDown()
@@ -111,19 +111,56 @@ class Piece_Right_Filter_FactoryTestCase extends PHPUnit_TestCase
 
     function testFactory()
     {
-        $fooFilter = &Piece_Right_Filter_Factory::factory('Foo');
+        $fooFilter = &Piece_Right_Filter_Factory::factory('FactoryTestCase_Foo');
 
-        $this->assertTrue(is_a($fooFilter, 'Piece_Right_Filter_Foo'));
+        $this->assertTrue(is_a($fooFilter, 'Piece_Right_Filter_FactoryTestCase_Foo'));
 
-        $barFilter = &Piece_Right_Filter_Factory::factory('Bar');
+        $barFilter = &Piece_Right_Filter_Factory::factory('FactoryTestCase_Bar');
 
-        $this->assertTrue(is_a($barFilter, 'Piece_Right_Filter_Bar'));
+        $this->assertTrue(is_a($barFilter, 'Piece_Right_Filter_FactoryTestCase_Bar'));
 
         $fooFilter->baz = 'qux';
 
-        $filter = &Piece_Right_Filter_Factory::factory('Foo');
+        $filter = &Piece_Right_Filter_Factory::factory('FactoryTestCase_Foo');
 
         $this->assertTrue(array_key_exists('baz', $fooFilter));
+    }
+
+    /**
+     * @since Method available since Release 1.5.0
+     */
+    function testAlias()
+    {
+        Piece_Right_Filter_Factory::addFilterPrefix('FactoryTestCaseAlias');
+        $foo = &Piece_Right_Filter_Factory::factory('FooFilter');
+
+        $this->assertTrue(is_object($foo));
+        $this->assertTrue(is_a($foo, 'FactoryTestCaseAlias_FooFilter'));
+    }
+
+    /**
+     * @since Method available since Release 1.5.0
+     */
+    function testAliasWithEmptyPrefix()
+    {
+        Piece_Right_Filter_Factory::addFilterPrefix('');
+        $bar = &Piece_Right_Filter_Factory::factory('BarFilter');
+
+        $this->assertTrue(is_object($bar));
+        $this->assertTrue(is_a($bar, 'BarFilter'));
+    }
+
+    /**
+     * @since Method available since Release 1.5.0
+     */
+    function testCreateExistingClass()
+    {
+        Piece_Right_Filter_Factory::addFilterPrefix('FactoryTestCaseAlias');
+        $foo = &Piece_Right_Filter_Factory::factory('FactoryTestCase_Foo');
+
+        $this->assertTrue(is_object($foo));
+        $this->assertFalse(is_a($foo, 'FactoryTestCaseAlias_FactoryTestCase_Foo'));
+        $this->assertTrue(is_a($foo, 'Piece_Right_Filter_FactoryTestCase_Foo'));
     }
 
     /**#@-*/
