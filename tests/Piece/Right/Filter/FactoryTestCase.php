@@ -72,6 +72,7 @@ class Piece_Right_Filter_FactoryTestCase extends PHPUnit_TestCase
      */
 
     var $_oldFilterDirectories;
+    var $_oldFilterPrefixes;
 
     /**#@-*/
 
@@ -84,10 +85,12 @@ class Piece_Right_Filter_FactoryTestCase extends PHPUnit_TestCase
         Piece_Right_Error::pushCallback(create_function('$error', 'var_dump($error); return ' . PEAR_ERRORSTACK_DIE . ';'));
         $this->_oldFilterDirectories = $GLOBALS['PIECE_RIGHT_Filter_Directories'];
         Piece_Right_Filter_Factory::addFilterDirectory(dirname(__FILE__) . '/FactoryTestCase');
+        $this->_oldFilterPrefixes = $GLOBALS['PIECE_RIGHT_Filter_Prefixes'];
     }
 
     function tearDown()
     {
+        $GLOBALS['PIECE_RIGHT_Filter_Prefixes'] = $this->_oldFilterPrefixes;
         Piece_Right_Filter_Factory::clearInstances();
         $GLOBALS['PIECE_RIGHT_Filter_Directories'] = $this->_oldFilterDirectories;
         Piece_Right_Error::clearErrors();

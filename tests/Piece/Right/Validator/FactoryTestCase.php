@@ -70,7 +70,7 @@ class Piece_Right_Validator_FactoryTestCase extends PHPUnit_TestCase
      */
 
     var $_oldValidatorDirectories;
-    var $_oldPrefixes;
+    var $_oldValidatorPrefixes;
 
     /**#@-*/
 
@@ -83,12 +83,12 @@ class Piece_Right_Validator_FactoryTestCase extends PHPUnit_TestCase
         Piece_Right_Error::pushCallback(create_function('$error', 'var_dump($error); return ' . PEAR_ERRORSTACK_DIE . ';'));
         $this->_oldValidatorDirectories = $GLOBALS['PIECE_RIGHT_Validator_Directories'];
         Piece_Right_Validator_Factory::addValidatorDirectory(dirname(__FILE__) . '/FactoryTestCase');
-        $this->_oldPrefixes = $GLOBALS['PIECE_RIGHT_Validator_Prefixes'];
+        $this->_oldValidatorPrefixes = $GLOBALS['PIECE_RIGHT_Validator_Prefixes'];
     }
 
     function tearDown()
     {
-        $GLOBALS['PIECE_RIGHT_Validator_Prefixes'] = $this->_oldPrefixes;
+        $GLOBALS['PIECE_RIGHT_Validator_Prefixes'] = $this->_oldValidatorPrefixes;
         Piece_Right_Validator_Factory::clearInstances();
         $GLOBALS['PIECE_RIGHT_Validator_Directories'] = $this->_oldValidatorDirectories;
         Piece_Right_Error::clearErrors();
