@@ -216,7 +216,7 @@ class Piece_Right_Validator_Numeric extends Piece_Right_Validator_Common
      */
     function _isDecimal($value)
     {
-        return preg_match('/^[+-]?(?:[1-9][0-9]*|0)$/', $value);
+        return preg_match('/^[+-]?(?:[1-9][0-9]*|0)$/D', $value);
     }
 
     // }}}
@@ -230,7 +230,7 @@ class Piece_Right_Validator_Numeric extends Piece_Right_Validator_Common
      */
     function _isOctal($value)
     {
-        return preg_match('/^[+-]?0[0-7]+$/', $value);
+        return preg_match('/^[+-]?0[0-7]+$/D', $value);
     }
 
     // }}}
@@ -244,7 +244,7 @@ class Piece_Right_Validator_Numeric extends Piece_Right_Validator_Common
      */
     function _isHexadecimal($value)
     {
-        return preg_match('/^[+-]?0[xX][0-9a-fA-F]+$/', $value);
+        return preg_match('/^[+-]?0[xX][0-9a-fA-F]+$/D', $value);
     }
 
     // }}}
@@ -258,7 +258,7 @@ class Piece_Right_Validator_Numeric extends Piece_Right_Validator_Common
      */
     function _isFloat($value)
     {
-        return preg_match('/^[+-]?(?:[0-9]*\.[0-9]+|[0-9]+\.[0-9]*)$/', $value);
+        return preg_match('/^[+-]?(?:[0-9]*\.[0-9]+|[0-9]+\.[0-9]*)$/D', $value);
     }
 
     // }}}
@@ -272,7 +272,7 @@ class Piece_Right_Validator_Numeric extends Piece_Right_Validator_Common
      */
     function _isExponent($value)
     {
-        return preg_match('/^(?:[0-9]+|(?:[0-9]*\.[0-9]+|[0-9]+\.[0-9]*))[eE][+-]?[0-9]+$/', $value);
+        return preg_match('/^(?:[0-9]+|(?:[0-9]*\.[0-9]+|[0-9]+\.[0-9]*))[eE][+-]?[0-9]+$/D', $value);
     }
 
     /**#@-*/

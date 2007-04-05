@@ -96,9 +96,9 @@ class Piece_Right_Validator_Email extends Piece_Right_Validator_Common
     {
         $allowDotBeforeAtmark = $this->getRule('allowDotBeforeAtmark');
         if (!$allowDotBeforeAtmark) {
-            return preg_match("/^{$this->_addrSpec}$/xS", $value);
+            return preg_match("/^{$this->_addrSpec}$/xSD", $value);
         } else {
-            return preg_match("/^{$this->_addrSpecForDotBeforeAtmark}$/xS", $value);
+            return preg_match("/^{$this->_addrSpecForDotBeforeAtmark}$/xSD", $value);
         }
     }
 
