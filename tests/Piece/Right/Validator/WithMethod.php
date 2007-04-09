@@ -85,6 +85,16 @@ class WithMethod
         return $value == $this->_foo;
     }
 
+    function isValidAndSetFoo($value, &$payload)
+    {
+        $payload->foo = 'foo';
+        if ($value == 'foo') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     /**#@-*/
 
     /**#@+
