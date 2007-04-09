@@ -102,11 +102,16 @@ class Piece_Right_Validator_WithMethod extends Piece_Right_Validator_Common
         }
 
         if (!is_array($value)) {
-            return call_user_func($callback, $value, $this->_payload);
+            return call_user_func_array($callback,
+                                        array($value, &$this->_payload)
+                                        );
         }
 
         foreach ($value as $target) {
-            if (!call_user_func($callback, $target, $this->_payload)) {
+            if (!call_user_func_array($callback,
+                                      array($target, &$this->_payload)
+                                      )
+                ) {
                 return false;
             }
         }
