@@ -65,12 +65,12 @@ sequence:
             type: seq
             required: no
             sequence:
-            - type: str
+              - type: str
           "turnOff":
             type: seq
             required: no
             sequence:
-            - type: str
+              - type: str
           "turnOnForceValidation": { type: bool, required: no }
       "description": { type: str, required: no }
       "pseudo":
@@ -84,5 +84,5 @@ sequence:
             type: seq
             required: no
             sequence:
-            - type: str
+              - type: str
       "forceValidation": { type: bool, required: no }
