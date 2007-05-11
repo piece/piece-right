@@ -174,8 +174,7 @@ class Piece_Right_Config_Factory
             return $config;
         }
 
-        $config = &Piece_Right_Config_Factory::_getConfiguration($configFile, $cacheDirectory);
-        return $config;
+        return Piece_Right_Config_Factory::_getConfiguration($configFile, $cacheDirectory);
     }
 
     /**#@-*/
