@@ -33,7 +33,6 @@
  * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
- * @link       http://piece-framework.com/piece-right/
  * @see        Piece_Right_Validator_WithMethod
  * @since      File available since Release 0.3.0
  */
@@ -53,7 +52,6 @@ require_once dirname(__FILE__) . '/WithMethod.php';
  * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
- * @link       http://piece-framework.com/piece-right/
  * @see        Piece_Right_Validator_WithMethod
  * @since      File available since Release 0.3.0
  */
@@ -114,7 +112,8 @@ class Piece_Right_Validator_WithMethodTestCase extends PHPUnit_TestCase
         $validator->setPayload($payload);
 
         $this->assertTrue($validator->validate('foo'));
-        $this->assertEquals($payload->foo, 'foo');
+        $this->assertTrue(array_key_exists('foo', $payload));
+        $this->assertEquals('foo', $payload->foo);
     }
 
     function testFailure()
@@ -152,7 +151,8 @@ class Piece_Right_Validator_WithMethodTestCase extends PHPUnit_TestCase
         $validator->setPayload($payload);
 
         $this->assertFalse($validator->validate('bar'));
-        $this->assertEquals($payload->foo, 'foo');
+        $this->assertTrue(array_key_exists('foo', $payload));
+        $this->assertEquals('foo', $payload->foo);
     }
 
     /**#@+
