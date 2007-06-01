@@ -33,7 +33,6 @@
  * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
- * @link       http://piece-framework.com/piece-right/
  * @see        Piece_Right
  * @since      File available since Release 0.1.0
  */
@@ -55,7 +54,6 @@ require_once 'Piece/Right/Filter/Factory.php';
  * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
- * @link       http://piece-framework.com/piece-right/
  * @see        Piece_Right
  * @since      Class available since Release 0.1.0
  */
@@ -1074,6 +1072,138 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $this->_assertTurnOff('0123456789', '', true);
         $this->_assertTurnOff('', '0123456789', true);
         $this->_assertTurnOff('0123456789', '0123456789', true);
+    }
+
+    /**
+     * @since Method available since Release 1.6.0
+     */
+    function testValidateFinalsWithDynamicConfigration()
+    {
+        $cacheDirectory = dirname(__FILE__) . '/' . basename(__FILE__, '.php');
+        include_once "$cacheDirectory/ValidateFinals.php";
+
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST['password1'] = 'foobar';
+        $_POST['password2'] = 'foobar';
+
+        $dynamicConfig = &new Piece_Right_Config();
+        $dynamicConfig->setRequired('password1');
+        $dynamicConfig->addValidation('password1', 'Length', array('min' => 6, 'max' => 255));
+        $dynamicConfig->setRequired('password2');
+        $dynamicConfig->addValidation('password2', 'Length', array('min' => 6, 'max' => 255));
+        $dynamicConfig->addValidation('password1', 'WithMethod', array('class' => 'ValidateFinals', 'method' => 'stamp'), null, true);
+        $dynamicConfig->addValidation('password1', 'Compare', array('to' => 'password2'), null, true);
+        $payload = &new stdClass();
+        $right = &new Piece_Right();
+        $right->setPayload($payload);
+
+        $this->assertTrue($right->validate(null, $dynamicConfig));
+
+        $results = &$right->getResults();
+        foreach (array('password1', 'password2') as $field) {
+            $this->assertTrue(in_array($field, $results->getValidFields()), "The field [ $field ] is expected.");
+        }
+
+        $this->assertTrue(array_key_exists('foo', $payload));
+        $this->assertEquals('bar', $payload->foo);
+
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST['password1'] = 'foo';
+        $_POST['password2'] = 'foobar';
+
+        $dynamicConfig = &new Piece_Right_Config();
+        $dynamicConfig->setRequired('password1');
+        $dynamicConfig->addValidation('password1', 'Length', array('min' => 6, 'max' => 255));
+        $dynamicConfig->setRequired('password2');
+        $dynamicConfig->addValidation('password2', 'Length', array('min' => 6, 'max' => 255));
+        $dynamicConfig->addValidation('password1', 'WithMethod', array('class' => 'ValidateFinals', 'method' => 'stamp'), null, true);
+        $dynamicConfig->addValidation('password1', 'Compare', array('to' => 'password2'), null, true);
+        $payload = &new stdClass();
+        $right = &new Piece_Right();
+        $right->setPayload($payload);
+
+        $this->assertFalse($right->validate(null, $dynamicConfig));
+
+        $results = &$right->getResults();
+        foreach (array('password1') as $field) {
+            $this->assertTrue(in_array($field, $results->getErrorFields()), "The field [ $field ] is expected.");
+        }
+
+        foreach (array('password2') as $field) {
+            $this->assertTrue(in_array($field, $results->getValidFields()), "The field [ $field ] is expected.");
+        }
+
+        $this->assertFalse(array_key_exists('foo', $payload));
+
+        unset($_POST['password2']);
+        unset($_POST['password1']);
+        unset($_SERVER['REQUEST_METHOD']);
+
+        $cache = &new Cache_Lite_File(array('cacheDir' => "$cacheDirectory/",
+                                            'masterFile' => '',
+                                            'automaticSerialization' => true,
+                                            'errorHandlingAPIBreak' => true)
+                                      );
+        $cache->clean();
+    }
+
+    /**
+     * @since Method available since Release 1.6.0
+     */
+    function testValidateFinals()
+    {
+        $cacheDirectory = dirname(__FILE__) . '/' . basename(__FILE__, '.php');
+        include_once "$cacheDirectory/ValidateFinals.php";
+
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST['password1'] = 'foobar';
+        $_POST['password2'] = 'foobar';
+
+        $payload = &new stdClass();
+        $right = &new Piece_Right($cacheDirectory, $cacheDirectory);
+        $right->setPayload($payload);
+
+        $this->assertTrue($right->validate('ValidateFinals'));
+
+        $results = &$right->getResults();
+        foreach (array('password1', 'password2') as $field) {
+            $this->assertTrue(in_array($field, $results->getValidFields()), "The field [ $field ] is expected.");
+        }
+
+        $this->assertTrue(array_key_exists('foo', $payload));
+        $this->assertEquals('bar', $payload->foo);
+
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST['password1'] = 'foo';
+        $_POST['password2'] = 'foobar';
+
+        $payload = &new stdClass();
+        $right = &new Piece_Right($cacheDirectory, $cacheDirectory);
+        $right->setPayload($payload);
+
+        $this->assertFalse($right->validate('ValidateFinals'));
+
+        $results = &$right->getResults();
+        foreach (array('password1') as $field) {
+            $this->assertTrue(in_array($field, $results->getErrorFields()), "The field [ $field ] is expected.");
+        }
+
+        foreach (array('password2') as $field) {
+            $this->assertTrue(in_array($field, $results->getValidFields()), "The field [ $field ] is expected.");
+        }
+
+        $this->assertFalse(array_key_exists('foo', $payload));
+
+        unset($_POST['password2']);
+        unset($_POST['password1']);
+        unset($_SERVER['REQUEST_METHOD']);
+
+        $cache = &new Cache_Lite_File(array('cacheDir' => "$cacheDirectory/",
+                                            'masterFile' => '',
+                                            'automaticSerialization' => true,
+                                            'errorHandlingAPIBreak' => true)
+                                      );
+        $cache->clean();
     }
 
     /**#@-*/

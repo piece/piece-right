@@ -156,6 +156,16 @@ class Piece_Right
             }
         }
 
+        if (!$this->_results->countErrors()) {
+            foreach ($validationSet as $field => $validations) {
+                $fieldValue = $this->_results->getFieldValue($field);
+                $this->_validate($field, $fieldValue, $validations, true);
+                if (Piece_Right_Error::hasErrors('exception')) {
+                    return;
+                }
+            }
+        }
+
         return !(boolean)$this->_results->countErrors();
     }
 
@@ -441,7 +451,7 @@ class Piece_Right
     // {{{ _validate()
 
     /**
-     * Validates the value by the validations of the field.
+     * Validates a field value by the given validations.
      *
      * @param string $field
      * @param string $value
@@ -450,9 +460,13 @@ class Piece_Right
      * @throws PIECE_RIGHT_ERROR_INVALID_VALIDATOR
      * @since Method available since Release 0.3.0
      */
-    function _validate($field, $value, $validations)
+    function _validate($field, $value, $validations, $isFinals = false)
     {
         foreach ($validations as $validation) {
+            if ($validation['useInFinals'] != $isFinals) {
+                continue;
+            }
+
             $validator = &Piece_Right_Validator_Factory::factory($validation['validator']);
             if (Piece_Right_Error::hasErrors('exception')) {
                 return;

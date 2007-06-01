@@ -321,6 +321,17 @@ class Piece_Right_Config_Factory
                                             $validation['forceValidation']
                                             );
             }
+
+            if (array_key_exists('finals', $validation) && is_array($validation['finals'])) {
+                foreach ($validation['finals'] as $validator) {
+                    $config->addValidation($validation['name'],
+                                           $validator['name'],
+                                           (array)@$validator['rule'],
+                                           @$validator['message'],
+                                           true
+                                           );
+                }
+            }
         }
 
         return $config;

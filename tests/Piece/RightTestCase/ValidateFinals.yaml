@@ -1,0 +1,26 @@
+# $Id$
+- name: password1
+  required:
+    message: "[%_description%] is required."
+  validator:
+    - name: Length
+      rule:
+        min: 6
+        max: 255
+  finals:
+    - name: WithMethod
+      rule:
+        class: ValidateFinals
+        method: stamp
+    - name: Compare
+      rule:
+        to: password2
+
+- name: password2
+  required:
+    message: "[%_description%] is required."
+  validator:
+    - name: Length
+      rule:
+        min: 6
+        max: 255

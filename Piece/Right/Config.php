@@ -91,15 +91,16 @@ class Piece_Right_Config
      * @param string $message
      */
     function addValidation($field, $validator, $rules = array(),
-                           $message = null
+                           $message = null, $useInFinals = false
                            )
     {
         $this->addField($field);
 
         array_push($this->_validationSet[$field],
-                   array('validator' => $validator,
-                         'rules'     => $rules,
-                         'message'   => $message)
+                   array('validator'   => $validator,
+                         'rules'       => $rules,
+                         'message'     => $message,
+                         'useInFinals' => $useInFinals)
                    );
     }
 
@@ -164,7 +165,8 @@ class Piece_Right_Config
             $this->addValidation($field,
                                  $validation['validator'],
                                  $validation['rules'],
-                                 $validation['message']
+                                 $validation['message'],
+                                 $validation['useInFinals']
                                  );
         }
     }
