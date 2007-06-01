@@ -105,15 +105,11 @@ class Piece_Right_Config_Factory
         }
 
         if (!file_exists($configDirectory)) {
-            Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
             Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                    "The configuration directory [ $configDirectory ] not found.",
-                                    'warning'
+                                    "The configuration directory [ $configDirectory ] not found."
                                     );
-            Piece_Right_Error::popCallback();
-
-            $config = &new Piece_Right_Config();
-            return $config;
+            $return = null;
+            return $return;
         }
 
         $configFile = "$configDirectory/$validationSet.yaml";
@@ -128,7 +124,7 @@ class Piece_Right_Config_Factory
 
         if (!is_readable($configFile)) {
             Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_READABLE,
-                                    "The configuration file [ $configFile ] was not readable."
+                                    "The configuration file [ $configFile ] is not readable."
                                     );
             $return = null;
             return $return;
@@ -155,12 +151,10 @@ class Piece_Right_Config_Factory
             return $config;
         }
 
-        if (!is_readable($cacheDirectory)
-            || !is_writable($cacheDirectory)
-            ) {
+        if (!is_readable($cacheDirectory) || !is_writable($cacheDirectory)) {
             Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
             Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_READABLE,
-                                    "The cache directory [ $cacheDirectory ] was not readable or writable.",
+                                    "The cache directory [ $cacheDirectory ] is not readable or writable.",
                                     'warning'
                                     );
             Piece_Right_Error::popCallback();
