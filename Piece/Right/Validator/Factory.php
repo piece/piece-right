@@ -193,7 +193,7 @@ class Piece_Right_Validator_Factory
         if (!is_readable($file)) {
             Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
             Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_READABLE,
-                                    "The validator file [ $file ] was not readable.",
+                                    "The validator file [ $file ] is not readable.",
                                     'warning'
                                     );
             Piece_Right_Error::popCallback();
@@ -203,7 +203,7 @@ class Piece_Right_Validator_Factory
         if (!include_once $file) {
             Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
             Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                    "The validator file [ $file ] not found or was not readable.",
+                                    "The validator file [ $file ] not found or is not readable.",
                                     'warning'
                                     );
             Piece_Right_Error::popCallback();
