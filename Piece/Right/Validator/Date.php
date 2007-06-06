@@ -105,75 +105,9 @@ class Piece_Right_Validator_Date extends Piece_Right_Validator_Common
             $this->_year = $matches[ $this->_getRule('patternYearPosition') ];
             return checkdate($this->_month, $this->_day, $this->_year);
         } else {
-            $era = $matches[ $this->_getRule('patternEraPosition') ];
-            $eraMapping = array_flip($this->_getRule('eraMapping'));
-            if (!array_key_exists($era, $eraMapping)) {
-                return false;
-            }
-
-            $year = $matches[ $this->_getRule('patternYearPosition') ];
-            switch ($eraMapping[$era]) {
-            case 'heisei':
-                $this->_year = 1989 - 1 + $year;
-                break;
-            case 'showa':
-                $this->_year = 1926 - 1 + $year;
-                break;
-            case 'taisho':
-                $this->_year = 1912 - 1 + $year;
-                break;
-            case 'meiji':
-                $this->_year = 1868 - 1 + $year;
-                break;
-            default:
-                return false;
-            }
-
-            if (checkdate($this->_month, $this->_day, $this->_year)) {
-                $dateForComparison = sprintf('%04d%02d%02d', $this->_year, $this->_month, $this->_day);
-                switch ($eraMapping[$era]) {
-                case 'heisei':
-                    if ($dateForComparison < '19890108') {
-                        return false;
-                    }
-
-                    break;
-                case 'showa':
-                    if ($dateForComparison < '19261225') {
-                        return false;
-                    }
-
-                    if ($dateForComparison > '19890107') {
-                        return false;
-                    }
-
-                    break;
-                case 'taisho':
-                    if ($dateForComparison < '19120730') {
-                        return false;
-                    }
-
-                    if ($dateForComparison > '19261225') {
-                        return false;
-                    }
-
-                    break;
-                case 'meiji':
-                    if ($dateForComparison < '18680125') {
-                        return false;
-                    }
-
-                    if ($dateForComparison > '19120730') {
-                        return false;
-                    }
-
-                    break;
-                }
-
-                return true;
-            } else {
-                return false;
-            }
+            return $this->_validateDateOfJapaneseEra($matches[ $this->_getRule('patternEraPosition') ],
+                                                     $matches[ $this->_getRule('patternYearPosition') ]
+                                                     );
         }
     }
 
@@ -208,7 +142,89 @@ class Piece_Right_Validator_Date extends Piece_Right_Validator_Common
         $this->_month = null;
         $this->_day = null;
     }
- 
+
+    // }}}
+    // {{{ _validateDateOfJapaneseEra()
+
+    /**
+     * Validates a date of Japanese era.
+     *
+     * @param string $era
+     * @param string $year
+     * @return boolean
+     * @since Method available since Release 1.6.0
+     */
+    function _validateDateOfJapaneseEra($era, $year)
+    {
+        $eraMapping = array_flip($this->_getRule('eraMapping'));
+        if (!array_key_exists($era, $eraMapping)) {
+            return false;
+        }
+
+        switch ($eraMapping[$era]) {
+        case 'heisei':
+            $this->_year = 1989 - 1 + $year;
+            break;
+        case 'showa':
+            $this->_year = 1926 - 1 + $year;
+            break;
+        case 'taisho':
+            $this->_year = 1912 - 1 + $year;
+            break;
+        case 'meiji':
+            $this->_year = 1868 - 1 + $year;
+            break;
+        default:
+            return false;
+        }
+
+        if (checkdate($this->_month, $this->_day, $this->_year)) {
+            $dateForComparison = sprintf('%04d%02d%02d', $this->_year, $this->_month, $this->_day);
+            switch ($eraMapping[$era]) {
+            case 'heisei':
+                if ($dateForComparison < '19890108') {
+                    return false;
+                }
+
+                break;
+            case 'showa':
+                if ($dateForComparison < '19261225') {
+                    return false;
+                }
+
+                if ($dateForComparison > '19890107') {
+                    return false;
+                }
+
+                break;
+            case 'taisho':
+                if ($dateForComparison < '19120730') {
+                    return false;
+                }
+
+                if ($dateForComparison > '19261225') {
+                    return false;
+                }
+
+                break;
+            case 'meiji':
+                if ($dateForComparison < '18680125') {
+                    return false;
+                }
+
+                if ($dateForComparison > '19120730') {
+                    return false;
+                }
+
+                break;
+            }
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     /**#@-*/
 
     // }}}
