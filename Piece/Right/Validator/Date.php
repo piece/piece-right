@@ -29,11 +29,13 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @author     KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
- * @link       http://piece-framework.com/piece-right/
+ * @see        http://ja.wikipedia.org/wiki/%E5%B9%B3%E6%88%90
+ * @see        http://ja.wikipedia.org/wiki/%E6%98%AD%E5%92%8C
+ * @see        http://ja.wikipedia.org/wiki/%E5%A4%A7%E6%AD%A3
+ * @see        http://ja.wikipedia.org/wiki/%E6%98%8E%E6%B2%BB
  * @since      File available since Release 0.3.0
  */
 
@@ -45,11 +47,13 @@ require_once 'Piece/Right/Validator/Common.php';
  * A validator which is used to check whether a value is a valid date.
  *
  * @package    Piece_Right
- * @author     KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
- * @link       http://piece-framework.com/piece-right/
+ * @see        http://ja.wikipedia.org/wiki/%E5%B9%B3%E6%88%90
+ * @see        http://ja.wikipedia.org/wiki/%E6%98%AD%E5%92%8C
+ * @see        http://ja.wikipedia.org/wiki/%E5%A4%A7%E6%AD%A3
+ * @see        http://ja.wikipedia.org/wiki/%E6%98%8E%E6%B2%BB
  * @since      Class available since Release 0.3.0
  */
 class Piece_Right_Validator_Date extends Piece_Right_Validator_Common
@@ -99,6 +103,7 @@ class Piece_Right_Validator_Date extends Piece_Right_Validator_Common
         $isJapaneseEra = $this->_getRule('isJapaneseEra');
         if (!$isJapaneseEra) {
             $this->_year = $matches[ $this->_getRule('patternYearPosition') ];
+            return checkdate($this->_month, $this->_day, $this->_year);
         } else {
             $era = $matches[ $this->_getRule('patternEraPosition') ];
             $eraMapping = array_flip($this->_getRule('eraMapping'));
@@ -108,11 +113,11 @@ class Piece_Right_Validator_Date extends Piece_Right_Validator_Common
 
             $year = $matches[ $this->_getRule('patternYearPosition') ];
             switch ($eraMapping[$era]) {
-            case 'showa':
-                $this->_year = 1926 - 1 + $year;
-                break;
             case 'heisei':
                 $this->_year = 1989 - 1 + $year;
+                break;
+            case 'showa':
+                $this->_year = 1926 - 1 + $year;
                 break;
             case 'taisho':
                 $this->_year = 1912 - 1 + $year;
@@ -123,9 +128,53 @@ class Piece_Right_Validator_Date extends Piece_Right_Validator_Common
             default:
                 return false;
             }
-        }
 
-        return checkdate($this->_month, $this->_day, $this->_year);
+            if (checkdate($this->_month, $this->_day, $this->_year)) {
+                $dateForComparison = sprintf('%04d%02d%02d', $this->_year, $this->_month, $this->_day);
+                switch ($eraMapping[$era]) {
+                case 'heisei':
+                    if ($dateForComparison < '19890108') {
+                        return false;
+                    }
+
+                    break;
+                case 'showa':
+                    if ($dateForComparison < '19261225') {
+                        return false;
+                    }
+
+                    if ($dateForComparison > '19890107') {
+                        return false;
+                    }
+
+                    break;
+                case 'taisho':
+                    if ($dateForComparison < '19120730') {
+                        return false;
+                    }
+
+                    if ($dateForComparison > '19261225') {
+                        return false;
+                    }
+
+                    break;
+                case 'meiji':
+                    if ($dateForComparison < '18680125') {
+                        return false;
+                    }
+
+                    if ($dateForComparison > '19120730') {
+                        return false;
+                    }
+
+                    break;
+                }
+
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
 
     /**#@-*/

@@ -29,12 +29,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @author     KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
- * @link       http://piece-framework.com/piece-right/
- * @see        Piece_Right_Validator_Date
  * @since      File available since Release 0.3.0
  */
 
@@ -48,12 +45,9 @@ require_once 'Piece/Right/Results.php';
  * TestCase for Piece_Right_Validator_Date
  *
  * @package    Piece_Right
- * @author     KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
- * @link       http://piece-framework.com/piece-right/
- * @see        Piece_Right_Validator_Date
  * @since      File available since Release 0.3.0
  */
 class Piece_Right_Validator_DateTestCase extends PHPUnit_TestCase
@@ -95,7 +89,8 @@ class Piece_Right_Validator_DateTestCase extends PHPUnit_TestCase
 
         $validator = &new Piece_Right_Validator_Date();
         $validator->setRules(array('isJapaneseEra' => true,
-                                   'pattern' => '/^(\d+)-(\d+)-(\d+)-(\d+)$/'));
+                                   'pattern' => '/^(\d+)-(\d+)-(\d+)-(\d+)$/')
+                             );
 
         $this->assertTrue($validator->validate('51-01-20-3'));
 
@@ -128,13 +123,15 @@ class Piece_Right_Validator_DateTestCase extends PHPUnit_TestCase
 
         $validator = &new Piece_Right_Validator_Date();
         $validator->setRules(array('isJapaneseEra' => true,
-                                   'pattern' => '/^(\d+)-(\d+)-(\d+)-(\d+)$/'));
+                                   'pattern' => '/^(\d+)-(\d+)-(\d+)-(\d+)$/')
+                             );
 
         $this->assertFalse($validator->validate('52-2-29-3'));
 
         $validator = &new Piece_Right_Validator_Date();
         $validator->setRules(array('isJapaneseEra' => true,
-                                   'pattern' => '/^(\d+)-(\d+)-(\d+)-(\d+)$/'));
+                                   'pattern' => '/^(\d+)-(\d+)-(\d+)-(\d+)$/')
+                             );
 
         $this->assertFalse($validator->validate('351120'));
 
@@ -145,9 +142,46 @@ class Piece_Right_Validator_DateTestCase extends PHPUnit_TestCase
 
         $validator = &new Piece_Right_Validator_Date();
         $validator->setRules(array('isJapaneseEra' => true,
-                                   'pattern' => '/^(\d+)-(\d+)-(\d+)-(\d+)$/'));
+                                   'pattern' => '/^(\d+)-(\d+)-(\d+)-(\d+)$/')
+                             );
 
         $this->assertFalse($validator->validate('51-2-29-10'));
+    }
+
+    /**
+     * @since Method available since Release 1.6.0
+     */
+    function testRangeOfYearsWithJapaneseEraShouldBeChecked()
+    {
+        $validator = &new Piece_Right_Validator_Date();
+        $validator->setRules(array('isJapaneseEra' => true,
+                                   'pattern' => '/^(\d+)-(\d+)-(\d+)-(\d+)$/')
+                             );
+
+        $this->assertFalse($validator->validate('1-1-7-4'));
+        $this->assertFalse($validator->validate('0-1-8-4'));
+        $this->assertTrue($validator->validate('1-1-8-4'));
+
+        $this->assertFalse($validator->validate('1-12-24-3'));
+        $this->assertFalse($validator->validate('0-12-25-3'));
+        $this->assertTrue($validator->validate('1-12-25-3'));
+        $this->assertFalse($validator->validate('64-1-8-3'));
+        $this->assertFalse($validator->validate('65-1-8-3'));
+        $this->assertTrue($validator->validate('64-1-7-3'));
+
+        $this->assertFalse($validator->validate('1-7-29-2'));
+        $this->assertFalse($validator->validate('0-7-30-2'));
+        $this->assertTrue($validator->validate('1-7-30-2'));
+        $this->assertFalse($validator->validate('15-12-26-2'));
+        $this->assertFalse($validator->validate('16-12-26-2'));
+        $this->assertTrue($validator->validate('15-12-25-2'));
+
+        $this->assertFalse($validator->validate('1-1-24-1'));
+        $this->assertFalse($validator->validate('0-1-24-1'));
+        $this->assertTrue($validator->validate('1-1-25-1'));
+        $this->assertFalse($validator->validate('45-7-31-1'));
+        $this->assertFalse($validator->validate('46-7-31-1'));
+        $this->assertTrue($validator->validate('45-7-30-1'));
     }
 
     /**#@+
