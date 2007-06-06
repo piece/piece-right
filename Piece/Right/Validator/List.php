@@ -91,7 +91,7 @@ class Piece_Right_Validator_List extends Piece_Right_Validator_Common
             $value = (array)$value;
         }
 
-        $elements = $this->getRule('elements');
+        $elements = $this->_getRule('elements');
         if (!is_array($elements)) {
             return false;
         }

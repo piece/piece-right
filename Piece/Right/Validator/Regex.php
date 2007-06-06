@@ -84,7 +84,7 @@ class Piece_Right_Validator_Regex extends Piece_Right_Validator_Common
      */
     function validate($value)
     {
-        $pattern = $this->getRule('pattern');
+        $pattern = $this->_getRule('pattern');
         if (!is_null($pattern)) {
             return preg_match($pattern, $value);
         }

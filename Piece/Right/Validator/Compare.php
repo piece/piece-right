@@ -85,7 +85,7 @@ class Piece_Right_Validator_Compare extends Piece_Right_Validator_Common
      */
     function validate($value)
     {
-        $to = $this->getRule('to');
+        $to = $this->_getRule('to');
         if (is_null($to)) {
             return false;
         }

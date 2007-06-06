@@ -84,14 +84,14 @@ class Piece_Right_Validator_Numeric extends Piece_Right_Validator_Common
      */
     function validate($value)
     {
-        $allowDecimal     = $this->getRule('allowDecimal');
-        $allowOctal       = $this->getRule('allowOctal');
-        $allowHexadecimal = $this->getRule('allowHexadecimal');
+        $allowDecimal     = $this->_getRule('allowDecimal');
+        $allowOctal       = $this->_getRule('allowOctal');
+        $allowHexadecimal = $this->_getRule('allowHexadecimal');
 
-        $allowExponent = $this->getRule('allowExponent');
+        $allowExponent = $this->_getRule('allowExponent');
 
-        $useInteger = $this->getRule('useInteger');
-        $useFloat = $this->getRule('useFloat');
+        $useInteger = $this->_getRule('useInteger');
+        $useFloat = $this->_getRule('useFloat');
 
         if ($allowDecimal) {
             $useInteger = true;

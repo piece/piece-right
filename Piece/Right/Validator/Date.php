@@ -88,25 +88,25 @@ class Piece_Right_Validator_Date extends Piece_Right_Validator_Common
      */
     function validate($value)
     {
-        $pattern = $this->getRule('pattern');
+        $pattern = $this->_getRule('pattern');
         if (!preg_match($pattern, $value, $matches)) {
             return false;
         }
 
-        $this->_month = $matches[ $this->getRule('patternMonthPosition') ];
-        $this->_day = $matches[ $this->getRule('patternDayPosition') ];
+        $this->_month = $matches[ $this->_getRule('patternMonthPosition') ];
+        $this->_day = $matches[ $this->_getRule('patternDayPosition') ];
 
-        $isJapaneseEra = $this->getRule('isJapaneseEra');
+        $isJapaneseEra = $this->_getRule('isJapaneseEra');
         if (!$isJapaneseEra) {
-            $this->_year = $matches[ $this->getRule('patternYearPosition') ];
+            $this->_year = $matches[ $this->_getRule('patternYearPosition') ];
         } else {
-            $era = $matches[ $this->getRule('patternEraPosition') ];
-            $eraMapping = array_flip($this->getRule('eraMapping'));
+            $era = $matches[ $this->_getRule('patternEraPosition') ];
+            $eraMapping = array_flip($this->_getRule('eraMapping'));
             if (!array_key_exists($era, $eraMapping)) {
                 return false;
             }
 
-            $year = $matches[ $this->getRule('patternYearPosition') ];
+            $year = $matches[ $this->_getRule('patternYearPosition') ];
             switch ($eraMapping[$era]) {
             case 'showa':
                 $this->_year = 1926 - 1 + $year;

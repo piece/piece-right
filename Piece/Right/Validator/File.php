@@ -147,7 +147,7 @@ class Piece_Right_Validator_File extends Piece_Right_Validator_Common
             return false;
         }
 
-        $useMagic = $this->getRule('useMagic');
+        $useMagic = $this->_getRule('useMagic');
         if ($useMagic) {
             $mime = $this->_detectMimeType($filename);
             if ($mime === false) {
@@ -177,7 +177,7 @@ class Piece_Right_Validator_File extends Piece_Right_Validator_Common
     {
         $key = ucfirst($key);
 
-        $max = $this->getRule("max{$key}");
+        $max = $this->_getRule("max{$key}");
         if (!is_null($max)) {
             if ($value > $max) {
                 $this->_setMessage("max{$key}");
@@ -185,7 +185,7 @@ class Piece_Right_Validator_File extends Piece_Right_Validator_Common
             }
         }
 
-        $min = $this->getRule("min{$key}");
+        $min = $this->_getRule("min{$key}");
         if (!is_null($min)) {
             if ($value < $min) {
                 $this->_setMessage("min{$key}");
@@ -207,7 +207,7 @@ class Piece_Right_Validator_File extends Piece_Right_Validator_Common
      */
     function _validateMimeType($mime)
     {
-        $pattern = $this->getRule('mimetype');
+        $pattern = $this->_getRule('mimetype');
         if (is_null($pattern)) {
             return true;
         }

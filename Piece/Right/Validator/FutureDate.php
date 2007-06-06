@@ -90,7 +90,7 @@ class Piece_Right_Validator_FutureDate extends Piece_Right_Validator_Date
             return false;
         }
 
-        $allowCurrentDate = $this->getRule('allowCurrentDate');
+        $allowCurrentDate = $this->_getRule('allowCurrentDate');
 
         $currentTime = time();
         if (!$allowCurrentDate) {

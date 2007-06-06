@@ -87,9 +87,9 @@ class Piece_Right_Validator_WithMethod extends Piece_Right_Validator_Common
      */
     function validate($value)
     {
-        $class = $this->getRule('class');
-        $method = $this->getRule('method');
-        $isStatic = $this->getRule('isStatic');
+        $class = $this->_getRule('class');
+        $method = $this->_getRule('method');
+        $isStatic = $this->_getRule('isStatic');
         if (is_null($class) || is_null($method)) {
             return false;
         }

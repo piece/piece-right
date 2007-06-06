@@ -87,7 +87,7 @@ class Piece_Right_Validator_Length extends Piece_Right_Validator_Common
     {
         $length = strlen($value);
 
-        $min = $this->getRule('min');
+        $min = $this->_getRule('min');
         if (!is_null($min)) {
             if ($length < $min) {
                 $this->_setMessage('min');
@@ -95,7 +95,7 @@ class Piece_Right_Validator_Length extends Piece_Right_Validator_Common
             }
         }
 
-        $max = $this->getRule('max');
+        $max = $this->_getRule('max');
         if (!is_null($max)) {
             if ($length > $max) {
                 $this->_setMessage('max');
