@@ -64,22 +64,23 @@ class Piece_Right_Validator_WithMethodTestCase extends PHPUnit_TestCase
      * @access private
      */
 
+    var $_oldIncludePath;
+
     /**#@-*/
 
     /**#@+
      * @access public
      */
-    /**#@-*/
 
     function setUp()
     {
         Piece_Right_Error::pushCallback(create_function('$error', 'var_dump($error); return ' . PEAR_ERRORSTACK_DIE . ';'));
-        $oldIncludePath = set_include_path(dirname(__FILE__) . '/' . basename(__FILE__, '.php') . PATH_SEPARATOR . get_include_path());
+        $this->_oldIncludePath = set_include_path(dirname(__FILE__) . '/' . basename(__FILE__, '.php') . PATH_SEPARATOR . get_include_path());
     }
 
     function tearDown()
     {
-        set_include_path($oldIncludePath);
+        set_include_path($this->_oldIncludePath);
         Piece_Right_Error::clearErrors();
         Piece_Right_Error::popCallback();
     }
@@ -200,6 +201,8 @@ class Piece_Right_Validator_WithMethodTestCase extends PHPUnit_TestCase
 
         Piece_Right_Error::popCallback();
     }
+
+    /**#@-*/
 
     /**#@+
      * @access private
