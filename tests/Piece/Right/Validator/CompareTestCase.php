@@ -29,12 +29,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @author     KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
- * @link       http://piece-framework.com/piece-right/
- * @see        Piece_Right_Validator_Compare
  * @since      File available since Release 0.3.0
  */
 
@@ -48,13 +45,10 @@ require_once 'Piece/Right/Results.php';
  * TestCase for Piece_Right_Validator_Compare
  *
  * @package    Piece_Right
- * @author     KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
- * @link       http://piece-framework.com/piece-right/
- * @see        Piece_Right_Validator_Compare
- * @since      File available since Release 0.3.0
+ * @since      Class available since Release 0.3.0
  */
 class Piece_Right_Validator_CompareTestCase extends PHPUnit_TestCase
 {

@@ -29,10 +29,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @author     KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
+ * @see        Piece_RightTestCase
  * @since      File available since Release 1.6.0
  */
 
@@ -42,11 +42,11 @@
  * A class for unit tests.
  *
  * @package    Piece_Right
- * @author     KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
- * @since      File available since Release 1.6.0
+ * @see        Piece_RightTestCase
+ * @since      Class available since Release 1.6.0
  */
 class ValidateFinals
 {

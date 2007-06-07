@@ -37,7 +37,6 @@
 
 require_once 'PHPUnit.php';
 require_once 'Piece/Right/Validator/Date.php';
-require_once 'Piece/Right/Results.php';
 
 // {{{ Piece_Right_Validator_DateTestCase
 
@@ -48,7 +47,7 @@ require_once 'Piece/Right/Results.php';
  * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
- * @since      File available since Release 0.3.0
+ * @since      Class available since Release 0.3.0
  */
 class Piece_Right_Validator_DateTestCase extends PHPUnit_TestCase
 {

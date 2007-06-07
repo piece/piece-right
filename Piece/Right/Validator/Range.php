@@ -29,12 +29,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @author     KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
- * @link       http://piece-framework.com/piece-right/
- * @see        Piece_Right_Validator_Numeric
  * @since      File available since Release 0.1.0
  */
 
@@ -46,12 +43,9 @@ require_once 'Piece/Right/Validator/Numeric.php';
  * A validator which is used to check whether a value is within a given range.
  *
  * @package    Piece_Right
- * @author     KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
- * @link       http://piece-framework.com/piece-right/
- * @see        Piece_Right_Validator_Numeric
  * @since      Class available since Release 0.1.0
  */
 class Piece_Right_Validator_Range extends Piece_Right_Validator_Numeric

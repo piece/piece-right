@@ -29,12 +29,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @author     KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
- * @link       http://piece-framework.com/piece-right/
- * @see        Piece_Right_Filter_Factory
+ * @see        Piece_Right_Filter_FactoryTestCase
  * @since      File available since Release 1.5.0
  */
 
@@ -44,12 +42,10 @@
  * A class for unit tests.
  *
  * @package    Piece_Right
- * @author     KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
- * @link       http://piece-framework.com/piece-right/
- * @see        Piece_Right_Filter_Factory
+ * @see        Piece_Right_Filter_FactoryTestCase
  * @since      Class available since Release 1.5.0
  */
 class Piece_Right_Filter_FactoryTestCase_Foo

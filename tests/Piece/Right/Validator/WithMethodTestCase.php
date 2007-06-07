@@ -29,17 +29,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @author     KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
- * @see        Piece_Right_Validator_WithMethod
  * @since      File available since Release 0.3.0
  */
 
 require_once 'PHPUnit.php';
 require_once 'Piece/Right/Validator/WithMethod.php';
-require_once 'Piece/Right/Results.php';
 require_once dirname(__FILE__) . '/WithMethod.php';
 
 // {{{ Piece_Right_Validator_WithMethodTestCase
@@ -48,12 +45,10 @@ require_once dirname(__FILE__) . '/WithMethod.php';
  * TestCase for Piece_Right_Validator_WithMethod
  *
  * @package    Piece_Right
- * @author     KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
- * @see        Piece_Right_Validator_WithMethod
- * @since      File available since Release 0.3.0
+ * @since      Class available since Release 0.3.0
  */
 class Piece_Right_Validator_WithMethodTestCase extends PHPUnit_TestCase
 {

@@ -29,13 +29,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @author     KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
- * @link       http://piece-framework.com/piece-right/
- * @since      File available since Release 0.3.0
  * @see        Piece_Right_Validator_WithMethodTestCase
+ * @since      File available since Release 0.3.0
  */
 
 // {{{ WithMethod
@@ -44,13 +42,11 @@
  * A class for unit tests.
  *
  * @package    Piece_Right
- * @author     KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
- * @link       http://piece-framework.com/piece-right/
- * @since      Class available since Release 0.3.0
  * @see        Piece_Right_Validator_WithMethodTestCase
+ * @since      Class available since Release 0.3.0
  */
 class WithMethod
 {
