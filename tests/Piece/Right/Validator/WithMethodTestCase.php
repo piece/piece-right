@@ -162,6 +162,9 @@ class Piece_Right_Validator_WithMethodTestCase extends PHPUnit_TestCase
         $this->assertEquals('foo', $payload->foo);
     }
 
+    /**
+     * @since Method available since Release 1.6.0
+     */
     function testClassShouldBeLoadedAutomaticallyBySpecifyingDirectory()
     {
         $validator = &new Piece_Right_Validator_WithMethod();
@@ -174,6 +177,9 @@ class Piece_Right_Validator_WithMethodTestCase extends PHPUnit_TestCase
         $this->assertTrue($validator->validate(array('foo', 'foo')));
     }
 
+    /**
+     * @since Method available since Release 1.6.0
+     */
     function testExceptionShoudBeRaisedIfSpecifiedClassNotFound()
     {
         Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
