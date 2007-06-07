@@ -159,6 +159,13 @@ class Piece_Right
         if (!$this->_results->countErrors()) {
             foreach ($validationSet as $field => $validations) {
                 $fieldValue = $this->_results->getFieldValue($field);
+
+                if (!$this->_config->forceValidation($field)) {
+                    if (!$this->_checkValidationRequirement($field, $fieldValue)) {
+                        continue;
+                    }
+                }
+
                 $this->_validate($field, $fieldValue, $validations, true);
                 if (Piece_Right_Error::hasErrors('exception')) {
                     return;
