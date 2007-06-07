@@ -117,6 +117,8 @@ class Piece_Right
      * @throws PIECE_RIGHT_ERROR_INVALID_CONFIGURATION
      * @throws PIECE_RIGHT_ERROR_NOT_FOUND
      * @throws PIECE_RIGHT_ERROR_INVALID_FILTER
+     * @throws PIECE_RIGHT_ERROR_CANNOT_READ
+     * @throws PIECE_RIGHT_ERROR_INVALID_VALIDATOR
      */
     function validate($validationSetName = null, $dynamicConfig = null)
     {
@@ -307,6 +309,8 @@ class Piece_Right
      * @param array $fields
      * @since Method available since Release 0.3.0
      * @throws PIECE_RIGHT_ERROR_NOT_FOUND
+     * @throws PIECE_RIGHT_ERROR_INVALID_FILTER
+     * @throws PIECE_RIGHT_ERROR_CANNOT_READ
      */
     function _filter($fields)
     {
@@ -455,6 +459,7 @@ class Piece_Right
      * @param array  $validations
      * @throws PIECE_RIGHT_ERROR_NOT_FOUND
      * @throws PIECE_RIGHT_ERROR_INVALID_VALIDATOR
+     * @throws PIECE_RIGHT_ERROR_CANNOT_READ
      * @since Method available since Release 0.3.0
      */
     function _validate($field, $value, $validations, $isFinals = false)
