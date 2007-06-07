@@ -36,6 +36,7 @@
  */
 
 require_once 'Piece/Right/Validator/Common.php';
+require_once 'Piece/Right/ClassLoader.php';
 
 // {{{ Piece_Right_Validator_WithMethod
 
@@ -80,6 +81,9 @@ class Piece_Right_Validator_WithMethod extends Piece_Right_Validator_Common
      *
      * @param mixed $value
      * @return boolean
+     * @throws PIECE_RIGHT_ERROR_NOT_READABLE
+     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
+     * @throws PIECE_RIGHT_ERROR_CANNOT_READ
      */
     function validate($value)
     {
@@ -88,6 +92,22 @@ class Piece_Right_Validator_WithMethod extends Piece_Right_Validator_Common
         $isStatic = $this->_getRule('isStatic');
         if (is_null($class) || is_null($method)) {
             return false;
+        }
+
+        if (!Piece_Right_ClassLoader::loaded($class)) {
+            Piece_Right_ClassLoader::load($class, $this->_getRule('directory'));
+            if (Piece_Right_Error::hasErrors('exception')) {
+                return;
+            }
+
+            if (!Piece_Right_ClassLoader::loaded($class)) {
+                Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
+                                        "The class [ $class ] not found in the loaded file.",
+                                        'exception',
+                                        array('validator' => __CLASS__)
+                                        );
+                return;
+            }
         }
 
         if ($isStatic) {
@@ -134,6 +154,7 @@ class Piece_Right_Validator_WithMethod extends Piece_Right_Validator_Common
         $this->_addRule('class');
         $this->_addRule('method');
         $this->_addRule('isStatic', true);
+        $this->_addRule('directory');
     }
  
     /**#@-*/

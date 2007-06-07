@@ -37,7 +37,6 @@
 
 require_once 'PHPUnit.php';
 require_once 'Piece/Right/Validator/WithMethod.php';
-require_once dirname(__FILE__) . '/WithMethod.php';
 
 // {{{ Piece_Right_Validator_WithMethodTestCase
 
@@ -71,6 +70,19 @@ class Piece_Right_Validator_WithMethodTestCase extends PHPUnit_TestCase
      * @access public
      */
     /**#@-*/
+
+    function setUp()
+    {
+        Piece_Right_Error::pushCallback(create_function('$error', 'var_dump($error); return ' . PEAR_ERRORSTACK_DIE . ';'));
+        $oldIncludePath = set_include_path(dirname(__FILE__) . '/' . basename(__FILE__, '.php') . PATH_SEPARATOR . get_include_path());
+    }
+
+    function tearDown()
+    {
+        set_include_path($oldIncludePath);
+        Piece_Right_Error::clearErrors();
+        Piece_Right_Error::popCallback();
+    }
 
     function testSuccess()
     {
@@ -148,6 +160,39 @@ class Piece_Right_Validator_WithMethodTestCase extends PHPUnit_TestCase
         $this->assertFalse($validator->validate('bar'));
         $this->assertTrue(array_key_exists('foo', $payload));
         $this->assertEquals('foo', $payload->foo);
+    }
+
+    function testClassShouldBeLoadedAutomaticallyBySpecifyingDirectory()
+    {
+        $validator = &new Piece_Right_Validator_WithMethod();
+        $validator->setRules(array('class' => 'Piece_Right_Validator_WithMethodTestCase_Foo',
+                                   'method' => 'isFoo',
+                                   'directory' => dirname(__FILE__) . '/' . basename(__FILE__, '.php'))
+                             );
+
+        $this->assertTrue($validator->validate('foo'));
+        $this->assertTrue($validator->validate(array('foo', 'foo')));
+    }
+
+    function testExceptionShoudBeRaisedIfSpecifiedClassNotFound()
+    {
+        Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
+        $validator = &new Piece_Right_Validator_WithMethod();
+        $validator->setRules(array('class' => 'Piece_Right_Validator_WithMethodTestCase_Bar',
+                                   'method' => 'isFoo',
+                                   'directory' => dirname(__FILE__) . '/' . basename(__FILE__, '.php'))
+                             );
+
+        $result = $validator->validate('foo');
+
+        $this->assertNull($result);
+        $this->assertTrue(Piece_Right_Error::hasErrors('exception'));
+
+        $error = Piece_Right_Error::pop();
+
+        $this->assertEquals(PIECE_RIGHT_ERROR_NOT_FOUND, $error['code']);
+
+        Piece_Right_Error::popCallback();
     }
 
     /**#@+
