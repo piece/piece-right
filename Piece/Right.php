@@ -138,39 +138,11 @@ class Piece_Right
         }
 
         $this->_generatePseudoFields(array_keys($validationSet));
-
         $this->_watch(array_keys($validationSet));
-
-        foreach ($validationSet as $field => $validations) {
-            $fieldValue = $this->_results->getFieldValue($field);
-
-            if (!$this->_config->forceValidation($field)) {
-                if (!$this->_checkValidationRequirement($field, $fieldValue)) {
-                    continue;
-                }
-            }
-
-            $this->_validate($field, $fieldValue, $validations);
-            if (Piece_Right_Error::hasErrors('exception')) {
-                return;
-            }
-        }
+        $this->_validateFields($validationSet, false);
 
         if (!$this->_results->countErrors()) {
-            foreach ($validationSet as $field => $validations) {
-                $fieldValue = $this->_results->getFieldValue($field);
-
-                if (!$this->_config->forceValidation($field)) {
-                    if (!$this->_checkValidationRequirement($field, $fieldValue)) {
-                        continue;
-                    }
-                }
-
-                $this->_validate($field, $fieldValue, $validations, true);
-                if (Piece_Right_Error::hasErrors('exception')) {
-                    return;
-                }
-            }
+            $this->_validateFields($validationSet, true);
         }
 
         return !(boolean)$this->_results->countErrors();
@@ -457,21 +429,22 @@ class Piece_Right
     }
 
     // }}}
-    // {{{ _validate()
+    // {{{ _validateField()
 
     /**
      * Validates a field value by the given validations.
      *
-     * @param string $field
-     * @param string $value
-     * @param array  $validations
+     * @param string  $field
+     * @param string  $value
+     * @param array   $validations
+     * @param boolean $isFinals
      * @throws PIECE_RIGHT_ERROR_NOT_FOUND
      * @throws PIECE_RIGHT_ERROR_INVALID_VALIDATOR
      * @throws PIECE_RIGHT_ERROR_CANNOT_READ
      * @throws PIECE_RIGHT_ERROR_NOT_READABLE
      * @since Method available since Release 0.3.0
      */
-    function _validate($field, $value, $validations, $isFinals = false)
+    function _validateField($field, $value, $validations, $isFinals)
     {
         foreach ($validations as $validation) {
             if ($validation['useInFinals'] != $isFinals) {
@@ -632,6 +605,38 @@ class Piece_Right
         }
 
         return array_map(array(&$this, __FUNCTION__), $value);
+    }
+
+    // }}}
+    // {{{ _validateFields()
+
+    /**
+     * Validates value of all fields.
+     *
+     * @param array   $validationSet
+     * @param boolean $isFinals
+     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
+     * @throws PIECE_RIGHT_ERROR_INVALID_VALIDATOR
+     * @throws PIECE_RIGHT_ERROR_CANNOT_READ
+     * @throws PIECE_RIGHT_ERROR_NOT_READABLE
+     * @since Method available since Release 1.6.0
+     */
+    function _validateFields($validationSet, $isFinals)
+    {
+        foreach ($validationSet as $field => $validations) {
+            $fieldValue = $this->_results->getFieldValue($field);
+
+            if (!$this->_config->forceValidation($field)) {
+                if (!$this->_checkValidationRequirement($field, $fieldValue)) {
+                    continue;
+                }
+            }
+
+            $this->_validateField($field, $fieldValue, $validations, $isFinals);
+            if (Piece_Right_Error::hasErrors('exception')) {
+                return;
+            }
+        }
     }
 
     /**#@-*/
