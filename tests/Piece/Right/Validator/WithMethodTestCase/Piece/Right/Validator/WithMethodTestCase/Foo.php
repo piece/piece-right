@@ -69,9 +69,15 @@ class Piece_Right_Validator_WithMethodTestCase_Foo
      * @access public
      */
 
-    function isFoo($value, &$payload)
+    function isFoo($value, &$payload, &$results)
     {
         return $value == 'foo';
+    }
+
+    function compare($value, &$payload, &$results)
+    {
+        $results->foo = 'bar';
+        return $value == $results->getFieldValue('bar');
     }
 
     /**#@-*/

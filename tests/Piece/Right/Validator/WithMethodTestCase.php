@@ -37,6 +37,7 @@
 
 require_once 'PHPUnit.php';
 require_once 'Piece/Right/Validator/WithMethod.php';
+require_once 'Piece/Right/Results.php';
 
 // {{{ Piece_Right_Validator_WithMethodTestCase
 
@@ -200,6 +201,25 @@ class Piece_Right_Validator_WithMethodTestCase extends PHPUnit_TestCase
         $this->assertEquals(PIECE_RIGHT_ERROR_NOT_FOUND, $error['code']);
 
         Piece_Right_Error::popCallback();
+    }
+
+    /**
+     * @since Method available since Release 1.6.0
+     */
+    function testResultsShouldBePassedToMethod()
+    {
+        $results = &new Piece_Right_Results();
+        $results->setFieldValue('bar', 'baz');
+        $validator = &new Piece_Right_Validator_WithMethod();
+        $validator->setResults($results);
+        $validator->setRules(array('class' => 'Piece_Right_Validator_WithMethodTestCase_Foo',
+                                   'method' => 'compare',
+                                   'directory' => dirname(__FILE__) . '/' . basename(__FILE__, '.php'))
+                             );
+
+        $this->assertTrue($validator->validate('baz'));
+        $this->assertTrue(array_key_exists('foo', $results));
+        $this->assertEquals('bar', $results->foo);
     }
 
     /**#@-*/
