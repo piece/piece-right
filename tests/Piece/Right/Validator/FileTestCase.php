@@ -125,7 +125,7 @@ class Piece_Right_Validator_FileTestCase extends PHPUnit_TestCase
                    'name' => $notExistFile,
                    'type' => 'text/plain',
                    'size' => 100,
-                   'error' => 0
+                   'error' => UPLOAD_ERR_OK
                    );
 
         $validator = &new Piece_Right_Validator_File();
