@@ -35,6 +35,8 @@
  * @since      File available since Release 0.3.0
  */
 
+require_once 'Piece/Right/Filter/Common.php';
+
 // {{{ Piece_Right_Filter_JapaneseH2Z
 
 /**
@@ -47,7 +49,7 @@
  * @version    Release: @package_version@
  * @since      Class available since Release 0.3.0
  */
-class Piece_Right_Filter_JapaneseH2Z
+class Piece_Right_Filter_JapaneseH2Z extends Piece_Right_Filter_Common
 {
 
     // {{{ properties

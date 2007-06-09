@@ -35,6 +35,8 @@
  * @since      File available since Release 1.3.0
  */
 
+require_once 'Piece/Right/Filter/Common.php';
+
 // {{{ Piece_Right_Filter_Empty2NULL
 
 /**
@@ -46,7 +48,7 @@
  * @version    Release: @package_version@
  * @since      Class available since Release 1.3.0
  */
-class Piece_Right_Filter_Empty2NULL
+class Piece_Right_Filter_Empty2NULL extends Piece_Right_Filter_Common
 {
 
     // {{{ properties
