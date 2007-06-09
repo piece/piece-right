@@ -106,7 +106,7 @@ class Piece_Right_Validator_File extends Piece_Right_Validator_Common
         }
 
         for ($i = 0; $i < count($value['error']); $i++) {
-            if ($value['error'][$i]) {
+            if ($value['error'][$i] != UPLOAD_ERR_OK) {
                 return false;
             }
 
