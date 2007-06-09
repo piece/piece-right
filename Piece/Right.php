@@ -74,6 +74,7 @@ class Piece_Right
     var $_config;
     var $_payload;
     var $_currentFilter;
+    var $_currentFilterIsArrayable;
 
     /**#@-*/
 
@@ -305,11 +306,19 @@ class Piece_Right
                     }
 
                     $this->_currentFilter = array(&$filter, 'filter');
+
+                    if (method_exists($filter, 'isArrayable')) {
+                        $this->_currentFilterIsArrayable = $filter->isArrayable();
+                    } else {
+                        $this->_currentFilterIsArrayable = false;
+                    }
+
+                    $fieldValue = $this->_invokeFilter($fieldValue);
                 } else {
                     $this->_currentFilter = $filterName;
+                    $this->_currentFilterIsArrayable = false;
+                    $fieldValue = $this->_invokeFilter($fieldValue);
                 }
-
-                $fieldValue = $this->_invokeFilter($fieldValue);
             }
 
             $this->_results->setFieldValue($field, $fieldValue);
@@ -602,9 +611,13 @@ class Piece_Right
     {
         if (!is_array($value)) {
             return call_user_func($this->_currentFilter, $value);
+        } else {
+            if (!$this->_currentFilterIsArrayable) {
+                return array_map(array(&$this, __FUNCTION__), $value);
+            } else {
+                return call_user_func($this->_currentFilter, $value);
+            }
         }
-
-        return array_map(array(&$this, __FUNCTION__), $value);
     }
 
     // }}}
