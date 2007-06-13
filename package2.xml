@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- $Id$ -->
-<package packagerversion="1.5.0" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+<package packagerversion="1.5.4" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
     http://pear.php.net/dtd/tasks-1.0.xsd
     http://pear.php.net/dtd/package-2.0
     http://pear.php.net/dtd/package-2.0.xsd">
@@ -9,40 +9,17 @@
  <summary>A validation framework for PHP</summary>
  <description>Piece_Right is a validation framework for PHP.
 
-The following is a list of features of Piece_Right.
-
-o Extensible validator system
-o Extensible filter system
-o A lot of built-in validators
-o Pseudo fields
-o Watching the specified fields
-o Message variables
-o Force validation
-o YAML based configuration
-o Dynamic configuration
-
-The following is a list of built-in validators.
-
-o Compare
-o Date, FutureDate, PastDate (including Japanese date support)
-o Length
-o List
-o Range
-o Regex
-o WithMethod
-o Email
-o File
-o Image</description>
+Piece_Right provides a generic validation system which make it easy to validate input values on Web applications. Piece_Right includes a lot of ready-to-use built-in validators. This can make it a lot faster to get started with Piece_Right in existing web applications and web application frameworks.</description>
  <lead>
   <name>KUBO Atsuhiro</name>
   <user>iteman</user>
   <email>iteman@users.sourceforge.net</email>
   <active>yes</active>
  </lead>
- <date>2007-02-19</date>
- <time>00:18:26</time>
+ <date>2007-06-13</date>
+ <time>12:02:43</time>
  <version>
-  <release>1.5.0</release>
+  <release>1.6.0</release>
   <api>1.1.0</api>
  </version>
  <stability>
@@ -51,25 +28,47 @@ o Image</description>
  </stability>
  <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
  <notes>A new release of Piece_Right is now available.
-This release includes two features &quot;Validator Aliases&quot; and &quot;Filter Aliases&quot;. They can be used multiple aliases as the name of a validator/filter class by setting multiple prefixes.
+
+What&apos;s New in Piece_Right 1.6.0
+
+ * Finals: &quot;Finals&quot; can be used for additional validations after normal validations.
+ * Enhanced Filter Mechanism: The filter mechanism can now pass an array to the filter directly if it is arrayable.
+ * Unique/UniqueFields validators: &quot;Unique&quot; validator can be used to check that all values in an array do not duplicate. &quot;UniqueFields&quot; validator can be used to check that each value of multiple fields do not duplicate.
+ * Improved WithMethod validator: &quot;WithMethod&quot; validator now has a rule &quot;directory&quot; for loading a class from the specified directory if the class file is not loaded before invoking a method. And also a callback can now receive a Piece_Right_Results object as the second argument.
+ * NoFile2NULL filter: &quot;NoFile2NULL&quot; filter converts a $_FILES element with UPLOAD_ERR_NO_FILE to NULL.
+ * A few Defect Fixes: A few defects in validators are fixed.
 
 See the following release notes for details.
 
-## Enhancements ##
+Enhancements
+============ 
 
-### Kernel ###
+Kernel:
 
-##### Piece_Right_Validator_Factory #####
+- Added a feature named &quot;Finals&quot; that can be used for additional validations after normal validations. (Ticket #11)
+- Changed factory() to throw an exception if the configuration directory not found. (Ticket #25) (Piece_Right_Config_Factory)
+- Added _setRule(), _setRuleMessage(), and _getRule().
+  setRule(), setRuleMessage(), and getRule() are deprecated since Piece_Right 1.6.0. (Ticket #21) (Piece_Right_Validator_Common)
+- Changed the filter mechanism so as to pass an array to the filter directly if it is arrayable.
 
-- Revemod setValidatorDirectories() and getValidatorDirectories().
-- Changed addValidatorDirectory() so as to not return value.
-- Added a feature named &quot;Validator Aliases&quot; so that this feature can be used multiple aliases as the name of a validator class by setting multiple prefixes. (Ticket #18)
+Validators:
 
-##### Piece_Right_Filter_Factory #####
+- Added &quot;Unique&quot; validator which can be used to check that all values in an array do not duplicate. (Ticket #26)
+- Added &quot;UniqueFields&quot; validator which can be used to check that each value of multiple fields do not duplicate. (Ticket #26)
+- Added a rule &quot;directory&quot; for loading a class from the specified directory if the class file is not loaded before invoking a method. (WithMethod)
+- Changed the callback interface so as to pass the Piece_Right_Results object to a method. (WithMethod)
 
-- Removed setFilterDirectories() and getFilterDirectories().
-- Changed addFilterDirectory() so as to not return value.
-- Added a feature named &quot;Filter Aliases&quot; so that this feature can be used multiple aliases as the name of a validator class by setting multiple prefixes. (Ticket #19)</notes>
+Filters:
+
+- Added &quot;NoFile2NULL&quot; filter which converts a $_FILES element with UPLOAD_ERR_NO_FILE to NULL. (Ticket #28)
+
+Defect Fixes
+============
+
+Validators:
+
+- Fixed a defect that caused a payload object to be passed by value to the specified method with PHP4. (Ticket #23) (WithMethod)
+- Fixed a defect that caused a validation to be passed regardless of whether or not a year value is within a valid range of Japanese era if the rule &quot;isJapaneseEra&quot; was used. (Ticket #22) (Date)</notes>
  <contents>
   <dir baseinstalldir="/" name="/">
    <dir name="data">
@@ -93,6 +92,9 @@ See the following release notes for details.
       </file>
      </dir> <!-- /Piece/Right/Config -->
      <dir name="Filter">
+      <file name="Common.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
       <file name="Empty2NULL.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
@@ -103,6 +105,9 @@ See the following release notes for details.
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
       <file name="JapaneseH2Z.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="NoFile2NULL.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
      </dir> <!-- /Piece/Right/Filter -->
@@ -157,10 +162,19 @@ See the following release notes for details.
       <file name="Regex.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
+      <file name="Unique.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="UniqueFields.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
       <file name="WithMethod.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
      </dir> <!-- /Piece/Right/Validator -->
+     <file name="ClassLoader.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
      <file name="Config.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
@@ -224,6 +238,9 @@ See the following release notes for details.
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
        <file name="LowerCase.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="NoFile2NULLTestCase.php" role="test">
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
        <file name="TestRunner.php" role="test">
@@ -303,6 +320,22 @@ See the following release notes for details.
          <tasks:replace from="@package_version@" to="version" type="package-info" />
         </file>
        </dir> <!-- /tests/Piece/Right/Validator/images -->
+       <dir name="WithMethodTestCase">
+        <dir name="Piece">
+         <dir name="Right">
+          <dir name="Validator">
+           <dir name="WithMethodTestCase">
+            <file name="Foo.php" role="test">
+             <tasks:replace from="@package_version@" to="version" type="package-info" />
+            </file>
+           </dir> <!-- /tests/Piece/Right/Validator/WithMethodTestCase/Piece/Right/Validator/WithMethodTestCase -->
+          </dir> <!-- /tests/Piece/Right/Validator/WithMethodTestCase/Piece/Right/Validator -->
+         </dir> <!-- /tests/Piece/Right/Validator/WithMethodTestCase/Piece/Right -->
+        </dir> <!-- /tests/Piece/Right/Validator/WithMethodTestCase/Piece -->
+        <file name="WithMethod.php" role="test">
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
+       </dir> <!-- /tests/Piece/Right/Validator/WithMethodTestCase -->
        <file name="CompareTestCase.php" role="test">
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
@@ -348,7 +381,10 @@ See the following release notes for details.
        <file name="TestRunner.php" role="test">
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
-       <file name="WithMethod.php" role="test">
+       <file name="UniqueFieldsTestCase.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="UniqueTestCase.php" role="test">
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
        <file name="WithMethodTestCase.php" role="test">
@@ -365,6 +401,14 @@ See the following release notes for details.
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
      </dir> <!-- /tests/Piece/Right -->
+     <dir name="RightTestCase">
+      <file name="ValidateFinals.php" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="ValidateFinals.yaml" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+     </dir> <!-- /tests/Piece/RightTestCase -->
      <file name="AppropriateValidationMessage.yaml" role="test">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
@@ -432,8 +476,62 @@ See the following release notes for details.
    </package>
   </optional>
  </dependencies>
- <phprelease/>
+ <phprelease />
  <changelog>
+  <release>
+   <version>
+    <release>1.6.0</release>
+    <api>1.1.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2007-06-13</date>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
+   <notes>A new release of Piece_Right is now available.
+
+What&apos;s New in Piece_Right 1.6.0
+
+ * Finals: &quot;Finals&quot; can be used for additional validations after normal validations.
+ * Enhanced Filter Mechanism: The filter mechanism can now pass an array to the filter directly if it is arrayable.
+ * Unique/UniqueFields validators: &quot;Unique&quot; validator can be used to check that all values in an array do not duplicate. &quot;UniqueFields&quot; validator can be used to check that each value of multiple fields do not duplicate.
+ * Improved WithMethod validator: &quot;WithMethod&quot; validator now has a rule &quot;directory&quot; for loading a class from the specified directory if the class file is not loaded before invoking a method. And also a callback can now receive a Piece_Right_Results object as the second argument.
+ * NoFile2NULL filter: &quot;NoFile2NULL&quot; filter converts a $_FILES element with UPLOAD_ERR_NO_FILE to NULL.
+ * A few Defect Fixes: A few defects in validators are fixed.
+
+See the following release notes for details.
+
+Enhancements
+============ 
+
+Kernel:
+
+- Added a feature named &quot;Finals&quot; that can be used for additional validations after normal validations. (Ticket #11)
+- Changed factory() to throw an exception if the configuration directory not found. (Ticket #25) (Piece_Right_Config_Factory)
+- Added _setRule(), _setRuleMessage(), and _getRule().
+  setRule(), setRuleMessage(), and getRule() are deprecated since Piece_Right 1.6.0. (Ticket #21) (Piece_Right_Validator_Common)
+- Changed the filter mechanism so as to pass an array to the filter directly if it is arrayable.
+
+Validators:
+
+- Added &quot;Unique&quot; validator which can be used to check that all values in an array do not duplicate. (Ticket #26)
+- Added &quot;UniqueFields&quot; validator which can be used to check that each value of multiple fields do not duplicate. (Ticket #26)
+- Added a rule &quot;directory&quot; for loading a class from the specified directory if the class file is not loaded before invoking a method. (WithMethod)
+- Changed the callback interface so as to pass the Piece_Right_Results object to a method. (WithMethod)
+
+Filters:
+
+- Added &quot;NoFile2NULL&quot; filter which converts a $_FILES element with UPLOAD_ERR_NO_FILE to NULL. (Ticket #28)
+
+Defect Fixes
+============
+
+Validators:
+
+- Fixed a defect that caused a payload object to be passed by value to the specified method with PHP4. (Ticket #23) (WithMethod)
+- Fixed a defect that caused a validation to be passed regardless of whether or not a year value is within a valid range of Japanese era if the rule &quot;isJapaneseEra&quot; was used. (Ticket #22) (Date)</notes>
+  </release>
   <release>
    <version>
     <release>1.5.0</release>

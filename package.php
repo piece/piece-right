@@ -40,29 +40,52 @@ require_once 'PEAR/PackageFileManager2.php';
 
 PEAR::staticPushErrorHandling(PEAR_ERROR_CALLBACK, create_function('$error', 'var_dump($error); exit();'));
 
-$version = '1.5.0';
-$apiVersion = '1.1.0';
+$releaseVersion = '1.6.0';
 $releaseStability = 'stable';
+$apiVersion = '1.1.0';
+$apiStability = 'stable';
 $notes = 'A new release of Piece_Right is now available.
-This release includes two features "Validator Aliases" and "Filter Aliases". They can be used multiple aliases as the name of a validator/filter class by setting multiple prefixes.
+
+What\'s New in Piece_Right 1.6.0
+
+ * Finals: "Finals" can be used for additional validations after normal validations.
+ * Enhanced Filter Mechanism: The filter mechanism can now pass an array to the filter directly if it is arrayable.
+ * Unique/UniqueFields validators: "Unique" validator can be used to check that all values in an array do not duplicate. "UniqueFields" validator can be used to check that each value of multiple fields do not duplicate.
+ * Improved WithMethod validator: "WithMethod" validator now has a rule "directory" for loading a class from the specified directory if the class file is not loaded before invoking a method. And also a callback can now receive a Piece_Right_Results object as the second argument.
+ * NoFile2NULL filter: "NoFile2NULL" filter converts a $_FILES element with UPLOAD_ERR_NO_FILE to NULL.
+ * A few Defect Fixes: A few defects in validators are fixed.
 
 See the following release notes for details.
 
-## Enhancements ##
+Enhancements
+============ 
 
-### Kernel ###
+Kernel:
 
-##### Piece_Right_Validator_Factory #####
+- Added a feature named "Finals" that can be used for additional validations after normal validations. (Ticket #11)
+- Changed factory() to throw an exception if the configuration directory not found. (Ticket #25) (Piece_Right_Config_Factory)
+- Added _setRule(), _setRuleMessage(), and _getRule().
+  setRule(), setRuleMessage(), and getRule() are deprecated since Piece_Right 1.6.0. (Ticket #21) (Piece_Right_Validator_Common)
+- Changed the filter mechanism so as to pass an array to the filter directly if it is arrayable.
 
-- Revemod setValidatorDirectories() and getValidatorDirectories().
-- Changed addValidatorDirectory() so as to not return value.
-- Added a feature named "Validator Aliases" so that this feature can be used multiple aliases as the name of a validator class by setting multiple prefixes. (Ticket #18)
+Validators:
 
-##### Piece_Right_Filter_Factory #####
+- Added "Unique" validator which can be used to check that all values in an array do not duplicate. (Ticket #26)
+- Added "UniqueFields" validator which can be used to check that each value of multiple fields do not duplicate. (Ticket #26)
+- Added a rule "directory" for loading a class from the specified directory if the class file is not loaded before invoking a method. (WithMethod)
+- Changed the callback interface so as to pass the Piece_Right_Results object to a method. (WithMethod)
 
-- Removed setFilterDirectories() and getFilterDirectories().
-- Changed addFilterDirectory() so as to not return value.
-- Added a feature named "Filter Aliases" so that this feature can be used multiple aliases as the name of a validator class by setting multiple prefixes. (Ticket #19)';
+Filters:
+
+- Added "NoFile2NULL" filter which converts a $_FILES element with UPLOAD_ERR_NO_FILE to NULL. (Ticket #28)
+
+Defect Fixes
+============
+
+Validators:
+
+- Fixed a defect that caused a payload object to be passed by value to the specified method with PHP4. (Ticket #23) (WithMethod)
+- Fixed a defect that caused a validation to be passed regardless of whether or not a year value is within a valid range of Japanese era if the rule "isJapaneseEra" was used. (Ticket #22) (Date)';
 
 $package = new PEAR_PackageFileManager2();
 $package->setOptions(array('filelistgenerator' => 'svn',
@@ -81,37 +104,14 @@ $package->setPackageType('php');
 $package->setSummary('A validation framework for PHP');
 $package->setDescription('Piece_Right is a validation framework for PHP.
 
-The following is a list of features of Piece_Right.
-
-o Extensible validator system
-o Extensible filter system
-o A lot of built-in validators
-o Pseudo fields
-o Watching the specified fields
-o Message variables
-o Force validation
-o YAML based configuration
-o Dynamic configuration
-
-The following is a list of built-in validators.
-
-o Compare
-o Date, FutureDate, PastDate (including Japanese date support)
-o Length
-o List
-o Range
-o Regex
-o WithMethod
-o Email
-o File
-o Image');
+Piece_Right provides a generic validation system which make it easy to validate input values on Web applications. Piece_Right includes a lot of ready-to-use built-in validators. This can make it a lot faster to get started with Piece_Right in existing web applications and web application frameworks.');
 $package->setChannel('pear.piece-framework.com');
 $package->setLicense('BSD License (revised)',
                      'http://www.opensource.org/licenses/bsd-license.php'
                      );
 $package->setAPIVersion($apiVersion);
-$package->setAPIStability('stable');
-$package->setReleaseVersion($version);
+$package->setAPIStability($apiStability);
+$package->setReleaseVersion($releaseVersion);
 $package->setReleaseStability($releaseStability);
 $package->setNotes($notes);
 $package->setPhpDep('4.3.0');
