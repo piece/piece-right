@@ -105,7 +105,7 @@ class Piece_Right_Validator_File extends Piece_Right_Validator_Common
             $value = array_map(create_function('$v', 'return array($v);'), $value);
         }
 
-        for ($i = 0; $i < count($value['error']); $i++) {
+        for ($i = 0, $count = count($value['error']); $i < $count; ++$i) {
             if ($value['error'][$i] != UPLOAD_ERR_OK) {
                 return false;
             }

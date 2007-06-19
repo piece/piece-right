@@ -196,7 +196,7 @@ class Piece_Right_Validator_FileTestCase extends PHPUnit_TestCase
     {
         $size = filesize(__FILE__);
         $files = array();
-        for ($i=0; $i < 5; $i++) {
+        for ($i = 0; $i < 5; ++$i) {
             $files['tmp_name'][$i] = __FILE__;
             $files['name'][$i] = __FILE__;
             $files['type'][$i] = 'text/plain';
