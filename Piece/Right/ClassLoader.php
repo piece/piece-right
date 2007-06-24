@@ -129,6 +129,7 @@ class Piece_Right_ClassLoader
             return class_exists($class, false);
         }
     }
+
     /**#@-*/
 
     /**#@+
