@@ -131,9 +131,7 @@ class Piece_Right_Validation_Script
             $right->setPayload($this->_payload);
         }
 
-        Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
         $result = $right->validate($validationSet, $config);
-        Piece_Right_Error::popCallback();
         if (Piece_Right_Error::hasErrors('exception')) {
             $return = null;
             return $return;
