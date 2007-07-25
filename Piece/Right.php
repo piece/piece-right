@@ -124,22 +124,24 @@ class Piece_Right
      */
     function validate($validationSetName = null, $dynamicConfig = null)
     {
-        $this->_configure($validationSetName, $dynamicConfig);
+        $config = $this->_configure($validationSetName, $dynamicConfig);
         if (Piece_Right_Error::hasErrors('exception')) {
             return;
         }
 
+        $this->_config = &$config;
         $this->_results = &new Piece_Right_Results();
         $this->_results->setMessageVariables($this->_config->getMessageVariables());
         $validationSet = $this->_config->getValidationSet();
+        $fieldNames = $this->_config->getFieldNames();
 
-        $this->_filter(array_keys($validationSet));
+        $this->_filter($fieldNames);
         if (Piece_Right_Error::hasErrors('exception')) {
             return;
         }
 
-        $this->_generatePseudoFields(array_keys($validationSet));
-        $this->_watch(array_keys($validationSet));
+        $this->_generatePseudoFields($fieldNames);
+        $this->_watch($fieldNames);
         $this->_validateFields($validationSet, false);
 
         if (!$this->_results->countErrors()) {
@@ -257,12 +259,12 @@ class Piece_Right
      */
     function getFieldNames($validationSetName = null, $dynamicConfig = null)
     {
-        $this->_configure($validationSetName, $dynamicConfig);
+        $config = &$this->_configure($validationSetName, $dynamicConfig);
         if (Piece_Right_Error::hasErrors('exception')) {
             return;
         }
 
-        return $this->_config->getFieldNames();
+        return $config->getFieldNames();
     }
 
     /**#@-*/
@@ -286,22 +288,25 @@ class Piece_Right
      *
      * @param string             $validationSetName
      * @param Piece_Right_Config $dynamicConfig
+     * @return Piece_Right_Config
      * @throws PIECE_RIGHT_ERROR_INVALID_CONFIGURATION
      * @throws PIECE_RIGHT_ERROR_NOT_FOUND
      */
-    function _configure($validationSetName = null, $dynamicConfig = null)
+    function &_configure($validationSetName = null, $dynamicConfig = null)
     {
-        $this->_config = &Piece_Right_Config_Factory::factory($validationSetName,
-                                                              $this->_configDirectory,
-                                                              $this->_cacheDirectory
-                                                              );
+        $config = &Piece_Right_Config_Factory::factory($validationSetName,
+                                                       $this->_configDirectory,
+                                                       $this->_cacheDirectory
+                                                       );
         if (Piece_Right_Error::hasErrors('exception')) {
             return;
         }
 
         if (is_a($dynamicConfig, 'Piece_Right_Config')) {
-            $this->_config->merge($dynamicConfig);
+            $config->merge($dynamicConfig);
         }
+
+        return $config;
     }
 
     // }}}
