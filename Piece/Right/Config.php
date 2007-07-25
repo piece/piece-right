@@ -633,6 +633,19 @@ class Piece_Right_Config
         $this->setForceValidation($field, $forceValidation);
     }
 
+    // }}}
+    // {{{ getFieldNames()
+
+    /**
+     * Gets all field names from the current validation set.
+     *
+     * @return array
+     */
+    function getFieldNames()
+    {
+        return array_keys($this->_validationSet);
+    }
+
     /**#@-*/
 
     /**#@+

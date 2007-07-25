@@ -242,6 +242,29 @@ class Piece_Right
         return $this->_fieldValuesCallback;
     }
 
+    // }}}
+    // {{{ getFieldNames()
+
+    /**
+     * Gets all field names corresponding to the given validation set and
+     * a Piece_Right_Config object.
+     *
+     * @param string             $validationSetName
+     * @param Piece_Right_Config $dynamicConfig
+     * @return array
+     * @throws PIECE_RIGHT_ERROR_INVALID_CONFIGURATION
+     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
+     */
+    function getFieldNames($validationSetName = null, $dynamicConfig = null)
+    {
+        $this->_configure($validationSetName, $dynamicConfig);
+        if (Piece_Right_Error::hasErrors('exception')) {
+            return;
+        }
+
+        return $this->_config->getFieldNames();
+    }
+
     /**#@-*/
 
     /**#@+

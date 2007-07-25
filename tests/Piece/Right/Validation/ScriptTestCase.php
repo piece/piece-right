@@ -209,6 +209,25 @@ class Piece_Right_Validation_ScriptTestCase extends PHPUnit_TestCase
         $GLOBALS['PIECE_RIGHT_Validator_Directories'] = $oldValidatorDirectories;
     }
 
+    /**
+     * @since Method available since Release 1.7.0
+     */
+    function testFieldNamesShouldBeAbleToGetByValidationSetAndConfiguration()
+    {
+        $config = &new Piece_Right_Config();
+        $config->addValidation('bar', 'Length', array('min' => 1, 'max' => 255));
+        $script = &new Piece_Right_Validation_Script($this->_cacheDirectory,
+                                                     $this->_cacheDirectory,
+                                                     null,
+                                                     array(&$this, 'turnOnPostRunCallbackCalled')
+                                                     );
+        $fieldNames = $script->getFieldNames('FieldNames', $config);
+
+        $this->assertEquals(2, count($fieldNames));
+        $this->assertContains('foo', $fieldNames);
+        $this->assertContains('bar', $fieldNames);
+    }
+
     /**#@-*/
 
     /**#@+

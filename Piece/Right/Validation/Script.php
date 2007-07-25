@@ -180,6 +180,33 @@ class Piece_Right_Validation_Script
         $this->_payload = &$payload;
     }
 
+    // }}}
+    // {{{ getFieldNames()
+
+    /**
+     * Gets all field names corresponding to the given validation set and
+     * a Piece_Right_Config object.
+     *
+     * @param string             $validationSet
+     * @param Piece_Right_Config $config
+     * @return array
+     * @throws PIECE_RIGHT_ERROR_INVALID_CONFIGURATION
+     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
+     */
+    function getFieldNames($validationSet, $config)
+    {
+        $right = &new Piece_Right($this->_configDirectory,
+                                  $this->_cacheDirectory,
+                                  $this->_fieldValuesCallback
+                                  );
+        $fieldNames = $right->getFieldNames($validationSet, $config);
+        if (Piece_Right_Error::hasErrors('exception')) {
+            return;
+        }
+
+        return $fieldNames;
+    }
+
     /**#@-*/
 
     /**#@+

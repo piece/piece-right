@@ -1,0 +1,8 @@
+# $Id$
+- name: foo
+  required:
+  validator:
+    - name: Length
+      rule:
+        min: 1
+        max: 255
