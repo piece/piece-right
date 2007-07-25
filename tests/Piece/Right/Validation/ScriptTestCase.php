@@ -35,6 +35,7 @@
  * @since      File available since Release 1.2.0
  */
 
+require_once realpath(dirname(__FILE__) . '/../../../prepare.php');
 require_once 'PHPUnit.php';
 require_once 'Piece/Right/Validation/Script.php';
 require_once 'Piece/Right/Error.php';
@@ -71,6 +72,7 @@ class Piece_Right_Validation_ScriptTestCase extends PHPUnit_TestCase
     var $_postRunCallbackCalled = false;
     var $_resultsViaCallback;
     var $_fields;
+    var $_cacheDirectory;
 
 
     /**#@-*/
@@ -89,6 +91,7 @@ class Piece_Right_Validation_ScriptTestCase extends PHPUnit_TestCase
         foreach ($this->_fields as $name => $value) {
             $_POST[$name] = $value;
         }
+        $this->_cacheDirectory = dirname(__FILE__) . '/' . basename(__FILE__, '.php');
     }
 
     function tearDown()
@@ -99,7 +102,7 @@ class Piece_Right_Validation_ScriptTestCase extends PHPUnit_TestCase
         unset($_SERVER['REQUEST_METHOD']);
         $this->_postRunCallbackCalled = false;
         $this->_resultsViaCallback = null;
-        $cache = &new Cache_Lite_File(array('cacheDir' => dirname(__FILE__) . '/',
+        $cache = &new Cache_Lite_File(array('cacheDir' => "{$this->_cacheDirectory}/",
                                             'masterFile' => '',
                                             'automaticSerialization' => true,
                                             'errorHandlingAPIBreak' => true)
@@ -121,8 +124,8 @@ class Piece_Right_Validation_ScriptTestCase extends PHPUnit_TestCase
         $config = &new Piece_Right_Config();
         $config->addValidation('email', 'Email');
         $container = &new stdClass();
-        $script = &new Piece_Right_Validation_Script(dirname(__FILE__),
-                                                     dirname(__FILE__),
+        $script = &new Piece_Right_Validation_Script($this->_cacheDirectory,
+                                                     $this->_cacheDirectory,
                                                      null,
                                                      array(&$this, 'turnOnPostRunCallbackCalled')
                                                      );
@@ -144,8 +147,8 @@ class Piece_Right_Validation_ScriptTestCase extends PHPUnit_TestCase
         $config = &new Piece_Right_Config();
         $config->addValidation('email', 'Email');
         $container = &new stdClass();
-        $script = &new Piece_Right_Validation_Script(dirname(__FILE__),
-                                                     dirname(__FILE__),
+        $script = &new Piece_Right_Validation_Script($this->_cacheDirectory,
+                                                     $this->_cacheDirectory,
                                                      null,
                                                      array(&$this, 'turnOnPostRunCallbackCalled')
                                                      );
@@ -168,8 +171,8 @@ class Piece_Right_Validation_ScriptTestCase extends PHPUnit_TestCase
         $config = &new Piece_Right_Config();
         $config->addValidation('email', 'Email');
         $container = &new stdClass();
-        $script = &new Piece_Right_Validation_Script(dirname(__FILE__),
-                                                     dirname(__FILE__),
+        $script = &new Piece_Right_Validation_Script($this->_cacheDirectory,
+                                                     $this->_cacheDirectory,
                                                      null,
                                                      array(&$this, 'turnOnPostRunCallbackCalled')
                                                      );
@@ -186,13 +189,13 @@ class Piece_Right_Validation_ScriptTestCase extends PHPUnit_TestCase
     function testPayload()
     {
         $oldValidatorDirectories = $GLOBALS['PIECE_RIGHT_Validator_Directories'];
-        Piece_Right_Validator_Factory::addValidatorDirectory(dirname(__FILE__));
+        Piece_Right_Validator_Factory::addValidatorDirectory($this->_cacheDirectory);
         $config = &new Piece_Right_Config();
         $config->addValidation('email', 'ScriptPayloadTest');
         $container = &new stdClass();
         $payload = &new stdClass();
-        $script = &new Piece_Right_Validation_Script(dirname(__FILE__),
-                                                     dirname(__FILE__),
+        $script = &new Piece_Right_Validation_Script($this->_cacheDirectory,
+                                                     $this->_cacheDirectory,
                                                      null,
                                                      array(&$this, 'turnOnPostRunCallbackCalled')
                                                      );
