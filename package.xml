@@ -1,36 +1,38 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!-- $Id$ -->
-<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
-<package version="1.0" packagerversion="1.5.4">
+<package packagerversion="1.6.1" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+    http://pear.php.net/dtd/tasks-1.0.xsd
+    http://pear.php.net/dtd/package-2.0
+    http://pear.php.net/dtd/package-2.0.xsd">
  <name>Piece_Right</name>
+ <channel>pear.piece-framework.com</channel>
  <summary>A validation framework for PHP</summary>
  <description>Piece_Right is a validation framework for PHP.
 
-Piece_Right provides a generic validation system which make it easy to validate input values on Web applications. Piece_Right includes a lot of ready-to-use built-in validators. This can make it a lot faster to get started with Piece_Right in existing web applications and web application frameworks.
- </description>
- <maintainers>
-  <maintainer>
-   <user>iteman</user>
-   <name>KUBO Atsuhiro</name>
-   <email>iteman@users.sourceforge.net</email>
-   <role>lead</role>
-  </maintainer>
-  </maintainers>
- <release>
-  <version>1.6.0</version>
-  <date>2007-06-13</date>
-  <license>BSD License (revised)</license>
-  <state>stable</state>
-  <notes>A new release of Piece_Right is now available.
+Piece_Right provides a generic validation system which make it easy to validate input values on Web applications. Piece_Right includes a lot of ready-to-use built-in validators. This can make it a lot faster to get started with Piece_Right in existing web applications and web application frameworks.</description>
+ <lead>
+  <name>KUBO Atsuhiro</name>
+  <user>iteman</user>
+  <email>iteman@users.sourceforge.net</email>
+  <active>yes</active>
+ </lead>
+ <date>2007-08-11</date>
+ <time>13:10:01</time>
+ <version>
+  <release>1.7.0</release>
+  <api>1.1.0</api>
+ </version>
+ <stability>
+  <release>stable</release>
+  <api>stable</api>
+ </stability>
+ <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
+ <notes>A new release of Piece_Right is now available.
 
-What&apos;s New in Piece_Right 1.6.0
+What&apos;s New in Piece_Right 1.7.0
 
- * Finals: &quot;Finals&quot; can be used for additional validations after normal validations.
- * Enhanced Filter Mechanism: The filter mechanism can now pass an array to the filter directly if it is arrayable.
- * Unique/UniqueFields validators: &quot;Unique&quot; validator can be used to check that all values in an array do not duplicate. &quot;UniqueFields&quot; validator can be used to check that each value of multiple fields do not duplicate.
- * Improved WithMethod validator: &quot;WithMethod&quot; validator now has a rule &quot;directory&quot; for loading a class from the specified directory if the class file is not loaded before invoking a method. And also a callback can now receive a Piece_Right_Results object as the second argument.
- * NoFile2NULL filter: &quot;NoFile2NULL&quot; filter converts a $_FILES element with UPLOAD_ERR_NO_FILE to NULL.
- * A few Defect Fixes: A few defects in validators are fixed.
+ * Getting Field Names: This is a new feature that allows users to always get field names by a validation set and a Piece_Right_Config object.
+ * Environment Settings: A configuration file be always read when the current environment is not production.
 
 See the following release notes for details.
 
@@ -39,425 +41,452 @@ Enhancements
 
 Kernel:
 
-- Added a feature named &quot;Finals&quot; that can be used for additional validations after normal validations. (Ticket #11)
-- Changed factory() to throw an exception if the configuration directory not found. (Ticket #25) (Piece_Right_Config_Factory)
-- Added _setRule(), _setRuleMessage(), and _getRule().
-  setRule(), setRuleMessage(), and getRule() are deprecated since Piece_Right 1.6.0. (Ticket #21) (Piece_Right_Validator_Common)
-- Changed the filter mechanism so as to pass an array to the filter directly if it is arrayable.
-
-Validators:
-
-- Added &quot;Unique&quot; validator which can be used to check that all values in an array do not duplicate. (Ticket #26)
-- Added &quot;UniqueFields&quot; validator which can be used to check that each value of multiple fields do not duplicate. (Ticket #26)
-- Added a rule &quot;directory&quot; for loading a class from the specified directory if the class file is not loaded before invoking a method. (WithMethod)
-- Changed the callback interface so as to pass the Piece_Right_Results object to a method. (WithMethod)
-
-Filters:
-
-- Added &quot;NoFile2NULL&quot; filter which converts a $_FILES element with UPLOAD_ERR_NO_FILE to NULL. (Ticket #28)
-
-Defect Fixes
-============
-
-Validators:
-
-- Fixed a defect that caused a payload object to be passed by value to the specified method with PHP4. (Ticket #23) (WithMethod)
-- Fixed a defect that caused a validation to be passed regardless of whether or not a year value is within a valid range of Japanese era if the rule &quot;isJapaneseEra&quot; was used. (Ticket #22) (Date)
-  </notes>
-  <deps>
-   <dep type="php" rel="ge" version="4.3.0" optional="no"/>
-   <dep type="pkg" rel="ge" version="1.7.0" optional="no">Cache_Lite</dep>
-   <dep type="pkg" rel="ge" version="1.4.3" optional="no">PEAR</dep>
-   <dep type="pkg" rel="ge" version="0.4.0" optional="yes">Stagehand_TestRunner</dep>
-  </deps>
-  <filelist>
-   <dir name="/" baseinstalldir="/">
-    <dir name="data">
-     <file role="data" name="Example.yaml">
-      <replace from="@package_version@" to="version" type="package-info"/>
+- Added a feature that allows users to always get field names by a validation set and a Piece_Right_Config object. (Ticket #30) (Piece_Right_Config, Piece_Right_Validation_Script, Piece_Right)
+- Updated code so that a configuration file be always read when the current environment is not production. (Ticket #31) (Piece_Right_Config_Factory)</notes>
+ <contents>
+  <dir baseinstalldir="/" name="/">
+   <dir name="data">
+    <file name="Example.yaml" role="data">
+     <tasks:replace from="@package_version@" to="version" type="package-info" />
+    </file>
+    <file name="piece-right.yaml" role="data">
+     <tasks:replace from="@package_version@" to="version" type="package-info" />
+    </file>
+   </dir> <!-- /data -->
+   <dir name="docs">
+    <file name="LICENSE" role="doc">
+     <tasks:replace from="@package_version@" to="version" type="package-info" />
+    </file>
+   </dir> <!-- /docs -->
+   <dir name="Piece">
+    <dir name="Right">
+     <dir name="Config">
+      <file name="Factory.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+     </dir> <!-- /Piece/Right/Config -->
+     <dir name="Filter">
+      <file name="Common.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Empty2NULL.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Factory.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="JapaneseAlphaNumeric.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="JapaneseH2Z.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="NoFile2NULL.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+     </dir> <!-- /Piece/Right/Filter -->
+     <dir name="Validation">
+      <file name="Error.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Script.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+     </dir> <!-- /Piece/Right/Validation -->
+     <dir name="Validator">
+      <file name="Common.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Compare.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Date.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Email.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Factory.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="File.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="FutureDate.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Image.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Length.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="List.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Numeric.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="PastDate.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Range.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Regex.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Unique.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="UniqueFields.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="WithMethod.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+     </dir> <!-- /Piece/Right/Validator -->
+     <file name="ClassLoader.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
-     <file role="data" name="piece-right.yaml">
-      <replace from="@package_version@" to="version" type="package-info"/>
+     <file name="Config.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
-    </dir> <!-- /data -->
-    <dir name="docs">
-     <file role="doc" name="LICENSE">
-      <replace from="@package_version@" to="version" type="package-info"/>
+     <file name="Env.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
-    </dir> <!-- /docs -->
+     <file name="Error.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="Results.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+    </dir> <!-- /Piece/Right -->
+    <file name="Right.php" role="php">
+     <tasks:replace from="@package_version@" to="version" type="package-info" />
+    </file>
+   </dir> <!-- /Piece -->
+   <dir name="tests">
     <dir name="Piece">
      <dir name="Right">
       <dir name="Config">
-       <file role="php" name="Factory.php">
-        <replace from="@package_version@" to="version" type="package-info"/>
+       <file name="FactoryTestCase.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
-      </dir> <!-- /Piece/Right/Config -->
+       <file name="InvalidConfiguration.yaml" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+      </dir> <!-- /tests/Piece/Right/Config -->
       <dir name="Filter">
-       <file role="php" name="Common.php">
-        <replace from="@package_version@" to="version" type="package-info"/>
-       </file>
-       <file role="php" name="Empty2NULL.php">
-        <replace from="@package_version@" to="version" type="package-info"/>
-       </file>
-       <file role="php" name="Factory.php">
-        <replace from="@package_version@" to="version" type="package-info"/>
-       </file>
-       <file role="php" name="JapaneseAlphaNumeric.php">
-        <replace from="@package_version@" to="version" type="package-info"/>
-       </file>
-       <file role="php" name="JapaneseH2Z.php">
-        <replace from="@package_version@" to="version" type="package-info"/>
-       </file>
-       <file role="php" name="NoFile2NULL.php">
-        <replace from="@package_version@" to="version" type="package-info"/>
-       </file>
-      </dir> <!-- /Piece/Right/Filter -->
-      <dir name="Validation">
-       <file role="php" name="Error.php">
-        <replace from="@package_version@" to="version" type="package-info"/>
-       </file>
-       <file role="php" name="Script.php">
-        <replace from="@package_version@" to="version" type="package-info"/>
-       </file>
-      </dir> <!-- /Piece/Right/Validation -->
-      <dir name="Validator">
-       <file role="php" name="Common.php">
-        <replace from="@package_version@" to="version" type="package-info"/>
-       </file>
-       <file role="php" name="Compare.php">
-        <replace from="@package_version@" to="version" type="package-info"/>
-       </file>
-       <file role="php" name="Date.php">
-        <replace from="@package_version@" to="version" type="package-info"/>
-       </file>
-       <file role="php" name="Email.php">
-        <replace from="@package_version@" to="version" type="package-info"/>
-       </file>
-       <file role="php" name="Factory.php">
-        <replace from="@package_version@" to="version" type="package-info"/>
-       </file>
-       <file role="php" name="File.php">
-        <replace from="@package_version@" to="version" type="package-info"/>
-       </file>
-       <file role="php" name="FutureDate.php">
-        <replace from="@package_version@" to="version" type="package-info"/>
-       </file>
-       <file role="php" name="Image.php">
-        <replace from="@package_version@" to="version" type="package-info"/>
-       </file>
-       <file role="php" name="Length.php">
-        <replace from="@package_version@" to="version" type="package-info"/>
-       </file>
-       <file role="php" name="List.php">
-        <replace from="@package_version@" to="version" type="package-info"/>
-       </file>
-       <file role="php" name="Numeric.php">
-        <replace from="@package_version@" to="version" type="package-info"/>
-       </file>
-       <file role="php" name="PastDate.php">
-        <replace from="@package_version@" to="version" type="package-info"/>
-       </file>
-       <file role="php" name="Range.php">
-        <replace from="@package_version@" to="version" type="package-info"/>
-       </file>
-       <file role="php" name="Regex.php">
-        <replace from="@package_version@" to="version" type="package-info"/>
-       </file>
-       <file role="php" name="Unique.php">
-        <replace from="@package_version@" to="version" type="package-info"/>
-       </file>
-       <file role="php" name="UniqueFields.php">
-        <replace from="@package_version@" to="version" type="package-info"/>
-       </file>
-       <file role="php" name="WithMethod.php">
-        <replace from="@package_version@" to="version" type="package-info"/>
-       </file>
-      </dir> <!-- /Piece/Right/Validator -->
-      <file role="php" name="ClassLoader.php">
-       <replace from="@package_version@" to="version" type="package-info"/>
-      </file>
-      <file role="php" name="Config.php">
-       <replace from="@package_version@" to="version" type="package-info"/>
-      </file>
-      <file role="php" name="Error.php">
-       <replace from="@package_version@" to="version" type="package-info"/>
-      </file>
-      <file role="php" name="Results.php">
-       <replace from="@package_version@" to="version" type="package-info"/>
-      </file>
-     </dir> <!-- /Piece/Right -->
-     <file role="php" name="Right.php">
-      <replace from="@package_version@" to="version" type="package-info"/>
-     </file>
-    </dir> <!-- /Piece -->
-    <dir name="tests">
-     <dir name="Piece">
-      <dir name="Right">
-       <dir name="Config">
-        <file role="test" name="FactoryTestCase.php">
-         <replace from="@package_version@" to="version" type="package-info"/>
-        </file>
-        <file role="test" name="InvalidConfiguration.yaml">
-         <replace from="@package_version@" to="version" type="package-info"/>
-        </file>
-        <file role="test" name="TestRunner.php">
-         <replace from="@package_version@" to="version" type="package-info"/>
-        </file>
-       </dir> <!-- /tests/Piece/Right/Config -->
-       <dir name="Filter">
-        <dir name="FactoryTestCase">
-         <dir name="FactoryTestCaseAlias">
-          <file role="test" name="FooFilter.php">
-           <replace from="@package_version@" to="version" type="package-info"/>
-          </file>
-         </dir> <!-- /tests/Piece/Right/Filter/FactoryTestCase/FactoryTestCaseAlias -->
-         <dir name="Piece">
-          <dir name="Right">
-           <dir name="Filter">
-            <dir name="FactoryTestCase">
-             <file role="test" name="Bar.php">
-              <replace from="@package_version@" to="version" type="package-info"/>
-             </file>
-             <file role="test" name="Foo.php">
-              <replace from="@package_version@" to="version" type="package-info"/>
-             </file>
-            </dir> <!-- /tests/Piece/Right/Filter/FactoryTestCase/Piece/Right/Filter/FactoryTestCase -->
-           </dir> <!-- /tests/Piece/Right/Filter/FactoryTestCase/Piece/Right/Filter -->
-          </dir> <!-- /tests/Piece/Right/Filter/FactoryTestCase/Piece/Right -->
-         </dir> <!-- /tests/Piece/Right/Filter/FactoryTestCase/Piece -->
-         <file role="test" name="BarFilter.php">
-          <replace from="@package_version@" to="version" type="package-info"/>
+       <dir name="FactoryTestCase">
+        <dir name="FactoryTestCaseAlias">
+         <file name="FooFilter.php" role="test">
+          <tasks:replace from="@package_version@" to="version" type="package-info" />
          </file>
-        </dir> <!-- /tests/Piece/Right/Filter/FactoryTestCase -->
-        <file role="test" name="FactoryTestCase.php">
-         <replace from="@package_version@" to="version" type="package-info"/>
+        </dir> <!-- /tests/Piece/Right/Filter/FactoryTestCase/FactoryTestCaseAlias -->
+        <dir name="Piece">
+         <dir name="Right">
+          <dir name="Filter">
+           <dir name="FactoryTestCase">
+            <file name="Bar.php" role="test">
+             <tasks:replace from="@package_version@" to="version" type="package-info" />
+            </file>
+            <file name="Foo.php" role="test">
+             <tasks:replace from="@package_version@" to="version" type="package-info" />
+            </file>
+           </dir> <!-- /tests/Piece/Right/Filter/FactoryTestCase/Piece/Right/Filter/FactoryTestCase -->
+          </dir> <!-- /tests/Piece/Right/Filter/FactoryTestCase/Piece/Right/Filter -->
+         </dir> <!-- /tests/Piece/Right/Filter/FactoryTestCase/Piece/Right -->
+        </dir> <!-- /tests/Piece/Right/Filter/FactoryTestCase/Piece -->
+        <file name="BarFilter.php" role="test">
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
         </file>
-        <file role="test" name="JapaneseAlphaNumericTestCase.php">
-         <replace from="@package_version@" to="version" type="package-info"/>
-        </file>
-        <file role="test" name="JapaneseH2ZTestCase.php">
-         <replace from="@package_version@" to="version" type="package-info"/>
-        </file>
-        <file role="test" name="LowerCase.php">
-         <replace from="@package_version@" to="version" type="package-info"/>
-        </file>
-        <file role="test" name="NoFile2NULLTestCase.php">
-         <replace from="@package_version@" to="version" type="package-info"/>
-        </file>
-        <file role="test" name="TestRunner.php">
-         <replace from="@package_version@" to="version" type="package-info"/>
-        </file>
-       </dir> <!-- /tests/Piece/Right/Filter -->
-       <dir name="Validation">
+       </dir> <!-- /tests/Piece/Right/Filter/FactoryTestCase -->
+       <file name="FactoryTestCase.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="JapaneseAlphaNumericTestCase.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="JapaneseH2ZTestCase.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="LowerCase.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="NoFile2NULLTestCase.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+      </dir> <!-- /tests/Piece/Right/Filter -->
+      <dir name="Validation">
+       <dir name="ScriptTestCase">
         <dir name="Piece">
          <dir name="Right">
           <dir name="Validator">
-           <file role="test" name="ScriptPayloadTest.php">
-            <replace from="@package_version@" to="version" type="package-info"/>
+           <file name="ScriptPayloadTest.php" role="test">
+            <tasks:replace from="@package_version@" to="version" type="package-info" />
            </file>
-          </dir> <!-- /tests/Piece/Right/Validation/Piece/Right/Validator -->
-         </dir> <!-- /tests/Piece/Right/Validation/Piece/Right -->
-        </dir> <!-- /tests/Piece/Right/Validation/Piece -->
-        <file role="test" name="ErrorTestCase.php">
-         <replace from="@package_version@" to="version" type="package-info"/>
+          </dir> <!-- /tests/Piece/Right/Validation/ScriptTestCase/Piece/Right/Validator -->
+         </dir> <!-- /tests/Piece/Right/Validation/ScriptTestCase/Piece/Right -->
+        </dir> <!-- /tests/Piece/Right/Validation/ScriptTestCase/Piece -->
+        <file name="FieldNames.yaml" role="test">
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
         </file>
-        <file role="test" name="Script.yaml">
-         <replace from="@package_version@" to="version" type="package-info"/>
+        <file name="Script.yaml" role="test">
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
         </file>
-        <file role="test" name="ScriptTestCase.php">
-         <replace from="@package_version@" to="version" type="package-info"/>
-        </file>
-        <file role="test" name="TestRunner.php">
-         <replace from="@package_version@" to="version" type="package-info"/>
-        </file>
-       </dir> <!-- /tests/Piece/Right/Validation -->
-       <dir name="Validator">
-        <dir name="FactoryTestCase">
-         <dir name="FactoryTestCaseAlias">
-          <dir name="FactoryTestCase">
-           <file role="test" name="Foo.php">
-            <replace from="@package_version@" to="version" type="package-info"/>
-           </file>
-          </dir> <!-- /tests/Piece/Right/Validator/FactoryTestCase/FactoryTestCaseAlias/FactoryTestCase -->
-          <file role="test" name="FooValidator.php">
-           <replace from="@package_version@" to="version" type="package-info"/>
+       </dir> <!-- /tests/Piece/Right/Validation/ScriptTestCase -->
+       <file name="ErrorTestCase.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="ScriptTestCase.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+      </dir> <!-- /tests/Piece/Right/Validation -->
+      <dir name="Validator">
+       <dir name="FactoryTestCase">
+        <dir name="FactoryTestCaseAlias">
+         <dir name="FactoryTestCase">
+          <file name="Foo.php" role="test">
+           <tasks:replace from="@package_version@" to="version" type="package-info" />
           </file>
-         </dir> <!-- /tests/Piece/Right/Validator/FactoryTestCase/FactoryTestCaseAlias -->
-         <dir name="Piece">
-          <dir name="Right">
-           <dir name="Validator">
-            <dir name="FactoryTestCase">
-             <file role="test" name="Bar.php">
-              <replace from="@package_version@" to="version" type="package-info"/>
-             </file>
-             <file role="test" name="Foo.php">
-              <replace from="@package_version@" to="version" type="package-info"/>
-             </file>
-            </dir> <!-- /tests/Piece/Right/Validator/FactoryTestCase/Piece/Right/Validator/FactoryTestCase -->
-            <file role="test" name="Invalid.php">
-             <replace from="@package_version@" to="version" type="package-info"/>
+         </dir> <!-- /tests/Piece/Right/Validator/FactoryTestCase/FactoryTestCaseAlias/FactoryTestCase -->
+         <file name="FooValidator.php" role="test">
+          <tasks:replace from="@package_version@" to="version" type="package-info" />
+         </file>
+        </dir> <!-- /tests/Piece/Right/Validator/FactoryTestCase/FactoryTestCaseAlias -->
+        <dir name="Piece">
+         <dir name="Right">
+          <dir name="Validator">
+           <dir name="FactoryTestCase">
+            <file name="Bar.php" role="test">
+             <tasks:replace from="@package_version@" to="version" type="package-info" />
             </file>
-           </dir> <!-- /tests/Piece/Right/Validator/FactoryTestCase/Piece/Right/Validator -->
-          </dir> <!-- /tests/Piece/Right/Validator/FactoryTestCase/Piece/Right -->
-         </dir> <!-- /tests/Piece/Right/Validator/FactoryTestCase/Piece -->
-         <file role="test" name="BarValidator.php">
-          <replace from="@package_version@" to="version" type="package-info"/>
-         </file>
-        </dir> <!-- /tests/Piece/Right/Validator/FactoryTestCase -->
-        <dir name="images">
-         <file role="test" name="image.bmp">
-          <replace from="@package_version@" to="version" type="package-info"/>
-         </file>
-         <file role="test" name="image.gif">
-          <replace from="@package_version@" to="version" type="package-info"/>
-         </file>
-         <file role="test" name="image.jpg">
-          <replace from="@package_version@" to="version" type="package-info"/>
-         </file>
-         <file role="test" name="image.png">
-          <replace from="@package_version@" to="version" type="package-info"/>
-         </file>
-         <file role="test" name="image.tif">
-          <replace from="@package_version@" to="version" type="package-info"/>
-         </file>
-        </dir> <!-- /tests/Piece/Right/Validator/images -->
-        <dir name="WithMethodTestCase">
-         <dir name="Piece">
-          <dir name="Right">
-           <dir name="Validator">
-            <dir name="WithMethodTestCase">
-             <file role="test" name="Foo.php">
-              <replace from="@package_version@" to="version" type="package-info"/>
-             </file>
-            </dir> <!-- /tests/Piece/Right/Validator/WithMethodTestCase/Piece/Right/Validator/WithMethodTestCase -->
-           </dir> <!-- /tests/Piece/Right/Validator/WithMethodTestCase/Piece/Right/Validator -->
-          </dir> <!-- /tests/Piece/Right/Validator/WithMethodTestCase/Piece/Right -->
-         </dir> <!-- /tests/Piece/Right/Validator/WithMethodTestCase/Piece -->
-         <file role="test" name="WithMethod.php">
-          <replace from="@package_version@" to="version" type="package-info"/>
-         </file>
-        </dir> <!-- /tests/Piece/Right/Validator/WithMethodTestCase -->
-        <file role="test" name="CompareTestCase.php">
-         <replace from="@package_version@" to="version" type="package-info"/>
+            <file name="Foo.php" role="test">
+             <tasks:replace from="@package_version@" to="version" type="package-info" />
+            </file>
+           </dir> <!-- /tests/Piece/Right/Validator/FactoryTestCase/Piece/Right/Validator/FactoryTestCase -->
+           <file name="Invalid.php" role="test">
+            <tasks:replace from="@package_version@" to="version" type="package-info" />
+           </file>
+          </dir> <!-- /tests/Piece/Right/Validator/FactoryTestCase/Piece/Right/Validator -->
+         </dir> <!-- /tests/Piece/Right/Validator/FactoryTestCase/Piece/Right -->
+        </dir> <!-- /tests/Piece/Right/Validator/FactoryTestCase/Piece -->
+        <file name="BarValidator.php" role="test">
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
         </file>
-        <file role="test" name="DateTestCase.php">
-         <replace from="@package_version@" to="version" type="package-info"/>
+       </dir> <!-- /tests/Piece/Right/Validator/FactoryTestCase -->
+       <dir name="images">
+        <file name="image.bmp" role="test">
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
         </file>
-        <file role="test" name="EmailTestCase.php">
-         <replace from="@package_version@" to="version" type="package-info"/>
+        <file name="image.gif" role="test">
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
         </file>
-        <file role="test" name="FactoryTestCase.php">
-         <replace from="@package_version@" to="version" type="package-info"/>
+        <file name="image.jpg" role="test">
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
         </file>
-        <file role="test" name="FileTestCase.php">
-         <replace from="@package_version@" to="version" type="package-info"/>
+        <file name="image.png" role="test">
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
         </file>
-        <file role="test" name="FutureDateTestCase.php">
-         <replace from="@package_version@" to="version" type="package-info"/>
+        <file name="image.tif" role="test">
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
         </file>
-        <file role="test" name="ImageTestCase.php">
-         <replace from="@package_version@" to="version" type="package-info"/>
+       </dir> <!-- /tests/Piece/Right/Validator/images -->
+       <dir name="WithMethodTestCase">
+        <dir name="Piece">
+         <dir name="Right">
+          <dir name="Validator">
+           <dir name="WithMethodTestCase">
+            <file name="Foo.php" role="test">
+             <tasks:replace from="@package_version@" to="version" type="package-info" />
+            </file>
+           </dir> <!-- /tests/Piece/Right/Validator/WithMethodTestCase/Piece/Right/Validator/WithMethodTestCase -->
+          </dir> <!-- /tests/Piece/Right/Validator/WithMethodTestCase/Piece/Right/Validator -->
+         </dir> <!-- /tests/Piece/Right/Validator/WithMethodTestCase/Piece/Right -->
+        </dir> <!-- /tests/Piece/Right/Validator/WithMethodTestCase/Piece -->
+        <file name="WithMethod.php" role="test">
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
         </file>
-        <file role="test" name="LengthTestCase.php">
-         <replace from="@package_version@" to="version" type="package-info"/>
-        </file>
-        <file role="test" name="ListTestCase.php">
-         <replace from="@package_version@" to="version" type="package-info"/>
-        </file>
-        <file role="test" name="NumericTestCase.php">
-         <replace from="@package_version@" to="version" type="package-info"/>
-        </file>
-        <file role="test" name="PastDateTestCase.php">
-         <replace from="@package_version@" to="version" type="package-info"/>
-        </file>
-        <file role="test" name="PayloadTest.php">
-         <replace from="@package_version@" to="version" type="package-info"/>
-        </file>
-        <file role="test" name="RangeTestCase.php">
-         <replace from="@package_version@" to="version" type="package-info"/>
-        </file>
-        <file role="test" name="RegexTestCase.php">
-         <replace from="@package_version@" to="version" type="package-info"/>
-        </file>
-        <file role="test" name="TestRunner.php">
-         <replace from="@package_version@" to="version" type="package-info"/>
-        </file>
-        <file role="test" name="UniqueFieldsTestCase.php">
-         <replace from="@package_version@" to="version" type="package-info"/>
-        </file>
-        <file role="test" name="UniqueTestCase.php">
-         <replace from="@package_version@" to="version" type="package-info"/>
-        </file>
-        <file role="test" name="WithMethodTestCase.php">
-         <replace from="@package_version@" to="version" type="package-info"/>
-        </file>
-       </dir> <!-- /tests/Piece/Right/Validator -->
-       <file role="test" name="ConfigTestCase.php">
-        <replace from="@package_version@" to="version" type="package-info"/>
+       </dir> <!-- /tests/Piece/Right/Validator/WithMethodTestCase -->
+       <file name="CompareTestCase.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
-       <file role="test" name="ResultsTestCase.php">
-        <replace from="@package_version@" to="version" type="package-info"/>
+       <file name="DateTestCase.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
-       <file role="test" name="TestRunner.php">
-        <replace from="@package_version@" to="version" type="package-info"/>
+       <file name="EmailTestCase.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
-      </dir> <!-- /tests/Piece/Right -->
-      <dir name="RightTestCase">
-       <file role="test" name="ValidateFinals.php">
-        <replace from="@package_version@" to="version" type="package-info"/>
+       <file name="FactoryTestCase.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
-       <file role="test" name="ValidateFinals.yaml">
-        <replace from="@package_version@" to="version" type="package-info"/>
+       <file name="FileTestCase.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
-      </dir> <!-- /tests/Piece/RightTestCase -->
-      <file role="test" name="AppropriateValidationMessage.yaml">
-       <replace from="@package_version@" to="version" type="package-info"/>
+       <file name="FutureDateTestCase.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="ImageTestCase.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="LengthTestCase.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="ListTestCase.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="NumericTestCase.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="PastDateTestCase.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="PayloadTest.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="RangeTestCase.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="RegexTestCase.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="UniqueFieldsTestCase.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="UniqueTestCase.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="WithMethodTestCase.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+      </dir> <!-- /tests/Piece/Right/Validator -->
+      <file name="ConfigTestCase.php" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
-      <file role="test" name="ForceValidation.yaml">
-       <replace from="@package_version@" to="version" type="package-info"/>
+      <file name="ResultsTestCase.php" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
-      <file role="test" name="ForceValidationBasedOnWatcher.yaml">
-       <replace from="@package_version@" to="version" type="package-info"/>
+     </dir> <!-- /tests/Piece/Right -->
+     <dir name="RightTestCase">
+      <file name="ValidateFinals.php" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
-      <file role="test" name="MessageVariable.yaml">
-       <replace from="@package_version@" to="version" type="package-info"/>
+      <file name="ValidateFinals.yaml" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
-      <file role="test" name="ProblemThatValidationOfPseudoFieldsAreAlwaysInvoked.yaml">
-       <replace from="@package_version@" to="version" type="package-info"/>
-      </file>
-      <file role="test" name="PseudoField.yaml">
-       <replace from="@package_version@" to="version" type="package-info"/>
-      </file>
-      <file role="test" name="RightTestCase.php">
-       <replace from="@package_version@" to="version" type="package-info"/>
-      </file>
-      <file role="test" name="RuleMessage.yaml">
-       <replace from="@package_version@" to="version" type="package-info"/>
-      </file>
-      <file role="test" name="SeparatedDateValidationWithPseudoFieldIfPseudoFieldIsNotRequired.yaml">
-       <replace from="@package_version@" to="version" type="package-info"/>
-      </file>
-      <file role="test" name="SeparatedDateValidationWithPseudoFieldIfPseudoFieldIsRequired.yaml">
-       <replace from="@package_version@" to="version" type="package-info"/>
-      </file>
-      <file role="test" name="TestRunner.php">
-       <replace from="@package_version@" to="version" type="package-info"/>
-      </file>
-     </dir> <!-- /tests/Piece -->
-     <file role="test" name="AllTestRunner.php">
-      <replace from="@package_version@" to="version" type="package-info"/>
+     </dir> <!-- /tests/Piece/RightTestCase -->
+     <file name="AppropriateValidationMessage.yaml" role="test">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
-    </dir> <!-- /tests -->
-   </dir> <!-- / -->
-  </filelist>
- </release>
+     <file name="ForceValidation.yaml" role="test">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="ForceValidationBasedOnWatcher.yaml" role="test">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="MessageVariable.yaml" role="test">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="ProblemThatValidationOfPseudoFieldsAreAlwaysInvoked.yaml" role="test">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="PseudoField.yaml" role="test">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="RightTestCase.php" role="test">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="RuleMessage.yaml" role="test">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="SeparatedDateValidationWithPseudoFieldIfPseudoFieldIsNotRequired.yaml" role="test">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="SeparatedDateValidationWithPseudoFieldIfPseudoFieldIsRequired.yaml" role="test">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+    </dir> <!-- /tests/Piece -->
+    <file name="prepare.php" role="test">
+     <tasks:replace from="@package_version@" to="version" type="package-info" />
+    </file>
+   </dir> <!-- /tests -->
+  </dir> <!-- / -->
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>4.3.0</min>
+   </php>
+   <pearinstaller>
+    <min>1.4.3</min>
+   </pearinstaller>
+   <package>
+    <name>Cache_Lite</name>
+    <channel>pear.php.net</channel>
+    <min>1.7.0</min>
+   </package>
+   <package>
+    <name>PEAR</name>
+    <channel>pear.php.net</channel>
+    <min>1.4.3</min>
+   </package>
+  </required>
+  <optional>
+   <package>
+    <name>Stagehand_TestRunner</name>
+    <channel>pear.piece-framework.com</channel>
+    <min>0.5.0</min>
+   </package>
+   <package>
+    <name>PHPUnit</name>
+    <channel>pear.phpunit.de</channel>
+    <min>1.3.2</min>
+   </package>
+  </optional>
+ </dependencies>
+ <phprelease />
  <changelog>
-   <release>
-    <version>1.6.0</version>
-    <date>2007-06-13</date>
-    <license>BSD License (revised)</license>
-    <state>stable</state>
-    <notes>A new release of Piece_Right is now available.
+  <release>
+   <version>
+    <release>1.7.0</release>
+    <api>1.1.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2007-08-11</date>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
+   <notes>A new release of Piece_Right is now available.
+
+What&apos;s New in Piece_Right 1.7.0
+
+ * Getting Field Names: This is a new feature that allows users to always get field names by a validation set and a Piece_Right_Config object.
+ * Environment Settings: A configuration file be always read when the current environment is not production.
+
+See the following release notes for details.
+
+Enhancements
+============ 
+
+Kernel:
+
+- Added a feature that allows users to always get field names by a validation set and a Piece_Right_Config object. (Ticket #30) (Piece_Right_Config, Piece_Right_Validation_Script, Piece_Right)
+- Updated code so that a configuration file be always read when the current environment is not production. (Ticket #31) (Piece_Right_Config_Factory)</notes>
+  </release>
+  <release>
+   <version>
+    <release>1.6.0</release>
+    <api>1.1.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2007-06-13</date>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
+   <notes>A new release of Piece_Right is now available.
 
 What&apos;s New in Piece_Right 1.6.0
 
@@ -498,15 +527,20 @@ Defect Fixes
 Validators:
 
 - Fixed a defect that caused a payload object to be passed by value to the specified method with PHP4. (Ticket #23) (WithMethod)
-- Fixed a defect that caused a validation to be passed regardless of whether or not a year value is within a valid range of Japanese era if the rule &quot;isJapaneseEra&quot; was used. (Ticket #22) (Date)
-    </notes>
-   </release>
-   <release>
-    <version>1.5.0</version>
-    <date>2007-02-19</date>
-    <license>BSD License (revised)</license>
-    <state>stable</state>
-    <notes>A new release of Piece_Right is now available.
+- Fixed a defect that caused a validation to be passed regardless of whether or not a year value is within a valid range of Japanese era if the rule &quot;isJapaneseEra&quot; was used. (Ticket #22) (Date)</notes>
+  </release>
+  <release>
+   <version>
+    <release>1.5.0</release>
+    <api>1.1.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2007-02-19</date>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
+   <notes>A new release of Piece_Right is now available.
 This release includes two features &quot;Validator Aliases&quot; and &quot;Filter Aliases&quot;. They can be used multiple aliases as the name of a validator/filter class by setting multiple prefixes.
 
 See the following release notes for details.
@@ -525,15 +559,20 @@ See the following release notes for details.
 
 - Removed setFilterDirectories() and getFilterDirectories().
 - Changed addFilterDirectory() so as to not return value.
-- Added a feature named &quot;Filter Aliases&quot; so that this feature can be used multiple aliases as the name of a validator class by setting multiple prefixes. (Ticket #19)
-    </notes>
-   </release>
-   <release>
-    <version>1.4.0</version>
-    <date>2006-12-20</date>
-    <license>BSD License (revised)</license>
-    <state>stable</state>
-    <notes>This release includes a few enhancements for instance caching of validators and filters, and two minor fixes. See the following release notes for details.
+- Added a feature named &quot;Filter Aliases&quot; so that this feature can be used multiple aliases as the name of a validator class by setting multiple prefixes. (Ticket #19)</notes>
+  </release>
+  <release>
+   <version>
+    <release>1.4.0</release>
+    <api>1.1.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2006-12-20</date>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
+   <notes>This release includes a few enhancements for instance caching of validators and filters, and two minor fixes. See the following release notes for details.
 
 ## Enhancements ##
 
@@ -558,15 +597,20 @@ See the following release notes for details.
 ##### Piece_Right_Validation_Script #####
 
 - Added missing error handling.
-- Added a missing require_once statement.
-    </notes>
-   </release>
-   <release>
-    <version>1.3.0</version>
-    <date>2006-11-26</date>
-    <license>BSD License (revised)</license>
-    <state>stable</state>
-    <notes>This release includes two new validators File and Image, a lot of enhancements, and several fixes. See the following release notes for details.
+- Added a missing require_once statement.</notes>
+  </release>
+  <release>
+   <version>
+    <release>1.3.0</release>
+    <api>1.1.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2006-11-26</date>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
+   <notes>This release includes two new validators File and Image, a lot of enhancements, and several fixes. See the following release notes for details.
 
 ## Enhancements ##
 
@@ -627,15 +671,20 @@ See the following release notes for details.
 ##### Piece_Right #####
 
 - Fixed the problem that the fields which are specified to turn off always turn off even though what the target field values are.
-- Fixed so as to set an error if a field value is an array and a validator is not arrayable.
-    </notes>
-   </release>
-   <release>
-    <version>1.2.0</version>
-    <date>2006-10-09</date>
-    <license>BSD License (revised)</license>
-    <state>stable</state>
-    <notes>This is the first release with the new PEAR Channel Server pear.piece-framework.com.
+- Fixed so as to set an error if a field value is an array and a validator is not arrayable.</notes>
+  </release>
+  <release>
+   <version>
+    <release>1.2.0</release>
+    <api>1.1.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2006-10-09</date>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
+   <notes>This is the first release with the new PEAR Channel Server pear.piece-framework.com.
 This release includes a new class Piece_Right_Validation_Script. It will be used to run a typical process of validation with Piece_Right. See the following release notes for details.
 
 ## Enhancements ##
@@ -650,15 +699,20 @@ This release includes a new class Piece_Right_Validation_Script. It will be used
 - Added getFieldValuesCallback() for getting the callback to get field values for the current validation.
 
 ##### Piece_Right_Validation_Error #####
-- Changed the class name from Piece_Right_ValidationError.
-    </notes>
-   </release>
-   <release>
-    <version>1.1.0</version>
-    <date>2006-09-07</date>
-    <license>BSD License (revised)</license>
-    <state>stable</state>
-    <notes>This release includes a few enhancement and breaks backward compatibility as follows:
+- Changed the class name from Piece_Right_ValidationError.</notes>
+  </release>
+  <release>
+   <version>
+    <release>1.1.0</release>
+    <api>1.1.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2006-09-07</date>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
+   <notes>This release includes a few enhancement and breaks backward compatibility as follows:
 
 ## Enhancements ##
 
@@ -680,15 +734,20 @@ This release includes a new class Piece_Right_Validation_Script. It will be used
 - Fixed the problem that validate() method always returns null when an array is given.
 
 ### Other Changes ###
-- Replaced the URL of Piece_Right&apos;s Web page with http://piece-framework.com/piece-right/.
-    </notes>
-   </release>
-   <release>
-    <version>1.0.0</version>
-    <date>2006-08-10</date>
-    <license>BSD License (revised)</license>
-    <state>stable</state>
-    <notes>The first stable release of Piece_Right. This release includes a few enhancement as follows:
+- Replaced the URL of Piece_Right&apos;s Web page with http://piece-framework.com/piece-right/.</notes>
+  </release>
+  <release>
+   <version>
+    <release>1.0.0</release>
+    <api>1.0.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2006-08-10</date>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
+   <notes>The first stable release of Piece_Right. This release includes a few enhancement as follows:
 
 ## Enhancements ##
 
@@ -711,15 +770,20 @@ This release includes a new class Piece_Right_Validation_Script. It will be used
 - A validator which is used to check whether a value is a valid date and the value is earlier than current date.
 
 ##### JapaneseDate #####
-- Removed.
-    </notes>
-   </release>
-   <release>
-    <version>0.5.0</version>
-    <date>2006-08-05</date>
-    <license>BSD License (revised)</license>
-    <state>beta</state>
-    <notes>This release includes a few enhancement as follows:
+- Removed.</notes>
+  </release>
+  <release>
+   <version>
+    <release>0.5.0</release>
+    <api>0.3.0</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2006-08-05</date>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
+   <notes>This release includes a few enhancement as follows:
 
 ## Enhancements ##
 
@@ -734,15 +798,20 @@ This release includes a new class Piece_Right_Validation_Script. It will be used
 - A validator which is used to check whether a value is valid email address or not. This validator checks only addr-spec defined in RFC822.
 
 ##### WithMethod #####
-- Added support for payload.
-    </notes>
-   </release>
-   <release>
-    <version>0.4.0</version>
-    <date>2006-08-02</date>
-    <license>BSD License (revised)</license>
-    <state>beta</state>
-    <notes>This release includes an enhancement and a defect fix as follows:
+- Added support for payload.</notes>
+  </release>
+  <release>
+   <version>
+    <release>0.4.0</release>
+    <api>0.3.0</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2006-08-02</date>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
+   <notes>This release includes an enhancement and a defect fix as follows:
 
 ## Enhancements ##
 
@@ -752,15 +821,20 @@ This release includes a new class Piece_Right_Validation_Script. It will be used
 ## Defect fixes ##
 
 ##### Piece_Right #####
-- Fixed the problem that the validation of pseudo fields are always invoked. Pseudo fields will only be created when all fields specifying with &apos;arg&apos; element are not empty.
-    </notes>
-   </release>
-   <release>
-    <version>0.3.0</version>
-    <date>2006-07-30</date>
-    <license>BSD License (revised)</license>
-    <state>beta</state>
-    <notes>The first beta release of Piece_Right. This release includes a lot of enhancemens and several defect fixes as follows:
+- Fixed the problem that the validation of pseudo fields are always invoked. Pseudo fields will only be created when all fields specifying with &apos;arg&apos; element are not empty.</notes>
+  </release>
+  <release>
+   <version>
+    <release>0.3.0</release>
+    <api>0.3.0</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2006-07-30</date>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
+   <notes>The first beta release of Piece_Right. This release includes a lot of enhancemens and several defect fixes as follows:
 
 ## Enhancements ##
 
@@ -863,29 +937,38 @@ This release includes a new class Piece_Right_Validation_Script. It will be used
 
 ##### Piece_Right_Filter_Factory #####
 ##### Piece_Right_Validator_Factory #####
-- Removed &apos;@&apos; operator from include_once.
-    </notes>
-   </release>
-   <release>
-    <version>0.2.0</version>
-    <date>2006-07-23</date>
-    <license>BSD License (revised)</license>
-    <state>alpha</state>
-    <notes>This release includes one enhancement as follows:
+- Removed &apos;@&apos; operator from include_once.</notes>
+  </release>
+  <release>
+   <version>
+    <release>0.2.0</release>
+    <api>0.1.0</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2006-07-23</date>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
+   <notes>This release includes one enhancement as follows:
 
 ## Enhancements ##
 
 ##### Piece_Right_Results #####
-- Added getFieldValue() method for getting the value of a field.
-    </notes>
-   </release>
-   <release>
-    <version>0.1.0</version>
-    <date>2006-07-20</date>
-    <license>BSD License (revised)</license>
-    <state>alpha</state>
-    <notes>The first alpha release of Piece_Right.
-    </notes>
-   </release>
+- Added getFieldValue() method for getting the value of a field.</notes>
+  </release>
+  <release>
+   <version>
+    <release>0.1.0</release>
+    <api>0.1.0</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2006-07-20</date>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
+   <notes>The first alpha release of Piece_Right.</notes>
+  </release>
  </changelog>
 </package>

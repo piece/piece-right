@@ -32,7 +32,6 @@
  * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
- * @see        PEAR_PackageFileManager2
  * @since      File available since Release 0.1.0
  */
 
@@ -40,20 +39,16 @@ require_once 'PEAR/PackageFileManager2.php';
 
 PEAR::staticPushErrorHandling(PEAR_ERROR_CALLBACK, create_function('$error', 'var_dump($error); exit();'));
 
-$releaseVersion = '1.6.0';
+$releaseVersion = '1.7.0';
 $releaseStability = 'stable';
 $apiVersion = '1.1.0';
 $apiStability = 'stable';
 $notes = 'A new release of Piece_Right is now available.
 
-What\'s New in Piece_Right 1.6.0
+What\'s New in Piece_Right 1.7.0
 
- * Finals: "Finals" can be used for additional validations after normal validations.
- * Enhanced Filter Mechanism: The filter mechanism can now pass an array to the filter directly if it is arrayable.
- * Unique/UniqueFields validators: "Unique" validator can be used to check that all values in an array do not duplicate. "UniqueFields" validator can be used to check that each value of multiple fields do not duplicate.
- * Improved WithMethod validator: "WithMethod" validator now has a rule "directory" for loading a class from the specified directory if the class file is not loaded before invoking a method. And also a callback can now receive a Piece_Right_Results object as the second argument.
- * NoFile2NULL filter: "NoFile2NULL" filter converts a $_FILES element with UPLOAD_ERR_NO_FILE to NULL.
- * A few Defect Fixes: A few defects in validators are fixed.
+ * Getting Field Names: This is a new feature that allows users to always get field names by a validation set and a Piece_Right_Config object.
+ * Environment Settings: A configuration file be always read when the current environment is not production.
 
 See the following release notes for details.
 
@@ -62,41 +57,20 @@ Enhancements
 
 Kernel:
 
-- Added a feature named "Finals" that can be used for additional validations after normal validations. (Ticket #11)
-- Changed factory() to throw an exception if the configuration directory not found. (Ticket #25) (Piece_Right_Config_Factory)
-- Added _setRule(), _setRuleMessage(), and _getRule().
-  setRule(), setRuleMessage(), and getRule() are deprecated since Piece_Right 1.6.0. (Ticket #21) (Piece_Right_Validator_Common)
-- Changed the filter mechanism so as to pass an array to the filter directly if it is arrayable.
-
-Validators:
-
-- Added "Unique" validator which can be used to check that all values in an array do not duplicate. (Ticket #26)
-- Added "UniqueFields" validator which can be used to check that each value of multiple fields do not duplicate. (Ticket #26)
-- Added a rule "directory" for loading a class from the specified directory if the class file is not loaded before invoking a method. (WithMethod)
-- Changed the callback interface so as to pass the Piece_Right_Results object to a method. (WithMethod)
-
-Filters:
-
-- Added "NoFile2NULL" filter which converts a $_FILES element with UPLOAD_ERR_NO_FILE to NULL. (Ticket #28)
-
-Defect Fixes
-============
-
-Validators:
-
-- Fixed a defect that caused a payload object to be passed by value to the specified method with PHP4. (Ticket #23) (WithMethod)
-- Fixed a defect that caused a validation to be passed regardless of whether or not a year value is within a valid range of Japanese era if the rule "isJapaneseEra" was used. (Ticket #22) (Date)';
+- Added a feature that allows users to always get field names by a validation set and a Piece_Right_Config object. (Ticket #30) (Piece_Right_Config, Piece_Right_Validation_Script, Piece_Right)
+- Updated code so that a configuration file be always read when the current environment is not production. (Ticket #31) (Piece_Right_Config_Factory)';
 
 $package = new PEAR_PackageFileManager2();
 $package->setOptions(array('filelistgenerator' => 'svn',
                            'changelogoldtonew' => false,
                            'simpleoutput'      => true,
                            'baseinstalldir'    => '/',
-                           'packagefile'       => 'package2.xml',
+                           'packagefile'       => 'package.xml',
                            'packagedirectory'  => '.',
                            'dir_roles'         => array('data' => 'data',
                                                         'tests' => 'test',
-                                                        'docs' => 'doc'))
+                                                        'docs' => 'doc'),
+                           'ignore'            => array('package.php', 'package.xml'))
                      );
 
 $package->setPackage('Piece_Right');
@@ -106,9 +80,7 @@ $package->setDescription('Piece_Right is a validation framework for PHP.
 
 Piece_Right provides a generic validation system which make it easy to validate input values on Web applications. Piece_Right includes a lot of ready-to-use built-in validators. This can make it a lot faster to get started with Piece_Right in existing web applications and web application frameworks.');
 $package->setChannel('pear.piece-framework.com');
-$package->setLicense('BSD License (revised)',
-                     'http://www.opensource.org/licenses/bsd-license.php'
-                     );
+$package->setLicense('BSD License (revised)', 'http://www.opensource.org/licenses/bsd-license.php');
 $package->setAPIVersion($apiVersion);
 $package->setAPIStability($apiStability);
 $package->setReleaseVersion($releaseVersion);
@@ -118,21 +90,16 @@ $package->setPhpDep('4.3.0');
 $package->setPearinstallerDep('1.4.3');
 $package->addPackageDepWithChannel('required', 'Cache_Lite', 'pear.php.net', '1.7.0');
 $package->addPackageDepWithChannel('required', 'PEAR', 'pear.php.net', '1.4.3');
-$package->addPackageDepWithChannel('optional', 'Stagehand_TestRunner', 'pear.piece-framework.com', '0.4.0');
+$package->addPackageDepWithChannel('optional', 'Stagehand_TestRunner', 'pear.piece-framework.com', '0.5.0');
+$package->addPackageDepWithChannel('optional', 'PHPUnit', 'pear.phpunit.de', '1.3.2');
 $package->addMaintainer('lead', 'iteman', 'KUBO Atsuhiro', 'iteman@users.sourceforge.net');
-$package->addIgnore(array('package.php', 'package.xml', 'package2.xml'));
 $package->addGlobalReplacement('package-info', '@package_version@', 'version');
 $package->generateContents();
-$package1 = &$package->exportCompatiblePackageFile1();
 
-if (array_key_exists(1, $_SERVER['argv'])
-    && $_SERVER['argv'][1] == 'make'
-    ) {
+if (array_key_exists(1, $_SERVER['argv']) && $_SERVER['argv'][1] == 'make') {
     $package->writePackageFile();
-    $package1->writePackageFile();
 } else {
     $package->debugPackageFile();
-    $package1->debugPackageFile();
 }
 
 exit();
