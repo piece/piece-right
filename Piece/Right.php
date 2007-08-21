@@ -124,7 +124,7 @@ class Piece_Right
      */
     function validate($validationSetName = null, $dynamicConfig = null)
     {
-        $config = $this->_configure($validationSetName, $dynamicConfig);
+        $config = &$this->_configure($validationSetName, $dynamicConfig);
         if (Piece_Right_Error::hasErrors('exception')) {
             return;
         }
@@ -299,7 +299,8 @@ class Piece_Right
                                                        $this->_cacheDirectory
                                                        );
         if (Piece_Right_Error::hasErrors('exception')) {
-            return;
+            $return = null;
+            return $return;
         }
 
         if (is_a($dynamicConfig, 'Piece_Right_Config')) {
