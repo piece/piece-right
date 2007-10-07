@@ -67,6 +67,8 @@ class Piece_Right_Config_FactoryTestCase extends PHPUnit_TestCase
      * @access private
      */
 
+    var $_cacheDirectory;
+
     /**#@-*/
 
     /**#@+
@@ -76,11 +78,12 @@ class Piece_Right_Config_FactoryTestCase extends PHPUnit_TestCase
     function setUp()
     {
         Piece_Right_Error::pushCallback(create_function('$error', 'var_dump($error); return ' . PEAR_ERRORSTACK_DIE . ';'));
+        $this->_cacheDirectory = dirname(__FILE__) . '/' . basename(__FILE__, '.php');
     }
 
     function tearDown()
     {
-        $cache = &new Cache_Lite_File(array('cacheDir' => dirname(__FILE__) . '/',
+        $cache = &new Cache_Lite_File(array('cacheDir' => "{$this->_cacheDirectory}/",
                                             'masterFile' => '',
                                             'automaticSerialization' => true,
                                             'errorHandlingAPIBreak' => true)
@@ -101,7 +104,7 @@ class Piece_Right_Config_FactoryTestCase extends PHPUnit_TestCase
     {
         $config = &Piece_Right_Config_Factory::factory('Example',
                                                        dirname(__FILE__) . '/../../../../data',
-                                                       dirname(__FILE__)
+                                                       $this->_cacheDirectory
                                                        );
         $this->assertTrue(is_a($config, 'Piece_Right_Config'));
 
@@ -132,7 +135,7 @@ class Piece_Right_Config_FactoryTestCase extends PHPUnit_TestCase
 
         $config = &Piece_Right_Config_Factory::factory('Example',
                                                        dirname(__FILE__) . '/foo',
-                                                       dirname(__FILE__)
+                                                       $this->_cacheDirectory
                                                        );
         $this->assertNull($config);
         $this->assertTrue(Piece_Right_Error::hasErrors('exception'));
@@ -150,7 +153,7 @@ class Piece_Right_Config_FactoryTestCase extends PHPUnit_TestCase
 
         $config = &Piece_Right_Config_Factory::factory('Example',
                                                        dirname(__FILE__) . '/../../../../tests',
-                                                       dirname(__FILE__)
+                                                       $this->_cacheDirectory
                                                        );
         $this->assertNull($config);
         $this->assertTrue(Piece_Right_Error::hasErrors('exception'));
@@ -198,11 +201,62 @@ class Piece_Right_Config_FactoryTestCase extends PHPUnit_TestCase
         Piece_Right_Error::popCallback();
     }
 
+    /**
+     * @since Method available since Release 1.8.0
+     */
+    function testCacheIDsShouldUniqueInOneCacheDirectory()
+    {
+        $oldDirectory = getcwd();
+        chdir("{$this->_cacheDirectory}/CacheIDsShouldBeUniqueInOneCacheDirectory1");
+        Piece_Right_Config_Factory::factory('CacheIDsShouldBeUniqueInOneCacheDirectory',
+                                            '.',
+                                            $this->_cacheDirectory
+                                            );
+
+        $this->assertEquals(1, $this->_getCacheFileCount($this->_cacheDirectory));
+
+        chdir("{$this->_cacheDirectory}/CacheIDsShouldBeUniqueInOneCacheDirectory2");
+        Piece_Right_Config_Factory::factory('CacheIDsShouldBeUniqueInOneCacheDirectory',
+                                            '.',
+                                            $this->_cacheDirectory
+                                            );
+
+        $this->assertEquals(2, $this->_getCacheFileCount($this->_cacheDirectory));
+
+        chdir($oldDirectory);
+    }
+
     /**#@-*/
 
     /**#@+
      * @access private
      */
+
+    /**
+     * @since Method available since Release 1.2.0
+     */
+    function _getCacheFileCount($directory)
+    {
+        $cacheFileCount = 0;
+        if ($dh = opendir($directory)) {
+            while (true) {
+                $file = readdir($dh);
+                if ($file === false) {
+                    break;
+                }
+
+                if (filetype("$directory/$file") == 'file') {
+                    if (preg_match('/^cache_.+/', $file)) {
+                        ++$cacheFileCount;
+                    }
+                }
+            }
+
+            closedir($dh);
+        }
+
+        return $cacheFileCount;
+    }
 
     /**#@-*/
 
