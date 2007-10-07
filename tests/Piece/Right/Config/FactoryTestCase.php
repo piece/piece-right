@@ -103,7 +103,7 @@ class Piece_Right_Config_FactoryTestCase extends PHPUnit_TestCase
     function testCreateUsingConfigurationFile()
     {
         $config = &Piece_Right_Config_Factory::factory('Example',
-                                                       dirname(__FILE__) . '/../../../../data',
+                                                       $this->_cacheDirectory,
                                                        $this->_cacheDirectory
                                                        );
         $this->assertTrue(is_a($config, 'Piece_Right_Config'));
@@ -134,7 +134,7 @@ class Piece_Right_Config_FactoryTestCase extends PHPUnit_TestCase
         Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
 
         $config = &Piece_Right_Config_Factory::factory('Example',
-                                                       dirname(__FILE__) . '/foo',
+                                                       "{$this->_cacheDirectory}/foo",
                                                        $this->_cacheDirectory
                                                        );
         $this->assertNull($config);
@@ -152,7 +152,7 @@ class Piece_Right_Config_FactoryTestCase extends PHPUnit_TestCase
         Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
 
         $config = &Piece_Right_Config_Factory::factory('Example',
-                                                       dirname(__FILE__) . '/../../../../tests',
+                                                       dirname(__FILE__),
                                                        $this->_cacheDirectory
                                                        );
         $this->assertNull($config);
@@ -170,7 +170,7 @@ class Piece_Right_Config_FactoryTestCase extends PHPUnit_TestCase
         Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
 
         $config = &Piece_Right_Config_Factory::factory('Example',
-                                                       dirname(__FILE__) . '/../../../../data'
+                                                       $this->_cacheDirectory
                                                        );
 
         $this->assertTrue(is_a($config, 'Piece_Right_Config'));
@@ -190,7 +190,9 @@ class Piece_Right_Config_FactoryTestCase extends PHPUnit_TestCase
     {
         Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
 
-        Piece_Right_Config_Factory::factory('InvalidConfiguration', dirname(__FILE__));
+        Piece_Right_Config_Factory::factory('InvalidConfiguration',
+                                            $this->_cacheDirectory
+                                            );
 
         $this->assertTrue(Piece_Right_Error::hasErrors('exception'));
 
