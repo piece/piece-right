@@ -71,6 +71,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
 
     var $_oldFilterDirectories;
     var $_oldValidatorDirectories;
+    var $_cacheDirectory;
 
     /**#@-*/
 
@@ -81,10 +82,11 @@ class Piece_RightTestCase extends PHPUnit_TestCase
     function setUp()
     {
         Piece_Right_Error::pushCallback(create_function('$error', 'var_dump($error); return ' . PEAR_ERRORSTACK_DIE . ';'));
+        $this->_cacheDirectory = dirname(__FILE__) . '/' . basename(__FILE__, '.php');
         $this->_oldFilterDirectories = $GLOBALS['PIECE_RIGHT_Filter_Directories'];
-        Piece_Right_Filter_Factory::addFilterDirectory(dirname(__FILE__) . '/..');
+        Piece_Right_Filter_Factory::addFilterDirectory($this->_cacheDirectory);
         $this->_oldValidatorDirectories = $GLOBALS['PIECE_RIGHT_Validator_Directories'];
-        Piece_Right_Validator_Factory::addValidatorDirectory(dirname(__FILE__) . '/..');
+        Piece_Right_Validator_Factory::addValidatorDirectory($this->_cacheDirectory);
     }
 
     function tearDown()
@@ -93,7 +95,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $GLOBALS['PIECE_RIGHT_Validator_Directories'] = $this->_oldValidatorDirectories;
         Piece_Right_Filter_Factory::clearInstances();
         $GLOBALS['PIECE_RIGHT_Filter_Directories'] = $this->_oldFilterDirectories;
-        $cache = &new Cache_Lite_File(array('cacheDir' => dirname(__FILE__) . '/',
+        $cache = &new Cache_Lite_File(array('cacheDir' => "{$this->_cacheDirectory}/",
                                             'masterFile' => '',
                                             'automaticSerialization' => true,
                                             'errorHandlingAPIBreak' => true)
@@ -119,9 +121,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $dynamicConfig = &new Piece_Right_Config();
         $dynamicConfig->setRequired('phone');
         $dynamicConfig->addValidation('phone', 'Length', array('min' => 10, 'max' => 11));
-        $right = &new Piece_Right(dirname(__FILE__) . '/../../data',
-                                  dirname(__FILE__)
-                                  );
+        $right = &new Piece_Right($this->_cacheDirectory, $this->_cacheDirectory);
 
         $this->assertTrue($right->validate('Example', $dynamicConfig));
 
@@ -150,9 +150,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $dynamicConfig = &new Piece_Right_Config();
         $dynamicConfig->setRequired('phone');
         $dynamicConfig->addValidation('phone', 'Length', array('min' => 10, 'max' => 11));
-        $right = &new Piece_Right(dirname(__FILE__) . '/../../data',
-                                  dirname(__FILE__)
-                                  );
+        $right = &new Piece_Right($this->_cacheDirectory, $this->_cacheDirectory);
 
         $this->assertFalse($right->validate('Example', $dynamicConfig));
 
@@ -173,9 +171,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $dynamicConfig = &new Piece_Right_Config();
         $dynamicConfig->setRequired('phone');
         $dynamicConfig->addValidation('phone', 'Length', array('min' => 10, 'max' => 11));
-        $right = &new Piece_Right(dirname(__FILE__) . '/../../data',
-                                  dirname(__FILE__)
-                                  );
+        $right = &new Piece_Right($this->_cacheDirectory, $this->_cacheDirectory);
 
         $this->assertFalse($right->validate('Example', $dynamicConfig));
 
@@ -285,9 +281,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $_POST['favorite_framework'] = 'Piece Framework';
         $dynamicConfig = &new Piece_Right_Config();
         $dynamicConfig->addFilter('first_name', 'strtolower');
-        $right = &new Piece_Right(dirname(__FILE__) . '/../../data',
-                                  dirname(__FILE__)
-                                  );
+        $right = &new Piece_Right($this->_cacheDirectory, $this->_cacheDirectory);
 
         $this->assertFalse($right->validate('Example', $dynamicConfig));
 
@@ -418,7 +412,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $_POST['homePhone1'] = '';
         $_POST['homePhone2'] = '';
         $_POST['homePhone3'] = '';
-        $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
+        $right = &new Piece_Right($this->_cacheDirectory, $this->_cacheDirectory);
 
         $this->assertTrue($right->validate('ForceValidationBasedOnWatcher'));
 
@@ -433,7 +427,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $_POST['homePhone1'] = '1111';
         $_POST['homePhone2'] = '';
         $_POST['homePhone3'] = '';
-        $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
+        $right = &new Piece_Right($this->_cacheDirectory, $this->_cacheDirectory);
 
         $this->assertFalse($right->validate('ForceValidationBasedOnWatcher'));
 
@@ -460,7 +454,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $_POST['homePhone1'] = '1111';
         $_POST['homePhone2'] = '2222';
         $_POST['homePhone3'] = '3333';
-        $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
+        $right = &new Piece_Right($this->_cacheDirectory, $this->_cacheDirectory);
 
         $this->assertTrue($right->validate('ForceValidationBasedOnWatcher'));
 
@@ -480,7 +474,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $_POST['foo'] = '10';
         $_POST['bar'] = '10';
         $_POST['baz'] = '0';
-        $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
+        $right = &new Piece_Right($this->_cacheDirectory, $this->_cacheDirectory);
 
         $this->assertFalse($right->validate('AppropriateValidationMessage'));
 
@@ -529,7 +523,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_POST['age'] = '18';
         $_POST['phone'] = '01234567891';
-        $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
+        $right = &new Piece_Right($this->_cacheDirectory, $this->_cacheDirectory);
 
         $this->assertFalse($right->validate('MessageVariable'));
 
@@ -680,7 +674,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
     function testSeparatedDateValidationWithPseudoFieldIfPseudoFieldIsRequired()
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
-        $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
+        $right = &new Piece_Right($this->_cacheDirectory, $this->_cacheDirectory);
 
         $this->assertFalse($right->validate('SeparatedDateValidationWithPseudoFieldIfPseudoFieldIsRequired'));
         $results = &$right->getResults();
@@ -694,7 +688,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
 
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_POST['year'] = '1976';
-        $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
+        $right = &new Piece_Right($this->_cacheDirectory, $this->_cacheDirectory);
 
         $this->assertFalse($right->validate('SeparatedDateValidationWithPseudoFieldIfPseudoFieldIsRequired'));
 
@@ -711,7 +705,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_POST['year'] = '1976';
         $_POST['month'] = '1';
-        $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
+        $right = &new Piece_Right($this->_cacheDirectory, $this->_cacheDirectory);
 
         $this->assertFalse($right->validate('SeparatedDateValidationWithPseudoFieldIfPseudoFieldIsRequired'));
 
@@ -730,7 +724,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $_POST['year'] = '1976';
         $_POST['month'] = '1';
         $_POST['day'] = '20';
-        $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
+        $right = &new Piece_Right($this->_cacheDirectory, $this->_cacheDirectory);
 
         $this->assertTrue($right->validate('SeparatedDateValidationWithPseudoFieldIfPseudoFieldIsRequired'));
 
@@ -743,7 +737,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $_POST['year'] = '1977';
         $_POST['month'] = '2';
         $_POST['day'] = '29';
-        $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
+        $right = &new Piece_Right($this->_cacheDirectory, $this->_cacheDirectory);
 
         $this->assertFalse($right->validate('SeparatedDateValidationWithPseudoFieldIfPseudoFieldIsRequired'));
 
@@ -766,7 +760,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
     function testSeparatedDateValidationWithPseudoFieldIfPseudoFieldIsNotRequired()
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
-        $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
+        $right = &new Piece_Right($this->_cacheDirectory, $this->_cacheDirectory);
 
         $this->assertTrue($right->validate('SeparatedDateValidationWithPseudoFieldIfPseudoFieldIsNotRequired'));
 
@@ -774,7 +768,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
 
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_POST['year'] = '1976';
-        $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
+        $right = &new Piece_Right($this->_cacheDirectory, $this->_cacheDirectory);
 
         $this->assertFalse($right->validate('SeparatedDateValidationWithPseudoFieldIfPseudoFieldIsNotRequired'));
 
@@ -792,7 +786,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $_POST['year'] = '1976';
         $_POST['month'] = '1';
         $_POST['day'] = '20';
-        $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
+        $right = &new Piece_Right($this->_cacheDirectory, $this->_cacheDirectory);
 
         $this->assertTrue($right->validate('SeparatedDateValidationWithPseudoFieldIfPseudoFieldIsNotRequired'));
 
@@ -918,8 +912,8 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $width  = 175;
         $height = 175;
 
-        $imagedir = dirname(__FILE__). '/Right/Validator/images';
-        $image = $imagedir.'/image.jpg';
+        $imagedir = "{$this->_cacheDirectory}/images";
+        $image = "$imagedir/image.jpg";
         $size = filesize($image);
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_FILES['userimage'] = array('tmp_name' => $image,
@@ -989,8 +983,8 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $width  = 175;
         $height = 175;
 
-        $imagedir = dirname(__FILE__). '/Right/Validator/images';
-        $image = $imagedir.'/image.jpg';
+        $imagedir = "{$this->_cacheDirectory}/images";
+        $image = "$imagedir/image.jpg";
         $size = filesize($image);
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_FILES['userimage'] = array('tmp_name' => $image,
@@ -1041,7 +1035,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
                                       );
 
         foreach (array('bmp', 'gif', 'jpg', 'png', 'tif') as $ext) {
-            $imagefile = "{$imagedir}/image.{$ext}";
+            $imagefile = "$imagedir/image.$ext";
             $_FILES['userimage'] = array('tmp_name' => $imagefile,
                                          'name'     => $imagefile,
                                          'size'     => filesize($imagefile),
@@ -1076,8 +1070,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
      */
     function testValidateFinalsWithDynamicConfigration()
     {
-        $cacheDirectory = dirname(__FILE__) . '/' . basename(__FILE__, '.php');
-        include_once "$cacheDirectory/ValidateFinals.php";
+        include_once "{$this->_cacheDirectory}/ValidateFinals.php";
 
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_POST['password1'] = 'foobar';
@@ -1135,13 +1128,6 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         unset($_POST['password2']);
         unset($_POST['password1']);
         unset($_SERVER['REQUEST_METHOD']);
-
-        $cache = &new Cache_Lite_File(array('cacheDir' => "$cacheDirectory/",
-                                            'masterFile' => '',
-                                            'automaticSerialization' => true,
-                                            'errorHandlingAPIBreak' => true)
-                                      );
-        $cache->clean();
     }
 
     /**
@@ -1149,15 +1135,14 @@ class Piece_RightTestCase extends PHPUnit_TestCase
      */
     function testValidateFinals()
     {
-        $cacheDirectory = dirname(__FILE__) . '/' . basename(__FILE__, '.php');
-        include_once "$cacheDirectory/ValidateFinals.php";
+        include_once "{$this->_cacheDirectory}/ValidateFinals.php";
 
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_POST['password1'] = 'foobar';
         $_POST['password2'] = 'foobar';
 
         $payload = &new stdClass();
-        $right = &new Piece_Right($cacheDirectory, $cacheDirectory);
+        $right = &new Piece_Right($this->_cacheDirectory, $this->_cacheDirectory);
         $right->setPayload($payload);
 
         $this->assertTrue($right->validate('ValidateFinals'));
@@ -1175,7 +1160,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $_POST['password2'] = 'foobar';
 
         $payload = &new stdClass();
-        $right = &new Piece_Right($cacheDirectory, $cacheDirectory);
+        $right = &new Piece_Right($this->_cacheDirectory, $this->_cacheDirectory);
         $right->setPayload($payload);
 
         $this->assertFalse($right->validate('ValidateFinals'));
@@ -1194,13 +1179,6 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         unset($_POST['password2']);
         unset($_POST['password1']);
         unset($_SERVER['REQUEST_METHOD']);
-
-        $cache = &new Cache_Lite_File(array('cacheDir' => "$cacheDirectory/",
-                                            'masterFile' => '',
-                                            'automaticSerialization' => true,
-                                            'errorHandlingAPIBreak' => true)
-                                      );
-        $cache->clean();
     }
 
     /**#@-*/
@@ -1223,9 +1201,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
 
         $dynamicConfig = &new Piece_Right_Config();
         $dynamicConfig->setRequired('age');
-        $right = &new Piece_Right(dirname(__FILE__) . '/../../data',
-                                  dirname(__FILE__)
-                                  );
+        $right = &new Piece_Right($this->_cacheDirectory, $this->_cacheDirectory);
 
         $this->assertFalse($right->validate('Example', $dynamicConfig));
 
@@ -1280,7 +1256,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_POST['foo'] = $fieldValue;
-        $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
+        $right = &new Piece_Right($this->_cacheDirectory, $this->_cacheDirectory);
 
         $this->assertFalse($right->validate('RuleMessage'));
 
@@ -1306,7 +1282,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_POST['emailUser'] = 'ITEMAN';
         $_POST['emailHost'] = 'USERS.SOURCEFORGE.NET';
-        $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
+        $right = &new Piece_Right($this->_cacheDirectory, $this->_cacheDirectory);
 
         if ($useDynamicConfiguration) {
             $this->assertTrue($right->validate('PseudoField', $dynamicConfig));
@@ -1331,7 +1307,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
     function _assertForceValidation($useDynamicConfiguration, &$dynamicConfig)
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
-        $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
+        $right = &new Piece_Right($this->_cacheDirectory, $this->_cacheDirectory);
 
         if ($useDynamicConfiguration) {
             $this->assertFalse($right->validate('ForceValidation', $dynamicConfig));
@@ -1355,7 +1331,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_POST['has_home_phone'] = '2';
-        $right = &new Piece_Right(dirname(__FILE__), dirname(__FILE__));
+        $right = &new Piece_Right($this->_cacheDirectory, $this->_cacheDirectory);
 
         if ($useDynamicConfiguration) {
             $this->assertTrue($right->validate('ProblemThatValidationOfPseudoFieldsAreAlwaysInvoked', $dynamicConfig));
