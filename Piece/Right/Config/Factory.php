@@ -87,7 +87,7 @@ class Piece_Right_Config_Factory
      * Creates a Piece_Right_Config object from a configuration file or a
      * cache.
      *
-     * @param string $validationSet
+     * @param string $validationSetName
      * @param string $configDirectory
      * @param string $cacheDirectory
      * @return Piece_Right_Config
@@ -95,9 +95,9 @@ class Piece_Right_Config_Factory
      * @throws PIECE_RIGHT_ERROR_NOT_FOUND
      * @static
      */
-    function &factory($validationSet = null, $configDirectory = null, $cacheDirectory = null)
+    function &factory($validationSetName = null, $configDirectory = null, $cacheDirectory = null)
     {
-        if (is_null($validationSet) || is_null($configDirectory)) {
+        if (is_null($validationSetName) || is_null($configDirectory)) {
             $config = &new Piece_Right_Config();
             return $config;
         }
@@ -110,7 +110,7 @@ class Piece_Right_Config_Factory
             return $return;
         }
 
-        $configFile = "$configDirectory/$validationSet.yaml";
+        $configFile = "$configDirectory/$validationSetName.yaml";
 
         if (!file_exists($configFile)) {
             Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,

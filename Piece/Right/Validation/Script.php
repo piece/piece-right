@@ -107,7 +107,7 @@ class Piece_Right_Validation_Script
      * Runs the validation script with a validation set and/or dynamic
      * configration and sets appropriate values to the given container.
      *
-     * @param string             $validationSet
+     * @param string             $validationSetName
      * @param mixed              &$container
      * @param Piece_Right_Config $config
      * @param boolean            $keepOriginalFieldValue
@@ -116,7 +116,7 @@ class Piece_Right_Validation_Script
      * @throws PIECE_RIGHT_ERROR_NOT_FOUND
      * @throws PIECE_RIGHT_ERROR_INVALID_FILTER
      */
-    function &run($validationSet,
+    function &run($validationSetName,
                   &$container,
                   $config,
                   $keepOriginalFieldValue = true
@@ -131,7 +131,7 @@ class Piece_Right_Validation_Script
             $right->setPayload($this->_payload);
         }
 
-        $result = $right->validate($validationSet, $config);
+        $result = $right->validate($validationSetName, $config);
         if (Piece_Right_Error::hasErrors('exception')) {
             $return = null;
             return $return;
@@ -157,7 +157,7 @@ class Piece_Right_Validation_Script
 
         if (!is_null($this->_postRunCallback)) {
             call_user_func_array($this->_postRunCallback,
-                                 array($validationSet, &$results)
+                                 array($validationSetName, &$results)
                                  );
         }
 
@@ -185,19 +185,19 @@ class Piece_Right_Validation_Script
      * Gets all field names corresponding to the given validation set and
      * a Piece_Right_Config object.
      *
-     * @param string             $validationSet
+     * @param string             $validationSetName
      * @param Piece_Right_Config $config
      * @return array
      * @throws PIECE_RIGHT_ERROR_INVALID_CONFIGURATION
      * @throws PIECE_RIGHT_ERROR_NOT_FOUND
      */
-    function getFieldNames($validationSet, $config)
+    function getFieldNames($validationSetName, $config)
     {
         $right = &new Piece_Right($this->_configDirectory,
                                   $this->_cacheDirectory,
                                   $this->_fieldValuesCallback
                                   );
-        $fieldNames = $right->getFieldNames($validationSet, $config);
+        $fieldNames = $right->getFieldNames($validationSetName, $config);
         if (Piece_Right_Error::hasErrors('exception')) {
             return;
         }
