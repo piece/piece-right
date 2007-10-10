@@ -91,6 +91,10 @@ class Piece_RightTestCase extends PHPUnit_TestCase
 
     function tearDown()
     {
+        foreach (array_keys($_POST) as $field) {
+            unset($_POST[$field]);
+        }
+        unset($_SERVER['REQUEST_METHOD']);
         Piece_Right_Validator_Factory::clearInstances();
         $GLOBALS['PIECE_RIGHT_Validator_Directories'] = $this->_oldValidatorDirectories;
         Piece_Right_Filter_Factory::clearInstances();
@@ -126,18 +130,6 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $this->assertTrue($right->validate('Example', $dynamicConfig));
 
         $results = &$right->getResults();
-
-        unset($_POST['birthdayDay']);
-        unset($_POST['birthdayMonth']);
-        unset($_POST['birthdayYear']);
-        unset($_POST['favorite_framework']);
-        unset($_POST['use_php']);
-        unset($_POST['hobbies']);
-        unset($_POST['country']);
-        unset($_POST['phone']);
-        unset($_POST['last_name']);
-        unset($_POST['first_name']);
-        unset($_SERVER['REQUEST_METHOD']);
     }
 
     function testFailureToValidate()
@@ -153,12 +145,6 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $right = &new Piece_Right($this->_cacheDirectory, $this->_cacheDirectory);
 
         $this->assertFalse($right->validate('Example', $dynamicConfig));
-
-        unset($_POST['country']);
-        unset($_POST['phone']);
-        unset($_POST['last_name']);
-        unset($_POST['first_name']);
-        unset($_SERVER['REQUEST_METHOD']);
     }
 
     function testGettingErrorInformation()
@@ -191,12 +177,6 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $this->assertTrue($results->isError('favorite_framework'));
         $this->assertEquals('foo', $results->getErrorMessage('first_name'));
         $this->assertEquals(array('foo'), $results->getErrorMessages('first_name'));
-
-        unset($_POST['use_php']);
-        unset($_POST['country']);
-        unset($_POST['phone']);
-        unset($_POST['last_name']);
-        unset($_SERVER['REQUEST_METHOD']);
     }
 
     /**
@@ -218,9 +198,6 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $this->assertEquals(1, $results->countErrors());
         $this->assertFalse($results->isError('foo'));
         $this->assertTrue($results->isError('bar'));
-
-        unset($_POST['baz']);
-        unset($_SERVER['REQUEST_METHOD']);
     }
 
     /**
@@ -263,11 +240,6 @@ class Piece_RightTestCase extends PHPUnit_TestCase
 
         $this->assertEquals('bar', $baz1[0]);
         $this->assertEquals('baz', $baz['baz']);
-
-        unset($_POST['baz']);
-        unset($_POST['bar']);
-        unset($_POST['foo']);
-        unset($_SERVER['REQUEST_METHOD']);
     }
 
     /**
@@ -290,11 +262,6 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $this->assertEquals(2, $results->countErrors());
         $this->assertFalse($results->isError('foo'));
         $this->assertEquals('this text is written in lower case', $results->getFieldValue('first_name'));
-
-        unset($_POST['favorite_framework']);
-        unset($_POST['use_php']);
-        unset($_POST['foo']);
-        unset($_SERVER['REQUEST_METHOD']);
     }
 
     /**
@@ -303,7 +270,15 @@ class Piece_RightTestCase extends PHPUnit_TestCase
     function testWatchingFields()
     {
         $this->_assertWatchingFields('birthdayMonth', '1', array('birthdayDay', 'birthdayYear'));
+
+        $this->tearDown();
+        $this->setUp();
+
         $this->_assertWatchingFields('birthdayDay', '20', array('birthdayMonth', 'birthdayYear'));
+
+        $this->tearDown();
+        $this->setUp();
+
         $this->_assertWatchingFields('birthdayYear', '1976', array('birthdayMonth', 'birthdayDay'));
     }
 
@@ -320,9 +295,6 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $right = &new Piece_Right();
 
         $this->assertTrue($right->validate('Example', $dynamicConfig));
-
-        unset($_POST['checkboxes']);
-        unset($_SERVER['REQUEST_METHOD']);
     }
 
     /**
@@ -356,10 +328,6 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         foreach (array('bar', 'baz') as $field) {
             $this->assertTrue(in_array($field, $results->getErrorFields()), "The field [ $field ] is expected.");
         }
-
-        unset($_POST['qux']);
-        unset($_POST['foo']);
-        unset($_SERVER['REQUEST_METHOD']);
     }
 
     /**
@@ -368,7 +336,14 @@ class Piece_RightTestCase extends PHPUnit_TestCase
     function testProblemThatNonRequiredFieldsCannotBeTurnedRequiredOn()
     {
         $this->_assertProblemThatNonRequiredFieldsCannotBeTurnedRequiredOn('param1', array('param2', 'param3'));
+
+        $this->tearDown();
+        $this->setUp();
+
         $this->_assertProblemThatNonRequiredFieldsCannotBeTurnedRequiredOn('param2', array('param1', 'param3'));
+        $this->tearDown();
+        $this->setUp();
+
         $this->_assertProblemThatNonRequiredFieldsCannotBeTurnedRequiredOn('param3', array('param1', 'param2'));
     }
 
@@ -457,12 +432,6 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $right = &new Piece_Right($this->_cacheDirectory, $this->_cacheDirectory);
 
         $this->assertTrue($right->validate('ForceValidationBasedOnWatcher'));
-
-        unset($_POST['homePhone3']);
-        unset($_POST['homePhone2']);
-        unset($_POST['homePhone1']);
-        unset($_POST['has_home_phone']);
-        unset($_SERVER['REQUEST_METHOD']);
     }
 
     /**
@@ -483,11 +452,6 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $this->assertEquals('Please select an element.', $results->getErrorMessage('foo'));
         $this->assertEquals('The value is too big.', $results->getErrorMessage('bar'));
         $this->assertEquals('The value is too small.', $results->getErrorMessage('baz'));
-
-        unset($_POST['baz']);
-        unset($_POST['bar']);
-        unset($_POST['foo']);
-        unset($_SERVER['REQUEST_METHOD']);
     }
 
     /**
@@ -539,10 +503,6 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $this->assertEquals('[phone] is must less than 10.',
                             $results->getErrorMessage('phone')
                             );
-
-        unset($_POST['phone']);
-        unset($_POST['age']);
-        unset($_SERVER['REQUEST_METHOD']);
     }
 
     /**
@@ -636,11 +596,6 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         foreach (array('foo', 'baz') as $field) {
             $this->assertTrue(in_array($field, $results->getValidFields()), "The field [ $field ] is expected.");
         }
-
-        unset($_POST['baz']);
-        unset($_POST['bar']);
-        unset($_POST['foo']);
-        unset($_SERVER['REQUEST_METHOD']);
     }
 
     /**
@@ -663,9 +618,6 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $results = &$right->getResults();
 
         $this->assertTrue($payload->validatorCalled);
-
-        unset($_POST['foo']);
-        unset($_SERVER['REQUEST_METHOD']);
     }
 
     /**
@@ -747,11 +699,6 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $this->assertEquals(1, count($errorFields));
         $this->assertContains('birthday', $errorFields);
         $this->assertEquals('[birthday] is invalid.', $results->getErrorMessage('birthday'));
-
-        unset($_POST['day']);
-        unset($_POST['month']);
-        unset($_POST['year']);
-        unset($_SERVER['REQUEST_METHOD']);
     }
 
     /**
@@ -789,11 +736,6 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $right = &new Piece_Right($this->_cacheDirectory, $this->_cacheDirectory);
 
         $this->assertTrue($right->validate('SeparatedDateValidationWithPseudoFieldIfPseudoFieldIsNotRequired'));
-
-        unset($_POST['day']);
-        unset($_POST['month']);
-        unset($_POST['year']);
-        unset($_SERVER['REQUEST_METHOD']);
     }
 
     /**
@@ -1124,10 +1066,6 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         }
 
         $this->assertFalse(array_key_exists('foo', $payload));
-
-        unset($_POST['password2']);
-        unset($_POST['password1']);
-        unset($_SERVER['REQUEST_METHOD']);
     }
 
     /**
@@ -1175,10 +1113,6 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         }
 
         $this->assertFalse(array_key_exists('foo', $payload));
-
-        unset($_POST['password2']);
-        unset($_POST['password1']);
-        unset($_SERVER['REQUEST_METHOD']);
     }
 
     /**#@-*/
@@ -1210,12 +1144,6 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         foreach ($invalidFields as $field) {
             $this->assertTrue(in_array($field, $results->getErrorFields()), "The field [ $field ] is expected.");
         }
-
-        unset($_POST[$name]);
-        unset($_POST['country']);
-        unset($_POST['last_name']);
-        unset($_POST['first_name']);
-        unset($_SERVER['REQUEST_METHOD']);
     }
 
     /**
@@ -1244,9 +1172,6 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         foreach ($invalidFields as $field) {
             $this->assertTrue(in_array($field, $results->getErrorFields()), "The field [ $field ] is expected.");
         }
-
-        unset($_POST[$name]);
-        unset($_SERVER['REQUEST_METHOD']);
     }
 
     /**
@@ -1269,9 +1194,6 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         }
 
         $this->assertEquals($expectedMessage, $results->getErrorMessage('foo'));
-
-        unset($_POST['foo']);
-        unset($_SERVER['REQUEST_METHOD']);
     }
 
     /**
@@ -1295,10 +1217,6 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $this->assertEquals('iteman@users.sourceforge.net',
                             $results->getFieldValue('email')
                             );
-
-        unset($_POST['emailHost']);
-        unset($_POST['emailUser']);
-        unset($_SERVER['REQUEST_METHOD']);
     }
 
     /**
@@ -1320,8 +1238,6 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $this->assertEquals('The password is invalid.',
                             $results->getErrorMessage('password')
                             );
-
-        unset($_SERVER['REQUEST_METHOD']);
     }
 
     /**
@@ -1343,9 +1259,6 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         foreach ($results->getErrorFields() as $field) {
             print "$field => " . $results->getFieldValue($field) . ': ' . $results->getErrorMessage($field) . "\n";
         }
-
-        unset($_POST['has_home_phone']);
-        unset($_SERVER['REQUEST_METHOD']);
     }
 
     /**
@@ -1382,10 +1295,6 @@ class Piece_RightTestCase extends PHPUnit_TestCase
                 $this->assertTrue(in_array($field, $results->getErrorFields()), "The field [ $field ] is expected.");
             }
         }
-
-        unset($_POST['home_phone']);
-        unset($_POST['mobile_phone']);
-        unset($_SERVER['REQUEST_METHOD']);
     }
 
     /**#@-*/
