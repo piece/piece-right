@@ -140,13 +140,7 @@ class Piece_Right_Config_Factory
                                     );
             Piece_Right_Error::popCallback();
 
-            $config = &Piece_Right_Config_Factory::_getConfigurationFromFile($configFile);
-            if (Piece_Right_Error::hasErrors('exception')) {
-                $return = null;
-                return $return;
-            }
-
-            return $config;
+            return Piece_Right_Config_Factory::_getConfigurationFromFile($configFile);
         }
 
         if (!is_readable($cacheDirectory) || !is_writable($cacheDirectory)) {
@@ -157,13 +151,7 @@ class Piece_Right_Config_Factory
                                     );
             Piece_Right_Error::popCallback();
 
-            $config = &Piece_Right_Config_Factory::_getConfigurationFromFile($configFile);
-            if (Piece_Right_Error::hasErrors('exception')) {
-                $return = null;
-                return $return;
-            }
-
-            return $config;
+            return Piece_Right_Config_Factory::_getConfigurationFromFile($configFile);
         }
 
         return Piece_Right_Config_Factory::_getConfiguration($configFile, $cacheDirectory);
@@ -213,13 +201,7 @@ class Piece_Right_Config_Factory
                                     );
             Piece_Right_Error::popCallback();
 
-            $config = &Piece_Right_Config_Factory::_getConfigurationFromFile($masterFile);
-            if (Piece_Right_Error::hasErrors('exception')) {
-                $return = null;
-                return $return;
-            }
-
-            return $config;
+            return Piece_Right_Config_Factory::_getConfigurationFromFile($masterFile);
         }
 
         if (!$config) {
