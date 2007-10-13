@@ -35,6 +35,8 @@
  * @since      File available since Release 0.1.0
  */
 
+require_once 'Piece/Right/Config/Field.php';
+
 // {{{ Piece_Right_Config
 
 /**
@@ -61,13 +63,7 @@ class Piece_Right_Config
      * @access private
      */
 
-    var $_requiredFields = array();
-    var $_validationSet = array();
-    var $_filters = array();
-    var $_watchers = array();
-    var $_forceValidationFields = array();
-    var $_pseudoFields = array();
-    var $_messageVariables = array();
+    var $_fields = array();
 
     /**#@-*/
 
@@ -81,36 +77,21 @@ class Piece_Right_Config
     /**
      * Adds a validation to a field with the given rules.
      *
-     * @param string $field
-     * @param string $validator
+     * @param string $fieldName
+     * @param string $validatorName
      * @param array  $rules
      * @param string $message
      */
-    function addValidation($field, $validator, $rules = array(),
+    function addValidation($fieldName, $validatorName, $rules = array(),
                            $message = null, $useInFinals = false
                            )
     {
-        $this->addField($field);
-
-        array_push($this->_validationSet[$field],
-                   array('validator'   => $validator,
-                         'rules'       => $rules,
-                         'message'     => $message,
-                         'useInFinals' => $useInFinals)
-                   );
-    }
-
-    // }}}
-    // {{{ getValidationSet()
-
-    /**
-     * Gets all validation sets as an array.
-     *
-     * @return array
-     */
-    function getValidationSet()
-    {
-        return $this->_validationSet;
+        $this->addField($fieldName);
+        $this->_fields[$fieldName]->addValidation($validatorName,
+                                                  $rules,
+                                                  $message,
+                                                  $useInFinals
+                                                  );
     }
 
     // }}}
@@ -123,47 +104,13 @@ class Piece_Right_Config
      */
     function merge(&$config)
     {
-        $validationSet = $config->getValidationSet();
-        array_walk($validationSet, array(&$this, 'mergeValidations'));
+        foreach ($config->getFieldNames() as $fieldName) {
+            if (!array_key_exists($fieldName, $this->_fields)) {
+                $field = &new Piece_Right_Config_Field();
+                $this->_fields[$fieldName] = &$field;
+            }
 
-        $requiredFields = $config->getRequiredFields();
-        array_walk($requiredFields, array(&$this, 'mergeRequiredField'));
-
-        $filters = $config->getFilters();
-        array_walk($filters, array(&$this, 'mergeFilters'));
-
-        $watchers = $config->getWatchers();
-        array_walk($watchers, array(&$this, 'mergeWatcher'));
-
-        $pseudoFields = $config->getPseudoFields();
-        array_walk($pseudoFields, array(&$this, 'mergePseudoField'));
-
-        $messageVariables = $config->getMessageVariables();
-        array_walk($messageVariables, array(&$this, 'mergeMessageVariables'));
-
-        $forceValidationFields = $config->getForceValidationFields();
-        array_walk($forceValidationFields, array(&$this, 'mergeForceValidationField'));
-    }
-
-    // }}}
-    // {{{ mergeValidations()
-
-    /**
-     * A callback that will be called by array_walk() function in merge()
-     * method.
-     *
-     * @param array  $validations
-     * @param string $field
-     */
-    function mergeValidations($validations, $field)
-    {
-        foreach ($validations as $validation) {
-            $this->addValidation($field,
-                                 $validation['validator'],
-                                 $validation['rules'],
-                                 $validation['message'],
-                                 $validation['useInFinals']
-                                 );
+            $this->_fields[$fieldName]->merge($config->getField($fieldName));
         }
     }
 
@@ -173,31 +120,14 @@ class Piece_Right_Config
     /**
      * Sets a field as required.
      *
-     * @param string $field
-     * @param array  $elements
+     * @param string $fieldName
+     * @param array  $required
      * @since Method available since Release 0.3.0
      */
-    function setRequired($field, $elements = array())
+    function setRequired($fieldName, $required = array())
     {
-        $this->addField($field);
-
-        if (!array_key_exists($field, $this->_requiredFields)) {
-            $this->_requiredFields[$field] = array('enabled' => true,
-                                                   'message' => null
-                                                   );
-        }
-
-        if (array_key_exists('enabled', $elements)) {
-            $this->_requiredFields[$field]['enabled'] = $elements['enabled'];
-        } else {
-            $this->_requiredFields[$field]['enabled'] = true;
-        }
-
-        if (array_key_exists('message', $elements)
-            && !is_null($elements['message'])
-            ) {
-            $this->_requiredFields[$field]['message'] = $elements['message'];
-        }
+        $this->addField($fieldName);
+        $this->_fields[$fieldName]->setRequired($required);
     }
 
     // }}}
@@ -206,12 +136,20 @@ class Piece_Right_Config
     /**
      * Returns whether the given field is required or not.
      *
+     * @param string $fieldName
      * @return boolean
+     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
      * @since Method available since Release 0.3.0
      */
-    function isRequired($field)
+    function isRequired($fieldName)
     {
-        return array_key_exists($field, $this->_requiredFields) && $this->_requiredFields[$field]['enabled'];
+        if (!array_key_exists($fieldName, $this->_fields)) {
+            Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
+                                    "The field [ $fieldName ] not found."
+                                    );
+        }
+
+        return $this->_fields[$fieldName]->isRequired();
     }
 
     // }}}
@@ -220,13 +158,20 @@ class Piece_Right_Config
     /**
      * Gets the message when a field is required.
      *
-     * @param string $field
+     * @param string $fieldName
      * @return string
+     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
      * @since Method available since Release 0.3.0
      */
-    function getRequiredMessage($field)
+    function getRequiredMessage($fieldName)
     {
-        return $this->_requiredFields[$field]['message'];
+        if (!array_key_exists($fieldName, $this->_fields)) {
+            Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
+                                    "The field [ $fieldName ] not found."
+                                    );
+        }
+
+        return $this->_fields[$fieldName]->getRequiredMessage();
     }
 
     // }}}
@@ -235,96 +180,14 @@ class Piece_Right_Config
     /**
      * Adds a filter to a field.
      *
-     * @param string $field
-     * @param string $filter
+     * @param string $fieldName
+     * @param string $filterName
      * @since Method available since Release 0.3.0
      */
-    function addFilter($field, $filter)
+    function addFilter($fieldName, $filterName)
     {
-        $this->addField($field);
-
-        if (!array_key_exists($field, $this->_filters)) {
-            $this->_filters[$field] = array();
-        }
-
-        array_push($this->_filters[$field], $filter);
-    }
-
-    // }}}
-    // {{{ getFiltersByFieldName()
-
-    /**
-     * Gets the filters for the given field.
-     *
-     * @param string $field
-     * @return array
-     * @since Method available since Release 0.3.0
-     */
-    function getFiltersByFieldName($field)
-    {
-        return array_key_exists($field, $this->_filters) ? $this->_filters[$field] : array();
-    }
-
-    // }}}
-    // {{{ getRequiredFields()
-
-    /**
-     * Gets all required fields for the current configuration.
-     *
-     * @return array
-     * @since Method available since Release 0.3.0
-     */
-    function getRequiredFields()
-    {
-        return $this->_requiredFields;
-    }
-
-    // }}}
-    // {{{ mergeRequiredField()
-
-    /**
-     * A callback that will be called by array_walk() function in merge()
-     * method.
-     *
-     * @param array  $elements
-     * @param string $field
-     * @since Method available since Release 0.3.0
-     */
-    function mergeRequiredField($elements, $field)
-    {
-        $this->setRequired($field, $elements);
-    }
-
-    // }}}
-    // {{{ mergeFilters()
-
-    /**
-     * A callback that will be called by array_walk() function in merge()
-     * method.
-     *
-     * @param array  $filters
-     * @param string $field
-     * @since Method available since Release 0.3.0
-     */
-    function mergeFilters($filters, $field)
-    {
-        foreach ($filters as $filter) {
-            $this->addFilter($field, $filter);
-        }
-    }
-
-    // }}}
-    // {{{ getFilters()
-
-    /**
-     * Gets all filters for the current configuration.
-     *
-     * @return array
-     * @since Method available since Release 0.3.0
-     */
-    function getFilters()
-    {
-        return $this->_filters;
+        $this->addField($fieldName);
+        $this->_fields[$fieldName]->addFilter($filterName);
     }
 
     // }}}
@@ -333,47 +196,14 @@ class Piece_Right_Config
     /**
      * Sets the watcher to the given field.
      *
-     * @param string $field
+     * @param string $fieldName
      * @param array  $watcher
      * @since Method available since Release 0.3.0
      */
-    function setWatcher($field, $watcher)
+    function setWatcher($fieldName, $watcher)
     {
-        if (!array_key_exists($field, $this->_validationSet)) {
-            $this->_validationSet[$field] = array();
-        }
-
-        $this->_watchers[$field] = $watcher;
-    }
-
-    // }}}
-    // {{{ getWatchers()
-
-    /**
-     * Gets all watchers for the current configuration.
-     *
-     * @return array
-     * @since Method available since Release 0.3.0
-     */
-    function getWatchers()
-    {
-        return $this->_watchers;
-    }
-
-    // }}}
-    // {{{ mergeWatcher()
-
-    /**
-     * A callback that will be called by array_walk() function in merge()
-     * method.
-     *
-     * @param array  $watcher
-     * @param string $field
-     * @since Method available since Release 0.3.0
-     */
-    function mergeWatcher($watcher, $field)
-    {
-        $this->setWatcher($field, $watcher);
+        $this->addField($fieldName);
+        $this->_fields[$fieldName]->setWatcher($watcher);
     }
 
     // }}}
@@ -382,13 +212,20 @@ class Piece_Right_Config
     /**
      * Gets the watcher for the given field.
      *
-     * @param string $field
+     * @param string $fieldName
      * @return array
+     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
      * @since Method available since Release 0.3.0
      */
-    function getWatcher($field)
+    function getWatcher($fieldName)
     {
-        return array_key_exists($field, $this->_watchers) ? $this->_watchers[$field] : null;
+        if (!array_key_exists($fieldName, $this->_fields)) {
+            Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
+                                    "The field [ $fieldName ] not found."
+                                    );
+        }
+
+        return $this->_fields[$fieldName]->getWatcher();
     }
 
     // }}}
@@ -397,14 +234,18 @@ class Piece_Right_Config
     /**
      * Adds a field which will be validated.
      *
-     * @param string $field
+     * @param string $fieldName
      * @since Method available since Release 0.3.0
      */
-    function addField($field)
+    function addField($fieldName)
     {
-        if (!array_key_exists($field, $this->_validationSet)) {
-            $this->_validationSet[$field] = array();
-            $this->addMessageVariable($field, '_name', $field);
+        if (!array_key_exists($fieldName, $this->_fields)) {
+            $field = &new Piece_Right_Config_Field();
+            $this->_fields[$fieldName] = &$field;
+        }
+
+        if (!$this->_fields[$fieldName]->hasMessageVariable('_name')) {
+            $this->_fields[$fieldName]->addMessageVariable('_name', $fieldName);
         }
     }
 
@@ -414,15 +255,14 @@ class Piece_Right_Config
     /**
      * Turns force validation on/off for the given field.
      *
-     * @param string  $field
+     * @param string  $fieldName
      * @param boolean $forceValidation
      * @since Method available since Release 0.3.0
      */
-    function setForceValidation($field, $forceValidation = true)
+    function setForceValidation($fieldName, $forceValidation = true)
     {
-        $this->addField($field);
-
-        $this->_forceValidationFields[$field] = $forceValidation;
+        $this->addField($fieldName);
+        $this->_fields[$fieldName]->setForceValidation($forceValidation);
     }
 
     // }}}
@@ -431,16 +271,19 @@ class Piece_Right_Config
     /**
      * Forces validation for the given field.
      *
-     * @param string $field
+     * @param string $fieldName
+     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
      * @since Method available since Release 0.3.0
      */
-    function forceValidation($field)
+    function forceValidation($fieldName)
     {
-        if (!array_key_exists($field, $this->_forceValidationFields)) {
-            return false;
+        if (!array_key_exists($fieldName, $this->_fields)) {
+            Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
+                                    "The field [ $fieldName ] not found."
+                                    );
         }
 
-        return $this->_forceValidationFields[$field];
+        return $this->_fields[$fieldName]->forceValidation();
     }
 
     // }}}
@@ -449,15 +292,14 @@ class Piece_Right_Config
     /**
      * Sets the given field as a pseudo field.
      *
-     * @param string $field
-     * @param array  $definition
+     * @param string $fieldName
+     * @param array  $pseudo
      * @since Method available since Release 0.3.0
      */
-    function setPseudo($field, $definition)
+    function setPseudo($fieldName, $pseudo)
     {
-        $this->addField($field);
-
-        $this->_pseudoFields[$field] = $definition;
+        $this->addField($fieldName);
+        $this->_fields[$fieldName]->setPseudo($pseudo);
     }
 
     // }}}
@@ -466,57 +308,20 @@ class Piece_Right_Config
     /**
      * Returns whether the given field is pseudo or not.
      *
+     * @param string $fieldName
      * @return boolean
+     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
      * @since Method available since Release 0.3.0
      */
-    function isPseudo($field)
+    function isPseudo($fieldName)
     {
-        return array_key_exists($field, $this->_pseudoFields);
-    }
+        if (!array_key_exists($fieldName, $this->_fields)) {
+            Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
+                                    "The field [ $fieldName ] not found."
+                                    );
+        }
 
-    // }}}
-    // {{{ getPseudoDefinition()
-
-    /**
-     * Gets the pseudo definition for the given field.
-     *
-     * @param string $field
-     * @return array
-     * @since Method available since Release 0.3.0
-     */
-    function getPseudoDefinition($field)
-    {
-        return array_key_exists($field, $this->_pseudoFields) ? $this->_pseudoFields[$field] : null;
-    }
-
-    // }}}
-    // {{{ getPseudoFields()
-
-    /**
-     * Gets all pseudo fields for the current configuration.
-     *
-     * @return array
-     * @since Method available since Release 0.3.0
-     */
-    function getPseudoFields()
-    {
-        return $this->_pseudoFields;
-    }
-
-    // }}}
-    // {{{ mergePseudoField()
-
-    /**
-     * A callback that will be called by array_walk() function in merge()
-     * method.
-     *
-     * @param array  $definition
-     * @param string $field
-     * @since Method available since Release 0.3.0
-     */
-    function mergePseudoField($definition, $field)
-    {
-        $this->setPseudo($field, $definition);
+        return $this->_fields[$fieldName]->isPseudo();
     }
 
     // }}}
@@ -525,64 +330,13 @@ class Piece_Right_Config
     /**
      * Sets the description of the given field.
      *
-     * @param string $field
+     * @param string $fieldName
      * @param string $description
      * @since Method available since Release 0.3.0
      */
-    function setDescription($field, $description)
+    function setDescription($fieldName, $description)
     {
-        $this->addMessageVariable($field, '_description', $description);
-    }
-
-    // }}}
-    // {{{ getMessageVariablesByFieldName()
-
-    /**
-     * Gets the message variables of the given field.
-     *
-     * @param string $field
-     * @return array
-     * @since Method available since Release 0.3.0
-     */
-    function getMessageVariablesByFieldName($field)
-    {
-        if (!array_key_exists($field, $this->_messageVariables)) {
-            return array();
-        }
-
-        return $this->_messageVariables[$field];
-    }
-
-    // }}}
-    // {{{ getMessageVariables()
-
-    /**
-     * Gets all message variables for the current configuration.
-     *
-     * @return array
-     * @since Method available since Release 0.3.0
-     */
-    function getMessageVariables()
-    {
-        return $this->_messageVariables;
-    }
-
-    // }}}
-    // {{{ mergeMesageVariables()
-
-    /**
-     * A callback that will be called by array_walk() function in merge()
-     * method.
-     *
-     * @param array  $variables
-     * @param string $field
-     * @since Method available since Release 0.3.0
-     */
-    function mergeMessageVariables($variables, $field)
-    {
-        foreach ($variables as $name => $value) {
-            $this->addMessageVariable($field, $name, $value);
-        }
+        $this->_fields[$fieldName]->addMessageVariable('_description', $description);
     }
 
     // }}}
@@ -591,59 +345,127 @@ class Piece_Right_Config
     /**
      * Adds a message variable for the given field.
      *
-     * @param string $field
-     * @param string $name
+     * @param string $fieldName
+     * @param string $variableName
      * @param string $value
      * @since Method available since Release 0.3.0
      */
-    function addMessageVariable($field, $name, $value)
+    function addMessageVariable($fieldName, $variableName, $value)
     {
-        $this->addField($field);
-
-        $this->_messageVariables[$field][$name] = $value;
-    }
-
-    // }}}
-    // {{{ getForceValidationFields()
-
-    /**
-     * Gets all force validation fields for the current configuration.
-     *
-     * @return array
-     * @since Method available since Release 0.3.0
-     */
-    function getForceValidationFields()
-    {
-        return $this->_forceValidationFields;
-    }
-
-    // }}}
-    // {{{ mergeForceValidationField()
-
-    /**
-     * A callback that will be called by array_walk() function in merge()
-     * method.
-     *
-     * @param boolean $forceValidation
-     * @param string $field
-     * @since Method available since Release 0.3.0
-     */
-    function mergeForceValidationField($forceValidation, $field)
-    {
-        $this->setForceValidation($field, $forceValidation);
+        $this->addField($fieldName);
+        $this->_fields[$fieldName]->addMessageVariable($variableName, $value);
     }
 
     // }}}
     // {{{ getFieldNames()
 
     /**
-     * Gets all field names from the current validation set.
+     * Gets all field names from the configuration.
      *
      * @return array
      */
     function getFieldNames()
     {
-        return array_keys($this->_validationSet);
+        return array_keys($this->_fields);
+    }
+
+    // }}}
+    // {{{ getField()
+
+    /**
+     * Gets the Piece_Right_Config_Field object for the given field.
+     *
+     * @param string $fieldName
+     * @return Piece_Right_Config_Field
+     */
+    function &getField($fieldName)
+    {
+        return $this->_fields[$fieldName];
+    }
+
+    // }}}
+    // {{{ getValidations()
+
+    /**
+     * Gets the validations for the given field.
+     *
+     * @param string $fieldName
+     * @return array
+     * @since Method available since Release 1.8.0
+     */
+    function getValidations($fieldName)
+    {
+        if (!array_key_exists($fieldName, $this->_fields)) {
+            Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
+                                    "The field [ $fieldName ] not found."
+                                    );
+        }
+
+        return $this->_fields[$fieldName]->getValidations();
+    }
+
+    // }}}
+    // {{{ getFilters()
+
+    /**
+     * Gets the filters for the given field.
+     *
+     * @param string $fieldName
+     * @return array
+     * @since Method available since Release 1.8.0
+     */
+    function getFilters($fieldName)
+    {
+        if (!array_key_exists($fieldName, $this->_fields)) {
+            Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
+                                    "The field [ $fieldName ] not found."
+                                    );
+        }
+
+        return $this->_fields[$fieldName]->getFilters();
+    }
+
+    // }}}
+    // {{{ getPseudo()
+
+    /**
+     * Gets the pseudo definition for the given field.
+     *
+     * @param string $fieldName
+     * @return array
+     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
+     * @since Method available since Release 1.8.0
+     */
+    function getPseudo($fieldName)
+    {
+        if (!array_key_exists($fieldName, $this->_fields)) {
+            Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
+                                    "The field [ $fieldName ] not found."
+                                    );
+        }
+
+        return $this->_fields[$fieldName]->getPseudo();
+    }
+
+    // }}}
+    // {{{ getMessageVariablesByFieldName()
+
+    /**
+     * Gets the message variables of the given field.
+     *
+     * @param string $fieldName
+     * @return array
+     * @since Method available since Release 1.8.0
+     */
+    function getMessageVariables($fieldName)
+    {
+        if (!array_key_exists($fieldName, $this->_fields)) {
+            Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
+                                    "The field [ $fieldName ] not found."
+                                    );
+        }
+
+        return $this->_fields[$fieldName]->getMessageVariables();
     }
 
     /**#@-*/

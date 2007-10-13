@@ -89,19 +89,18 @@ class Piece_Right_ConfigTestCase extends PHPUnit_TestCase
 
     function testAddingValidations()
     {
-        $this->_config->setRequired('first_name');
-        $this->_config->addValidation('first_name', 'Length', array('max' => 255));
-        $this->_config->setRequired('last_name');
-        $this->_config->addValidation('last_name', 'Length', array('max' => 255));
-        $validationSet = $this->_config->getValidationSet();
+        foreach (array('first_name', 'last_name') as $fieldName) {
+            $this->_config->setRequired($fieldName);
+            $this->_config->addValidation($fieldName, 'Length', array('max' => 255));
+        }
 
-        $this->assertTrue($this->_config->isRequired('first_name'));
-        $this->assertEquals('Length', $validationSet['first_name'][0]['validator']);
-        $this->assertEquals(array('max' => 255), $validationSet['first_name'][0]['rules']);
+        foreach (array('first_name', 'last_name') as $fieldName) {
+            $validations = $this->_config->getValidations($fieldName);
 
-        $this->assertTrue($this->_config->isRequired('last_name'));
-        $this->assertEquals('Length', $validationSet['last_name'][0]['validator']);
-        $this->assertEquals(array('max' => 255), $validationSet['last_name'][0]['rules']);
+            $this->assertTrue($this->_config->isRequired($fieldName));
+            $this->assertEquals('Length', $validations[0]['validator']);
+            $this->assertEquals(array('max' => 255), $validations[0]['rules']);
+        }
     }
 
     function testAddingValidationsWithMessages()
@@ -112,14 +111,21 @@ class Piece_Right_ConfigTestCase extends PHPUnit_TestCase
         $this->_config->addValidation('last_name', 'Length', array('max' => 255), 'qux');
         $this->_config->setRequired('country');
         $this->_config->addValidation('country', 'Length', array('max' => 255));
-        $validationSet = $this->_config->getValidationSet();
+
+        $validations = $this->_config->getValidations('first_name');
 
         $this->assertEquals('foo', $this->_config->getRequiredMessage('first_name'));
-        $this->assertEquals('bar', $validationSet['first_name'][0]['message']);
+        $this->assertEquals('bar', $validations[0]['message']);
+
+        $validations = $this->_config->getValidations('last_name');
+
         $this->assertEquals('baz', $this->_config->getRequiredMessage('last_name'));
-        $this->assertEquals('qux', $validationSet['last_name'][0]['message']);
+        $this->assertEquals('qux', $validations[0]['message']);
+
+        $validations = $this->_config->getValidations('country');
+
         $this->assertNull($this->_config->getRequiredMessage('country'));
-        $this->assertNull($validationSet['country'][0]['message']);
+        $this->assertNull($validations[0]['message']);
     }
 
     function testGettingFiledNames()
@@ -127,9 +133,11 @@ class Piece_Right_ConfigTestCase extends PHPUnit_TestCase
         $this->_config->setRequired('foo');
         $this->_config->setRequired('bar');
         $this->_config->addValidation('bar', 'Length', array('max' => 255));
-        $validationSet = $this->_config->getValidationSet();
+        $fieldNames = $this->_config->getFieldNames();
 
-        $this->assertEquals(array('foo', 'bar'), array_keys($validationSet));
+        $this->assertEquals(2, count($fieldNames));
+        $this->assertContains('foo', $fieldNames);
+        $this->assertContains('bar', $fieldNames);
     }
 
     /**
@@ -151,32 +159,59 @@ class Piece_Right_ConfigTestCase extends PHPUnit_TestCase
         $this->_config->setWatcher('foo', array('target' => array('baz')));
         $this->_config->setRequired('baz', array('message' => 'baz is required', 'enabled' => false));
         $this->_config->merge($dynamicConfig);
-        $validationSet = $this->_config->getValidationSet();
-        $requiredFields = $this->_config->getRequiredFields();
-        $filters = $this->_config->getFilters();
-        $watchers = $this->_config->getWatchers();
 
-        foreach (array('foo', 'bar', 'baz') as $key) {
-            $this->assertContains($key, array_keys($validationSet), "$key does not contain in an array.");
-        }
-        $this->assertEquals('Length', $validationSet['foo'][0]['validator']);
-        $this->assertEquals('Regex', $validationSet['foo'][1]['validator']);
-        $this->assertEquals('Length', $validationSet['bar'][0]['validator']);
-        $this->assertEquals('Length', $validationSet['bar'][1]['validator']);
-        $this->assertEquals(255, $validationSet['bar'][0]['rules']['max']);
-        $this->assertEquals(5, $validationSet['bar'][1]['rules']['min']);
-        foreach (array('foo', 'baz') as $key) {
-            $this->assertContains($key, array_keys($requiredFields), "$key does not contain in an array.");
-        }
-        foreach (array('foo', 'bar') as $key) {
-            $this->assertContains($key, array_keys($filters), "$key does not contain in an array.");
-        }
-        $this->assertEquals('strtoupper', $filters['foo'][0]);
-        $this->assertEquals('trim', $filters['foo'][1]);
-        $this->assertEquals('trim', $filters['bar'][0]);
-        $this->assertEquals('baz', $watchers['foo']['target'][0]);
-        $this->assertEquals('qux', $watchers['bar']['target'][0]);
+        $fieldNames = $this->_config->getFieldNames();
+
+        $this->assertEquals(3, count($fieldNames));
+        $this->assertContains('foo', $fieldNames);
+        $this->assertContains('bar', $fieldNames);
+        $this->assertContains('baz', $fieldNames);
+
+        $validations = $this->_config->getValidations('foo');
+
+        $this->assertEquals(2, count($validations));
+        $this->assertEquals('Length', $validations[0]['validator']);
+        $this->assertEquals('Regex', $validations[1]['validator']);
+
+        $validations = $this->_config->getValidations('bar');
+
+        $this->assertEquals(2, count($validations));
+        $this->assertEquals('Length', $validations[0]['validator']);
+        $this->assertEquals('Length', $validations[1]['validator']);
+        $this->assertEquals(255, $validations[0]['rules']['max']);
+        $this->assertEquals(5, $validations[1]['rules']['min']);
+
+        $validations = $this->_config->getValidations('baz');
+
+        $this->assertEquals(0, count($validations));
+
+        $this->assertTrue($this->_config->isRequired('foo'));
+        $this->assertFalse($this->_config->isRequired('bar'));
+        $this->assertTrue($this->_config->isRequired('baz'));
         $this->assertEquals('baz is required', $this->_config->getRequiredMessage('baz'));
+
+        $filters = $this->_config->getFilters('foo');
+
+        $this->assertEquals(2, count($filters));
+        $this->assertContains('strtoupper', $filters);
+        $this->assertContains('trim', $filters);
+
+        $filters = $this->_config->getFilters('bar');
+
+        $this->assertEquals(1, count($filters));
+        $this->assertContains('trim', $filters);
+
+        $filters = $this->_config->getFilters('baz');
+
+        $this->assertEquals(0, count($filters));
+
+        $watcher = $this->_config->getWatcher('foo');
+
+        $this->assertEquals('baz', $watcher['target'][0]);
+
+        $watcher = $this->_config->getWatcher('bar');
+
+        $this->assertEquals('qux', $watcher['target'][0]);
     }
 
     /**#@-*/

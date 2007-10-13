@@ -45,6 +45,13 @@
       - birthdayMonth
       - birthdayDay
 
+- name: age
+  validator:
+    - name: Range
+      rule:
+        min: 0
+        max: 99
+
 - name: hobbies
   required:
   validator:

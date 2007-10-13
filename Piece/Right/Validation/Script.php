@@ -140,17 +140,17 @@ class Piece_Right_Validation_Script
         $results = $right->getResults();
 
         if ($result) {
-            foreach ($results->getFieldNames() as $field) {
-                $container->$field = $results->getFieldValue($field);
+            foreach ($results->getFieldNames() as $fieldName) {
+                $container->$fieldName = $results->getFieldValue($fieldName);
             }
         } else {
             if ($keepOriginalFieldValue) {
-                foreach ($results->getFieldNames() as $field) {
-                    $container->$field = call_user_func($right->getFieldValuesCallback(), $field);
+                foreach ($results->getFieldNames() as $fieldName) {
+                    $container->$fieldName = call_user_func($right->getFieldValuesCallback(), $fieldName);
                 }
             } else {
-                foreach ($results->getFieldNames() as $field) {
-                    $container->$field = $results->getFieldValue($field);
+                foreach ($results->getFieldNames() as $fieldName) {
+                    $container->$fieldName = $results->getFieldValue($fieldName);
                 }
             }
         }

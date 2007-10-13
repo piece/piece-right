@@ -131,21 +131,29 @@ class Piece_Right
 
         $this->_config = &$config;
         $this->_results = &new Piece_Right_Results();
-        $this->_results->setMessageVariables($this->_config->getMessageVariables());
-        $validationSet = $this->_config->getValidationSet();
-        $fieldNames = $this->_config->getFieldNames();
 
-        $this->_filter($fieldNames);
+        $messageVariables = array();
+        foreach ($this->_config->getFieldNames() as $fieldName) {
+            $messageVariables[$fieldName] = $this->_config->getMessageVariables($fieldName);
+        }
+        $this->_results->setMessageVariables($messageVariables);
+
+        $this->_filter();
         if (Piece_Right_Error::hasErrors('exception')) {
             return;
         }
 
-        $this->_generatePseudoFields($fieldNames);
-        $this->_watch($fieldNames);
-        $this->_validateFields($validationSet, false);
+        $this->_generatePseudoFields();
+
+        $this->_watch();
+        if (Piece_Right_Error::hasErrors('exception')) {
+            return;
+        }
+
+        $this->_validateFields(false);
 
         if (!$this->_results->countErrors()) {
-            $this->_validateFields($validationSet, true);
+            $this->_validateFields(true);
         }
 
         return !(boolean)$this->_results->countErrors();
@@ -157,21 +165,21 @@ class Piece_Right
     /**
      * Gets the value of the given field name from PHP superglobals.
      *
-     * @param string $field
+     * @param string $fieldName
      * @return mixed
      * @static
      */
-    function getFieldValueFromSuperglobals($field)
+    function getFieldValueFromSuperglobals($fieldName)
     {
         if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-            return @$_GET[$field];
+            return @$_GET[$fieldName];
         }
 
-        if (array_key_exists($field, $_FILES)) {
-            return $_FILES[$field];
+        if (array_key_exists($fieldName, $_FILES)) {
+            return $_FILES[$fieldName];
         }
 
-        return @$_POST[$field];
+        return @$_POST[$fieldName];
     }
 
     // }}}
@@ -316,17 +324,16 @@ class Piece_Right
     /**
      * Filters field values.
      *
-     * @param array $fields
      * @since Method available since Release 0.3.0
      * @throws PIECE_RIGHT_ERROR_NOT_FOUND
      * @throws PIECE_RIGHT_ERROR_INVALID_FILTER
      * @throws PIECE_RIGHT_ERROR_CANNOT_READ
      */
-    function _filter($fields)
+    function _filter()
     {
-        foreach ($fields as $field) {
-            $fieldValue = call_user_func($this->_fieldValuesCallback, $field);
-            $filters = $this->_config->getFiltersByFieldName($field);
+        foreach ($this->_config->getFieldNames() as $fieldName) {
+            $value = call_user_func($this->_fieldValuesCallback, $fieldName);
+            $filters = $this->_config->getFilters($fieldName);
             foreach ($filters as $filterName) {
                 if (!function_exists($filterName)) {
                     $filter = &Piece_Right_Filter_Factory::factory($filterName);
@@ -342,15 +349,15 @@ class Piece_Right
                         $this->_currentFilterIsArrayable = false;
                     }
 
-                    $fieldValue = $this->_invokeFilter($fieldValue);
+                    $value = $this->_invokeFilter($value);
                 } else {
                     $this->_currentFilter = $filterName;
                     $this->_currentFilterIsArrayable = false;
-                    $fieldValue = $this->_invokeFilter($fieldValue);
+                    $value = $this->_invokeFilter($value);
                 }
             }
 
-            $this->_results->setFieldValue($field, $fieldValue);
+            $this->_results->setFieldValue($fieldName, $value);
         }
     }
 
@@ -361,26 +368,27 @@ class Piece_Right
      * Watches the target fields and turns the fields requirements
      * on/off.
      *
-     * @param array $fields
+     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
      * @since Method available since Release 0.3.0
      */
-    function _watch($fields)
+    function _watch()
     {
-        foreach ($fields as $field) {
-            $watcher = $this->_config->getWatcher($field);
+        $fieldNames = $this->_config->getFieldNames();
+        foreach ($fieldNames as $fieldName) {
+            $watcher = $this->_config->getWatcher($fieldName);
             if (!is_array($watcher)) {
                 continue;
             }
 
             $found = false;
             foreach ($watcher['target'] as $target) {
-                if ($target['name'] == $field) {
+                if ($target['name'] == $fieldName) {
                     $found = true;
                     break;
                 }
             }
             if (!$found) {
-                $watcher['target'][] = array('name' => $field);
+                $watcher['target'][] = array('name' => $fieldName);
             }
 
             if (!array_key_exists('turnOn', $watcher)) {
@@ -392,8 +400,8 @@ class Piece_Right
                 }
             }
 
-            if (!in_array($field, $watcher['turnOn'])) {
-                $watcher['turnOn'][] = $field;
+            if (!in_array($fieldName, $watcher['turnOn'])) {
+                $watcher['turnOn'][] = $fieldName;
             }
 
             if (!array_key_exists('turnOff', $watcher)) {
@@ -420,10 +428,24 @@ class Piece_Right
             }
 
             foreach ($turnOnFields as $turnOnFieldName) {
+                if (!in_array($turnOnFieldName, $fieldNames)) {
+                    Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
+                                            "The field [ $turnOnFieldName ] which is a target of turn on not found in the configuration."
+                                            );
+                    return;
+                }
+
                 $this->_config->setRequired($turnOnFieldName, array('enabled' => true));
             }
 
             foreach ($turnOffFields as $turnOffFieldName) {
+                if (!in_array($turnOffFieldName, $fieldNames)) {
+                    Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
+                                            "The field [ $turnOffFieldName ] which is a target of turn off not found in the configuration."
+                                            );
+                    return;
+                }
+
                 $this->_config->setRequired($turnOffFieldName, array('enabled' => false));
             }
 
@@ -431,7 +453,7 @@ class Piece_Right
                 && $watcher['turnOnForceValidation']
                 && count($turnOnFields)
                 ) {
-                $this->_config->setForceValidation($field);
+                $this->_config->setForceValidation($fieldName);
             }
         }
     }
@@ -442,18 +464,18 @@ class Piece_Right
     /**
      * Returns whether the current validation should be continued or not.
      *
-     * @param string $field
+     * @param string $fieldName
      * @param string $value
      * @return boolean
      * @since Method available since Release 0.3.0
      */
-    function _checkValidationRequirement($field, $value)
+    function _checkValidationRequirement($fieldName, $value)
     {
-        if ($this->_config->isRequired($field)) {
+        if ($this->_config->isRequired($fieldName)) {
             if (Piece_Right::isEmpty($value)) {
-                $this->_results->addError($field,
+                $this->_results->addError($fieldName,
                                           'required',
-                                          $this->_config->getRequiredMessage($field)
+                                          $this->_config->getRequiredMessage($fieldName)
                                           );
                 return false;
             }
@@ -472,9 +494,8 @@ class Piece_Right
     /**
      * Validates a field value by the given validations.
      *
-     * @param string  $field
+     * @param string  $fieldName
      * @param string  $value
-     * @param array   $validations
      * @param boolean $isFinals
      * @throws PIECE_RIGHT_ERROR_NOT_FOUND
      * @throws PIECE_RIGHT_ERROR_INVALID_VALIDATOR
@@ -482,9 +503,9 @@ class Piece_Right
      * @throws PIECE_RIGHT_ERROR_NOT_READABLE
      * @since Method available since Release 0.3.0
      */
-    function _validateField($field, $value, $validations, $isFinals)
+    function _validateField($fieldName, $value, $isFinals)
     {
-        foreach ($validations as $validation) {
+        foreach ($this->_config->getValidations($fieldName) as $validation) {
             if ($validation['useInFinals'] != $isFinals) {
                 continue;
             }
@@ -497,11 +518,11 @@ class Piece_Right
             if (is_array($value) && !$validator->isArrayable()) {
                 Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
                 Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_ARRAYABLE,
-                                        "The value of the field [ $field ] is an array, but the validator [ {$validation['validator']} ] is not arrayable. This validation is skipped.",
+                                        "The value of the field [ $fieldName ] is an array, but the validator [ {$validation['validator']} ] is not arrayable. This validation is skipped.",
                                         'warning'
                                         );
                 Piece_Right_Error::popCallback();
-                $this->_results->addError($field,
+                $this->_results->addError($fieldName,
                                           $validation['validator'],
                                           $validator->getMessage()
                                           );
@@ -513,7 +534,7 @@ class Piece_Right
             $validator->setMessage($validation['message']);
             $validator->setPayload($this->_payload);
             if (!$validator->validate($value)) {
-                $this->_results->addError($field,
+                $this->_results->addError($fieldName,
                                           $validation['validator'],
                                           $validator->getMessage()
                                           );
@@ -585,43 +606,42 @@ class Piece_Right
     // {{{ _generatePseudoFields()
 
     /**
-     * @param array $fields
+     * Generates pseudo fields.
+     *
      * @since Method available since Release 0.3.0
      */
-    function _generatePseudoFields($fields)
+    function _generatePseudoFields()
     {
-        foreach ($fields as $field) {
-            if (!$this->_config->isPseudo($field)) {
+        foreach ($this->_config->getFieldNames() as $fieldName) {
+            if (!$this->_config->isPseudo($fieldName)) {
                 continue;
             }
 
-            $definition = $this->_config->getPseudoDefinition($field);
-            if (!array_key_exists('format', $definition)) {
+            $pseudo = $this->_config->getPseudo($fieldName);
+            if (!array_key_exists('format', $pseudo)) {
                 continue;
             }
 
-            if (!array_key_exists('arg', $definition)
-                || !is_array($definition['arg'])
-                ) {
+            if (!array_key_exists('arg', $pseudo) || !is_array($pseudo['arg'])) {
                 continue;
             }
 
             $numberOfValidFields = 0;
             $args = array();
-            foreach ($definition['arg'] as $arg) {
-                $fieldValue = $this->_results->getFieldValue($arg);
-                if (!is_null($fieldValue) && strlen($fieldValue)) {
+            foreach ($pseudo['arg'] as $arg) {
+                $value = $this->_results->getFieldValue($arg);
+                if (!is_null($value) && strlen($value)) {
                     ++$numberOfValidFields;
                 }
-                $args[] = $fieldValue;
+                $args[] = $value;
             }
 
-            if ($numberOfValidFields < count($definition['arg'])) {
+            if ($numberOfValidFields < count($pseudo['arg'])) {
                 continue;
             }
 
-            $this->_results->setFieldValue($field,
-                                           vsprintf($definition['format'], $args)
+            $this->_results->setFieldValue($fieldName,
+                                           vsprintf($pseudo['format'], $args)
                                            );
         }
     }
@@ -655,7 +675,6 @@ class Piece_Right
     /**
      * Validates value of all fields.
      *
-     * @param array   $validationSet
      * @param boolean $isFinals
      * @throws PIECE_RIGHT_ERROR_NOT_FOUND
      * @throws PIECE_RIGHT_ERROR_INVALID_VALIDATOR
@@ -663,18 +682,18 @@ class Piece_Right
      * @throws PIECE_RIGHT_ERROR_NOT_READABLE
      * @since Method available since Release 1.6.0
      */
-    function _validateFields($validationSet, $isFinals)
+    function _validateFields($isFinals)
     {
-        foreach ($validationSet as $field => $validations) {
-            $fieldValue = $this->_results->getFieldValue($field);
+        foreach ($this->_config->getFieldNames() as $fieldName) {
+            $value = $this->_results->getFieldValue($fieldName);
 
-            if (!$this->_config->forceValidation($field)) {
-                if (!$this->_checkValidationRequirement($field, $fieldValue)) {
+            if (!$this->_config->forceValidation($fieldName)) {
+                if (!$this->_checkValidationRequirement($fieldName, $value)) {
                     continue;
                 }
             }
 
-            $this->_validateField($field, $fieldValue, $validations, $isFinals);
+            $this->_validateField($fieldName, $value, $isFinals);
             if (Piece_Right_Error::hasErrors('exception')) {
                 return;
             }

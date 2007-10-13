@@ -240,8 +240,8 @@ class Piece_Right_Config_Factory
     {
         $config = &new Piece_Right_Config();
         $yaml = Spyc::YAMLLoad($file);
-        foreach ($yaml as $validation) {
-            if (!array_key_exists('name', $validation)) {
+        foreach ($yaml as $field) {
+            if (!array_key_exists('name', $field)) {
                 Piece_Right_Error::push(PIECE_RIGHT_ERROR_INVALID_CONFIGURATION,
                                         "A configuration in the configuration file [ $file ] has no 'name' element."
                                         );
@@ -249,27 +249,21 @@ class Piece_Right_Config_Factory
                 return $return;
             }
 
-            $config->addField($validation['name']);
+            $config->addField($field['name']);
 
-            if (array_key_exists('required', $validation)) {
-                $config->setRequired($validation['name'],
-                                     (array)$validation['required']
-                                     );
+            if (array_key_exists('required', $field)) {
+                $config->setRequired($field['name'], (array)$field['required']);
             }
 
-            if (array_key_exists('filter', $validation)
-                && is_array($validation['filter'])
-                ) {
-                foreach ($validation['filter'] as $filter) {
-                    $config->addFilter($validation['name'], $filter);
+            if (array_key_exists('filter', $field)) {
+                foreach ((array)$field['filter'] as $filter) {
+                    $config->addFilter($field['name'], $filter);
                 }
             }
 
-            if (array_key_exists('validator', $validation)
-                && is_array($validation['validator'])
-                ) {
-                foreach ($validation['validator'] as $validator) {
-                    $config->addValidation($validation['name'],
+            if (array_key_exists('validator', $field)) {
+                foreach ((array)$field['validator'] as $validator) {
+                    $config->addValidation($field['name'],
                                            $validator['name'],
                                            (array)@$validator['rule'],
                                            @$validator['message']
@@ -277,33 +271,29 @@ class Piece_Right_Config_Factory
                 }
             }
 
-            if (array_key_exists('watcher', $validation)
-                && is_array($validation['watcher'])
-                ) {
-                $config->setWatcher($validation['name'], $validation['watcher']);
+            if (array_key_exists('watcher', $field)) {
+                $config->setWatcher($field['name'], (array)$field['watcher']);
             }
 
-            if (array_key_exists('pseudo', $validation)
-                && is_array($validation['pseudo'])
-                ) {
-                $config->setPseudo($validation['name'], $validation['pseudo']);
+            if (array_key_exists('pseudo', $field)) {
+                $config->setPseudo($field['name'], (array)$field['pseudo']);
             }
 
-            if (array_key_exists('description', $validation)) {
-                $config->setDescription($validation['name'],
-                                        $validation['description']
+            if (array_key_exists('description', $field)) {
+                $config->setDescription($field['name'],
+                                        $field['description']
                                         );
             }
 
-            if (array_key_exists('forceValidation', $validation)) {
-                $config->setForceValidation($validation['name'],
-                                            $validation['forceValidation']
+            if (array_key_exists('forceValidation', $field)) {
+                $config->setForceValidation($field['name'],
+                                            $field['forceValidation']
                                             );
             }
 
-            if (array_key_exists('finals', $validation) && is_array($validation['finals'])) {
-                foreach ($validation['finals'] as $validator) {
-                    $config->addValidation($validation['name'],
+            if (array_key_exists('finals', $field)) {
+                foreach ((array)$field['finals'] as $validator) {
+                    $config->addValidation($field['name'],
                                            $validator['name'],
                                            (array)@$validator['rule'],
                                            @$validator['message'],

@@ -106,17 +106,17 @@ class Piece_Right_Results
     /**
      * Adds an error to the given field.
      *
-     * @param string $field
+     * @param string $fieldName
      * @param string $validator
      * @param string $message
      */
-    function addError($field, $validator, $message = null)
+    function addError($fieldName, $validator, $message = null)
     {
-        if ($this->isError($field)) {
-            $error = &$this->_errors[$field];
+        if ($this->isError($fieldName)) {
+            $error = &$this->_errors[$fieldName];
         } else {
             $error = &new Piece_Right_Validation_Error();
-            $this->_errors[$field] = &$error;
+            $this->_errors[$fieldName] = &$error;
         }
 
         $error->add($validator, $message);
@@ -141,12 +141,12 @@ class Piece_Right_Results
     /**
      * Returns whether the given field has errors or not.
      *
-     * @param string $field
+     * @param string $fieldName
      * @return boolean
      */
-    function isError($field)
+    function isError($fieldName)
     {
-        return array_key_exists($field, $this->_errors);
+        return array_key_exists($fieldName, $this->_errors);
     }
 
     // }}}
@@ -155,14 +155,14 @@ class Piece_Right_Results
     /**
      * Gets an error message of the given field.
      *
-     * @param string $field
+     * @param string $fieldName
      * @return string
      */
-    function getErrorMessage($field)
+    function getErrorMessage($fieldName)
     {
-        if ($this->isError($field)) {
-            return $this->_replaceMessage($field,
-                                          $this->_errors[$field]->getMessage()
+        if ($this->isError($fieldName)) {
+            return $this->_replaceMessage($fieldName,
+                                          $this->_errors[$fieldName]->getMessage()
                                           );
         }
     }
@@ -173,13 +173,13 @@ class Piece_Right_Results
     /**
      * Gets an array of all error messages for the given field.
      *
-     * @param string $field
+     * @param string $fieldName
      * @return array
      */
-    function getErrorMessages($field)
+    function getErrorMessages($fieldName)
     {
-        if ($this->isError($field)) {
-            return $this->_errors[$field]->getMessages();
+        if ($this->isError($fieldName)) {
+            return $this->_errors[$fieldName]->getMessages();
         }
     }
 
@@ -250,14 +250,14 @@ class Piece_Right_Results
     /**
      * Replaces the message with the message variables of the given field.
      *
-     * @param string $field
+     * @param string $fieldName
      * @param string $message
      * @return string
      * @since Method available since Release 1.0.0
      */
-    function _replaceMessage($field, $message)
+    function _replaceMessage($fieldName, $message)
     {
-        foreach ($this->_messageVariables[$field] as $name => $value) {
+        foreach ($this->_messageVariables[$fieldName] as $name => $value) {
             $message = str_replace("%$name%", $value, $message);
         }
 
