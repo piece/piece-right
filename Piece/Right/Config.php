@@ -105,7 +105,7 @@ class Piece_Right_Config
     function merge(&$config)
     {
         foreach ($config->getFieldNames() as $fieldName) {
-            if (!array_key_exists($fieldName, $this->_fields)) {
+            if (!$this->_hasField($fieldName)) {
                 $field = &new Piece_Right_Config_Field();
                 $this->_fields[$fieldName] = &$field;
             }
@@ -143,7 +143,7 @@ class Piece_Right_Config
      */
     function isRequired($fieldName)
     {
-        if (!array_key_exists($fieldName, $this->_fields)) {
+        if (!$this->_hasField($fieldName)) {
             Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
                                     "The field [ $fieldName ] not found."
                                     );
@@ -165,7 +165,7 @@ class Piece_Right_Config
      */
     function getRequiredMessage($fieldName)
     {
-        if (!array_key_exists($fieldName, $this->_fields)) {
+        if (!$this->_hasField($fieldName)) {
             Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
                                     "The field [ $fieldName ] not found."
                                     );
@@ -219,7 +219,7 @@ class Piece_Right_Config
      */
     function getWatcher($fieldName)
     {
-        if (!array_key_exists($fieldName, $this->_fields)) {
+        if (!$this->_hasField($fieldName)) {
             Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
                                     "The field [ $fieldName ] not found."
                                     );
@@ -239,7 +239,7 @@ class Piece_Right_Config
      */
     function addField($fieldName)
     {
-        if (!array_key_exists($fieldName, $this->_fields)) {
+        if (!$this->_hasField($fieldName)) {
             $field = &new Piece_Right_Config_Field();
             $this->_fields[$fieldName] = &$field;
         }
@@ -277,7 +277,7 @@ class Piece_Right_Config
      */
     function forceValidation($fieldName)
     {
-        if (!array_key_exists($fieldName, $this->_fields)) {
+        if (!$this->_hasField($fieldName)) {
             Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
                                     "The field [ $fieldName ] not found."
                                     );
@@ -315,7 +315,7 @@ class Piece_Right_Config
      */
     function isPseudo($fieldName)
     {
-        if (!array_key_exists($fieldName, $this->_fields)) {
+        if (!$this->_hasField($fieldName)) {
             Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
                                     "The field [ $fieldName ] not found."
                                     );
@@ -336,6 +336,7 @@ class Piece_Right_Config
      */
     function setDescription($fieldName, $description)
     {
+        $this->addField($fieldName);
         $this->_fields[$fieldName]->addMessageVariable('_description', $description);
     }
 
@@ -376,10 +377,19 @@ class Piece_Right_Config
      * Gets the Piece_Right_Config_Field object for the given field.
      *
      * @param string $fieldName
+     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
      * @return Piece_Right_Config_Field
      */
     function &getField($fieldName)
     {
+        if (!$this->_hasField($fieldName)) {
+            Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
+                                    "The field [ $fieldName ] not found."
+                                    );
+            $return = null;
+            return $return;
+        }
+
         return $this->_fields[$fieldName];
     }
 
@@ -391,11 +401,12 @@ class Piece_Right_Config
      *
      * @param string $fieldName
      * @return array
+     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
      * @since Method available since Release 1.8.0
      */
     function getValidations($fieldName)
     {
-        if (!array_key_exists($fieldName, $this->_fields)) {
+        if (!$this->_hasField($fieldName)) {
             Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
                                     "The field [ $fieldName ] not found."
                                     );
@@ -412,11 +423,12 @@ class Piece_Right_Config
      *
      * @param string $fieldName
      * @return array
+     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
      * @since Method available since Release 1.8.0
      */
     function getFilters($fieldName)
     {
-        if (!array_key_exists($fieldName, $this->_fields)) {
+        if (!$this->_hasField($fieldName)) {
             Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
                                     "The field [ $fieldName ] not found."
                                     );
@@ -438,7 +450,7 @@ class Piece_Right_Config
      */
     function getPseudo($fieldName)
     {
-        if (!array_key_exists($fieldName, $this->_fields)) {
+        if (!$this->_hasField($fieldName)) {
             Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
                                     "The field [ $fieldName ] not found."
                                     );
@@ -448,21 +460,23 @@ class Piece_Right_Config
     }
 
     // }}}
-    // {{{ getMessageVariablesByFieldName()
+    // {{{ getMessageVariables()
 
     /**
      * Gets the message variables of the given field.
      *
      * @param string $fieldName
      * @return array
+     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
      * @since Method available since Release 1.8.0
      */
     function getMessageVariables($fieldName)
     {
-        if (!array_key_exists($fieldName, $this->_fields)) {
+        if (!$this->_hasField($fieldName)) {
             Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
                                     "The field [ $fieldName ] not found."
                                     );
+            return;
         }
 
         return $this->_fields[$fieldName]->getMessageVariables();
@@ -473,6 +487,20 @@ class Piece_Right_Config
     /**#@+
      * @access private
      */
+
+    // }}}
+    // {{{ _hasField()
+
+    /**
+     * Returns whether the configuration has the given field or not.
+     *
+     * @param string $fieldName
+     * @return boolean
+     */
+    function _hasField($fieldName)
+    {
+        return array_key_exists($fieldName, $this->_fields);
+    }
 
     /**#@-*/
 
