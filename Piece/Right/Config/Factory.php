@@ -107,14 +107,6 @@ class Piece_Right_Config_Factory
             return $config;
         }
 
-        if (!file_exists($configDirectory)) {
-            Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                    "The configuration directory [ $configDirectory ] not found."
-                                    );
-            $return = null;
-            return $return;
-        }
-
         $configFile = "$configDirectory/$validationSetName.yaml";
 
         if (!file_exists($configFile)) {
