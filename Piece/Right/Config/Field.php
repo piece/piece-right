@@ -66,6 +66,7 @@ class Piece_Right_Config_Field
     var $_pseudo;
     var $_messageVariables = array();
     var $_forceValidation;
+    var $_basedOn;
 
     /**#@-*/
 
@@ -149,6 +150,11 @@ class Piece_Right_Config_Field
         if (!is_null($forceValidation)) {
             $field->setForceValidation($forceValidation);
         }
+
+        $basedOn = $field->getBasedOn();
+        if (!is_null($basedOn)) {
+            $this->setBasedOn($basedOn);
+        }
     }
 
     function addFilter($filterName)
@@ -228,6 +234,49 @@ class Piece_Right_Config_Field
     {
         if (!is_null($this->_forceValidation)) {
             return $this->_forceValidation;
+        } else {
+            return false;
+        }
+    }
+
+    // }}}
+    // {{{ setBasedOn()
+
+    /**
+     * Sets the field which this field based on.
+     *
+     * @param string $basedOn
+     */
+    function setBasedOn($basedOn)
+    {
+        $this->_basedOn = $basedOn;
+    }
+
+    // }}}
+    // {{{ getBasedOn()
+
+    /**
+     * Gets the field which this field based on.
+     *
+     * @return string
+     */
+    function getBasedOn()
+    {
+        return $this->_basedOn;
+    }
+
+    // }}}
+    // {{{ hasBasedOn()
+
+    /**
+     * Returns whether this field is based on any field or not.
+     *
+     * @return boolean
+     */
+    function hasBasedOn()
+    {
+        if (!is_null($this->_basedOn)) {
+            return true;
         } else {
             return false;
         }

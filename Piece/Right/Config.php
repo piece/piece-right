@@ -482,6 +482,100 @@ class Piece_Right_Config
         return $this->_fields[$fieldName]->getMessageVariables();
     }
 
+    // }}}
+    // {{{ setBasedOn()
+
+    /**
+     * Sets a field which the given field based on.
+     *
+     * @param string $fieldName
+     * @param string $basedOn
+     * @since Method available since Release 1.8.0
+     */
+    function setBasedOn($fieldName, $basedOn)
+    {
+        $this->addField($fieldName);
+        $this->_fields[$fieldName]->setBasedOn($basedOn);
+    }
+
+    // }}}
+    // {{{ getBasedOn()
+
+    /**
+     * Gets the field which the given field based on.
+     *
+     * @param string $fieldName
+     * @return string
+     * @since Method available since Release 1.8.0
+     */
+    function getBasedOn($fieldName)
+    {
+        if (!$this->_hasField($fieldName)) {
+            Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
+                                    "The field [ $fieldName ] not found."
+                                    );
+        }
+
+        return $this->_fields[$fieldName]->getBasedOn();
+    }
+
+    // }}}
+    // {{{ hasBasedOn()
+
+    /**
+     * Returns whether the given field is based on any field or not.
+     *
+     * @param string $fieldName
+     * @return boolean
+     * @since Method available since Release 1.8.0
+     */
+    function hasBasedOn($fieldName)
+    {
+        if (!$this->_hasField($fieldName)) {
+            Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
+                                    "The field [ $fieldName ] not found."
+                                    );
+        }
+
+        return $this->_fields[$fieldName]->hasBasedOn();
+    }
+
+    // }}}
+    // {{{ inherit()
+
+    /**
+     * Extends the given field using the field in the template.
+     *
+     * @param string             $fieldName
+     * @param string             $basedOn
+     * @param Piece_Right_Config &$template
+     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
+     * @since Method available since Release 1.8.0
+     */
+    function inherit($fieldName, $basedOn, &$template)
+    {
+        if (!$this->_hasField($fieldName)) {
+            Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
+                                    "The field [ $fieldName ] not found."
+                                    );
+            return;
+        }
+
+        if (version_compare(phpversion(), '5.0.0', '>=')) {
+            $field = clone($this->_fields[$fieldName]);
+            $this->_fields[$fieldName] = clone($template->getField($basedOn));
+        } else {
+            $field = $this->_fields[$fieldName];
+            $this->_fields[$fieldName] = $template->getField($basedOn);
+        }
+
+        if (Piece_Right_Error::hasErrors('exception')) {
+            return;
+        }
+
+        $this->_fields[$fieldName]->merge($field);
+    }
+
     /**#@-*/
 
     /**#@+

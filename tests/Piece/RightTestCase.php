@@ -1115,6 +1115,28 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $this->assertFalse(array_key_exists('foo', $payload));
     }
 
+    /**
+     * @since Method available since Release 1.8.0
+     */
+    function testTemplateShouldBeUsedIfFileIsSetAndBasedOnElementIsSpecified()
+    {
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST['firstName'] = ' Foo ';
+        $_POST['lastName'] = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
+
+        $right = &new Piece_Right($this->_cacheDirectory, $this->_cacheDirectory);
+        $right->setTemplate('Common');
+
+        $this->assertFalse($right->validate('TemplateShouldBeUsedIfFileIsSetAndBasedOnElementIsSpecified'));
+
+        $results = &$right->getResults();
+
+        $this->assertTrue(in_array('firstName', $results->getValidFields()));
+        $this->assertTrue(in_array('lastName', $results->getErrorFields()));
+        $this->assertEquals('Foo', $results->getFieldValue('firstName'));
+        $this->assertEquals('The length of Last Name must be less than 255 characters', $results->getErrorMessage('lastName'));
+    }
+
     /**#@-*/
 
     /**#@+

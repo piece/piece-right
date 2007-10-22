@@ -70,6 +70,7 @@ class Piece_Right_Validation_Script
     var $_fieldValuesCallback;
     var $_postRunCallback;
     var $_payload;
+    var $_template;
 
     /**#@-*/
 
@@ -129,6 +130,10 @@ class Piece_Right_Validation_Script
 
         if (!is_null($this->_payload)) {
             $right->setPayload($this->_payload);
+        }
+
+        if (!is_null($this->_template)) {
+            $right->setTemplate($this->_template);
         }
 
         $result = $right->validate($validationSetName, $config);
@@ -203,6 +208,19 @@ class Piece_Right_Validation_Script
         }
 
         return $fieldNames;
+    }
+
+    // }}}
+    // {{{ setTemplate()
+
+    /**
+     * Sets the given validation set as a template.
+     *
+     * @param string $template
+     */
+    function setTemplate($template)
+    {
+        $this->_template = $template;
     }
 
     /**#@-*/

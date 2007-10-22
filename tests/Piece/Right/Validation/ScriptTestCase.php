@@ -115,8 +115,6 @@ class Piece_Right_Validation_ScriptTestCase extends PHPUnit_TestCase
     {
         $this->_postRunCallbackCalled = true;
         $this->_resultsViaCallback = &$results;
-
-        $this->assertTrue('Script', $validationSet);
     }
 
     function testSuccessToValidate()
@@ -226,6 +224,33 @@ class Piece_Right_Validation_ScriptTestCase extends PHPUnit_TestCase
         $this->assertEquals(2, count($fieldNames));
         $this->assertContains('foo', $fieldNames);
         $this->assertContains('bar', $fieldNames);
+    }
+
+    /**
+     * @since Method available since Release 1.8.0
+     */
+    function testTemplateShouldBeUsedIfFileIsSetAndBasedOnElementIsSpecified()
+    {
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST['firstName'] = ' Foo ';
+        $_POST['lastName'] = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
+
+        $config = &new Piece_Right_Config();
+        $container = &new stdClass();
+        $script = &new Piece_Right_Validation_Script($this->_cacheDirectory,
+                                                     $this->_cacheDirectory,
+                                                     null,
+                                                     array(&$this, 'turnOnPostRunCallbackCalled')
+                                                     );
+        $script->setTemplate('Common');
+        $results = &$script->run('TemplateShouldBeUsedIfFileIsSetAndBasedOnElementIsSpecified', $container, $config);
+
+        $this->assertEquals(1, $results->countErrors());
+
+        $this->assertTrue(in_array('firstName', $results->getValidFields()));
+        $this->assertTrue(in_array('lastName', $results->getErrorFields()));
+        $this->assertEquals('Foo', $results->getFieldValue('firstName'));
+        $this->assertEquals('The length of Last Name must be less than 255 characters', $results->getErrorMessage('lastName'));
     }
 
     /**#@-*/

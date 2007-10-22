@@ -232,6 +232,36 @@ class Piece_Right_Config_FactoryTestCase extends PHPUnit_TestCase
         chdir($oldDirectory);
     }
 
+    /**
+     * @since Method available since Release 1.8.0
+     */
+    function testTemplateShouldBeUsedIfFileIsSetAndBasedOnElementIsSpecified()
+    {
+        $config = &Piece_Right_Config_Factory::factory('TemplateShouldBeUsedIfFileIsSetAndBasedOnElementIsSpecified',
+                                                       $this->_cacheDirectory,
+                                                       $this->_cacheDirectory,
+                                                       'Common'
+                                                       );
+
+        $fieldNames = $config->getFieldNames();
+
+        $this->assertEquals(2, count($fieldNames));
+        $this->assertContains('firstName', $fieldNames);
+        $this->assertContains('lastName', $fieldNames);
+
+        foreach (array('firstName', 'lastName') as $fieldName) {
+            $this->assertTrue($config->isRequired($fieldName));
+
+            $validations = $config->getValidations($fieldName);
+
+            $this->assertEquals(1, count($validations));
+            $this->assertEquals('Length', $validations[0]['validator']);
+            $this->assertEquals(array('min' => 1, 'max' => 255), $validations[0]['rules']);
+            $this->assertEquals('%_description% is required', $config->getRequiredMessage('firstName'));
+            $this->assertEquals('The length of %_description% must be less than %max% characters', $validations[0]['message']);
+        }
+    }
+
     /**#@-*/
 
     /**#@+

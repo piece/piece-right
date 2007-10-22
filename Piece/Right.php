@@ -75,6 +75,7 @@ class Piece_Right
     var $_payload;
     var $_currentFilter;
     var $_currentFilterIsArrayable;
+    var $_template;
 
     /**#@-*/
 
@@ -275,6 +276,19 @@ class Piece_Right
         return $config->getFieldNames();
     }
 
+    // }}}
+    // {{{ setTemplate()
+
+    /**
+     * Sets the given validation set as a template.
+     *
+     * @param string $template
+     */
+    function setTemplate($template)
+    {
+        $this->_template = $template;
+    }
+
     /**#@-*/
 
     /**#@+
@@ -304,7 +318,8 @@ class Piece_Right
     {
         $config = &Piece_Right_Config_Factory::factory($validationSetName,
                                                        $this->_configDirectory,
-                                                       $this->_cacheDirectory
+                                                       $this->_cacheDirectory,
+                                                       $this->_template
                                                        );
         if (Piece_Right_Error::hasErrors('exception')) {
             $return = null;

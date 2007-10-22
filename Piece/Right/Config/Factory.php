@@ -90,12 +90,17 @@ class Piece_Right_Config_Factory
      * @param string $validationSetName
      * @param string $configDirectory
      * @param string $cacheDirectory
+     * @param string $TemplateName
      * @return Piece_Right_Config
      * @throws PIECE_RIGHT_ERROR_INVALID_CONFIGURATION
      * @throws PIECE_RIGHT_ERROR_NOT_FOUND
      * @static
      */
-    function &factory($validationSetName = null, $configDirectory = null, $cacheDirectory = null)
+    function &factory($validationSetName = null,
+                      $configDirectory   = null,
+                      $cacheDirectory    = null,
+                      $templateName      = null
+                      )
     {
         if (is_null($validationSetName) || is_null($configDirectory)) {
             $config = &new Piece_Right_Config();
@@ -132,29 +137,64 @@ class Piece_Right_Config_Factory
             $cacheDirectory = './cache';
         }
 
-        if (!file_exists($cacheDirectory)) {
-            Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
-            Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                    "The cache directory [ $cacheDirectory ] not found.",
-                                    'warning'
-                                    );
-            Piece_Right_Error::popCallback();
+        while (true) {
+            if (!file_exists($cacheDirectory)) {
+                Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
+                Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
+                                        "The cache directory [ $cacheDirectory ] not found.",
+                                        'warning'
+                                        );
+                Piece_Right_Error::popCallback();
 
-            return Piece_Right_Config_Factory::_getConfigurationFromFile($configFile);
+                $config = &Piece_Right_Config_Factory::_getConfigurationFromFile($configFile);
+                break;
+            }
+
+            if (!is_readable($cacheDirectory) || !is_writable($cacheDirectory)) {
+                Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
+                Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_READABLE,
+                                        "The cache directory [ $cacheDirectory ] is not readable or writable.",
+                                        'warning'
+                                        );
+                Piece_Right_Error::popCallback();
+
+                $config = &Piece_Right_Config_Factory::_getConfigurationFromFile($configFile);
+                break;
+            }
+
+            $config = &Piece_Right_Config_Factory::_getConfiguration($configFile, $cacheDirectory);
+            break;
         }
 
-        if (!is_readable($cacheDirectory) || !is_writable($cacheDirectory)) {
-            Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
-            Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_READABLE,
-                                    "The cache directory [ $cacheDirectory ] is not readable or writable.",
-                                    'warning'
-                                    );
-            Piece_Right_Error::popCallback();
-
-            return Piece_Right_Config_Factory::_getConfigurationFromFile($configFile);
+        if (Piece_Right_Error::hasErrors('exception')) {
+            $return = null;
+            return $return;
         }
 
-        return Piece_Right_Config_Factory::_getConfiguration($configFile, $cacheDirectory);
+        if (is_null($templateName)) {
+            return $config;
+        }
+
+        $template = &Piece_Right_Config_Factory::factory($templateName,
+                                                         $configDirectory,
+                                                         $cacheDirectory,
+                                                         null
+                                                         );
+        if (Piece_Right_Error::hasErrors('exception')) {
+            $return = null;
+            return $return;
+        }
+
+        foreach ($config->getFieldNames() as $fieldName) {
+            if (!$config->hasBasedOn($fieldName)) {
+                continue;
+            }
+
+            $basedOn = $config->getBasedOn($fieldName);
+            $config->inherit($fieldName, $basedOn, $template);
+        }
+
+        return $config;
     }
 
     /**#@-*/
@@ -240,8 +280,8 @@ class Piece_Right_Config_Factory
     {
         $config = &new Piece_Right_Config();
         $yaml = Spyc::YAMLLoad($file);
-        foreach ($yaml as $field) {
-            if (!array_key_exists('name', $field)) {
+        foreach ($yaml as $validation) {
+            if (!array_key_exists('name', $validation)) {
                 Piece_Right_Error::push(PIECE_RIGHT_ERROR_INVALID_CONFIGURATION,
                                         "A configuration in the configuration file [ $file ] has no 'name' element."
                                         );
@@ -249,21 +289,21 @@ class Piece_Right_Config_Factory
                 return $return;
             }
 
-            $config->addField($field['name']);
+            $config->addField($validation['name']);
 
-            if (array_key_exists('required', $field)) {
-                $config->setRequired($field['name'], (array)$field['required']);
+            if (array_key_exists('required', $validation)) {
+                $config->setRequired($validation['name'], (array)$validation['required']);
             }
 
-            if (array_key_exists('filter', $field)) {
-                foreach ((array)$field['filter'] as $filter) {
-                    $config->addFilter($field['name'], $filter);
+            if (array_key_exists('filter', $validation)) {
+                foreach ((array)$validation['filter'] as $filter) {
+                    $config->addFilter($validation['name'], $filter);
                 }
             }
 
-            if (array_key_exists('validator', $field)) {
-                foreach ((array)$field['validator'] as $validator) {
-                    $config->addValidation($field['name'],
+            if (array_key_exists('validator', $validation)) {
+                foreach ((array)$validation['validator'] as $validator) {
+                    $config->addValidation($validation['name'],
                                            $validator['name'],
                                            (array)@$validator['rule'],
                                            @$validator['message']
@@ -271,35 +311,39 @@ class Piece_Right_Config_Factory
                 }
             }
 
-            if (array_key_exists('watcher', $field)) {
-                $config->setWatcher($field['name'], (array)$field['watcher']);
+            if (array_key_exists('watcher', $validation)) {
+                $config->setWatcher($validation['name'], (array)$validation['watcher']);
             }
 
-            if (array_key_exists('pseudo', $field)) {
-                $config->setPseudo($field['name'], (array)$field['pseudo']);
+            if (array_key_exists('pseudo', $validation)) {
+                $config->setPseudo($validation['name'], (array)$validation['pseudo']);
             }
 
-            if (array_key_exists('description', $field)) {
-                $config->setDescription($field['name'],
-                                        $field['description']
+            if (array_key_exists('description', $validation)) {
+                $config->setDescription($validation['name'],
+                                        $validation['description']
                                         );
             }
 
-            if (array_key_exists('forceValidation', $field)) {
-                $config->setForceValidation($field['name'],
-                                            $field['forceValidation']
+            if (array_key_exists('forceValidation', $validation)) {
+                $config->setForceValidation($validation['name'],
+                                            $validation['forceValidation']
                                             );
             }
 
-            if (array_key_exists('finals', $field)) {
-                foreach ((array)$field['finals'] as $validator) {
-                    $config->addValidation($field['name'],
+            if (array_key_exists('finals', $validation)) {
+                foreach ((array)$validation['finals'] as $validator) {
+                    $config->addValidation($validation['name'],
                                            $validator['name'],
                                            (array)@$validator['rule'],
                                            @$validator['message'],
                                            true
                                            );
                 }
+            }
+
+            if (array_key_exists('basedOn', $validation)) {
+                $config->setBasedOn($validation['name'], $validation['basedOn']);
             }
         }
 
