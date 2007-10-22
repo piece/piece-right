@@ -283,6 +283,7 @@ class Piece_Right
      * Sets the given validation set as a template.
      *
      * @param string $template
+     * @since Method available since Release 1.8.0
      */
     function setTemplate($template)
     {

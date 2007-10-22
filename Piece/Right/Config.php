@@ -590,6 +590,7 @@ class Piece_Right_Config
      *
      * @param string $fieldName
      * @return boolean
+     * @since Method available since Release 1.8.0
      */
     function _hasField($fieldName)
     {
