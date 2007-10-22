@@ -42,6 +42,7 @@ require_once 'Piece/Right/Error.php';
 require_once 'Piece/Right/Config.php';
 require_once 'Cache/Lite/File.php';
 require_once 'Piece/Right/Filter/Factory.php';
+require_once 'Piece/Right/Config/Factory.php';
 
 // {{{ Piece_RightTestCase
 
@@ -1135,6 +1136,37 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $this->assertTrue(in_array('lastName', $results->getErrorFields()));
         $this->assertEquals('Foo', $results->getFieldValue('firstName'));
         $this->assertEquals('The length of Last Name must be less than 255 characters', $results->getErrorMessage('lastName'));
+    }
+
+    /**
+     * @since Method available since Release 1.8.0
+     */
+    function testUnderScoresInValidationSetNamesShouldBeUsedAsDirectorySeparators()
+    {
+        Piece_Right_Config_Factory::setUseUnderscoreAsDirectorySeparator(true);
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST['firstName'] = ' Foo ';
+        $_POST['lastName'] = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
+
+        $right = &new Piece_Right($this->_cacheDirectory, $this->_cacheDirectory);
+        $right->setTemplate('Common');
+
+        $this->assertFalse($right->validate('UnderScoresInValidationSetNamesShouldBeUsedAsDirectorySeparators_Foo'));
+
+        $results = &$right->getResults();
+
+        $this->assertTrue(in_array('firstName', $results->getValidFields()));
+        $this->assertTrue(in_array('lastName', $results->getErrorFields()));
+        $this->assertEquals('Foo', $results->getFieldValue('firstName'));
+        $this->assertEquals('The length of Last Name must be less than 255 characters', $results->getErrorMessage('lastName'));
+
+        $fieldNames = $right->getFieldNames('UnderScoresInValidationSetNamesShouldBeUsedAsDirectorySeparators_Foo');
+
+        $this->assertEquals(2, count($fieldNames));
+        $this->assertContains('firstName', $fieldNames);
+        $this->assertContains('lastName', $fieldNames);
+
+        Piece_Right_Config_Factory::setUseUnderscoreAsDirectorySeparator(false);
     }
 
     /**#@-*/

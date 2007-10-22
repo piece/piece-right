@@ -48,6 +48,11 @@ if (version_compare(phpversion(), '5.0.0', '<')) {
 
 require_once 'Piece/Right/Env.php';
 
+// {{{ GLOBALS
+
+$GLOBALS['PIECE_RIGHT_Config_Factory_UseUnderscoreAsDirectorySeparator'] = false;
+
+// }}}
 // {{{ Piece_Right_Config_Factory
 
 /**
@@ -105,6 +110,10 @@ class Piece_Right_Config_Factory
         if (is_null($validationSetName) || is_null($configDirectory)) {
             $config = &new Piece_Right_Config();
             return $config;
+        }
+
+        if ($GLOBALS['PIECE_RIGHT_Config_Factory_UseUnderscoreAsDirectorySeparator']) {
+            $validationSetName = str_replace('_', '/', $validationSetName);
         }
 
         $configFile = "$configDirectory/$validationSetName.yaml";
@@ -187,6 +196,20 @@ class Piece_Right_Config_Factory
         }
 
         return $config;
+    }
+
+    // }}}
+    // {{{ setUseUnderscoreAsDirectorySeparator()
+
+    /**
+     * Sets whether or not the factory uses underscores in validation set
+     * names as directory separators.
+     *
+     * @param boolean $treatUnderscoreAsDirectorySeparator
+     */
+    function setUseUnderscoreAsDirectorySeparator($useUnderscoreAsDirectorySeparator)
+    {
+        $GLOBALS['PIECE_RIGHT_Config_Factory_UseUnderscoreAsDirectorySeparator'] = $useUnderscoreAsDirectorySeparator;
     }
 
     /**#@-*/
