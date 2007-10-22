@@ -1,6 +1,6 @@
 # $Id$
-name: config
-desc: the definition of Piece_Right configuration file.
+name: piece-right
+desc: Piece_Right 1.8.0 YAML Schema Definition
 type: seq
 sequence:
   - type: map
@@ -86,3 +86,4 @@ sequence:
             sequence:
               - type: str
       "forceValidation": { type: bool, required: no }
+      "basedOn": { type: str, required: no }
