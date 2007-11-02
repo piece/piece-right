@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- $Id$ -->
-<package packagerversion="1.6.1" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+<package packagerversion="1.6.2" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
     http://pear.php.net/dtd/tasks-1.0.xsd
     http://pear.php.net/dtd/package-2.0
     http://pear.php.net/dtd/package-2.0.xsd">
@@ -16,10 +15,10 @@ Piece_Right provides a generic validation system which make it easy to validate 
   <email>iteman@users.sourceforge.net</email>
   <active>yes</active>
  </lead>
- <date>2007-08-11</date>
- <time>13:10:01</time>
+ <date>2007-11-03</date>
+ <time>01:17:42</time>
  <version>
-  <release>1.7.0</release>
+  <release>1.8.0</release>
   <api>1.1.0</api>
  </version>
  <stability>
@@ -29,26 +28,14 @@ Piece_Right provides a generic validation system which make it easy to validate 
  <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
  <notes>A new release of Piece_Right is now available.
 
-What&apos;s New in Piece_Right 1.7.0
+What&apos;s New in Piece_Right 1.8.0
 
- * Getting Field Names: This is a new feature that allows users to always get field names by a validation set and a Piece_Right_Config object.
- * Environment Settings: A configuration file be always read when the current environment is not production.
-
-See the following release notes for details.
-
-Enhancements
-============ 
-
-Kernel:
-
-- Added a feature that allows users to always get field names by a validation set and a Piece_Right_Config object. (Ticket #30) (Piece_Right_Config, Piece_Right_Validation_Script, Piece_Right)
-- Updated code so that a configuration file be always read when the current environment is not production. (Ticket #31) (Piece_Right_Config_Factory)</notes>
+ * Validation Template: Validation Template allows users to use a validation set as a template for another validation set.
+ * Layered structure support: Layered structure has been supported by using underscores in validation set names as directory separators.
+ * A Defect Fix: A defect that caused the same cache to be used if the relative paths of the validation definition files are same even though the absolute paths of the files are different has been fixed.</notes>
  <contents>
   <dir baseinstalldir="/" name="/">
    <dir name="data">
-    <file name="Example.yaml" role="data">
-     <tasks:replace from="@package_version@" to="version" type="package-info" />
-    </file>
     <file name="piece-right.yaml" role="data">
      <tasks:replace from="@package_version@" to="version" type="package-info" />
     </file>
@@ -62,6 +49,9 @@ Kernel:
     <dir name="Right">
      <dir name="Config">
       <file name="Factory.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Field.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
      </dir> <!-- /Piece/Right/Config -->
@@ -170,10 +160,31 @@ Kernel:
     <dir name="Piece">
      <dir name="Right">
       <dir name="Config">
+       <dir name="FactoryTestCase">
+        <dir name="CacheIDsShouldBeUniqueInOneCacheDirectory1">
+         <file name="CacheIDsShouldBeUniqueInOneCacheDirectory.yaml" role="test">
+          <tasks:replace from="@package_version@" to="version" type="package-info" />
+         </file>
+        </dir> <!-- /tests/Piece/Right/Config/FactoryTestCase/CacheIDsShouldBeUniqueInOneCacheDirectory1 -->
+        <dir name="CacheIDsShouldBeUniqueInOneCacheDirectory2">
+         <file name="CacheIDsShouldBeUniqueInOneCacheDirectory.yaml" role="test">
+          <tasks:replace from="@package_version@" to="version" type="package-info" />
+         </file>
+        </dir> <!-- /tests/Piece/Right/Config/FactoryTestCase/CacheIDsShouldBeUniqueInOneCacheDirectory2 -->
+        <file name="Common.yaml" role="test">
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
+        <file name="Example.yaml" role="test">
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
+        <file name="InvalidConfiguration.yaml" role="test">
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
+        <file name="TemplateShouldBeUsedIfFileIsSetAndBasedOnElementIsSpecified.yaml" role="test">
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
+       </dir> <!-- /tests/Piece/Right/Config/FactoryTestCase -->
        <file name="FactoryTestCase.php" role="test">
-        <tasks:replace from="@package_version@" to="version" type="package-info" />
-       </file>
-       <file name="InvalidConfiguration.yaml" role="test">
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
       </dir> <!-- /tests/Piece/Right/Config -->
@@ -211,9 +222,6 @@ Kernel:
        <file name="JapaneseH2ZTestCase.php" role="test">
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
-       <file name="LowerCase.php" role="test">
-        <tasks:replace from="@package_version@" to="version" type="package-info" />
-       </file>
        <file name="NoFile2NULLTestCase.php" role="test">
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
@@ -229,10 +237,16 @@ Kernel:
           </dir> <!-- /tests/Piece/Right/Validation/ScriptTestCase/Piece/Right/Validator -->
          </dir> <!-- /tests/Piece/Right/Validation/ScriptTestCase/Piece/Right -->
         </dir> <!-- /tests/Piece/Right/Validation/ScriptTestCase/Piece -->
+        <file name="Common.yaml" role="test">
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
         <file name="FieldNames.yaml" role="test">
          <tasks:replace from="@package_version@" to="version" type="package-info" />
         </file>
         <file name="Script.yaml" role="test">
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
+        <file name="TemplateShouldBeUsedIfFileIsSetAndBasedOnElementIsSpecified.yaml" role="test">
          <tasks:replace from="@package_version@" to="version" type="package-info" />
         </file>
        </dir> <!-- /tests/Piece/Right/Validation/ScriptTestCase -->
@@ -342,9 +356,6 @@ Kernel:
        <file name="PastDateTestCase.php" role="test">
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
-       <file name="PayloadTest.php" role="test">
-        <tasks:replace from="@package_version@" to="version" type="package-info" />
-       </file>
        <file name="RangeTestCase.php" role="test">
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
@@ -369,6 +380,78 @@ Kernel:
       </file>
      </dir> <!-- /tests/Piece/Right -->
      <dir name="RightTestCase">
+      <dir name="images">
+       <file name="image.bmp" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="image.gif" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="image.jpg" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="image.png" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="image.tif" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+      </dir> <!-- /tests/Piece/RightTestCase/images -->
+      <dir name="Piece">
+       <dir name="Right">
+        <dir name="Filter">
+         <file name="LowerCase.php" role="test">
+          <tasks:replace from="@package_version@" to="version" type="package-info" />
+         </file>
+        </dir> <!-- /tests/Piece/RightTestCase/Piece/Right/Filter -->
+        <dir name="Validator">
+         <file name="PayloadTest.php" role="test">
+          <tasks:replace from="@package_version@" to="version" type="package-info" />
+         </file>
+        </dir> <!-- /tests/Piece/RightTestCase/Piece/Right/Validator -->
+       </dir> <!-- /tests/Piece/RightTestCase/Piece/Right -->
+      </dir> <!-- /tests/Piece/RightTestCase/Piece -->
+      <dir name="UnderScoresInValidationSetNamesShouldBeUsedAsDirectorySeparators">
+       <file name="Foo.yaml" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+      </dir> <!-- /tests/Piece/RightTestCase/UnderScoresInValidationSetNamesShouldBeUsedAsDirectorySeparators -->
+      <file name="AppropriateValidationMessage.yaml" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Common.yaml" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Example.yaml" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="ForceValidation.yaml" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="ForceValidationBasedOnWatcher.yaml" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="MessageVariable.yaml" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="ProblemThatValidationOfPseudoFieldsAreAlwaysInvoked.yaml" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="PseudoField.yaml" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="RuleMessage.yaml" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="SeparatedDateValidationWithPseudoFieldIfPseudoFieldIsNotRequired.yaml" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="SeparatedDateValidationWithPseudoFieldIfPseudoFieldIsRequired.yaml" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="TemplateShouldBeUsedIfFileIsSetAndBasedOnElementIsSpecified.yaml" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
       <file name="ValidateFinals.php" role="test">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
@@ -376,34 +459,7 @@ Kernel:
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
      </dir> <!-- /tests/Piece/RightTestCase -->
-     <file name="AppropriateValidationMessage.yaml" role="test">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
-     <file name="ForceValidation.yaml" role="test">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
-     <file name="ForceValidationBasedOnWatcher.yaml" role="test">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
-     <file name="MessageVariable.yaml" role="test">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
-     <file name="ProblemThatValidationOfPseudoFieldsAreAlwaysInvoked.yaml" role="test">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
-     <file name="PseudoField.yaml" role="test">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
      <file name="RightTestCase.php" role="test">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
-     <file name="RuleMessage.yaml" role="test">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
-     <file name="SeparatedDateValidationWithPseudoFieldIfPseudoFieldIsNotRequired.yaml" role="test">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
-     <file name="SeparatedDateValidationWithPseudoFieldIfPseudoFieldIsRequired.yaml" role="test">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
     </dir> <!-- /tests/Piece -->
@@ -432,21 +488,28 @@ Kernel:
     <min>1.4.3</min>
    </package>
   </required>
-  <optional>
-   <package>
-    <name>Stagehand_TestRunner</name>
-    <channel>pear.piece-framework.com</channel>
-    <min>0.5.0</min>
-   </package>
-   <package>
-    <name>PHPUnit</name>
-    <channel>pear.phpunit.de</channel>
-    <min>1.3.2</min>
-   </package>
-  </optional>
  </dependencies>
  <phprelease />
  <changelog>
+  <release>
+   <version>
+    <release>1.8.0</release>
+    <api>1.1.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2007-11-03</date>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
+   <notes>A new release of Piece_Right is now available.
+
+What&apos;s New in Piece_Right 1.8.0
+
+ * Validation Template: Validation Template allows users to use a validation set as a template for another validation set.
+ * Layered structure support: Layered structure has been supported by using underscores in validation set names as directory separators.
+ * A Defect Fix: A defect that caused the same cache to be used if the relative paths of the validation definition files are same even though the absolute paths of the files are different has been fixed.</notes>
+  </release>
   <release>
    <version>
     <release>1.7.0</release>
