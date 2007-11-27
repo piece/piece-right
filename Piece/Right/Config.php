@@ -36,6 +36,7 @@
  */
 
 require_once 'Piece/Right/Config/Field.php';
+require_once 'Piece/Right/Error.php';
 
 // {{{ Piece_Right_Config
 
