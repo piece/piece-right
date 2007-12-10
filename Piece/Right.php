@@ -646,9 +646,10 @@ class Piece_Right
             $args = array();
             foreach ($pseudo['arg'] as $arg) {
                 $value = $this->_results->getFieldValue($arg);
-                if (!is_null($value) && strlen($value)) {
+                if (!Piece_Right::isEmpty($value)) {
                     ++$numberOfValidFields;
                 }
+
                 $args[] = $value;
             }
 
