@@ -138,6 +138,7 @@ class Piece_Right_Validator_Date extends Piece_Right_Validator_Common
                                             'heisei' => 4)
                         );
         $this->_addRule('patternEraPosition', 4);
+        $this->_addRule('allowCurrentDate', false);
         $this->_year = null;
         $this->_month = null;
         $this->_day = null;
@@ -226,18 +227,19 @@ class Piece_Right_Validator_Date extends Piece_Right_Validator_Common
     }
 
     // }}}
-    // {{{ _compare()
+    // {{{ _compareGivenDateAndCurrentDate()
 
     /**
-     * Compares two dates.
+     * Compares the given date and the current date.
      *
      * @return integer
      * @link http://www.php.net/manual/en/function.mktime.php
      */
-    function _compare($a, $b)
+    function _compareGivenDateAndCurrentDate()
     {
-        $aDays = gregoriantojd($a->month, $a->day, $a->year);
-        $bDays = gregoriantojd($b->month, $b->day, $b->year);
+        $currentTime = time();
+        $aDays = gregoriantojd($this->_month, $this->_day, $this->_year);
+        $bDays = gregoriantojd(date('n', $currentTime), date('j', $currentTime), date('Y', $currentTime));
 
         if ($aDays == $bDays) {
             return 0;

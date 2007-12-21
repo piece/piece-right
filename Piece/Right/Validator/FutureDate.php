@@ -86,14 +86,7 @@ class Piece_Right_Validator_FutureDate extends Piece_Right_Validator_Date
             return false;
         }
 
-        $currentTime = time();
-        $result = $this->_compare((object)array('year' => $this->_year,
-                                                'month' => $this->_month,
-                                                'day' => $this->_day),
-                                  (object)array('year' => date('Y', $currentTime),
-                                                'month' => date('n', $currentTime),
-                                                'day' => date('j', $currentTime))
-                                  );
+        $result = $this->_compareGivenDateAndCurrentDate();
 
         if (!$this->_getRule('allowCurrentDate')) {
             return $result > 0;
@@ -107,18 +100,6 @@ class Piece_Right_Validator_FutureDate extends Piece_Right_Validator_Date
     /**#@+
      * @access private
      */
-
-    // }}}
-    // {{{ _initialize()
-
-    /**
-     * Initializes properties.
-     */
-    function _initialize()
-    {
-        parent::_initialize();
-        $this->_addRule('allowCurrentDate', false);
-    }
 
     /**#@-*/
 
