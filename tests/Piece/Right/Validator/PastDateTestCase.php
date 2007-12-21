@@ -127,6 +127,21 @@ class Piece_Right_Validator_PastDateTestCase extends PHPUnit_TestCase
         $this->assertFalse(@$validator->validate('19760120'));
     }
 
+    /**
+     * @since Method available since Release 1.9.0
+     */
+    function testItShouldNotHaveTheYear2038Problem()
+    {
+        $oldTimezone = getenv('TZ');
+        putenv('TZ=UTC');
+        $validator = &new Piece_Right_Validator_PastDate();
+
+        $this->assertFalse($validator->validate('2038-01-19'));
+        $this->assertFalse($validator->validate('2038-01-20'));
+
+        putenv("TZ=$oldTimezone");
+    }
+
     /**#@+
      * @access private
      */

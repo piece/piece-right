@@ -225,6 +225,27 @@ class Piece_Right_Validator_Date extends Piece_Right_Validator_Common
         }
     }
 
+    // }}}
+    // {{{ _compare()
+
+    /**
+     * Compares two dates.
+     *
+     * @return integer
+     * @link http://www.php.net/manual/en/function.mktime.php
+     */
+    function _compare($a, $b)
+    {
+        $aDays = gregoriantojd($a->month, $a->day, $a->year);
+        $bDays = gregoriantojd($b->month, $b->day, $b->year);
+
+        if ($aDays == $bDays) {
+            return 0;
+        }
+
+        return ($aDays < $bDays) ? -1 : 1;
+    }
+
     /**#@-*/
 
     // }}}
