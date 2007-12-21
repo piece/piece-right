@@ -75,7 +75,7 @@ class Piece_Right_Validator_PastDate extends Piece_Right_Validator_Date
 
     /**
      * Checks whether a value is a valid date and the value is earlier than
-     * current date.
+     * the current date.
      *
      * @param string $value
      * @return boolean
