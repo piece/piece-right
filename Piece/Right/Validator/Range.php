@@ -4,7 +4,7 @@
 /**
  * PHP versions 4 and 5
  *
- * Copyright (c) 2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,7 +29,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @since      File available since Release 0.1.0
@@ -43,7 +43,7 @@ require_once 'Piece/Right/Validator/Numeric.php';
  * A validator which is used to check whether a value is within a given range.
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
@@ -63,6 +63,8 @@ class Piece_Right_Validator_Range extends Piece_Right_Validator_Numeric
      * @access private
      */
 
+    var $_isArrayable = true;
+
     /**#@-*/
 
     /**#@+
@@ -80,6 +82,16 @@ class Piece_Right_Validator_Range extends Piece_Right_Validator_Numeric
      */
     function validate($value)
     {
+        if (is_array($value)) {
+            for ($i = 0, $count = count($value); $i < $count; ++$i) {
+                if (!$this->validate($value[$i])) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         if (!parent::validate($value)) {
             return false;
         }

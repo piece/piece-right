@@ -4,7 +4,7 @@
 /**
  * PHP versions 4 and 5
  *
- * Copyright (c) 2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,7 +29,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @since      File available since Release 0.1.0
@@ -45,7 +45,7 @@ require_once 'Piece/Right/Validator/Range.php';
  * TestCase for Piece_Right_Validator_Range
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
@@ -200,6 +200,19 @@ class Piece_Right_Validator_RangeTestCase extends PHPUnit_TestCase
 
         $this->assertFalse($validator->validate('0x0B'));
         $this->assertFalse($validator->validate('2e+1'));
+    }
+
+    /**
+     * @since Method available since Release 1.9.0
+     */
+    function testShouldBeArrayable()
+    {
+        $validator = &new Piece_Right_Validator_Range();
+        $validator->setRules(array('min' => 2));
+
+        $this->assertTrue($validator->validate(array(3, 5)));
+        $this->assertFalse($validator->validate(array(1, 3, 5)));
+        $this->assertTrue($validator->validate(array()));
     }
 
     /**#@-*/
