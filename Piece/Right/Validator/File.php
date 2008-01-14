@@ -5,7 +5,7 @@
  * PHP versions 4 and 5
  *
  * Copyright (c) 2006 Chihiro Sakatoku <csakatoku@users.sourceforge.net>,
- *               2007 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ *               2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,7 +31,7 @@
  *
  * @package    Piece_Right
  * @copyright  2006 Chihiro Sakatoku <csakatoku@users.sourceforge.net>
- * @copyright  2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @since      File available since Release 1.3.0
@@ -39,6 +39,18 @@
 
 require_once 'Piece/Right/Validator/Common.php';
 
+// {{{ GLOBALS
+
+$GLOBALS['PIECE_RIGHT_Validator_File_ErrorCodes'] = array('UPLOAD_ERR_INI_SIZE',
+                                                          'UPLOAD_ERR_FORM_SIZE',
+                                                          'UPLOAD_ERR_PARTIAL',
+                                                          'UPLOAD_ERR_NO_FILE',
+                                                          'UPLOAD_ERR_NO_TMP_DIR',
+                                                          'UPLOAD_ERR_CANT_WRITE',
+                                                          'UPLOAD_ERR_EXTENSION'
+                                                          );
+
+// }}}
 // {{{ Piece_Right_Validator_File
 
 /**
@@ -46,7 +58,7 @@ require_once 'Piece/Right/Validator/Common.php';
  *
  * @package    Piece_Right
  * @copyright  2006 Chihiro Sakatoku <csakatoku@users.sourceforge.net>
- * @copyright  2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 1.3.0
@@ -110,6 +122,24 @@ class Piece_Right_Validator_File extends Piece_Right_Validator_Common
 
         for ($i = 0, $count = count($value['error']); $i < $count; ++$i) {
             if ($value['error'][$i] != UPLOAD_ERR_OK) {
+                $messagesByErrorCode = $this->_getRule('messagesByErrorCode');
+                foreach ($GLOBALS['PIECE_RIGHT_Validator_File_ErrorCodes'] as $errorCode) {
+                    if (!defined($errorCode)) {
+                        continue;
+                    }
+
+                    if ($value['error'][$i] != constant($errorCode)) {
+                        continue;
+                    }
+
+                    if (array_key_exists($errorCode, $messagesByErrorCode)
+                        && !is_null($messagesByErrorCode[$errorCode])
+                        && strlen($messagesByErrorCode[$errorCode])
+                        ) {
+                        $this->setMessage($messagesByErrorCode[$errorCode]);
+                    }
+                }
+
                 return false;
             }
 
@@ -274,6 +304,7 @@ class Piece_Right_Validator_File extends Piece_Right_Validator_Common
         $this->_addRule('minSize', 0);
         $this->_addRule('mimetype', null);
         $this->_addRule('useMagic', false);
+        $this->_addRule('messagesByErrorCode', array());
     }
 
     /**#@-*/

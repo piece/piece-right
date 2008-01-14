@@ -5,7 +5,7 @@
  * PHP versions 4 and 5
  *
  * Copyright (c) 2006 Chihiro Sakatoku <csakatoku@users.sourceforge.net>,
- *               2007 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ *               2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,7 +31,7 @@
  *
  * @package    Piece_Right
  * @copyright  2006 Chihiro Sakatoku <csakatoku@users.sourceforge.net>
- * @copyright  2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @since      File available since Release 1.3.0
@@ -59,7 +59,7 @@ if (function_exists('finfo_file')
  *
  * @package    Piece_Right
  * @copyright  2006 Chihiro Sakatoku <csakatoku@users.sourceforge.net>
- * @copyright  2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 1.3.0
@@ -100,12 +100,12 @@ class Piece_Right_Validator_FileTestCase extends PHPUnit_TestCase
                                    'maxSize' => $size,
                                    'mimetype' => 'text/.+')
                              );
+
         $this->assertTrue($validator->validate($f));
 
         $validator = &new Piece_Right_Validator_File();
-        $validator->setRules(array(
-                        'mimetype' => '^application/.+$'
-                    ));
+        $validator->setRules(array('mimetype' => '^application/.+$'));
+
         $this->assertFalse($validator->validate($f));
     }
 
@@ -119,6 +119,7 @@ class Piece_Right_Validator_FileTestCase extends PHPUnit_TestCase
                    );
 
         $validator = &new Piece_Right_Validator_File();
+
         $this->assertFalse($validator->validate($f));
     }
 
@@ -136,6 +137,7 @@ class Piece_Right_Validator_FileTestCase extends PHPUnit_TestCase
         $validator->setRules(array('mimetype' => 'text/.+',
                                    'useMagic'=>true)
                              );
+
         $this->assertFalse($validator->validate($f));
     }
 
@@ -151,6 +153,7 @@ class Piece_Right_Validator_FileTestCase extends PHPUnit_TestCase
 
         $validator = &new Piece_Right_Validator_File();
         $validator->setRules(array('mimetype' => '^text/.+$'));
+
         $this->assertTrue($validator->validate($f));
     }
 
@@ -172,6 +175,7 @@ class Piece_Right_Validator_FileTestCase extends PHPUnit_TestCase
         $validator->setRules(array('mimetype' => '^text/.+$',
                                    'useMagic'=>true)
                              );
+
         $this->assertTrue($validator->validate($f));
     }
 
@@ -193,6 +197,7 @@ class Piece_Right_Validator_FileTestCase extends PHPUnit_TestCase
         $validator->setRules(array('mimetype' => '^application/.+$',
                                    'useMagic'=>true)
                              );
+
         $this->assertFalse($validator->validate($f));
     }
 
@@ -213,6 +218,7 @@ class Piece_Right_Validator_FileTestCase extends PHPUnit_TestCase
                                    'minSize' => $size,
                                    'mimetype' => '^text/.+$')
                              );
+
         $this->assertTrue($validator->validate($files));
 
         $files['tmp_name'][] = __FILE__;
@@ -226,7 +232,34 @@ class Piece_Right_Validator_FileTestCase extends PHPUnit_TestCase
                                    'minSize' => $size,
                                    'mimetype' => '^text/.+$')
                              );
+
         $this->assertFalse($validator->validate($files));
+    }
+
+    /**
+     * @since Method available since Release 1.9.0
+     */
+    function testShouldProvideAMessageCorrespondingToAnErrorCode()
+    {
+        $size = filesize(__FILE__);
+        $f = array('tmp_name' => __FILE__,
+                   'name' => basename(__FILE__),
+                   'type' => 'text/plain',
+                   'size' => $size,
+                   'error' => UPLOAD_ERR_FORM_SIZE
+                   );
+
+        $message = 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.';
+        $validator = &new Piece_Right_Validator_File();
+        $validator->setRules(array('minSize' => $size,
+                                   'maxSize' => $size,
+                                   'mimetype' => 'text/.+',
+                                   'messagesByErrorCode' => array('UPLOAD_ERR_FORM_SIZE' => $message)
+                                   )
+                             );
+
+        $this->assertFalse($validator->validate($f));
+        $this->assertEquals($message, $validator->getMessage());
     }
 
     /**#@-*/
