@@ -122,23 +122,7 @@ class Piece_Right_Validator_File extends Piece_Right_Validator_Common
 
         for ($i = 0, $count = count($value['error']); $i < $count; ++$i) {
             if ($value['error'][$i] != UPLOAD_ERR_OK) {
-                $messagesByErrorCode = $this->_getRule('messagesByErrorCode');
-                foreach ($GLOBALS['PIECE_RIGHT_Validator_File_ErrorCodes'] as $errorCode) {
-                    if (!defined($errorCode)) {
-                        continue;
-                    }
-
-                    if ($value['error'][$i] != constant($errorCode)) {
-                        continue;
-                    }
-
-                    if (array_key_exists($errorCode, $messagesByErrorCode)
-                        && !is_null($messagesByErrorCode[$errorCode])
-                        && strlen($messagesByErrorCode[$errorCode])
-                        ) {
-                        $this->setMessage($messagesByErrorCode[$errorCode]);
-                    }
-                }
+                $this->_setMessageByErrorCode($value['error'][$i]);
 
                 return false;
             }
@@ -305,6 +289,36 @@ class Piece_Right_Validator_File extends Piece_Right_Validator_Common
         $this->_addRule('mimetype', null);
         $this->_addRule('useMagic', false);
         $this->_addRule('messagesByErrorCode', array());
+    }
+
+    // }}}
+    // {{{ _initialize()
+
+    /**
+     * Sets an appropriate message correspoiding to a given error code.
+     *
+     * @param integer $actualErrorCode
+     * @since Method available since Release 1.9.0
+     */
+    function _setMessageByErrorCode($actualErrorCode)
+    {
+        $messagesByErrorCode = $this->_getRule('messagesByErrorCode');
+        foreach ($GLOBALS['PIECE_RIGHT_Validator_File_ErrorCodes'] as $errorCode) {
+            if (!defined($errorCode)) {
+                continue;
+            }
+
+            if ($actualErrorCode != constant($errorCode)) {
+                continue;
+            }
+
+            if (array_key_exists($errorCode, $messagesByErrorCode)
+                && !is_null($messagesByErrorCode[$errorCode])
+                && strlen($messagesByErrorCode[$errorCode])
+                ) {
+                $this->setMessage($messagesByErrorCode[$errorCode]);
+            }
+        }
     }
 
     /**#@-*/
