@@ -4,7 +4,7 @@
 /**
  * PHP versions 4 and 5
  *
- * Copyright (c) 2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,7 +29,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @since      File available since Release 0.1.0
@@ -39,20 +39,40 @@ require_once 'PEAR/PackageFileManager2.php';
 
 PEAR::staticPushErrorHandling(PEAR_ERROR_CALLBACK, create_function('$error', 'var_dump($error); exit();'));
 
-$releaseVersion = '1.8.0';
+$releaseVersion = '1.9.0';
 $releaseStability = 'stable';
 $apiVersion = '1.1.0';
 $apiStability = 'stable';
 $notes = 'A new release of Piece_Right is now available.
 
-What\'s New in Piece_Right 1.8.0
+What\'s New in Piece_Right 1.9.0
 
- * Validation Template: Validation Template allows users to use a validation set as a template for another validation set.
- * Layered structure support: Layered structure has been supported by using underscores in validation set names as directory separators.
- * A Defect Fix: A defect that caused the same cache to be used if the relative paths of the validation definition files are same even though the absolute paths of the files are different has been fixed.';
+ * Enhanced validators: File validator allows users to use messages corresponding to each error code for file uploading. Range validator supports array.
+ * A defect fix: A defect that caused the validation result to be incorrect when a day later than January 19, 2038 is given has been fixed.
+
+See the following release notes for details.
+
+Enhancements
+============
+
+Validators:
+
+- Added support for messages by error code. (Ticket #41) (File)
+- Added support for array. (Ticket #59) (Range)
+
+Kernel:
+
+- Changed factory() so as to use a given cache directory as is. (Ticket #37) (Piece_Right_Config_Factory)
+
+Defect Fixes
+============
+
+Validators:
+
+- Fixed a defect that caused the validation result to be incorrect when a day later than January 19, 2038 is given. (Ticket #40) (Date, FutureDate, PastDate)';
 
 $package = new PEAR_PackageFileManager2();
-$package->setOptions(array('filelistgenerator' => 'svn',
+$package->setOptions(array('filelistgenerator' => 'file',
                            'changelogoldtonew' => false,
                            'simpleoutput'      => true,
                            'baseinstalldir'    => '/',

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<package packagerversion="1.6.2" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+<package packagerversion="1.7.0RC2" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
     http://pear.php.net/dtd/tasks-1.0.xsd
     http://pear.php.net/dtd/package-2.0
     http://pear.php.net/dtd/package-2.0.xsd">
@@ -15,10 +15,10 @@ Piece_Right provides a generic validation system which make it easy to validate 
   <email>iteman@users.sourceforge.net</email>
   <active>yes</active>
  </lead>
- <date>2007-11-03</date>
- <time>03:47:12</time>
+ <date>2008-01-15</date>
+ <time>14:54:29</time>
  <version>
-  <release>1.8.0</release>
+  <release>1.9.0</release>
   <api>1.1.0</api>
  </version>
  <stability>
@@ -28,11 +28,31 @@ Piece_Right provides a generic validation system which make it easy to validate 
  <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
  <notes>A new release of Piece_Right is now available.
 
-What&apos;s New in Piece_Right 1.8.0
+What&apos;s New in Piece_Right 1.9.0
 
- * Validation Template: Validation Template allows users to use a validation set as a template for another validation set.
- * Layered structure support: Layered structure has been supported by using underscores in validation set names as directory separators.
- * A Defect Fix: A defect that caused the same cache to be used if the relative paths of the validation definition files are same even though the absolute paths of the files are different has been fixed.</notes>
+ * Enhanced validators: File validator allows users to use messages corresponding to each error code for file uploading. Range validator supports array.
+ * A defect fix: A defect that caused the validation result to be incorrect when a day later than January 19, 2038 is given has been fixed.
+
+See the following release notes for details.
+
+Enhancements
+============
+
+Validators:
+
+- Added support for messages by error code. (Ticket #41) (File)
+- Added support for array. (Ticket #59) (Range)
+
+Kernel:
+
+- Changed factory() so as to use a given cache directory as is. (Ticket #37) (Piece_Right_Config_Factory)
+
+Defect Fixes
+============
+
+Validators:
+
+- Fixed a defect that caused the validation result to be incorrect when a day later than January 19, 2038 is given. (Ticket #40) (Date, FutureDate, PastDate)</notes>
  <contents>
   <dir baseinstalldir="/" name="/">
    <dir name="data">
@@ -491,6 +511,45 @@ What&apos;s New in Piece_Right 1.8.0
  </dependencies>
  <phprelease />
  <changelog>
+  <release>
+   <version>
+    <release>1.9.0</release>
+    <api>1.1.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2008-01-15</date>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
+   <notes>A new release of Piece_Right is now available.
+
+What&apos;s New in Piece_Right 1.9.0
+
+ * Enhanced validators: File validator allows users to use messages corresponding to each error code for file uploading. Range validator supports array.
+ * A defect fix: A defect that caused the validation result to be incorrect when a day later than January 19, 2038 is given has been fixed.
+
+See the following release notes for details.
+
+Enhancements
+============
+
+Validators:
+
+- Added support for messages by error code. (Ticket #41) (File)
+- Added support for array. (Ticket #59) (Range)
+
+Kernel:
+
+- Changed factory() so as to use a given cache directory as is. (Ticket #37) (Piece_Right_Config_Factory)
+
+Defect Fixes
+============
+
+Validators:
+
+- Fixed a defect that caused the validation result to be incorrect when a day later than January 19, 2038 is given. (Ticket #40) (Date, FutureDate, PastDate)</notes>
+  </release>
   <release>
    <version>
     <release>1.8.0</release>
