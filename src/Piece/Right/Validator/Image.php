@@ -2,10 +2,10 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 
 /**
- * PHP versions 4 and 5
+ * PHP version 5
  *
  * Copyright (c) 2006 Chihiro Sakatoku <csakatoku@users.sourceforge.net>,
- *               2007 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ *               2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,32 +31,40 @@
  *
  * @package    Piece_Right
  * @copyright  2006 Chihiro Sakatoku <csakatoku@users.sourceforge.net>
- * @copyright  2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @since      File available since Release 1.3.0
  */
-require_once 'Piece/Right/Validator/File.php';
 
-// {{{ Piece_Right_Validator_Image
+namespace Piece::Right::Validator;
+use Piece::Right::Validator::File;
+
+// {{{ Image
 
 /**
  * A validator to check files are valid image files.
  *
  * @package    Piece_Right
  * @copyright  2006 Chihiro Sakatoku <csakatoku@users.sourceforge.net>
- * @copyright  2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 1.3.0
  */
-class Piece_Right_Validator_Image extends Piece_Right_Validator_File
+class Image extends File
 {
 
     // {{{ properties
 
     /**#@+
      * @access public
+     */
+
+    /**#@-*/
+
+    /**#@+
+     * @access protected
      */
 
     /**#@-*/
@@ -79,9 +87,8 @@ class Piece_Right_Validator_Image extends Piece_Right_Validator_File
      *
      * @param array $value the array of uploaded file(s).
      * @return boolean true if passes, false if not.
-     * @see Piece_Right_Validator_File
      */
-    function validate($value)
+    public function validate($value)
     {
         if (!function_exists('getimagesize')) {
             return false;
@@ -97,8 +104,23 @@ class Piece_Right_Validator_Image extends Piece_Right_Validator_File
     /**#@-*/
 
     /**#@+
-     * @access private
+     * @access protected
      */
+
+    // }}}
+    // {{{ _initialize()
+
+    /**
+     * Initializes properties.
+     */
+    protected function _initialize()
+    {
+        parent::_initialize();
+        $this->_addRule('maxWidth');
+        $this->_addRule('minWidth', 0);
+        $this->_addRule('maxHeight');
+        $this->_addRule('minHeight', 0);
+    }
 
     // }}}
     // {{{ _validateFile()
@@ -114,9 +136,8 @@ class Piece_Right_Validator_Image extends Piece_Right_Validator_File
      * @param string  $mime     the mime type which is retrieved
      *                          from HTTP request headers.
      * @return boolean true if the file passes the validation, false if not.
-     * @see Piece_Right_Validator_File
      */
-    function _validateFile($filename, $size, $mime)
+    protected function _validateFile($filename, $size, $mime)
     {
         if (!is_file($filename) || !is_readable($filename)) {
            return false;
@@ -143,20 +164,11 @@ class Piece_Right_Validator_Image extends Piece_Right_Validator_File
         return true;
     }
 
-    // }}}
-    // {{{ _initialize()
+    /**#@-*/
 
-    /**
-     * Initializes properties.
+    /**#@+
+     * @access private
      */
-    function _initialize()
-    {
-        parent::_initialize();
-        $this->_addRule('maxWidth', null);
-        $this->_addRule('minWidth', 0);
-        $this->_addRule('maxHeight', null);
-        $this->_addRule('minHeight', 0);
-    }
 
     /**#@-*/
 

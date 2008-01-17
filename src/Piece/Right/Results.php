@@ -2,9 +2,9 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 
 /**
- * PHP versions 4 and 5
+ * PHP version 5
  *
- * Copyright (c) 2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,26 +29,27 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @since      File available since Release 0.1.0
  */
 
-require_once 'Piece/Right/Validation/Error.php';
+namespace Piece::Right;
+use Piece::Right::Validation::Error;
 
-// {{{ Piece_Right_Results
+// {{{ Results
 
 /**
  * The validation results which include errors and field values.
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-class Piece_Right_Results
+class Results
 {
 
     // {{{ properties
@@ -60,12 +61,18 @@ class Piece_Right_Results
     /**#@-*/
 
     /**#@+
+     * @access protected
+     */
+
+    /**#@-*/
+
+    /**#@+
      * @access private
      */
 
-    var $_fieldValues = array();
-    var $_errors = array();
-    var $_messageVariables = array();
+    private $_fieldValues = array();
+    private $_errors = array();
+    private $_messageVariables = array();
 
     /**#@-*/
 
@@ -82,7 +89,7 @@ class Piece_Right_Results
      * @param string $name
      * @param string $value
      */
-    function setFieldValue($name, $value)
+    public function setFieldValue($name, $value)
     {
         $this->_fieldValues[$name] = $value;
     }
@@ -95,7 +102,7 @@ class Piece_Right_Results
      *
      * @return integer
      */
-    function countErrors()
+    public function countErrors()
     {
         return count($this->_errors);
     }
@@ -110,13 +117,13 @@ class Piece_Right_Results
      * @param string $validator
      * @param string $message
      */
-    function addError($fieldName, $validator, $message = null)
+    public function addError($fieldName, $validator, $message = null)
     {
         if ($this->isError($fieldName)) {
-            $error = &$this->_errors[$fieldName];
+            $error = $this->_errors[$fieldName];
         } else {
-            $error = &new Piece_Right_Validation_Error();
-            $this->_errors[$fieldName] = &$error;
+            $error = new Error();
+            $this->_errors[$fieldName] = $error;
         }
 
         $error->add($validator, $message);
@@ -130,7 +137,7 @@ class Piece_Right_Results
      *
      * @return array
      */
-    function getErrorFields()
+    public function getErrorFields()
     {
         return array_keys($this->_errors);
     }
@@ -144,7 +151,7 @@ class Piece_Right_Results
      * @param string $fieldName
      * @return boolean
      */
-    function isError($fieldName)
+    public function isError($fieldName)
     {
         return array_key_exists($fieldName, $this->_errors);
     }
@@ -158,7 +165,7 @@ class Piece_Right_Results
      * @param string $fieldName
      * @return string
      */
-    function getErrorMessage($fieldName)
+    public function getErrorMessage($fieldName)
     {
         if ($this->isError($fieldName)) {
             return $this->_replaceMessage($fieldName,
@@ -176,7 +183,7 @@ class Piece_Right_Results
      * @param string $fieldName
      * @return array
      */
-    function getErrorMessages($fieldName)
+    public function getErrorMessages($fieldName)
     {
         if ($this->isError($fieldName)) {
             return $this->_errors[$fieldName]->getMessages();
@@ -193,7 +200,7 @@ class Piece_Right_Results
      * @return string
      * @since Method available since Release 0.2.0
      */
-    function getFieldValue($name)
+    public function getFieldValue($name)
     {
         return $this->_fieldValues[$name];
     }
@@ -207,7 +214,7 @@ class Piece_Right_Results
      * @return array
      * @since Method available since Release 0.3.0
      */
-    function getFieldNames()
+    public function getFieldNames()
     {
         return array_keys($this->_fieldValues);
     }
@@ -220,7 +227,7 @@ class Piece_Right_Results
      *
      * @return array
      */
-    function getValidFields()
+    public function getValidFields()
     {
         return array_diff(array_keys($this->_fieldValues), array_keys($this->_errors));
     }
@@ -233,10 +240,16 @@ class Piece_Right_Results
      *
      * @param array $messageVariables
      */
-    function setMessageVariables($messageVariables)
+    public function setMessageVariables($messageVariables)
     {
         $this->_messageVariables = $messageVariables;
     }
+
+    /**#@-*/
+
+    /**#@+
+     * @access protected
+     */
 
     /**#@-*/
 
@@ -255,7 +268,7 @@ class Piece_Right_Results
      * @return string
      * @since Method available since Release 1.0.0
      */
-    function _replaceMessage($fieldName, $message)
+    private function _replaceMessage($fieldName, $message)
     {
         foreach ($this->_messageVariables[$fieldName] as $name => $value) {
             $message = str_replace("%$name%", $value, $message);

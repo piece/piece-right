@@ -2,7 +2,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 
 /**
- * PHP versions 4 and 5
+ * PHP version 5
  *
  * Copyright (c) 2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
@@ -35,9 +35,10 @@
  * @since      File available since Release 0.1.0
  */
 
-require_once 'Piece/Right/Validator/Numeric.php';
+namespace Piece::Right::Validator;
+use Piece::Right::Validator::Numeric;
 
-// {{{ Piece_Right_Validator_Range
+// {{{ Range
 
 /**
  * A validator which is used to check whether a value is within a given range.
@@ -48,7 +49,7 @@ require_once 'Piece/Right/Validator/Numeric.php';
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-class Piece_Right_Validator_Range extends Piece_Right_Validator_Numeric
+class Range extends Numeric
 {
 
     // {{{ properties
@@ -60,10 +61,16 @@ class Piece_Right_Validator_Range extends Piece_Right_Validator_Numeric
     /**#@-*/
 
     /**#@+
-     * @access private
+     * @access protected
      */
 
-    var $_isArrayable = true;
+    protected $_isArrayable = true;
+
+    /**#@-*/
+
+    /**#@+
+     * @access private
+     */
 
     /**#@-*/
 
@@ -80,7 +87,7 @@ class Piece_Right_Validator_Range extends Piece_Right_Validator_Numeric
      * @param string $value
      * @return boolean
      */
-    function validate($value)
+    public function validate($value)
     {
         if (is_array($value)) {
             for ($i = 0, $count = count($value); $i < $count; ++$i) {
@@ -118,7 +125,7 @@ class Piece_Right_Validator_Range extends Piece_Right_Validator_Numeric
     /**#@-*/
 
     /**#@+
-     * @access private
+     * @access protected
      */
 
     // }}}
@@ -129,13 +136,19 @@ class Piece_Right_Validator_Range extends Piece_Right_Validator_Numeric
      *
      * @since Method available since Release 0.3.0
      */
-    function _initialize()
+    protected function _initialize()
     {
         parent::_initialize();
         $this->_addRule('min');
         $this->_addRule('max');
     }
- 
+
+    /**#@-*/
+
+    /**#@+
+     * @access private
+     */
+
     /**#@-*/
 
     // }}}

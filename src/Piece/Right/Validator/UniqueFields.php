@@ -2,9 +2,9 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 
 /**
- * PHP versions 4 and 5
+ * PHP version 5
  *
- * Copyright (c) 2007 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,27 +29,28 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @copyright  2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @since      File available since Release 1.6.0
  */
 
-require_once 'Piece/Right/Validator/Unique.php';
+namespace Piece::Right::Validator;
+use Piece::Right::Validator::Unique;
 
-// {{{ Piece_Right_Validator_UniqueFields
+// {{{ UniqueFields
 
 /**
  * A validator which can be used to check that each value of multiple fields
- * do not duplicate.
+ * does not duplicate.
  *
  * @package    Piece_Right
- * @copyright  2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 1.6.0
  */
-class Piece_Right_Validator_UniqueFields extends Piece_Right_Validator_Unique
+class UniqueFields extends Unique
 {
 
     // {{{ properties
@@ -61,10 +62,16 @@ class Piece_Right_Validator_UniqueFields extends Piece_Right_Validator_Unique
     /**#@-*/
 
     /**#@+
-     * @access private
+     * @access protected
      */
 
-    var $_isArrayable = false;
+    protected $_isArrayable = false;
+
+    /**#@-*/
+
+    /**#@+
+     * @access private
+     */
 
     /**#@-*/
 
@@ -81,7 +88,7 @@ class Piece_Right_Validator_UniqueFields extends Piece_Right_Validator_Unique
      * @param string $value
      * @return boolean
      */
-    function validate($value)
+    public function validate($value)
     {
         $fields = $this->_getRule('fields');
         if (!is_array($fields)) {
@@ -104,7 +111,7 @@ class Piece_Right_Validator_UniqueFields extends Piece_Right_Validator_Unique
     /**#@-*/
 
     /**#@+
-     * @access private
+     * @access protected
      */
 
     // }}}
@@ -113,11 +120,17 @@ class Piece_Right_Validator_UniqueFields extends Piece_Right_Validator_Unique
     /**
      * Initializes properties.
      */
-    function _initialize()
+    protected function _initialize()
     {
         parent::_initialize();
         $this->_addRule('fields', array());
     }
+
+    /**#@-*/
+
+    /**#@+
+     * @access private
+     */
 
     /**#@-*/
 

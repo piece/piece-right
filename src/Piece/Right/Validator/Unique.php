@@ -2,9 +2,9 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 
 /**
- * PHP versions 4 and 5
+ * PHP version 5
  *
- * Copyright (c) 2007 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,27 +29,28 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @copyright  2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @since      File available since Release 1.6.0
  */
 
-require_once 'Piece/Right/Validator/Common.php';
+namespace Piece::Right::Validator;
+use Piece::Right::Validator::Common;
 
-// {{{ Piece_Right_Validator_Unique
+// {{{ Unique
 
 /**
  * A validator which can be used to check that all values in an array do not
  * duplicate.
  *
  * @package    Piece_Right
- * @copyright  2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 1.6.0
  */
-class Piece_Right_Validator_Unique extends Piece_Right_Validator_Common
+class Unique extends Common
 {
 
     // {{{ properties
@@ -61,10 +62,16 @@ class Piece_Right_Validator_Unique extends Piece_Right_Validator_Common
     /**#@-*/
 
     /**#@+
-     * @access private
+     * @access protected
      */
 
-    var $_isArrayable = true;
+    protected $_isArrayable = true;
+
+    /**#@-*/
+
+    /**#@+
+     * @access private
+     */
 
     /**#@-*/
 
@@ -81,7 +88,7 @@ class Piece_Right_Validator_Unique extends Piece_Right_Validator_Common
      * @param mixed $value
      * @return boolean
      */
-    function validate($value)
+    public function validate($value)
     {
         if (!is_array($value)) {
             return false;
@@ -93,6 +100,12 @@ class Piece_Right_Validator_Unique extends Piece_Right_Validator_Common
             return false;
         }
     }
+
+    /**#@-*/
+
+    /**#@+
+     * @access protected
+     */
 
     /**#@-*/
 

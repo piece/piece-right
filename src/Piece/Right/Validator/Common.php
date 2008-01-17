@@ -2,9 +2,9 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 
 /**
- * PHP versions 4 and 5
+ * PHP version 5
  *
- * Copyright (c) 2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,24 +29,26 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @since      File available since Release 0.1.0
  */
 
-// {{{ Piece_Right_Validator_Common
+namespace Piece::Right::Validator;
+
+// {{{ Common
 
 /**
  * The base class for Piece_Right validators.
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-class Piece_Right_Validator_Common
+abstract class Common
 {
 
     // {{{ properties
@@ -58,15 +60,22 @@ class Piece_Right_Validator_Common
     /**#@-*/
 
     /**#@+
+     * @access protected
+     */
+
+    protected $_results;
+    protected $_isArrayable = false;
+    protected $_payload;
+
+    /**#@-*/
+
+    /**#@+
      * @access private
      */
 
-    var $_results;
-    var $_rules = array();
-    var $_message;
-    var $_messages = array();
-    var $_isArrayable = false;
-    var $_payload;
+    private $_rules = array();
+    private $_message;
+    private $_messages = array();
 
     /**#@-*/
 
@@ -75,14 +84,14 @@ class Piece_Right_Validator_Common
      */
 
     // }}}
-    // {{{ constructor
+    // {{{ __construct()
 
     /**
      * Initializes properties.
      *
      * @since Method available since Release 0.3.0
      */
-    function Piece_Right_Validator_Common()
+    public function __construct()
     {
         $this->_initialize();
     }
@@ -95,7 +104,7 @@ class Piece_Right_Validator_Common
      *
      * @param array $rules
      */
-    function setRules($rules = array())
+    public function setRules($rules = array())
     {
         foreach ($rules as $rule => $value) {
             $this->_setRule($rule, $value);
@@ -103,39 +112,12 @@ class Piece_Right_Validator_Common
     }
 
     // }}}
-    // {{{ setRule()
-
-    /**
-     * Sets a validation rule to the given rule name.
-     *
-     * @param string $rule
-     * @param mixed  $value
-     * @deprecated Method deprecated in Release 1.6.0
-     */
-    function setRule($rule, $value)
-    {
-        $this->_setRule($rule, $value);
-    }
-
-    // }}}
-    // {{{ validate()
-
-    /**
-     * Checks whether a value is valid.
-     *
-     * @param string $value
-     * @return boolean
-     * @abstract
-     */
-    function validate($value) {}
-
-    // }}}
     // {{{ clear()
 
     /**
      * Clears some properties for the next use.
      */
-    function clear()
+    public function clear()
     {
         $this->_message = null;
         $this->_messages = array();
@@ -150,39 +132,9 @@ class Piece_Right_Validator_Common
      *
      * @param Piece_Right_Results $results
      */
-    function setResults(&$results)
+    public function setResults($results)
     {
-        $this->_results = &$results;
-    }
-
-    // }}}
-    // {{{ getRule()
-
-    /**
-     * Gets the validation rule of the given rule name.
-     *
-     * @param string $rule
-     * @return mixed
-     * @deprecated Method deprecated in Release 1.6.0
-     */
-    function getRule($rule)
-    {
-        return $this->_getRule($rule);
-    }
-
-    // }}}
-    // {{{ setRuleMessage()
-
-    /**
-     * Sets an error message for the given rule name.
-     *
-     * @param string $rule
-     * @param string $message
-     * @deprecated Method deprecated in Release 1.6.0
-     */
-    function setRuleMessage($rule, $message)
-    {
-        $this->_setRuleMessage($rule, $message);
+        $this->_results = $results;
     }
 
     // }}}
@@ -193,7 +145,7 @@ class Piece_Right_Validator_Common
      *
      * @param string $message
      */
-    function setMessage($message)
+    public function setMessage($message)
     {
         $this->_message = $message;
     }
@@ -206,7 +158,7 @@ class Piece_Right_Validator_Common
      *
      * @return string
      */
-    function getMessage()
+    public function getMessage()
     {
         return $this->_replaceMessage($this->_message);
     }
@@ -219,7 +171,7 @@ class Piece_Right_Validator_Common
      *
      * @return boolean
      */
-    function isArrayable()
+    public function isArrayable()
     {
         return $this->_isArrayable;
     }
@@ -233,7 +185,7 @@ class Piece_Right_Validator_Common
      * @param mixed &$payload
      * @since Method available since Release 1.1.0
      */
-    function setPayload(&$payload)
+    public function setPayload(&$payload)
     {
         $this->_payload = &$payload;
     }
@@ -241,8 +193,20 @@ class Piece_Right_Validator_Common
     /**#@-*/
 
     /**#@+
-     * @access private
+     * @access protected
      */
+
+    // }}}
+    // {{{ validate()
+
+    /**
+     * Checks whether a value is valid.
+     *
+     * @param mixed $value
+     * @return boolean
+     * @abstract
+     */
+    abstract protected function validate($value);
 
     // }}}
     // {{{ _initialize()
@@ -252,7 +216,7 @@ class Piece_Right_Validator_Common
      *
      * @since Method available since Release 0.3.0
      */
-    function _initialize() {}
+    protected function _initialize() {}
 
     // }}}
     // {{{ _addRule()
@@ -265,7 +229,7 @@ class Piece_Right_Validator_Common
      * @param mixed $default
      * @param string $message
      */
-    function _addRule($rule, $default = null, $message = null)
+    protected function _addRule($rule, $default = null, $message = null)
     {
         $this->_rules[$rule] = $default;
         $this->_messages[$rule] = $message;
@@ -280,7 +244,7 @@ class Piece_Right_Validator_Common
      *
      * @param string $rule
      */
-    function _setMessage($rule)
+    protected function _setMessage($rule)
     {
         if (array_key_exists($rule, $this->_messages)
             && !is_null($this->_messages[$rule])
@@ -289,6 +253,27 @@ class Piece_Right_Validator_Common
             $this->setMessage($this->_messages[$rule]);
         }
     }
+
+    // }}}
+    // {{{ _getRule()
+
+    /**
+     * Gets the validation rule of the given rule name.
+     *
+     * @param string $rule
+     * @return mixed
+     * @since Method available since Release 1.6.0
+     */
+    protected function _getRule($rule)
+    {
+        return $this->_rules[$rule];
+    }
+
+    /**#@-*/
+
+    /**#@+
+     * @access private
+     */
 
     // }}}
     // {{{ _replaceMessage()
@@ -300,7 +285,7 @@ class Piece_Right_Validator_Common
      * @return string
      * @since Method available since Release 1.3.0
      */
-    function _replaceMessage($message)
+    private function _replaceMessage($message)
     {
         foreach ($this->_rules as $name => $value) {
             if (!is_array($value)) {
@@ -321,7 +306,7 @@ class Piece_Right_Validator_Common
      * @param mixed  $value
      * @since Method available since Release 1.6.0
      */
-    function _setRule($rule, $value)
+    private function _setRule($rule, $value)
     {
         if (array_key_exists($rule, $this->_rules)) {
             $this->_rules[$rule] = $value;
@@ -345,28 +330,13 @@ class Piece_Right_Validator_Common
      * @param string $message
      * @since Method available since Release 1.6.0
      */
-    function _setRuleMessage($rule, $message)
+    private function _setRuleMessage($rule, $message)
     {
         if (array_key_exists($rule, $this->_messages)) {
             $this->_messages[$rule] = $message;
         }
     }
  
-    // }}}
-    // {{{ _getRule()
-
-    /**
-     * Gets the validation rule of the given rule name.
-     *
-     * @param string $rule
-     * @return mixed
-     * @since Method available since Release 1.6.0
-     */
-    function _getRule($rule)
-    {
-        return $this->_rules[$rule];
-    }
-
     /**#@-*/
 
     // }}}

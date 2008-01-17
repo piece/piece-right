@@ -2,7 +2,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 
 /**
- * PHP versions 4 and 5
+ * PHP version 5
  *
  * Copyright (c) 2006 Chihiro Sakatoku <csakatoku@users.sourceforge.net>,
  *               2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
@@ -37,21 +37,10 @@
  * @since      File available since Release 1.3.0
  */
 
-require_once 'Piece/Right/Validator/Common.php';
+namespace Piece::Right::Validator;
+use Piece::Right::Validator::Common;
 
-// {{{ GLOBALS
-
-$GLOBALS['PIECE_RIGHT_Validator_File_ErrorCodes'] = array('UPLOAD_ERR_INI_SIZE',
-                                                          'UPLOAD_ERR_FORM_SIZE',
-                                                          'UPLOAD_ERR_PARTIAL',
-                                                          'UPLOAD_ERR_NO_FILE',
-                                                          'UPLOAD_ERR_NO_TMP_DIR',
-                                                          'UPLOAD_ERR_CANT_WRITE',
-                                                          'UPLOAD_ERR_EXTENSION'
-                                                          );
-
-// }}}
-// {{{ Piece_Right_Validator_File
+// {{{ File
 
 /**
  * A validator which is used to validate a file.
@@ -63,7 +52,7 @@ $GLOBALS['PIECE_RIGHT_Validator_File_ErrorCodes'] = array('UPLOAD_ERR_INI_SIZE',
  * @version    Release: @package_version@
  * @since      Class available since Release 1.3.0
  */
-class Piece_Right_Validator_File extends Piece_Right_Validator_Common
+class File extends Common
 {
 
     // {{{ properties
@@ -75,10 +64,25 @@ class Piece_Right_Validator_File extends Piece_Right_Validator_Common
     /**#@-*/
 
     /**#@+
+     * @access protected
+     */
+
+    protected $_isArrayable = true;
+
+    /**#@-*/
+
+    /**#@+
      * @access private
      */
 
-    var $_isArrayable = true;
+    private static $_errorCodes = array('UPLOAD_ERR_INI_SIZE',
+                                        'UPLOAD_ERR_FORM_SIZE',
+                                        'UPLOAD_ERR_PARTIAL',
+                                        'UPLOAD_ERR_NO_FILE',
+                                        'UPLOAD_ERR_NO_TMP_DIR',
+                                        'UPLOAD_ERR_CANT_WRITE',
+                                        'UPLOAD_ERR_EXTENSION'
+                                        );
 
     /**#@-*/
 
@@ -95,7 +99,7 @@ class Piece_Right_Validator_File extends Piece_Right_Validator_Common
      * @param array $value the array of uploaded file(s).
      * @return boolean true if passes, false if not.
      */
-    function validate($value)
+    public function validate($value)
     {
         if (!is_array($value)) {
             return false;
@@ -138,8 +142,23 @@ class Piece_Right_Validator_File extends Piece_Right_Validator_Common
     /**#@-*/
 
     /**#@+
-     * @access private
+     * @access protected
      */
+
+    // }}}
+    // {{{ _initialize()
+
+    /**
+     * Initializes properties.
+     */
+    protected function _initialize()
+    {
+        $this->_addRule('maxSize');
+        $this->_addRule('minSize', 0);
+        $this->_addRule('mimetype');
+        $this->_addRule('useMagic', false);
+        $this->_addRule('messagesByErrorCode', array());
+    }
 
     // }}}
     // {{{ _validateFile()
@@ -154,7 +173,7 @@ class Piece_Right_Validator_File extends Piece_Right_Validator_Common
      * @return boolean true if the file passes the validation, false if not.
      * @see Piece_Right_Validator_File
      */
-    function _validateFile($filename, $size, $mime)
+    protected function _validateFile($filename, $size, $mime)
     {
         if (!$this->_inRange('size', $size)) {
             return false;
@@ -186,7 +205,7 @@ class Piece_Right_Validator_File extends Piece_Right_Validator_Common
      * @param string $value the numberic string to be compared.
      * @return boolean true if the value in range, false if not.
      */
-    function _inRange($key, $value)
+    protected function _inRange($key, $value)
     {
         $key = ucfirst($key);
 
@@ -218,7 +237,7 @@ class Piece_Right_Validator_File extends Piece_Right_Validator_Common
      * @param $mime string the mime-type.
      * @return boolean true if the pattern maches, false if not.
      */
-    function _validateMimeType($mime)
+    protected function _validateMimeType($mime)
     {
         $pattern = $this->_getRule('mimetype');
         if (is_null($pattern)) {
@@ -227,6 +246,12 @@ class Piece_Right_Validator_File extends Piece_Right_Validator_Common
 
         return preg_match("!{$pattern}!", $mime);
     }
+
+    /**#@-*/
+
+    /**#@+
+     * @access private
+     */
 
     // }}}
     // {{{ _detectMimeType()
@@ -237,7 +262,7 @@ class Piece_Right_Validator_File extends Piece_Right_Validator_Common
      * @param string $filename the file name to be checked.
      * @return mixed the mime-type string, or false if failed.
      */
-    function _detectMimeType($filename)
+    private function _detectMimeType($filename)
     {
         if (!is_file($filename) || !is_readable($filename)) {
             return false;
@@ -251,7 +276,7 @@ class Piece_Right_Validator_File extends Piece_Right_Validator_Common
             return mime_content_type($filename);
         }
 
-        if (!substr(PHP_OS, 0, 3) != 'WIN') {
+        if (substr(PHP_OS, 0, 3) != 'WIN') {
             return exec('file -bi '. escapeshellarg($filename));
         }
 
@@ -268,7 +293,7 @@ class Piece_Right_Validator_File extends Piece_Right_Validator_Common
      * @return mixed the mime-type string, or false if failed.
      * @see http://www.php.net/manual/en/ref.fileinfo.php
      */
-    function _detectMimeWithFileinfo($filename)
+    private function _detectMimeWithFileinfo($filename)
     {
         $info = finfo_open(FILEINFO_MIME);
         $mime = finfo_file($info, $filename);
@@ -277,22 +302,7 @@ class Piece_Right_Validator_File extends Piece_Right_Validator_Common
     }
 
     // }}}
-    // {{{ _initialize()
-
-    /**
-     * Initializes properties.
-     */
-    function _initialize()
-    {
-        $this->_addRule('maxSize', null);
-        $this->_addRule('minSize', 0);
-        $this->_addRule('mimetype', null);
-        $this->_addRule('useMagic', false);
-        $this->_addRule('messagesByErrorCode', array());
-    }
-
-    // }}}
-    // {{{ _initialize()
+    // {{{ _setMessageByErrorCode()
 
     /**
      * Sets an appropriate message correspoiding to a given error code.
@@ -300,10 +310,10 @@ class Piece_Right_Validator_File extends Piece_Right_Validator_Common
      * @param integer $actualErrorCode
      * @since Method available since Release 1.9.0
      */
-    function _setMessageByErrorCode($actualErrorCode)
+    private function _setMessageByErrorCode($actualErrorCode)
     {
         $messagesByErrorCode = $this->_getRule('messagesByErrorCode');
-        foreach ($GLOBALS['PIECE_RIGHT_Validator_File_ErrorCodes'] as $errorCode) {
+        foreach (self::_getErrorCodes() as $errorCode) {
             if (!defined($errorCode)) {
                 continue;
             }
@@ -319,6 +329,20 @@ class Piece_Right_Validator_File extends Piece_Right_Validator_Common
                 $this->setMessage($messagesByErrorCode[$errorCode]);
             }
         }
+    }
+
+    // }}}
+    // {{{ _getErrorCodes()
+
+    /**
+     * Gets the error codes for file uploading.
+     *
+     * @return array
+     * @since Method available since Release 2.0.0
+     */
+    private static function _getErrorCodes()
+    {
+        return self::$_errorCodes;
     }
 
     /**#@-*/

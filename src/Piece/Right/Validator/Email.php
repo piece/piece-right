@@ -2,9 +2,9 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 
 /**
- * PHP versions 4 and 5
+ * PHP version 5
  *
- * Copyright (c) 2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,7 +29,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @link       http://www.ecodebank.com/details/?catid=8&catsubid=13&nid=7
@@ -37,9 +37,10 @@
  * @since      File available since Release 0.5.0
  */
 
-require_once 'Piece/Right/Validator/Common.php';
+namespace Piece::Right::Validator;
+use Piece::Right::Validator::Common;
 
-// {{{ Piece_Right_Validator_Email
+// {{{ Email
 
 /**
  * A validator which is used to check whether a value is valid email address
@@ -48,14 +49,14 @@ require_once 'Piece/Right/Validator/Common.php';
  * This code is based on Clay Loveless's validateEmailFormat.php.
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @link       http://www.ecodebank.com/details/?catid=8&catsubid=13&nid=7
  * @link       http://www.ietf.org/rfc/rfc0822.txt?number=822
  * @since      Class available since Release 0.5.0
  */
-class Piece_Right_Validator_Email extends Piece_Right_Validator_Common
+class Email extends Common
 {
 
     // {{{ properties
@@ -67,11 +68,17 @@ class Piece_Right_Validator_Email extends Piece_Right_Validator_Common
     /**#@-*/
 
     /**#@+
+     * @access protected
+     */
+
+    /**#@-*/
+
+    /**#@+
      * @access private
      */
 
-    var $_addrSpec;
-    var $_addrSpecForDotBeforeAtmark;
+    private $_addrSpec;
+    private $_addrSpecForDotBeforeAtmark;
 
     /**#@-*/
 
@@ -88,20 +95,20 @@ class Piece_Right_Validator_Email extends Piece_Right_Validator_Common
      * @param string $value
      * @return boolean
      */
-    function validate($value)
+    public function validate($value)
     {
         $allowDotBeforeAtmark = $this->_getRule('allowDotBeforeAtmark');
         if (!$allowDotBeforeAtmark) {
-            return preg_match("/^{$this->_addrSpec}$/xSD", $value);
+            return (boolean)preg_match("/^{$this->_addrSpec}$/xSD", $value);
         } else {
-            return preg_match("/^{$this->_addrSpecForDotBeforeAtmark}$/xSD", $value);
+            return (boolean)preg_match("/^{$this->_addrSpecForDotBeforeAtmark}$/xSD", $value);
         }
     }
 
     /**#@-*/
 
     /**#@+
-     * @access private
+     * @access protected
      */
 
     // }}}
@@ -112,7 +119,7 @@ class Piece_Right_Validator_Email extends Piece_Right_Validator_Common
      *
      * @since Method available since Release 0.3.0
      */
-    function _initialize()
+    protected function _initialize()
     {
         $this->_addRule('allowDotBeforeAtmark', false);
 
@@ -148,6 +155,12 @@ class Piece_Right_Validator_Email extends Piece_Right_Validator_Common
         $this->_addrSpec = "$localPart \@ $x $domain";
         $this->_addrSpecForDotBeforeAtmark = "$localPartForDotBeforeAtmark \@ $x $domain";
     }
+
+    /**#@-*/
+
+    /**#@+
+     * @access private
+     */
 
     /**#@-*/
 

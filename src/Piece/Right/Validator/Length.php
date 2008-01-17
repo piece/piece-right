@@ -2,9 +2,9 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 
 /**
- * PHP versions 4 and 5
+ * PHP version 5
  *
- * Copyright (c) 2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,33 +29,40 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @since      File available since Release 0.1.0
  */
 
-require_once 'Piece/Right/Validator/Common.php';
+namespace Piece::Right::Validator;
+use Piece::Right::Validator::Common;
 
-// {{{ Piece_Right_Validator_Length
+// {{{ Length
 
 /**
- * A validator which is used to check whether a value length is within a
- * given range.
+ * A validator which is used to check whether a value length is within
+ * a given range.
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-class Piece_Right_Validator_Length extends Piece_Right_Validator_Common
+class Length extends Common
 {
 
     // {{{ properties
 
     /**#@+
      * @access public
+     */
+
+    /**#@-*/
+
+    /**#@+
+     * @access protected
      */
 
     /**#@-*/
@@ -79,7 +86,7 @@ class Piece_Right_Validator_Length extends Piece_Right_Validator_Common
      * @param string $value
      * @return boolean
      */
-    function validate($value)
+    public function validate($value)
     {
         $length = strlen($value);
 
@@ -105,7 +112,7 @@ class Piece_Right_Validator_Length extends Piece_Right_Validator_Common
     /**#@-*/
 
     /**#@+
-     * @access private
+     * @access protected
      */
 
     // }}}
@@ -116,12 +123,18 @@ class Piece_Right_Validator_Length extends Piece_Right_Validator_Common
      *
      * @since Method available since Release 0.3.0
      */
-    function _initialize()
+    protected function _initialize()
     {
         $this->_addRule('min');
         $this->_addRule('max');
     }
  
+    /**#@-*/
+
+    /**#@+
+     * @access private
+     */
+
     /**#@-*/
 
     // }}}

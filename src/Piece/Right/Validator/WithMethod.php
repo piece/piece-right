@@ -2,9 +2,9 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 
 /**
- * PHP versions 4 and 5
+ * PHP version 5
  *
- * Copyright (c) 2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,28 +29,29 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @since      File available since Release 0.3.0
  */
 
-require_once 'Piece/Right/Validator/Common.php';
-require_once 'Piece/Right/ClassLoader.php';
+namespace Piece::Right::Validator;
+use Piece::Right::Validator::Common;
+use Piece::Right::Exception;
 
-// {{{ Piece_Right_Validator_WithMethod
+// {{{ WithMethod
 
 /**
- * A validator which is used to validate the value of a field with an
- * arbitrary method.
+ * A validator which is used to validate the value of a field with
+ * an arbitrary method.
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 0.3.0
  */
-class Piece_Right_Validator_WithMethod extends Piece_Right_Validator_Common
+class WithMethod extends Common
 {
 
     // {{{ properties
@@ -62,10 +63,16 @@ class Piece_Right_Validator_WithMethod extends Piece_Right_Validator_Common
     /**#@-*/
 
     /**#@+
-     * @access private
+     * @access protected
      */
 
-    var $_isArrayable = true;
+    protected $_isArrayable = true;
+
+    /**#@-*/
+
+    /**#@+
+     * @access private
+     */
 
     /**#@-*/
 
@@ -81,11 +88,9 @@ class Piece_Right_Validator_WithMethod extends Piece_Right_Validator_Common
      *
      * @param mixed $value
      * @return boolean
-     * @throws PIECE_RIGHT_ERROR_NOT_READABLE
-     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
-     * @throws PIECE_RIGHT_ERROR_CANNOT_READ
+     * @throws Piece::Right::Exception
      */
-    function validate($value)
+    public function validate($value)
     {
         $class = $this->_getRule('class');
         $method = $this->_getRule('method');
@@ -94,40 +99,33 @@ class Piece_Right_Validator_WithMethod extends Piece_Right_Validator_Common
             return false;
         }
 
-        if (!Piece_Right_ClassLoader::loaded($class)) {
-            Piece_Right_ClassLoader::load($class, $this->_getRule('directory'));
-            if (Piece_Right_Error::hasErrors('exception')) {
-                return;
-            }
-
-            if (!Piece_Right_ClassLoader::loaded($class)) {
-                Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                        "The class [ $class ] not found in the loaded file.",
-                                        'exception',
-                                        array('validator' => __CLASS__)
-                                        );
-                return;
-            }
+        if (!class_exists($class)) {
+            throw new Exception("Unknown class $class, be sure the class exists and is loaded prior to use.");
         }
 
         if ($isStatic) {
             $callback = array($class, $method);
         } else {
-            $instance = &new $class();
-            $callback = array(&$instance, $method);
+            $instance = new $class();
+            $callback = array($instance, $method);
         }
 
         if (!is_array($value)) {
-            return call_user_func_array($callback,
-                                        array($value, &$this->_payload, &$this->_results)
-                                        );
+            if ($isStatic) {
+                return $class::$method($value, $this->_payload, $this->_results);
+            } else {
+                return $instance->$method($value, $this->_payload, $this->_results);
+            }
         }
 
         foreach ($value as $target) {
-            if (!call_user_func_array($callback,
-                                      array($target, &$this->_payload, &$this->_results)
-                                      )
-                ) {
+            if ($isStatic) {
+                $result = $class::$method($target, $this->_payload, $this->_results);
+            } else {
+                $result = $instance->$method($target, $this->_payload, $this->_results);
+            }
+
+            if (!$result) {
                 return false;
             }
         }
@@ -138,7 +136,7 @@ class Piece_Right_Validator_WithMethod extends Piece_Right_Validator_Common
     /**#@-*/
 
     /**#@+
-     * @access private
+     * @access protected
      */
 
     // }}}
@@ -149,14 +147,19 @@ class Piece_Right_Validator_WithMethod extends Piece_Right_Validator_Common
      *
      * @since Method available since Release 0.3.0
      */
-    function _initialize()
+    protected function _initialize()
     {
         $this->_addRule('class');
         $this->_addRule('method');
         $this->_addRule('isStatic', true);
-        $this->_addRule('directory');
     }
- 
+
+    /**#@-*/
+
+    /**#@+
+     * @access private
+     */
+
     /**#@-*/
 
     // }}}
