@@ -45,7 +45,7 @@ require_once dirname(__FILE__) . '/../../../prepare.php';
  * Some specs for Piece::Right::Config::Factory.
  *
  * @package    Piece_Right
- * @copyright  2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 2.0.0
