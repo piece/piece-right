@@ -2,9 +2,9 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 
 /**
- * PHP versions 4 and 5
+ * PHP version 5
  *
- * Copyright (c) 2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,27 +29,27 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @since      File available since Release 0.1.0
  */
 
-require_once 'Piece/Right/Config/Field.php';
-require_once 'Piece/Right/Error.php';
+namespace Piece::Right;
+use Piece::Right::Config::Field;
 
-// {{{ Piece_Right_Config
+// {{{ Config
 
 /**
  * The configuration container for Piece_Right validation sets.
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-class Piece_Right_Config
+class Config
 {
 
     // {{{ properties
@@ -61,10 +61,16 @@ class Piece_Right_Config
     /**#@-*/
 
     /**#@+
+     * @access protected
+     */
+
+    /**#@-*/
+
+    /**#@+
      * @access private
      */
 
-    var $_fields = array();
+    private $_fields = array();
 
     /**#@-*/
 
@@ -83,9 +89,9 @@ class Piece_Right_Config
      * @param array  $rules
      * @param string $message
      */
-    function addValidation($fieldName, $validatorName, $rules = array(),
-                           $message = null, $useInFinals = false
-                           )
+    public function addValidation($fieldName, $validatorName, $rules = array(),
+                                  $message = null, $useInFinals = false
+                                  )
     {
         $this->addField($fieldName);
         $this->_fields[$fieldName]->addValidation($validatorName,
@@ -101,14 +107,13 @@ class Piece_Right_Config
     /**
      * Merges the given configuretion into the existing configuration.
      *
-     * @param Piece_Right_Config &$config
+     * @param Piece::Right::Config $config
      */
-    function merge(&$config)
+    public function merge(Config $config)
     {
         foreach ($config->getFieldNames() as $fieldName) {
             if (!$this->_hasField($fieldName)) {
-                $field = &new Piece_Right_Config_Field();
-                $this->_fields[$fieldName] = &$field;
+                $this->_fields[$fieldName] = new Field();
             }
 
             $this->_fields[$fieldName]->merge($config->getField($fieldName));
@@ -125,7 +130,7 @@ class Piece_Right_Config
      * @param array  $required
      * @since Method available since Release 0.3.0
      */
-    function setRequired($fieldName, $required = array())
+    public function setRequired($fieldName, $required = array())
     {
         $this->addField($fieldName);
         $this->_fields[$fieldName]->setRequired($required);
@@ -139,15 +144,13 @@ class Piece_Right_Config
      *
      * @param string $fieldName
      * @return boolean
-     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
+     * @throws Piece::Right::Exception
      * @since Method available since Release 0.3.0
      */
-    function isRequired($fieldName)
+    public function isRequired($fieldName)
     {
         if (!$this->_hasField($fieldName)) {
-            Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                    "The field [ $fieldName ] not found."
-                                    );
+            throw new Exception("The field [ $fieldName ] is not found.");
         }
 
         return $this->_fields[$fieldName]->isRequired();
@@ -161,15 +164,13 @@ class Piece_Right_Config
      *
      * @param string $fieldName
      * @return string
-     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
+     * @throws Piece::Right::Exception
      * @since Method available since Release 0.3.0
      */
-    function getRequiredMessage($fieldName)
+    public function getRequiredMessage($fieldName)
     {
         if (!$this->_hasField($fieldName)) {
-            Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                    "The field [ $fieldName ] not found."
-                                    );
+            throw new Exception("The field [ $fieldName ] is not found.");
         }
 
         return $this->_fields[$fieldName]->getRequiredMessage();
@@ -185,7 +186,7 @@ class Piece_Right_Config
      * @param string $filterName
      * @since Method available since Release 0.3.0
      */
-    function addFilter($fieldName, $filterName)
+    public function addFilter($fieldName, $filterName)
     {
         $this->addField($fieldName);
         $this->_fields[$fieldName]->addFilter($filterName);
@@ -201,7 +202,7 @@ class Piece_Right_Config
      * @param array  $watcher
      * @since Method available since Release 0.3.0
      */
-    function setWatcher($fieldName, $watcher)
+    public function setWatcher($fieldName, $watcher)
     {
         $this->addField($fieldName);
         $this->_fields[$fieldName]->setWatcher($watcher);
@@ -215,15 +216,13 @@ class Piece_Right_Config
      *
      * @param string $fieldName
      * @return array
-     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
+     * @throws Piece::Right::Exception
      * @since Method available since Release 0.3.0
      */
-    function getWatcher($fieldName)
+    public function getWatcher($fieldName)
     {
         if (!$this->_hasField($fieldName)) {
-            Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                    "The field [ $fieldName ] not found."
-                                    );
+            throw new Exception("The field [ $fieldName ] is not found.");
         }
 
         return $this->_fields[$fieldName]->getWatcher();
@@ -238,11 +237,10 @@ class Piece_Right_Config
      * @param string $fieldName
      * @since Method available since Release 0.3.0
      */
-    function addField($fieldName)
+    public function addField($fieldName)
     {
         if (!$this->_hasField($fieldName)) {
-            $field = &new Piece_Right_Config_Field();
-            $this->_fields[$fieldName] = &$field;
+            $this->_fields[$fieldName] = new Field();
         }
 
         if (!$this->_fields[$fieldName]->hasMessageVariable('_name')) {
@@ -260,7 +258,7 @@ class Piece_Right_Config
      * @param boolean $forceValidation
      * @since Method available since Release 0.3.0
      */
-    function setForceValidation($fieldName, $forceValidation = true)
+    public function setForceValidation($fieldName, $forceValidation = true)
     {
         $this->addField($fieldName);
         $this->_fields[$fieldName]->setForceValidation($forceValidation);
@@ -273,15 +271,13 @@ class Piece_Right_Config
      * Forces validation for the given field.
      *
      * @param string $fieldName
-     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
+     * @throws Piece::Right::Exception
      * @since Method available since Release 0.3.0
      */
-    function forceValidation($fieldName)
+    public function forceValidation($fieldName)
     {
         if (!$this->_hasField($fieldName)) {
-            Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                    "The field [ $fieldName ] not found."
-                                    );
+            throw new Exception("The field [ $fieldName ] is not found.");
         }
 
         return $this->_fields[$fieldName]->forceValidation();
@@ -297,7 +293,7 @@ class Piece_Right_Config
      * @param array  $pseudo
      * @since Method available since Release 0.3.0
      */
-    function setPseudo($fieldName, $pseudo)
+    public function setPseudo($fieldName, $pseudo)
     {
         $this->addField($fieldName);
         $this->_fields[$fieldName]->setPseudo($pseudo);
@@ -311,15 +307,13 @@ class Piece_Right_Config
      *
      * @param string $fieldName
      * @return boolean
-     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
+     * @throws Piece::Right::Exception
      * @since Method available since Release 0.3.0
      */
-    function isPseudo($fieldName)
+    public function isPseudo($fieldName)
     {
         if (!$this->_hasField($fieldName)) {
-            Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                    "The field [ $fieldName ] not found."
-                                    );
+            throw new Exception("The field [ $fieldName ] is not found.");
         }
 
         return $this->_fields[$fieldName]->isPseudo();
@@ -335,7 +329,7 @@ class Piece_Right_Config
      * @param string $description
      * @since Method available since Release 0.3.0
      */
-    function setDescription($fieldName, $description)
+    public function setDescription($fieldName, $description)
     {
         $this->addField($fieldName);
         $this->_fields[$fieldName]->addMessageVariable('_description', $description);
@@ -352,7 +346,7 @@ class Piece_Right_Config
      * @param string $value
      * @since Method available since Release 0.3.0
      */
-    function addMessageVariable($fieldName, $variableName, $value)
+    public function addMessageVariable($fieldName, $variableName, $value)
     {
         $this->addField($fieldName);
         $this->_fields[$fieldName]->addMessageVariable($variableName, $value);
@@ -366,7 +360,7 @@ class Piece_Right_Config
      *
      * @return array
      */
-    function getFieldNames()
+    public function getFieldNames()
     {
         return array_keys($this->_fields);
     }
@@ -375,20 +369,16 @@ class Piece_Right_Config
     // {{{ getField()
 
     /**
-     * Gets the Piece_Right_Config_Field object for the given field.
+     * Gets the Field object for the given field.
      *
      * @param string $fieldName
-     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
-     * @return Piece_Right_Config_Field
+     * @throws Piece::Right::Exception
+     * @return Piece::Right::Config::Field
      */
-    function &getField($fieldName)
+    public function getField($fieldName)
     {
         if (!$this->_hasField($fieldName)) {
-            Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                    "The field [ $fieldName ] not found."
-                                    );
-            $return = null;
-            return $return;
+            throw new Exception("The field [ $fieldName ] is not found.");
         }
 
         return $this->_fields[$fieldName];
@@ -402,15 +392,13 @@ class Piece_Right_Config
      *
      * @param string $fieldName
      * @return array
-     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
+     * @throws Piece::Right::Exception
      * @since Method available since Release 1.8.0
      */
-    function getValidations($fieldName)
+    public function getValidations($fieldName)
     {
         if (!$this->_hasField($fieldName)) {
-            Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                    "The field [ $fieldName ] not found."
-                                    );
+            throw new Exception("The field [ $fieldName ] is not found.");
         }
 
         return $this->_fields[$fieldName]->getValidations();
@@ -424,15 +412,13 @@ class Piece_Right_Config
      *
      * @param string $fieldName
      * @return array
-     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
+     * @throws Piece::Right::Exception
      * @since Method available since Release 1.8.0
      */
-    function getFilters($fieldName)
+    public function getFilters($fieldName)
     {
         if (!$this->_hasField($fieldName)) {
-            Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                    "The field [ $fieldName ] not found."
-                                    );
+            throw new Exception("The field [ $fieldName ] is not found.");
         }
 
         return $this->_fields[$fieldName]->getFilters();
@@ -446,15 +432,13 @@ class Piece_Right_Config
      *
      * @param string $fieldName
      * @return array
-     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
+     * @throws Piece::Right::Exception
      * @since Method available since Release 1.8.0
      */
-    function getPseudo($fieldName)
+    public function getPseudo($fieldName)
     {
         if (!$this->_hasField($fieldName)) {
-            Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                    "The field [ $fieldName ] not found."
-                                    );
+            throw new Exception("The field [ $fieldName ] is not found.");
         }
 
         return $this->_fields[$fieldName]->getPseudo();
@@ -468,16 +452,13 @@ class Piece_Right_Config
      *
      * @param string $fieldName
      * @return array
-     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
+     * @throws Piece::Right::Exception
      * @since Method available since Release 1.8.0
      */
-    function getMessageVariables($fieldName)
+    public function getMessageVariables($fieldName)
     {
         if (!$this->_hasField($fieldName)) {
-            Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                    "The field [ $fieldName ] not found."
-                                    );
-            return;
+            throw new Exception("The field [ $fieldName ] is not found.");
         }
 
         return $this->_fields[$fieldName]->getMessageVariables();
@@ -493,7 +474,7 @@ class Piece_Right_Config
      * @param string $basedOn
      * @since Method available since Release 1.8.0
      */
-    function setBasedOn($fieldName, $basedOn)
+    public function setBasedOn($fieldName, $basedOn)
     {
         $this->addField($fieldName);
         $this->_fields[$fieldName]->setBasedOn($basedOn);
@@ -507,14 +488,13 @@ class Piece_Right_Config
      *
      * @param string $fieldName
      * @return string
+     * @throws Piece::Right::Exception
      * @since Method available since Release 1.8.0
      */
-    function getBasedOn($fieldName)
+    public function getBasedOn($fieldName)
     {
         if (!$this->_hasField($fieldName)) {
-            Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                    "The field [ $fieldName ] not found."
-                                    );
+            throw new Exception("The field [ $fieldName ] is not found.");
         }
 
         return $this->_fields[$fieldName]->getBasedOn();
@@ -528,14 +508,13 @@ class Piece_Right_Config
      *
      * @param string $fieldName
      * @return boolean
+     * @throws Piece::Right::Exception
      * @since Method available since Release 1.8.0
      */
-    function hasBasedOn($fieldName)
+    public function hasBasedOn($fieldName)
     {
         if (!$this->_hasField($fieldName)) {
-            Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                    "The field [ $fieldName ] not found."
-                                    );
+            throw new Exception("The field [ $fieldName ] is not found.");
         }
 
         return $this->_fields[$fieldName]->hasBasedOn();
@@ -547,19 +526,16 @@ class Piece_Right_Config
     /**
      * Extends the given field using the field in the template.
      *
-     * @param string             $fieldName
-     * @param string             $basedOn
-     * @param Piece_Right_Config &$template
-     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
+     * @param string               $fieldName
+     * @param string               $basedOn
+     * @param Piece::Right::Config $template
+     * @throws Piece::Right::Exception
      * @since Method available since Release 1.8.0
      */
-    function inherit($fieldName, $basedOn, &$template)
+    public function inherit($fieldName, $basedOn, Config $template)
     {
         if (!$this->_hasField($fieldName)) {
-            Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                    "The field [ $fieldName ] not found."
-                                    );
-            return;
+            throw new Exception("The field [ $fieldName ] is not found.");
         }
 
         if (version_compare(phpversion(), '5.0.0', '>=')) {
@@ -570,12 +546,14 @@ class Piece_Right_Config
             $this->_fields[$fieldName] = $template->getField($basedOn);
         }
 
-        if (Piece_Right_Error::hasErrors('exception')) {
-            return;
-        }
-
         $this->_fields[$fieldName]->merge($field);
     }
+
+    /**#@-*/
+
+    /**#@+
+     * @access protected
+     */
 
     /**#@-*/
 
@@ -593,7 +571,7 @@ class Piece_Right_Config
      * @return boolean
      * @since Method available since Release 1.8.0
      */
-    function _hasField($fieldName)
+    private function _hasField($fieldName)
     {
         return array_key_exists($fieldName, $this->_fields);
     }

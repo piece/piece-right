@@ -4,7 +4,7 @@
 /**
  * PHP version 5
  *
- * Copyright (c) 2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,98 +28,27 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    Piece_Right
- * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @package    Piece_Flow
+ * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
- * @since      File available since Release 1.7.0
+ * @since      File available since Release 2.0.0
  */
 
 namespace Piece::Right;
 
-// {{{ Env
+// {{{ Exception
 
 /**
- * The state holder for an application with Piece_Right.
+ * An exception class for Piece_Right.
  *
- * @package    Piece_Right
- * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @package    Piece_Flow
+ * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
- * @since      Class available since Release 1.7.0
+ * @since      Class available since Release 2.0.0
  */
-class Env
-{
-
-    // {{{ properties
-
-    /**#@+
-     * @access public
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access protected
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access private
-     */
-
-    private static $isProduction = true;
-
-    /**#@-*/
-
-    /**#@+
-     * @access public
-     * @static
-     */
-
-    // }}}
-    // {{{ setIsProduction()
-
-    /**
-     * Sets whether the current environment is production or not.
-     *
-     * @param boolean $isProduction
-     */
-    public static function setIsProduction($isProduction)
-    {
-        self::$isProduction = $isProduction;
-    }
-
-    // }}}
-    // {{{ isProduction()
-
-    /**
-     * Returns whether the current environment is production or not.
-     *
-     * @return boolean
-     */
-    public static function isProduction()
-    {
-        return self::$isProduction;
-    }
-
-    /**#@-*/
-
-    /**#@+
-     * @access protected
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access private
-     */
-
-    /**#@-*/
-
-    // }}}
-}
+class Exception extends ::Exception {}
 
 // }}}
 

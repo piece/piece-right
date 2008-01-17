@@ -2,7 +2,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 
 /**
- * PHP versions 4 and 5
+ * PHP version 5
  *
  * Copyright (c) 2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
@@ -35,28 +35,23 @@
  * @since      File available since Release 0.1.0
  */
 
-require_once 'Piece/Right/Config.php';
-require_once 'Piece/Right/Error.php';
+namespace Piece::Right::Config;
+use Piece::Right::Config;
+use Piece::Right::Exception;
+use Piece::Right::Env;
+
 require_once 'Cache/Lite/File.php';
-require_once 'PEAR.php';
-
-if (version_compare(phpversion(), '5.0.0', '<')) {
-    require_once 'spyc.php';
-} else {
-    require_once 'spyc.php5';
-}
-
-require_once 'Piece/Right/Env.php';
+require_once 'spyc.php5';
 
 // {{{ GLOBALS
 
 $GLOBALS['PIECE_RIGHT_Config_Factory_UseUnderscoreAsDirectorySeparator'] = false;
 
 // }}}
-// {{{ Piece_Right_Config_Factory
+// {{{ Factory
 
 /**
- * A factory class for creating Piece_Right_Config objects.
+ * The configuration reader.
  *
  * @package    Piece_Right
  * @copyright  2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
@@ -64,13 +59,19 @@ $GLOBALS['PIECE_RIGHT_Config_Factory_UseUnderscoreAsDirectorySeparator'] = false
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-class Piece_Right_Config_Factory
+class Factory
 {
 
     // {{{ properties
 
     /**#@+
      * @access public
+     */
+
+    /**#@-*/
+
+    /**#@+
+     * @access protected
      */
 
     /**#@-*/
@@ -83,33 +84,34 @@ class Piece_Right_Config_Factory
 
     /**#@+
      * @access public
+     * @static
      */
 
     // }}}
     // {{{ factory()
 
     /**
-     * Creates a Piece_Right_Config object from a configuration file or a
-     * cache.
+     * Creates a Config object from a configuration file or a cache.
      *
      * @param string $validationSetName
      * @param string $configDirectory
      * @param string $cacheDirectory
-     * @param string $TemplateName
-     * @return Piece_Right_Config
-     * @throws PIECE_RIGHT_ERROR_INVALID_CONFIGURATION
-     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
-     * @static
+     * @param string $templateName
+     * @return Piece::Right::Config
+     * @throws Piece::Right::Exception
      */
-    function &factory($validationSetName = null,
-                      $configDirectory   = null,
-                      $cacheDirectory    = null,
-                      $templateName      = null
-                      )
+    public static function factory($validationSetName = null,
+                                   $configDirectory   = null,
+                                   $cacheDirectory    = null,
+                                   $templateName      = null
+                                   )
     {
         if (is_null($validationSetName) || is_null($configDirectory)) {
-            $config = &new Piece_Right_Config();
-            return $config;
+            return new Config();
+        }
+
+        if (!file_exists($configDirectory)) {
+            throw new Exception("The configuration directory [ $configDirectory ] is not found.");
         }
 
         if ($GLOBALS['PIECE_RIGHT_Config_Factory_UseUnderscoreAsDirectorySeparator']) {
@@ -117,83 +119,46 @@ class Piece_Right_Config_Factory
         }
 
         $configFile = "$configDirectory/$validationSetName.yaml";
-
         if (!file_exists($configFile)) {
-            Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                    "The configuration file [ $configFile ] not found."
-                                    );
-            $return = null;
-            return $return;
+            throw new Exception("The configuration file [ $configFile ] is not found.");
         }
 
         if (!is_readable($configFile)) {
-            Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_READABLE,
-                                    "The configuration file [ $configFile ] is not readable."
-                                    );
-            $return = null;
-            return $return;
+            throw new Exception("The configuration file [ $configFile ] is not readable.");
         }
 
         while (true) {
-            if (is_null($cacheDirectory)) {
-                $config = &Piece_Right_Config_Factory::_getConfigurationFromFile($configFile);
-                break;
-            }
-
             if (!file_exists($cacheDirectory)) {
-                Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
-                Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                        "The cache directory [ $cacheDirectory ] not found.",
-                                        'warning'
-                                        );
-                Piece_Right_Error::popCallback();
-
-                $config = &Piece_Right_Config_Factory::_getConfigurationFromFile($configFile);
-                break;
+                throw new Exception("The cache directory [ $cacheDirectory ] is not found.");
             }
 
             if (!is_readable($cacheDirectory) || !is_writable($cacheDirectory)) {
-                Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
-                Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_READABLE,
-                                        "The cache directory [ $cacheDirectory ] is not readable or writable.",
-                                        'warning'
-                                        );
-                Piece_Right_Error::popCallback();
-
-                $config = &Piece_Right_Config_Factory::_getConfigurationFromFile($configFile);
-                break;
+                throw new Exception("The cache directory [ $cacheDirectory ] is not readable or writable.");
             }
 
-            $config = &Piece_Right_Config_Factory::_getConfiguration($configFile, $cacheDirectory);
+            $config = self::_getConfiguration($configFile, $cacheDirectory);
             break;
-        }
-
-        if (Piece_Right_Error::hasErrors('exception')) {
-            $return = null;
-            return $return;
         }
 
         if (is_null($templateName)) {
             return $config;
         }
 
-        $template = &Piece_Right_Config_Factory::factory($templateName,
-                                                         $configDirectory,
-                                                         $cacheDirectory,
-                                                         null
-                                                         );
-        if (Piece_Right_Error::hasErrors('exception')) {
-            $return = null;
-            return $return;
-        }
+        $template = self::factory($templateName,
+                                  $configDirectory,
+                                  $cacheDirectory,
+                                  null
+                                  );
 
         foreach ($config->getFieldNames() as $fieldName) {
             if (!$config->hasBasedOn($fieldName)) {
                 continue;
             }
 
-            $basedOn = $config->getBasedOn($fieldName);
-            $config->inherit($fieldName, $basedOn, $template);
+            $config->inherit($fieldName,
+                             $config->getBasedOn($fieldName),
+                             $template
+                             );
         }
 
         return $config;
@@ -208,7 +173,7 @@ class Piece_Right_Config_Factory
      *
      * @param boolean $treatUnderscoreAsDirectorySeparator
      */
-    function setUseUnderscoreAsDirectorySeparator($useUnderscoreAsDirectorySeparator)
+    public static function setUseUnderscoreAsDirectorySeparator($useUnderscoreAsDirectorySeparator)
     {
         $GLOBALS['PIECE_RIGHT_Config_Factory_UseUnderscoreAsDirectorySeparator'] = $useUnderscoreAsDirectorySeparator;
     }
@@ -216,31 +181,37 @@ class Piece_Right_Config_Factory
     /**#@-*/
 
     /**#@+
+     * @access protected
+     */
+
+    /**#@-*/
+
+    /**#@+
      * @access private
+     * @static
      */
 
     // }}}
     // {{{ _getConfiguration()
 
     /**
-     * Gets a Piece_Right_Config object from a configuration file or a cache.
+     * Gets a Config object from a configuration file or a cache.
      *
      * @param string $masterFile
      * @param string $cacheDirectory
-     * @return Piece_Right_Config
-     * @throws PIECE_RIGHT_ERROR_INVALID_CONFIGURATION
-     * @static
+     * @return Piece::Right::Config
+     * @throws Piece::Right::Exception
      */
-    function &_getConfiguration($masterFile, $cacheDirectory)
+    private static function _getConfiguration($masterFile, $cacheDirectory)
     {
         $masterFile = realpath($masterFile);
-        $cache = &new Cache_Lite_File(array('cacheDir' => "$cacheDirectory/",
-                                            'masterFile' => $masterFile,
-                                            'automaticSerialization' => true,
-                                            'errorHandlingAPIBreak' => true)
-                                      );
+        $cache = new ::Cache_Lite_File(array('cacheDir' => "$cacheDirectory/",
+                                             'masterFile' => $masterFile,
+                                             'automaticSerialization' => true,
+                                             'errorHandlingAPIBreak' => true)
+                                       );
 
-        if (!Piece_Right_Env::isProduction()) {
+        if (!Env::isProduction()) {
             $cache->remove($masterFile);
         }
 
@@ -249,32 +220,15 @@ class Piece_Right_Config_Factory
          * calling PEAR::raiseError in default.
          */
         $config = $cache->get($masterFile);
-        if (PEAR::isError($config)) {
-            Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
-            Piece_Right_Error::push(PIECE_RIGHT_ERROR_CANNOT_READ,
-                                    "Cannot read the cache file in the directory [ $cacheDirectory ].",
-                                    'warning'
-                                    );
-            Piece_Right_Error::popCallback();
-
-            return Piece_Right_Config_Factory::_getConfigurationFromFile($masterFile);
+        if (::PEAR::isError($config)) {
+            throw new Exception("Cannot read the cache file in the directory [ $cacheDirectory ].");
         }
 
         if (!$config) {
-            $config = &Piece_Right_Config_Factory::_getConfigurationFromFile($masterFile);
-            if (Piece_Right_Error::hasErrors('exception')) {
-                $return = null;
-                return $return;
-            }
-
+            $config = self::_getConfigurationFromFile($masterFile);
             $result = $cache->save($config);
-            if (PEAR::isError($result)) {
-                Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
-                Piece_Right_Error::push(PIECE_RIGHT_ERROR_CANNOT_WRITE,
-                                        "Cannot write the Piece_Right_Config object to the cache file in the directory [ $cacheDirectory ].",
-                                        'warning'
-                                        );
-                Piece_Right_Error::popCallback();
+            if (::PEAR::isError($result)) {
+                throw new Exception("Cannot write the Config object to the cache file in the directory [ $cacheDirectory ].");
             }
         }
 
@@ -285,24 +239,20 @@ class Piece_Right_Config_Factory
     // {{{ _getConfigurationFromFile()
 
     /**
-     * Parses the given file and returns a Piece_Right_Config object.
+     * Parses the given file and returns a Config object.
      *
      * @param string $file
-     * @return Piece_Right_Config
-     * @throws PIECE_RIGHT_ERROR_INVALID_CONFIGURATION
-     * @static
+     * @return Piece::Right::Config
+     * @throws Piece::Right::Exception
      */
-    function &_getConfigurationFromFile($file)
+    private static function _getConfigurationFromFile($file)
     {
-        $config = &new Piece_Right_Config();
-        $yaml = Spyc::YAMLLoad($file);
+        $config = new Config();
+        $yaml = ::Spyc::YAMLLoad($file);
+
         foreach ($yaml as $validation) {
             if (!array_key_exists('name', $validation)) {
-                Piece_Right_Error::push(PIECE_RIGHT_ERROR_INVALID_CONFIGURATION,
-                                        "A configuration in the configuration file [ $file ] has no 'name' element."
-                                        );
-                $return = null;
-                return $return;
+                throw new Exception("The \"name\" element is required in the validation definition file [ $file ].");
             }
 
             $config->addField($validation['name']);

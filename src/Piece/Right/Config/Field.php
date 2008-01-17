@@ -2,9 +2,9 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 
 /**
- * PHP versions 4 and 5
+ * PHP version 5
  *
- * Copyright (c) 2007 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,22 +29,24 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @copyright  2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @since      File available since Release 1.8.0
  */
 
-// {{{ Piece_Right_Config_Field
+namespace Piece::Right::Config;
+
+// {{{ Field
 
 /**
  * @package    Piece_Right
- * @copyright  2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 1.8.0
  */
-class Piece_Right_Config_Field
+class Field
 {
 
     // {{{ properties
@@ -56,17 +58,23 @@ class Piece_Right_Config_Field
     /**#@-*/
 
     /**#@+
+     * @access protected
+     */
+
+    /**#@-*/
+
+    /**#@+
      * @access private
      */
 
-    var $_required = array('enabled' => null, 'message' => null);
-    var $_filters = array();
-    var $_validations = array();
-    var $_watcher;
-    var $_pseudo;
-    var $_messageVariables = array();
-    var $_forceValidation;
-    var $_basedOn;
+    private $_required = array('enabled' => null, 'message' => null);
+    private $_filters = array();
+    private $_validations = array();
+    private $_watcher;
+    private $_pseudo;
+    private $_messageVariables = array();
+    private $_forceValidation;
+    private $_basedOn;
 
     /**#@-*/
 
@@ -74,7 +82,7 @@ class Piece_Right_Config_Field
      * @access public
      */
 
-    function setRequired($required)
+    public function setRequired($required)
     {
         if (array_key_exists('enabled', $required)) {
             if (!is_null($required['enabled'])) {
@@ -91,26 +99,26 @@ class Piece_Right_Config_Field
         }
     }
 
-    function getRequired()
+    public function getRequired()
     {
         return $this->_required;
     }
 
-    function isRequired()
+    public function isRequired()
     {
         if (!is_null($this->_required)) {
-            return $this->_required['enabled'];
+            return (boolean)$this->_required['enabled'];
         } else {
             return false;
         }
     }
 
-    function getRequiredMessage()
+    public function getRequiredMessage()
     {
         return $this->_required['message'];
     }
 
-    function merge(&$field)
+    public function merge(&$field)
     {
         $required = $field->getRequired();
         if (!is_null($required)) {
@@ -157,17 +165,17 @@ class Piece_Right_Config_Field
         }
     }
 
-    function addFilter($filterName)
+    public function addFilter($filterName)
     {
         $this->_filters[] = $filterName;
     }
 
-    function getFilters()
+    public function getFilters()
     {
         return $this->_filters;
     }
 
-    function addValidation($validatorName, $rules, $message, $useInFinals)
+    public function addValidation($validatorName, $rules, $message, $useInFinals)
     {
         $this->_validations[] = array('validator'   => $validatorName,
                                       'rules'       => $rules,
@@ -176,32 +184,32 @@ class Piece_Right_Config_Field
                                       );
     }
 
-    function getValidations()
+    public function getValidations()
     {
         return $this->_validations;
     }
 
-    function setWatcher($watcher)
+    public function setWatcher($watcher)
     {
         $this->_watcher = $watcher;
     }
 
-    function getWatcher()
+    public function getWatcher()
     {
         return $this->_watcher;
     }
 
-    function setPseudo($pseudo)
+    public function setPseudo($pseudo)
     {
         $this->_pseudo = $pseudo;
     }
 
-    function getPseudo()
+    public function getPseudo()
     {
         return $this->_pseudo;
     }
 
-    function isPseudo()
+    public function isPseudo()
     {
         if (!is_null($this->_pseudo)) {
             return true;
@@ -210,27 +218,27 @@ class Piece_Right_Config_Field
         }
     }
 
-    function hasMessageVariable($variableName)
+    public function hasMessageVariable($variableName)
     {
         return array_key_exists($variableName, $this->_messageVariables);
     }
 
-    function addMessageVariable($variableName, $value)
+    public function addMessageVariable($variableName, $value)
     {
         $this->_messageVariables[$variableName] = $value;
     }
 
-    function getMessageVariables()
+    public function getMessageVariables()
     {
         return $this->_messageVariables;
     }
 
-    function setForceValidation($forceValidation)
+    public function setForceValidation($forceValidation)
     {
         $this->_forceValidation = $forceValidation;
     }
 
-    function forceValidation()
+    public function forceValidation()
     {
         if (!is_null($this->_forceValidation)) {
             return $this->_forceValidation;
@@ -247,7 +255,7 @@ class Piece_Right_Config_Field
      *
      * @param string $basedOn
      */
-    function setBasedOn($basedOn)
+    public function setBasedOn($basedOn)
     {
         $this->_basedOn = $basedOn;
     }
@@ -260,7 +268,7 @@ class Piece_Right_Config_Field
      *
      * @return string
      */
-    function getBasedOn()
+    public function getBasedOn()
     {
         return $this->_basedOn;
     }
@@ -273,7 +281,7 @@ class Piece_Right_Config_Field
      *
      * @return boolean
      */
-    function hasBasedOn()
+    public function hasBasedOn()
     {
         if (!is_null($this->_basedOn)) {
             return true;
@@ -281,6 +289,12 @@ class Piece_Right_Config_Field
             return false;
         }
     }
+
+    /**#@-*/
+
+    /**#@+
+     * @access protected
+     */
 
     /**#@-*/
 
