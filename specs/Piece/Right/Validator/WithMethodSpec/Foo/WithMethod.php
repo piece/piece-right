@@ -2,9 +2,9 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 
 /**
- * PHP versions 4 and 5
+ * PHP version 5
  *
- * Copyright (c) 2007 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,29 +29,26 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @copyright  2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
- * @since      File available since Release 1.6.0
+ * @see        DescribeRightValidatorWithMethod
+ * @since      File available since Release 0.3.0
  */
 
-require_once realpath(dirname(__FILE__) . '/../../../prepare.php');
-require_once 'PHPUnit.php';
-require_once 'Piece/Right/Validator/UniqueFields.php';
-require_once 'Piece/Right/Results.php';
+namespace Foo;
 
-// {{{ Piece_Right_Validator_UniqueFieldsTestCase
+// {{{ WithMethod
 
 /**
- * TestCase for Piece_Right_Validator_UniqueFields
- *
  * @package    Piece_Right
- * @copyright  2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
- * @since      Class available since Release 1.6.0
+ * @see        DescribeRightValidatorWithMethod
+ * @since      Class available since Release 0.3.0
  */
-class Piece_Right_Validator_UniqueFieldsTestCase extends PHPUnit_TestCase
+class WithMethod
 {
 
     // {{{ properties
@@ -63,45 +60,56 @@ class Piece_Right_Validator_UniqueFieldsTestCase extends PHPUnit_TestCase
     /**#@-*/
 
     /**#@+
+     * @access protected
+     */
+
+    /**#@-*/
+
+    /**#@+
      * @access private
      */
+
+    private $_foo = 'foo';
 
     /**#@-*/
 
     /**#@+
      * @access public
      */
+
+    public static function isValid($value, &$payload)
+    {
+        return $value == 'foo';
+    }
+
+    public function isFoo($value, &$payload)
+    {
+        return $value == $this->_foo;
+    }
+
+    public function isValidAndSetFoo($value, &$payload)
+    {
+        $payload['foo'] = 'bar';
+        if ($value == 'foo') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function compare($value, &$payload, $results)
+    {
+        $results->foo = 'bar';
+        return $value == $results->getFieldValue('bar');
+    }
+
     /**#@-*/
 
-    function testValidationOfMultipleFieldsShouldWork()
-    {
-        $results = &new Piece_Right_Results();
-        $results->setFieldValue('desiredAccount2', 'bar');
-        $results->setFieldValue('desiredAccount3', 'baz');
-        $validator = &new Piece_Right_Validator_UniqueFields();
-        $validator->setResults($results);
-        $validator->setRules(array('fields' => array('desiredAccount2', 'desiredAccount3')));
+    /**#@+
+     * @access protected
+     */
 
-        $this->assertTrue($validator->validate('foo'));
-
-        $results = &new Piece_Right_Results();
-        $results->setFieldValue('desiredAccount2', 'bar');
-        $results->setFieldValue('desiredAccount3', 'foo');
-        $validator = &new Piece_Right_Validator_UniqueFields();
-        $validator->setResults($results);
-        $validator->setRules(array('fields' => array('desiredAccount2', 'desiredAccount3')));
-
-        $this->assertFalse($validator->validate('foo'));
-
-        $results = &new Piece_Right_Results();
-        $results->setFieldValue('desiredAccount2', 'foo');
-        $results->setFieldValue('desiredAccount3', 'foo');
-        $validator = &new Piece_Right_Validator_UniqueFields();
-        $validator->setResults($results);
-        $validator->setRules(array('fields' => array('desiredAccount2', 'desiredAccount3')));
-
-        $this->assertFalse($validator->validate('foo'));
-    }
+    /**#@-*/
 
     /**#@+
      * @access private

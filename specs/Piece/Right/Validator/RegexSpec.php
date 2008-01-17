@@ -2,9 +2,9 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 
 /**
- * PHP versions 4 and 5
+ * PHP version 5
  *
- * Copyright (c) 2007 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,28 +29,28 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @copyright  2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
- * @since      File available since Release 1.6.0
+ * @since      File available since Release 2.0.0
  */
 
-require_once realpath(dirname(__FILE__) . '/../../../prepare.php');
-require_once 'PHPUnit.php';
-require_once 'Piece/Right/Validator/Unique.php';
+use Piece::Right::Validator::Regex;
 
-// {{{ Piece_Right_Validator_UniqueTestCase
+require_once dirname(__FILE__) . '/../../../prepare.php';
+
+// {{{ DescribeRightValidatorRegex
 
 /**
- * TestCase for Piece_Right_Validator_Unique
+ * Some specs for Piece::Right::Validator::Regex.
  *
  * @package    Piece_Right
- * @copyright  2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
- * @since      Class available since Release 1.6.0
+ * @since      Class available since Release 2.0.0
  */
-class Piece_Right_Validator_UniqueTestCase extends PHPUnit_TestCase
+class DescribeRightValidatorRegex extends PHPSpec_Context
 {
 
     // {{{ properties
@@ -62,31 +62,69 @@ class Piece_Right_Validator_UniqueTestCase extends PHPUnit_TestCase
     /**#@-*/
 
     /**#@+
+     * @access protected
+     */
+
+    /**#@-*/
+
+    /**#@+
      * @access private
      */
+
+    private $_validator;
 
     /**#@-*/
 
     /**#@+
      * @access public
      */
+
+    public function beforeAll()
+    {
+        $this->_validator = new Regex();
+    }
+
+    public function before()
+    {
+        $this->_validator->clear();
+    }
+
+    public function itShouldNotBeArrayable()
+    {
+        $this->spec($this->_validator)->shouldNot->beArrayable();
+    }
+
+    public function itShouldSucceed()
+    {
+        $this->_validator->setRules(array('pattern' => '/^\d+$/'));
+
+        $this->spec($this->_validator->validate('12345'))->should->beTrue();
+
+        $this->_validator->clear();
+        $this->_validator->setRules(array('pattern' => '/^\w+$/'));
+
+        $this->spec($this->_validator->validate('foo_bar_baz_12345'))->should->beTrue();
+
+        $this->_validator->clear();
+        $this->_validator->setRules(array('pattern' => '/^[a-z0-9]{10}$/i'));
+
+        $this->spec($this->_validator->validate('eapUjdCpJ8'))->should->beTrue();
+    }
+
+    public function itShouldFail()
+    {
+        $this->_validator->setRules(array('pattern' => '/^\d+$/'));
+
+        $this->spec($this->_validator->validate('foo_bar_baz_12345'))->should->beFalse();
+    }
+
     /**#@-*/
 
-    function testValidationOfArrayShouldWork()
-    {
-        $validator = &new Piece_Right_Validator_Unique();
+    /**#@+
+     * @access protected
+     */
 
-        $this->assertTrue($validator->validate(array('foo', 'bar', 'baz')));
-        $this->assertFalse($validator->validate(array('foo', 'bar', 'foo')));
-        $this->assertFalse($validator->validate(array('foo', 'foo', 'foo')));
-    }
-
-    function testValidationOfScalarShouldAlwaysFail()
-    {
-        $validator = &new Piece_Right_Validator_Unique();
-
-        $this->assertFalse($validator->validate('foo'));
-    }
+    /**#@-*/
 
     /**#@+
      * @access private

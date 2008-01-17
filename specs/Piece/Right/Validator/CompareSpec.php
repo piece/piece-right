@@ -2,9 +2,9 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 
 /**
- * PHP versions 4 and 5
+ * PHP version 5
  *
- * Copyright (c) 2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,29 +29,29 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
- * @since      File available since Release 0.3.0
+ * @since      File available since Release 2.0.0
  */
 
-require_once realpath(dirname(__FILE__) . '/../../../prepare.php');
-require_once 'PHPUnit.php';
-require_once 'Piece/Right/Validator/Compare.php';
-require_once 'Piece/Right/Results.php';
+use Piece::Right::Results;
+use Piece::Right::Validator::Compare;
 
-// {{{ Piece_Right_Validator_CompareTestCase
+require_once dirname(__FILE__) . '/../../../prepare.php';
+
+// {{{ DescribeRightValidatorCompare
 
 /**
- * TestCase for Piece_Right_Validator_Compare
+ * Some specs for Piece::Right::Validator::Compare.
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
- * @since      Class available since Release 0.3.0
+ * @since      Class available since Release 2.0.0
  */
-class Piece_Right_Validator_CompareTestCase extends PHPUnit_TestCase
+class DescribeRightValidatorCompare extends PHPSpec_Context
 {
 
     // {{{ properties
@@ -63,44 +63,72 @@ class Piece_Right_Validator_CompareTestCase extends PHPUnit_TestCase
     /**#@-*/
 
     /**#@+
+     * @access protected
+     */
+
+    /**#@-*/
+
+    /**#@+
      * @access private
      */
+
+    private $_validator;
 
     /**#@-*/
 
     /**#@+
      * @access public
      */
+
+    public function beforeAll()
+    {
+        $this->_validator = new Compare();
+    }
+
+    public function before()
+    {
+        $this->_validator->clear();
+    }
+
+    public function itShouldNotBeArrayable()
+    {
+        $this->spec($this->_validator)->shouldNot->beArrayable();
+    }
+
+    public function itShouldSucceed()
+    {
+        $results = new Results();
+        $results->setFieldValue('password2', 'foo');
+        $this->_validator->setResults($results);
+        $this->_validator->setRules(array('to' => 'password2'));
+
+        $this->spec($this->_validator->validate('foo'))->should->beTrue();
+    }
+
+    public function itShouldFail()
+    {
+        $results = new Results();
+        $results->setFieldValue('password2', 'bar');
+        $this->_validator->setResults($results);
+        $this->_validator->setRules(array('to' => 'password2'));
+
+        $this->spec($this->_validator->validate('foo'))->should->beFalse();
+
+        $this->_validator->clear();
+        $results = new Results();
+        $results->setFieldValue('password2', 'bar');
+        $this->_validator->setResults($results);
+
+        $this->spec($this->_validator->validate('foo'))->should->beFalse();
+    }
+
     /**#@-*/
 
-    function testSuccess()
-    {
-        $results = &new Piece_Right_Results();
-        $results->setFieldValue('password2', 'foo');
-        $validator = &new Piece_Right_Validator_Compare();
-        $validator->setResults($results);
-        $validator->setRules(array('to' => 'password2'));
+    /**#@+
+     * @access protected
+     */
 
-        $this->assertTrue($validator->validate('foo'));
-    }
-
-    function testFailure()
-    {
-        $results = &new Piece_Right_Results();
-        $results->setFieldValue('password2', 'bar');
-        $validator = &new Piece_Right_Validator_Compare();
-        $validator->setResults($results);
-        $validator->setRules(array('to' => 'password2'));
-
-        $this->assertFalse($validator->validate('foo'));
-
-        $results = &new Piece_Right_Results();
-        $results->setFieldValue('password2', 'bar');
-        $validator = &new Piece_Right_Validator_Compare();
-        $validator->setResults($results);
-
-        $this->assertFalse($validator->validate('foo'));
-    }
+    /**#@-*/
 
     /**#@+
      * @access private

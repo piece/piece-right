@@ -2,10 +2,9 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 
 /**
- * PHP versions 4 and 5
+ * PHP version 5
  *
- * Copyright (c) 2006 Chihiro Sakatoku <csakatoku@users.sourceforge.net>,
- *               2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -30,41 +29,28 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @copyright  2006 Chihiro Sakatoku <csakatoku@users.sourceforge.net>
- * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
- * @since      File available since Release 1.3.0
+ * @since      File available since Release 2.0.0
  */
 
-require_once realpath(dirname(__FILE__) . '/../../../prepare.php');
-require_once 'PHPUnit.php';
-require_once 'Piece/Right/Validator/File.php';
+use Piece::Right::Validator::File;
 
-// {{{ constants
+require_once dirname(__FILE__) . '/../../../prepare.php';
 
-if (function_exists('finfo_file')
-    || function_exists('mime_content_type')
-    || substr(PHP_OS, 0, 3) != 'WIN') {
-    define('SKIP_LIBMAGIC_TEST', 0);
-} else {
-    define('SKIP_LIBMAGIC_TEST', 1);
-}
-
-// }}}
-// {{{ Piece_Right_Validator_FileTestCase
+// {{{ DescribeRightValidatorFile
 
 /**
- * TestCase for Piece_Right_Validator_File
+ * Some specs for Piece::Right::Validator::File.
  *
  * @package    Piece_Right
- * @copyright  2006 Chihiro Sakatoku <csakatoku@users.sourceforge.net>
- * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
- * @since      Class available since Release 1.3.0
+ * @since      Class available since Release 2.0.0
  */
-class Piece_Right_Validator_FileTestCase extends PHPUnit_TestCase
+class DescribeRightValidatorFile extends PHPSpec_Context
 {
 
     // {{{ properties
@@ -76,8 +62,17 @@ class Piece_Right_Validator_FileTestCase extends PHPUnit_TestCase
     /**#@-*/
 
     /**#@+
+     * @access protected
+     */
+
+    /**#@-*/
+
+    /**#@+
      * @access private
      */
+
+    private $_validator;
+    private $_runMagicExamples;
 
     /**#@-*/
 
@@ -85,7 +80,23 @@ class Piece_Right_Validator_FileTestCase extends PHPUnit_TestCase
      * @access public
      */
 
-    function testSuccess()
+    public function beforeAll()
+    {
+        $this->_validator = new File();
+        $this->_runMagicExamples = function_exists('finfo_file') || substr(PHP_OS, 0, 3) != 'WIN';
+    }
+
+    public function before()
+    {
+        $this->_validator->clear();
+    }
+
+    public function itShouldBeArrayable()
+    {
+        $this->spec($this->_validator)->should->beArrayable();
+    }
+
+    public function itShouldSucceed()
     {
         $size = filesize(__FILE__);
         $f = array('tmp_name' => __FILE__,
@@ -94,23 +105,28 @@ class Piece_Right_Validator_FileTestCase extends PHPUnit_TestCase
                    'size' => $size,
                    'error' => UPLOAD_ERR_OK
                    );
+        $this->_validator->setRules(array('minSize' => $size,
+                                          'maxSize' => $size,
+                                          'mimetype' => 'text/.+')
+                                    );
 
-        $validator = &new Piece_Right_Validator_File();
-        $validator->setRules(array('minSize' => $size,
-                                   'maxSize' => $size,
-                                   'mimetype' => 'text/.+')
-                             );
-
-        $this->assertTrue($validator->validate($f));
-
-        $validator = &new Piece_Right_Validator_File();
-        $validator->setRules(array('mimetype' => '^application/.+$'));
-
-        $this->assertFalse($validator->validate($f));
+        $this->spec($this->_validator->validate($f))->should->beTrue();
     }
 
-    function testFailure()
+    public function itShouldFail()
     {
+        $size = filesize(__FILE__);
+        $f = array('tmp_name' => __FILE__,
+                   'name' => basename(__FILE__),
+                   'type' => 'text/plain',
+                   'size' => $size,
+                   'error' => UPLOAD_ERR_OK
+                   );
+        $this->_validator->setRules(array('mimetype' => '^application/.+$'));
+
+        $this->spec($this->_validator->validate($f))->should->beFalse();
+
+        $this->_validator->clear();
         $f = array('tmp_name' => __FILE__,
                    'name' => basename(__FILE__),
                    'type' => 'text/plain',
@@ -118,12 +134,10 @@ class Piece_Right_Validator_FileTestCase extends PHPUnit_TestCase
                    'error' => UPLOAD_ERR_NO_FILE
                    );
 
-        $validator = &new Piece_Right_Validator_File();
-
-        $this->assertFalse($validator->validate($f));
+        $this->spec($this->_validator->validate($f))->should->beFalse();
     }
 
-    function testFileDoesNotExist()
+    public function itShouldFailIfAFileIsNotFound()
     {
         $notExistFile = dirname(__FILE__). '/NotExistFile.txt';
         $f = array('tmp_name' => $notExistFile,
@@ -133,15 +147,14 @@ class Piece_Right_Validator_FileTestCase extends PHPUnit_TestCase
                    'error' => UPLOAD_ERR_OK
                    );
 
-        $validator = &new Piece_Right_Validator_File();
-        $validator->setRules(array('mimetype' => 'text/.+',
-                                   'useMagic'=>true)
-                             );
+        $this->_validator->setRules(array('mimetype' => 'text/.+',
+                                          'useMagic' => true)
+                                    );
 
-        $this->assertFalse($validator->validate($f));
+        $this->spec($this->_validator->validate($f))->should->beFalse();
     }
 
-    function testMimeType()
+    public function itShouldSupportToValidateByMimetype()
     {
         $size = filesize(__FILE__);
         $f = array('tmp_name' => __FILE__,
@@ -151,15 +164,15 @@ class Piece_Right_Validator_FileTestCase extends PHPUnit_TestCase
                    'error' => UPLOAD_ERR_OK
                    );
 
-        $validator = &new Piece_Right_Validator_File();
-        $validator->setRules(array('mimetype' => '^text/.+$'));
+        $this->_validator->setRules(array('mimetype' => '^text/.+$'));
 
-        $this->assertTrue($validator->validate($f));
+        $this->spec($this->_validator->validate($f))->should->beTrue();
     }
 
-    function testUseMagicSuccess()
+    public function itShouldSupportToValidateByMagicFile()
     {
-        if (SKIP_LIBMAGIC_TEST) {
+        if (!$this->_runMagicExamples) {
+            $this->pending('Fileinfo extension is not available or the specs is running on Windows.');
             return;
         }
 
@@ -171,20 +184,13 @@ class Piece_Right_Validator_FileTestCase extends PHPUnit_TestCase
                    'error' => UPLOAD_ERR_OK
                    );
 
-        $validator = &new Piece_Right_Validator_File();
-        $validator->setRules(array('mimetype' => '^text/.+$',
-                                   'useMagic'=>true)
-                             );
+        $this->_validator->setRules(array('mimetype' => '^text/.+$',
+                                          'useMagic'=>true)
+                                    );
 
-        $this->assertTrue($validator->validate($f));
-    }
+        $this->spec($this->_validator->validate($f))->should->beTrue();
 
-    function testUseMagicFail()
-    {
-        if (SKIP_LIBMAGIC_TEST) {
-            return;
-        }
-
+        $this->_validator->clear();
         $size = filesize(__FILE__);
         $f = array('tmp_name' => __FILE__,
                    'name' => basename(__FILE__),
@@ -192,16 +198,14 @@ class Piece_Right_Validator_FileTestCase extends PHPUnit_TestCase
                    'size' => $size,
                    'error' => UPLOAD_ERR_OK
                    );
+        $this->_validator->setRules(array('mimetype' => '^application/.+$',
+                                          'useMagic'=>true)
+                                    );
 
-        $validator = &new Piece_Right_Validator_File();
-        $validator->setRules(array('mimetype' => '^application/.+$',
-                                   'useMagic'=>true)
-                             );
-
-        $this->assertFalse($validator->validate($f));
+        $this->spec($this->_validator->validate($f))->should->beFalse();
     }
 
-    function testMultipleFiles()
+    public function itShouldSupportMultipleFiles()
     {
         $size = filesize(__FILE__);
         $files = array();
@@ -213,33 +217,28 @@ class Piece_Right_Validator_FileTestCase extends PHPUnit_TestCase
             $files['error'][$i] = UPLOAD_ERR_OK;
         }
 
-        $validator = &new Piece_Right_Validator_File();
-        $validator->setRules(array('maxSize' => $size,
-                                   'minSize' => $size,
-                                   'mimetype' => '^text/.+$')
-                             );
+        $this->_validator->setRules(array('maxSize' => $size,
+                                          'minSize' => $size,
+                                          'mimetype' => '^text/.+$')
+                                    );
 
-        $this->assertTrue($validator->validate($files));
+        $this->spec($this->_validator->validate($files))->should->beTrue();
 
+        $this->_validator->clear();
         $files['tmp_name'][] = __FILE__;
         $files['name'][] = basename(__FILE__);
         $files['type'][] = 'image/jpeg';
         $files['size'][] = $size;
         $files['error'][] = UPLOAD_ERR_OK;
+        $this->_validator->setRules(array('maxSize' => $size,
+                                          'minSize' => $size,
+                                          'mimetype' => '^text/.+$')
+                                    );
 
-        $validator = &new Piece_Right_Validator_File();
-        $validator->setRules(array('maxSize' => $size,
-                                   'minSize' => $size,
-                                   'mimetype' => '^text/.+$')
-                             );
-
-        $this->assertFalse($validator->validate($files));
+        $this->spec($this->_validator->validate($files))->should->beFalse();
     }
 
-    /**
-     * @since Method available since Release 1.9.0
-     */
-    function testShouldProvideAMessageCorrespondingToAnErrorCode()
+    public function itShouldProvideAMessageCorrespondingToAnErrorCode()
     {
         $size = filesize(__FILE__);
         $f = array('tmp_name' => __FILE__,
@@ -248,19 +247,23 @@ class Piece_Right_Validator_FileTestCase extends PHPUnit_TestCase
                    'size' => $size,
                    'error' => UPLOAD_ERR_FORM_SIZE
                    );
-
         $message = 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.';
-        $validator = &new Piece_Right_Validator_File();
-        $validator->setRules(array('minSize' => $size,
-                                   'maxSize' => $size,
-                                   'mimetype' => 'text/.+',
-                                   'messagesByErrorCode' => array('UPLOAD_ERR_FORM_SIZE' => $message)
-                                   )
-                             );
+        $this->_validator->setRules(array('minSize' => $size,
+                                          'maxSize' => $size,
+                                          'mimetype' => 'text/.+',
+                                          'messagesByErrorCode' => array('UPLOAD_ERR_FORM_SIZE' => $message)
+                                          )
+                                    );
 
-        $this->assertFalse($validator->validate($f));
-        $this->assertEquals($message, $validator->getMessage());
+        $this->spec($this->_validator->validate($f))->should->beFalse();
+        $this->spec($this->_validator->getMessage())->should->be($message);
     }
+
+    /**#@-*/
+
+    /**#@+
+     * @access protected
+     */
 
     /**#@-*/
 

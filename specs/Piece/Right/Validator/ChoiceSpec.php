@@ -2,9 +2,9 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 
 /**
- * PHP versions 4 and 5
+ * PHP version 5
  *
- * Copyright (c) 2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,28 +29,28 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
- * @since      File available since Release 0.5.0
+ * @since      File available since Release 2.0.0
  */
 
-require_once realpath(dirname(__FILE__) . '/../../../prepare.php');
-require_once 'PHPUnit.php';
-require_once 'Piece/Right/Validator/Email.php';
+use Piece::Right::Validator::Choice;
 
-// {{{ Piece_Right_Validator_EmailTestCase
+require_once dirname(__FILE__) . '/../../../prepare.php';
+
+// {{{ DescribeRightValidatorChoice
 
 /**
- * TestCase for Piece_Right_Validator_Email
+ * Some specs for Piece::Right::Validator::Choice.
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
- * @since      Class available since Release 0.5.0
+ * @since      Class available since Release 2.0.0
  */
-class Piece_Right_Validator_EmailTestCase extends PHPUnit_TestCase
+class DescribeRightValidatorChoice extends PHPSpec_Context
 {
 
     // {{{ properties
@@ -62,8 +62,16 @@ class Piece_Right_Validator_EmailTestCase extends PHPUnit_TestCase
     /**#@-*/
 
     /**#@+
+     * @access protected
+     */
+
+    /**#@-*/
+
+    /**#@+
      * @access private
      */
+
+    private $_validator;
 
     /**#@-*/
 
@@ -71,35 +79,50 @@ class Piece_Right_Validator_EmailTestCase extends PHPUnit_TestCase
      * @access public
      */
 
-    function testSuccess()
+    public function beforeAll()
     {
-        $validator = &new Piece_Right_Validator_Email();
-
-        $this->assertTrue($validator->validate('foo@example.org'));
-        $this->assertTrue($validator->validate('foo@ example.org'));
-        $this->assertTrue($validator->validate('foo @ example.org'));
-        $this->assertTrue($validator->validate('-foo@example.org'));
-
-        $validator = &new Piece_Right_Validator_Email();
-        $validator->setRules(array('allowDotBeforeAtmark' => true));
-
-        $this->assertTrue($validator->validate('foo.@example.org'));
-        $this->assertTrue($validator->validate('-_-/.@example.org'));
+        $this->_validator = new Choice();
     }
 
-    function testFailure()
+    public function before()
     {
-        $validator = &new Piece_Right_Validator_Email();
-
-        $this->assertFalse($validator->validate('foo.@example.org'));
-        $this->assertFalse($validator->validate('foo'));
-        $this->assertFalse($validator->validate('foo bar@example.org'));
-
-        $validator = &new Piece_Right_Validator_Email();
-        $validator->setRules(array('allowDotBeforeAtmark' => true));
-
-        $this->assertFalse($validator->validate('foo.@.org'));
+        $this->_validator->clear();
     }
+
+    public function itShouldBeArrayable()
+    {
+        $this->spec($this->_validator)->should->beArrayable();
+    }
+
+    public function itShouldSucceed()
+    {
+        $this->_validator->setRules(array('elements' => array('foo', 'bar', 'baz')));
+
+        $this->spec($this->_validator->validate(array('foo')))->should->beTrue();
+
+        $this->_validator->clear();
+        $this->_validator->setRules(array('elements' => array('foo', 'bar', 'baz')));
+
+        $this->spec($this->_validator->validate(array('foo', 'baz')))->should->beTrue();
+
+        $this->_validator->clear();
+        $this->_validator->setRules(array('elements' => array('foo', 'bar', 'baz')));
+
+        $this->spec($this->_validator->validate(array('foo', 'baz', 'bar')))->should->beTrue();
+    }
+
+    public function itShouldFail()
+    {
+        $this->_validator->setRules(array('elements' => array('foo', 'bar', 'baz')));
+
+        $this->spec($this->_validator->validate(array('foo', 'qux')))->should->beFalse();
+    }
+
+    /**#@-*/
+
+    /**#@+
+     * @access protected
+     */
 
     /**#@-*/
 

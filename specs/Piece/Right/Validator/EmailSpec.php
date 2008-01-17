@@ -2,9 +2,9 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 
 /**
- * PHP versions 4 and 5
+ * PHP version 5
  *
- * Copyright (c) 2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,28 +29,28 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
- * @since      File available since Release 0.1.0
+ * @since      File available since Release 2.0.0
  */
 
-require_once realpath(dirname(__FILE__) . '/../../../prepare.php');
-require_once 'PHPUnit.php';
-require_once 'Piece/Right/Validator/Regex.php';
+use Piece::Right::Validator::Email;
 
-// {{{ Piece_Right_Validator_RegexTestCase
+require_once dirname(__FILE__) . '/../../../prepare.php';
+
+// {{{ DescribeRightValidatorEmail
 
 /**
- * TestCase for Piece_Right_Validator_Regex
+ * Some specs for Piece::Right::Validator::Email.
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
- * @since      Class available since Release 0.1.0
+ * @since      Class available since Release 2.0.0
  */
-class Piece_Right_Validator_RegexTestCase extends PHPUnit_TestCase
+class DescribeRightValidatorEmail extends PHPSpec_Context
 {
 
     // {{{ properties
@@ -62,41 +62,71 @@ class Piece_Right_Validator_RegexTestCase extends PHPUnit_TestCase
     /**#@-*/
 
     /**#@+
+     * @access protected
+     */
+
+    /**#@-*/
+
+    /**#@+
      * @access private
      */
+
+    private $_validator;
 
     /**#@-*/
 
     /**#@+
      * @access public
      */
+
+    public function beforeAll()
+    {
+        $this->_validator = new Email();
+    }
+
+    public function before()
+    {
+        $this->_validator->clear();
+    }
+
+    public function itShouldNotBeArrayable()
+    {
+        $this->spec($this->_validator)->shouldNot->beArrayable();
+    }
+
+    public function itShouldSucceed()
+    {
+        $this->spec($this->_validator->validate('foo@example.org'))->should->beTrue();
+        $this->spec($this->_validator->validate('foo@ example.org'))->should->beTrue();
+        $this->spec($this->_validator->validate('foo @ example.org'))->should->beTrue();
+        $this->spec($this->_validator->validate('-foo@example.org'))->should->beTrue();
+
+        $this->_validator->clear();
+        $this->_validator->setRules(array('allowDotBeforeAtmark' => true));
+
+        $this->spec($this->_validator->validate('foo.@example.org'))->should->beTrue();
+        $this->spec($this->_validator->validate('-_-/.@example.org'))->should->beTrue();
+    }
+
+    public function itShouldFail()
+    {
+        $this->spec($this->_validator->validate('foo.@example.org'))->should->beFalse();
+        $this->spec($this->_validator->validate('foo'))->should->beFalse();
+        $this->spec($this->_validator->validate('foo bar@example.org'))->should->beFalse();
+
+        $this->_validator->clear();
+        $this->_validator->setRules(array('allowDotBeforeAtmark' => true));
+
+        $this->spec($this->_validator->validate('foo.@.org'))->should->beFalse();
+    }
+
     /**#@-*/
 
-    function testSuccess()
-    {
-        $validator = &new Piece_Right_Validator_Regex();
-        $validator->setRules(array('pattern' => '/^\d+$/'));
+    /**#@+
+     * @access protected
+     */
 
-        $this->assertTrue($validator->validate('12345'));
-
-        $validator = &new Piece_Right_Validator_Regex();
-        $validator->setRules(array('pattern' => '/^\w+$/'));
-
-        $this->assertTrue($validator->validate('foo_bar_baz_12345'));
-
-        $validator = &new Piece_Right_Validator_Regex();
-        $validator->setRules(array('pattern' => '/^[a-z0-9]{10}$/i'));
-
-        $this->assertTrue($validator->validate('eapUjdCpJ8'));
-    }
-
-    function testFailure()
-    {
-        $validator = &new Piece_Right_Validator_Regex();
-        $validator->setRules(array('pattern' => '/^\d+$/'));
-
-        $this->assertFalse($validator->validate('foo_bar_baz_12345'));
-    }
+    /**#@-*/
 
     /**#@+
      * @access private

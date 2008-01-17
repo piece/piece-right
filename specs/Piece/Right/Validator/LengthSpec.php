@@ -2,9 +2,9 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 
 /**
- * PHP versions 4 and 5
+ * PHP version 5
  *
- * Copyright (c) 2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,28 +29,28 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
- * @since      File available since Release 0.3.0
+ * @since      File available since Release 2.0.0
  */
 
-require_once realpath(dirname(__FILE__) . '/../../../prepare.php');
-require_once 'PHPUnit.php';
-require_once 'Piece/Right/Validator/List.php';
+use Piece::Right::Validator::Length;
 
-// {{{ Piece_Right_Validator_ListTestCase
+require_once dirname(__FILE__) . '/../../../prepare.php';
+
+// {{{ DescribeRightValidatorLength
 
 /**
- * TestCase for Piece_Right_Validator_List
+ * Some specs for Piece::Right::Validator::Length.
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
- * @since      Class available since Release 0.3.0
+ * @since      Class available since Release 2.0.0
  */
-class Piece_Right_Validator_ListTestCase extends PHPUnit_TestCase
+class DescribeRightValidatorLength extends PHPSpec_Context
 {
 
     // {{{ properties
@@ -62,41 +62,74 @@ class Piece_Right_Validator_ListTestCase extends PHPUnit_TestCase
     /**#@-*/
 
     /**#@+
+     * @access protected
+     */
+
+    /**#@-*/
+
+    /**#@+
      * @access private
      */
+
+    private $_validator;
 
     /**#@-*/
 
     /**#@+
      * @access public
      */
+
+    public function beforeAll()
+    {
+        $this->_validator = new Length();
+    }
+
+    public function before()
+    {
+        $this->_validator->clear();
+    }
+
+    public function itShouldNotBeArrayable()
+    {
+        $this->spec($this->_validator)->shouldNot->beArrayable();
+    }
+
+    public function itShouldSucceed()
+    {
+        $this->_validator->setRules(array('min' => 2));
+
+        $this->spec($this->_validator->validate('foo'))->should->beTrue();
+
+        $this->_validator->clear();
+        $this->_validator->setRules(array('max' => 5));
+
+        $this->spec($this->_validator->validate('foo'))->should->beTrue();
+
+        $this->_validator->clear();
+        $this->_validator->setRules(array('min' => 2, 'max' => 5));
+
+        $this->spec($this->_validator->validate('foo'))->should->beTrue();
+    }
+
+    public function itShouldFail()
+    {
+        $this->_validator->setRules(array('max' => 2));
+
+        $this->spec($this->_validator->validate('foo'))->should->beFalse();
+
+        $this->_validator->clear();
+        $this->_validator->setRules(array('min' => 4));
+
+        $this->spec($this->_validator->validate('foo'))->should->beFalse();
+    }
+
     /**#@-*/
 
-    function testSuccess()
-    {
-        $validator = &new Piece_Right_Validator_List();
-        $validator->setRules(array('elements' => array('foo', 'bar', 'baz')));
+    /**#@+
+     * @access protected
+     */
 
-        $this->assertTrue($validator->validate(array('foo')));
-
-        $validator = &new Piece_Right_Validator_List();
-        $validator->setRules(array('elements' => array('foo', 'bar', 'baz')));
-
-        $this->assertTrue($validator->validate(array('foo', 'baz')));
-
-        $validator = &new Piece_Right_Validator_List();
-        $validator->setRules(array('elements' => array('foo', 'bar', 'baz')));
-
-        $this->assertTrue($validator->validate(array('foo', 'baz', 'bar')));
-    }
-
-    function testFailure()
-    {
-        $validator = &new Piece_Right_Validator_List();
-        $validator->setRules(array('elements' => array('foo', 'bar', 'baz')));
-
-        $this->assertFalse($validator->validate(array('foo', 'qux')));
-    }
+    /**#@-*/
 
     /**#@+
      * @access private
