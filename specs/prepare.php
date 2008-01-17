@@ -2,9 +2,9 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 
 /**
- * PHP versions 4 and 5
+ * PHP version 5
  *
- * Copyright (c) 2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,14 +29,31 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @since      File available since Release 1.7.0
  */
 
-if (file_exists(dirname(__FILE__) . '/../Piece/Right.php')) {
-    set_include_path(realpath(dirname(__FILE__) . '/..') . PATH_SEPARATOR . get_include_path());
+if (file_exists(dirname(__FILE__) . '/../src/Piece/Right.php')) {
+    set_include_path(realpath(dirname(__FILE__) . '/../src') . PATH_SEPARATOR .
+                     realpath(dirname(__FILE__) . '/../../sh-fsm/src') . PATH_SEPARATOR .
+                     get_include_path()
+                     );
+}
+
+require_once 'PHPSpec/Context.php';
+require_once 'Stagehand/Autoload.php';
+require_once 'Cache/Lite/File.php';
+
+function clearCache($cacheDirectory)
+{
+    $cache = new Cache_Lite_File(array('cacheDir' => "$cacheDirectory/",
+                                       'masterFile' => '',
+                                       'automaticSerialization' => true,
+                                       'errorHandlingAPIBreak' => true)
+                                 );
+    $cache->clean();
 }
 
 /*
