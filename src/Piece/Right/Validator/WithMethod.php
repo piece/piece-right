@@ -118,11 +118,11 @@ class WithMethod extends Common
         }
 
         if (!is_array($value)) {
-            return $this->_invokeCallback($value);
+            return $this->_invokeMethod($value);
         }
 
         foreach ($value as $target) {
-            $result = $this->_invokeCallback($target);
+            $result = $this->_invokeMethod($target);
             if (!$result) {
                 return false;
             }
@@ -159,7 +159,7 @@ class WithMethod extends Common
      */
 
     // }}}
-    // {{{ _invokeCallback()
+    // {{{ _invokeMethod()
 
     /**
      * Invokes a callback and returns the result.
@@ -168,7 +168,7 @@ class WithMethod extends Common
      * @return boolean
      * @since Method available since Release 2.0.0
      */
-    private function _invokeCallback($value)
+    private function _invokeMethod($value)
     {
         if (is_null($this->_instance)) {
             $class = $this->_class;
