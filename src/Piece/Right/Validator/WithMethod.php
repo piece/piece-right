@@ -74,6 +74,10 @@ class WithMethod extends Common
      * @access private
      */
 
+    private $_class;
+    private $_method;
+    private $_instance;
+
     /**#@-*/
 
     /**#@+
@@ -94,7 +98,6 @@ class WithMethod extends Common
     {
         $class = $this->_getRule('class');
         $method = $this->_getRule('method');
-        $isStatic = $this->_getRule('isStatic');
         if (is_null($class) || is_null($method)) {
             return false;
         }
@@ -103,28 +106,23 @@ class WithMethod extends Common
             throw new Exception("Unknown class $class, be sure the class exists and is loaded prior to use.");
         }
 
-        if ($isStatic) {
-            $callback = array($class, $method);
+        if ($this->_getRule('isStatic')) {
+            $this->_class = $class;
+            $this->_method = $method;
+            $this->_instance = null;
         } else {
             $instance = new $class();
-            $callback = array($instance, $method);
+            $this->_class = null;
+            $this->_method = $method;
+            $this->_instance = $instance;
         }
 
         if (!is_array($value)) {
-            if ($isStatic) {
-                return $class::$method($value, $this->_payload, $this->_results);
-            } else {
-                return $instance->$method($value, $this->_payload, $this->_results);
-            }
+            return $this->_invokeCallback($value);
         }
 
         foreach ($value as $target) {
-            if ($isStatic) {
-                $result = $class::$method($target, $this->_payload, $this->_results);
-            } else {
-                $result = $instance->$method($target, $this->_payload, $this->_results);
-            }
-
+            $result = $this->_invokeCallback($target);
             if (!$result) {
                 return false;
             }
@@ -159,6 +157,27 @@ class WithMethod extends Common
     /**#@+
      * @access private
      */
+
+    // }}}
+    // {{{ _invokeCallback()
+
+    /**
+     * Invokes a callback and returns the result.
+     *
+     * @param mixed $value
+     * @return boolean
+     * @since Method available since Release 2.0.0
+     */
+    private function _invokeCallback($value)
+    {
+        if (is_null($this->_instance)) {
+            $class = $this->_class;
+            $method = $this->_method;
+            return $class::$method($value, $this->_payload, $this->_results);
+        } else {
+            return $this->_instance->{ $this->_method }($value, $this->_payload, $this->_results);
+        }
+    }
 
     /**#@-*/
 
