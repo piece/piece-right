@@ -35,10 +35,10 @@
  * @since      File available since Release 2.0.0
  */
 
-use Piece::Right::Validator::Factory;
+use Piece::Right::ValidatorFactory;
 use Stagehand::Autoload;
 
-require_once dirname(__FILE__) . '/../../../prepare.php';
+require_once dirname(__FILE__) . '/../../prepare.php';
 
 // {{{ DescribeRightValidatorFactory
 
@@ -96,13 +96,13 @@ class DescribeRightValidatorFactory extends PHPSpec_Context
 
     public function after()
     {
-        Factory::clearInstances();
+        ValidatorFactory::clearInstances();
     }
 
     public function itShouldRaiseAnExceptionWhenTheFileIsNotFound()
     {
         try {
-            Factory::factory('FileNotFoundAction');
+            ValidatorFactory::factory('FileNotFoundAction');
         } catch (Piece::Right::Exception $e) {
             return;
         }
@@ -112,23 +112,23 @@ class DescribeRightValidatorFactory extends PHPSpec_Context
 
     public function itShouldCreateAnObjectByAGivenClass()
     {
-        $validator = Factory::factory('Compare');
+        $validator = ValidatorFactory::factory('Compare');
 
         $this->spec($validator)->should->beAnInstanceOf('Piece::Right::Validator::Compare');
     }
 
     public function itShouldReturnTheExistingObjectIfItExists()
     {
-        $validator1 = Factory::factory('Compare');
-        $validator2 = Factory::factory('Compare');
+        $validator1 = ValidatorFactory::factory('Compare');
+        $validator2 = ValidatorFactory::factory('Compare');
 
         $this->spec(spl_object_hash($validator2))->should->beEqualTo(spl_object_hash($validator1));
     }
 
     public function itShouldSupportNamespaces()
     {
-        Factory::addNamespace('Foo');
-        $validator = Factory::factory('BarBaz');
+        ValidatorFactory::addNamespace('Foo');
+        $validator = ValidatorFactory::factory('BarBaz');
 
         $this->spec($validator)->should->beAnInstanceOf('Foo::BarBaz');
     }
@@ -136,16 +136,16 @@ class DescribeRightValidatorFactory extends PHPSpec_Context
     public function itShouldSupportEmptyNamespace()
     {
         require dirname(__FILE__) . '/' . basename(__FILE__, '.php') . '/BazQux.php';
-        Factory::addNamespace('');
-        $validator = Factory::factory('BazQux');
+        ValidatorFactory::addNamespace('');
+        $validator = ValidatorFactory::factory('BazQux');
 
         $this->spec($validator)->should->beAnInstanceOf('BazQux');
     }
 
     public function itShouldReplaceAExistingValidatorWithAnotherClass()
     {
-        Factory::addNamespace('Foo');
-        $validator = Factory::factory('Compare');
+        ValidatorFactory::addNamespace('Foo');
+        $validator = ValidatorFactory::factory('Compare');
 
         $this->spec($validator)->shouldNot->beAnInstanceOf('Piece::Right::Validator::Compare');
         $this->spec($validator)->should->beAnInstanceOf('Foo::Compare');

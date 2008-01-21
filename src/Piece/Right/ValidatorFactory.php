@@ -35,11 +35,11 @@
  * @since      File available since Release 0.1.0
  */
 
-namespace Piece::Right::Validator;
+namespace Piece::Right;
 use Piece::Right::Validator::Common;
 use Piece::Right::Exception;
 
-// {{{ Factory
+// {{{ ValidatorFactory
 
 /**
  * A factory class for creating validator objects.
@@ -50,7 +50,7 @@ use Piece::Right::Exception;
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-class Factory
+class ValidatorFactory
 {
 
     // {{{ properties
