@@ -2,9 +2,9 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 
 /**
- * PHP versions 4 and 5
+ * PHP version 5
  *
- * Copyright (c) 2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,28 +29,28 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
- * @since      File available since Release 0.3.0
+ * @since      File available since Release 2.0.0
  */
 
-require_once realpath(dirname(__FILE__) . '/../../../prepare.php');
-require_once 'PHPUnit.php';
-require_once 'Piece/Right/Filter/JapaneseAlphaNumeric.php';
+use Piece::Right::Filter::JapaneseAlphaNumeric;
 
-// {{{ Piece_Right_Filter_JapaneseAlphaNumericTestCase
+require_once dirname(__FILE__) . '/../../../prepare.php';
+
+// {{{ DescribeRightFilterJapanesealphanumeric
 
 /**
- * TestCase for Piece_Right_Filter_JapaneseAlphaNumeric
+ * Some specs for Piece::Right::Filter::JapaneseAlphaNumeric
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
- * @since      Class available since Release 0.3.0
+ * @since      Class available since Release 2.0.0
  */
-class Piece_Right_Filter_JapaneseAlphaNumericTestCase extends PHPUnit_TestCase
+class DescribeRightFilterJapanesealphanumeric extends PHPSpec_Context
 {
 
     // {{{ properties
@@ -62,8 +62,16 @@ class Piece_Right_Filter_JapaneseAlphaNumericTestCase extends PHPUnit_TestCase
     /**#@-*/
 
     /**#@+
+     * @access protected
+     */
+
+    /**#@-*/
+
+    /**#@+
      * @access private
      */
+
+    private $_filter;
 
     /**#@-*/
 
@@ -71,28 +79,38 @@ class Piece_Right_Filter_JapaneseAlphaNumericTestCase extends PHPUnit_TestCase
      * @access public
      */
 
-    function testAlphaNumeric()
+    public function beforeAll()
+    {
+        $this->_filter = new JapaneseAlphaNumeric();
+    }
+
+    public function itShouldNotBeArrayable()
+    {
+        $this->spec($this->_filter)->shouldNot->beArrayable();
+    }
+
+    public function itShouldFilter()
     {
         if (!function_exists('mb_convert_kana')) {
+            $this->pending('mbstring extension is not available.');
             return;
         }
 
         $previousEncoding = mb_internal_encoding();
-        mb_internal_encoding('EUC-JP');
-        $filter = &new Piece_Right_Filter_JapaneseAlphaNumeric();
+        mb_internal_encoding('UTF-8');
 
-        $this->assertEquals('0123456789',
-                            $filter->filter('£°£±£²£³£´£µ£¶£·£¸£¹')
-                            );
-        $this->assertEquals('012-3456',
-                            $filter->filter('£°£±£²¡Ý£³£´£µ£¶')
-                            );
-        $this->assertEquals('iteman@users.sourceforge.net',
-                            $filter->filter('£é£ô£å£í£á£î¡÷£õ£ó£å£ò£ó.£ó£ï£õ£ò£ã£å£æ£ï£ò£ç£å.£î£å£ô')
-                            );
+        $this->spec($this->_filter->filter('ï¼ï¼‘ï¼’ï¼“ï¼”ï¼•ï¼–ï¼—ï¼˜ï¼™'))->should->be('0123456789');
+        $this->spec($this->_filter->filter('ï¼ï¼‘ï¼’âˆ’ï¼“ï¼”ï¼•ï¼–'))->should->be('012-3456');
+        $this->spec($this->_filter->filter('ï½‰ï½”ï½…ï½ï½ï½Žï¼ ï½•ï½“ï½…ï½’ï½“.ï½“ï½ï½•ï½’ï½ƒï½…ï½†ï½ï½’ï½‡ï½….ï½Žï½…ï½”'))->should->be('iteman@users.sourceforge.net');
 
         mb_internal_encoding($previousEncoding);
     }
+
+    /**#@-*/
+
+    /**#@+
+     * @access protected
+     */
 
     /**#@-*/
 
@@ -110,7 +128,7 @@ class Piece_Right_Filter_JapaneseAlphaNumericTestCase extends PHPUnit_TestCase
 /*
  * Local Variables:
  * mode: php
- * coding: euc-jp
+ * coding: utf-8
  * tab-width: 4
  * c-basic-offset: 4
  * c-hanging-comment-ender-p: nil

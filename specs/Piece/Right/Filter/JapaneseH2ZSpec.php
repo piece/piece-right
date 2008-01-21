@@ -2,9 +2,9 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 
 /**
- * PHP versions 4 and 5
+ * PHP version 5
  *
- * Copyright (c) 2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,28 +29,28 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
- * @since      File available since Release 0.3.0
+ * @since      File available since Release 2.0.0
  */
 
-require_once realpath(dirname(__FILE__) . '/../../../prepare.php');
-require_once 'PHPUnit.php';
-require_once 'Piece/Right/Filter/JapaneseH2Z.php';
+use Piece::Right::Filter::JapaneseH2Z;
 
-// {{{ Piece_Right_Filter_JapaneseH2ZTestCase
+require_once dirname(__FILE__) . '/../../../prepare.php';
+
+// {{{ DescribeRightFilterJapaneseh2z
 
 /**
- * TestCase for Piece_Right_Filter_JapaneseH2Z
+ * Some specs for Piece::Right::Filter::JapaneseH2Z
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
- * @since      Class available since Release 0.3.0
+ * @since      Class available since Release 2.0.0
  */
-class Piece_Right_Filter_JapaneseH2ZTestCase extends PHPUnit_TestCase
+class DescribeRightFilterJapaneseh2z extends PHPSpec_Context
 {
 
     // {{{ properties
@@ -62,8 +62,16 @@ class Piece_Right_Filter_JapaneseH2ZTestCase extends PHPUnit_TestCase
     /**#@-*/
 
     /**#@+
+     * @access protected
+     */
+
+    /**#@-*/
+
+    /**#@+
      * @access private
      */
+
+    private $_filter;
 
     /**#@-*/
 
@@ -71,20 +79,36 @@ class Piece_Right_Filter_JapaneseH2ZTestCase extends PHPUnit_TestCase
      * @access public
      */
 
-    function testH2Z()
+    public function beforeAll()
+    {
+        $this->_filter = new JapaneseH2Z();
+    }
+
+    public function itShouldNotBeArrayable()
+    {
+        $this->spec($this->_filter)->shouldNot->beArrayable();
+    }
+
+    public function itShouldFilter()
     {
         if (!function_exists('mb_convert_kana')) {
+            $this->pending('mbstring extension is not available.');
             return;
         }
 
         $previousEncoding = mb_internal_encoding();
-        mb_internal_encoding('EUC-JP');
-        $filter = &new Piece_Right_Filter_JapaneseH2Z();
+        mb_internal_encoding('UTF-8');
 
-        $this->assertEquals('¥Æ¥¹¥È¥Ç¡¼¥¿', $filter->filter('ŽÃŽ½ŽÄŽÃŽÞŽ°ŽÀ'));
+        $this->spec($this->_filter->filter('ï¾ƒï½½ï¾„ï¾ƒï¾žï½°ï¾€'))->should->be('ãƒ†ã‚¹ãƒˆãƒ‡ãƒ¼ã‚¿');
 
         mb_internal_encoding($previousEncoding);
     }
+
+    /**#@-*/
+
+    /**#@+
+     * @access protected
+     */
 
     /**#@-*/
 
@@ -102,7 +126,7 @@ class Piece_Right_Filter_JapaneseH2ZTestCase extends PHPUnit_TestCase
 /*
  * Local Variables:
  * mode: php
- * coding: euc-jp
+ * coding: utf-8
  * tab-width: 4
  * c-basic-offset: 4
  * c-hanging-comment-ender-p: nil

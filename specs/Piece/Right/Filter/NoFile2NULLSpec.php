@@ -2,9 +2,9 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 
 /**
- * PHP versions 4 and 5
+ * PHP version 5
  *
- * Copyright (c) 2007 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,28 +29,28 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @copyright  2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
- * @since      File available since Release 1.6.0
+ * @since      File available since Release 2.0.0
  */
 
-require_once realpath(dirname(__FILE__) . '/../../../prepare.php');
-require_once 'PHPUnit.php';
-require_once 'Piece/Right/Filter/NoFile2NULL.php';
+use Piece::Right::Filter::NoFile2NULL;
 
-// {{{ Piece_Right_Filter_NoFile2NULLTestCase
+require_once dirname(__FILE__) . '/../../../prepare.php';
+
+// {{{ DescribeRightFilterNofile2null
 
 /**
- * TestCase for Piece_Right_Filter_NoFile2NULL
+ * Some specs for Piece::Right::Filter::NoFile2NULL
  *
  * @package    Piece_Right
- * @copyright  2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
- * @since      Class available since Release 1.6.0
+ * @since      Class available since Release 2.0.0
  */
-class Piece_Right_Filter_NoFile2NULLTestCase extends PHPUnit_TestCase
+class DescribeRightFilterNofile2null extends PHPSpec_Context
 {
 
     // {{{ properties
@@ -62,8 +62,16 @@ class Piece_Right_Filter_NoFile2NULLTestCase extends PHPUnit_TestCase
     /**#@-*/
 
     /**#@+
+     * @access protected
+     */
+
+    /**#@-*/
+
+    /**#@+
      * @access private
      */
+
+    private $_filter;
 
     /**#@-*/
 
@@ -71,19 +79,27 @@ class Piece_Right_Filter_NoFile2NULLTestCase extends PHPUnit_TestCase
      * @access public
      */
 
-    function testArrayWithNoFileErrorShoudBeConvertedToNULL()
+    public function beforeAll()
     {
-        $filter = &new Piece_Right_Filter_NoFile2NULL();
-
-        $this->assertNull($filter->filter(array('name' => '',
-                                                'type' => '',
-                                                'tmp_name' => '',
-                                                'error' => UPLOAD_ERR_NO_FILE,
-                                                'size' => 0))
-                          );
+        $this->_filter = new NoFile2NULL();
     }
 
-    function testArrayWithErrorExceptNoFileErrorShoudNotBeConverted()
+    public function itShouldBeArrayable()
+    {
+        $this->spec($this->_filter)->should->beArrayable();
+    }
+
+    public function itShouldFilter()
+    {
+        $this->spec($this->_filter->filter(array('name' => '',
+                                                 'type' => '',
+                                                 'tmp_name' => '',
+                                                 'error' => UPLOAD_ERR_NO_FILE,
+                                                 'size' => 0)))
+             ->should->beNull();
+    }
+
+    public function itShoudNotFilterIfAnArrayWithErrorExceptNoFileErrorIsGiven()
     {
         $array = array('name' => '',
                        'type' => '',
@@ -91,32 +107,34 @@ class Piece_Right_Filter_NoFile2NULLTestCase extends PHPUnit_TestCase
                        'error' => UPLOAD_ERR_OK,
                        'size' => 0
                        );
-        $filter = &new Piece_Right_Filter_NoFile2NULL();
 
-        $this->assertNotNull($filter->filter($array));
-        $this->assertEquals($array, $filter->filter($array));
+        $this->spec($this->_filter->filter($array))->shouldNot->beNull();
+        $this->spec($this->_filter->filter($array))->should->beEqualTo($array);
     }
 
-    function testBrokenArrayWithNoFileErrorShoudNotBeConverted()
+    public function itShoudNotFilterIfABrokenArrayWithNoFileErrorIsGiven()
     {
-        $brokenArray = array('name' => '',
-                             'type' => '',
-                             'error' => UPLOAD_ERR_NO_FILE,
-                             'size' => 0
-                             );
-        $filter = &new Piece_Right_Filter_NoFile2NULL();
+        $array = array('name' => '',
+                       'type' => '',
+                       'error' => UPLOAD_ERR_NO_FILE,
+                       'size' => 0
+                       );
 
-        $this->assertNotNull($filter->filter($brokenArray));
-        $this->assertEquals($brokenArray, $filter->filter($brokenArray));
+        $this->spec($this->_filter->filter($array))->shouldNot->beNull();
+        $this->spec($this->_filter->filter($array))->should->beEqualTo($array);
     }
 
-    function testNonArrayShoudNotBeConverted()
+    public function itShoudNotFilterIfANonArrayIsGiven()
     {
-        $filter = &new Piece_Right_Filter_NoFile2NULL();
-
-        $this->assertNotNull($filter->filter('foo'));
-        $this->assertEquals('foo', $filter->filter('foo'));
+        $this->spec($this->_filter->filter('foo'))->shouldNot->beNull();
+        $this->spec($this->_filter->filter('foo'))->should->beEqualTo('foo');
     }
+
+    /**#@-*/
+
+    /**#@+
+     * @access protected
+     */
 
     /**#@-*/
 
@@ -134,7 +152,7 @@ class Piece_Right_Filter_NoFile2NULLTestCase extends PHPUnit_TestCase
 /*
  * Local Variables:
  * mode: php
- * coding: iso-8859-1
+ * coding: utf-8
  * tab-width: 4
  * c-basic-offset: 4
  * c-hanging-comment-ender-p: nil
