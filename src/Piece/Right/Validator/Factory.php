@@ -36,16 +36,9 @@
  */
 
 namespace Piece::Right::Validator;
-// require_once 'Piece/Right/Error.php';
-// require_once 'Piece/Right/ClassLoader.php';
+use Piece::Right::Validator::Common;
+use Piece::Right::Exception;
 
-// {{{ GLOBALS
-
-$GLOBALS['PIECE_RIGHT_Validator_Instances'] = array();
-$GLOBALS['PIECE_RIGHT_Validator_Directories'] = array(dirname(__FILE__) . '/../../..');
-$GLOBALS['PIECE_RIGHT_Validator_Prefixes'] = array('Piece_Right_Validator');
-
-// }}}
 // {{{ Factory
 
 /**
@@ -78,6 +71,9 @@ class Factory
      * @access private
      */
 
+    private static $_instances = array();
+    private static $_namespaces = array('Piece::Right::Validator');
+
     /**#@-*/
 
     /**#@+
@@ -89,96 +85,38 @@ class Factory
     // {{{ factory()
 
     /**
-     * Creates a validator object from the validator directories.
+     * Creates a validator object from a validator name and a namespace.
      *
      * @param string $validatorName
-     * @return mixed
-     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
-     * @throws PIECE_RIGHT_ERROR_INVALID_VALIDATOR
-     * @throws PIECE_RIGHT_ERROR_CANNOT_READ
+     * @return Piece::Right::Validator::Common
+     * @throws Piece::Right::Exception
      */
     public static function factory($validatorName)
     {
-        if (!array_key_exists($validatorName, $GLOBALS['PIECE_RIGHT_Validator_Instances'])) {
-            $found = false;
-            foreach ($GLOBALS['PIECE_RIGHT_Validator_Prefixes'] as $prefixAlias) {
-                $validatorClass = self::_getValidatorClass($validatorName, $prefixAlias);
-                if (Piece_Right_ClassLoader::loaded($validatorClass)) {
-                    $found = true;
-                    break;
-                }
-            }
-
-            if (!$found) {
-                foreach ($GLOBALS['PIECE_RIGHT_Validator_Directories'] as $validatorDirectory) {
-                    foreach ($GLOBALS['PIECE_RIGHT_Validator_Prefixes'] as $prefixAlias) {
-                        $validatorClass = Piece_Right_Validator_Factory::_getValidatorClass($validatorName, $prefixAlias);
-
-                        Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
-                        Piece_Right_ClassLoader::load($validatorClass, $validatorDirectory);
-                        Piece_Right_Error::popCallback();
-
-                        if (Piece_Right_Error::hasErrors('exception')) {
-                            $error = Piece_Right_Error::pop();
-                            if ($error['code'] == PIECE_RIGHT_ERROR_NOT_FOUND) {
-                                continue;
-                            }
-
-                            Piece_Right_Error::push(PIECE_RIGHT_ERROR_CANNOT_READ,
-                                                    "Failed to read the validator [ $validatorName ] for any reasons.",
-                                                    'exception',
-                                                    array(),
-                                                    $error
-                                                    );
-                            $return = null;
-                            return $return;
+        while (true) {
+            if (!array_key_exists($validatorName, self::$_instances)) {
+                foreach (self::$_namespaces as $namespace) {
+                    $class = strlen($namespace) ?
+                        "$namespace::$validatorName" : $validatorName;
+                    if (class_exists($class)) {
+                        $instance = new $class();
+                        if (!($instance instanceof Common)) {
+                            throw new Exception('Invalid validator $class, a validator must extend the Piece::Right::Validator::Common class.');
                         }
 
-                        if (Piece_Right_ClassLoader::loaded($validatorClass)) {
-                            $found = true;
-                            break 2;
-                        }
+                        self::$_instances[$validatorName] = $instance;
+                        break 2;
                     }
                 }
 
-                if (!$found) {
-                    Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                            "The validator [ $validatorName ] not found in the following directories:\n" .
-                                            implode("\n", $GLOBALS['PIECE_RIGHT_Validator_Directories'])
-                                            );
-                    $return = null;
-                    return $return;
-                }
+                throw new Exception("Unknown validator $validatorName, be sure the validator exists and is loaded prior to use.");
+            } else {
+                self::$_instances[$validatorName]->clear();
+                break;
             }
-
-            $validator = new $validatorClass($prefixAlias);
-            if (!is_subclass_of($validator, 'Piece_Right_Validator_Common')) {
-                Piece_Right_Error::push(PIECE_RIGHT_ERROR_INVALID_VALIDATOR,
-                                        "The validator [ $validatorName ] is invalid."
-                                        );
-                $return = null;
-                return $return;
-            }
-
-            $GLOBALS['PIECE_RIGHT_Validator_Instances'][$validatorName] = $validator;
-        } else {
-            $GLOBALS['PIECE_RIGHT_Validator_Instances'][$validatorName]->clear();
         }
 
-        return $GLOBALS['PIECE_RIGHT_Validator_Instances'][$validatorName];
-    }
-
-    // }}}
-    // {{{ addValidatorDirectory()
-
-    /**
-     * Adds a validator directory.
-     *
-     * @param string $validatorDirectory
-     */
-    public static function addValidatorDirectory($validatorDirectory)
-    {
-        array_unshift($GLOBALS['PIECE_RIGHT_Validator_Directories'], $validatorDirectory);
+        return self::$_instances[$validatorName];
     }
 
     // }}}
@@ -189,20 +127,20 @@ class Factory
      */
     public static function clearInstances()
     {
-        $GLOBALS['PIECE_RIGHT_Validator_Instances'] = array();
+        self::$_instances = array();
     }
 
     // }}}
-    // {{{ addValidatorPrefix()
+    // {{{ addNamespace()
 
     /**
-     * Adds a prefix for a validator.
+     * Adds a namespace for a validator.
      *
-     * @param string $validatorPrefix
+     * @param string $namespace
      */
-    public static function addValidatorPrefix($validatorPrefix)
+    public static function addNamespace($namespace)
     {
-        array_unshift($GLOBALS['PIECE_RIGHT_Validator_Prefixes'], $validatorPrefix);
+        array_unshift(self::$_namespaces, $namespace);
     }
 
     /**#@-*/
@@ -216,25 +154,6 @@ class Factory
     /**#@+
      * @access private
      */
-
-    // }}}
-    // {{{ _getValidatorClass()
-
-    /**
-     * Gets the class name for a given validator name with a prefix alias.
-     *
-     * @param string $validatorName
-     * @param string $prefixAlias
-     * @return string
-     */
-    private static function _getValidatorClass($validatorName, $prefixAlias)
-    {
-        if ($prefixAlias) {
-            return "{$prefixAlias}_{$validatorName}";
-        } else {
-            return $validatorName;
-        }
-    }
 
     /**#@-*/
 
