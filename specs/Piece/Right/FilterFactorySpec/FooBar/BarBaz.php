@@ -2,9 +2,9 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 
 /**
- * PHP versions 4 and 5
+ * PHP version 5
  *
- * Copyright (c) 2007 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,32 +29,39 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @copyright  2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
- * @see        Piece_Right_Filter_FactoryTestCase
- * @since      File available since Release 1.5.0
+ * @see        DescribeRightFilterfactory
+ * @since      File available since Release 2.0.0
  */
 
-// {{{ Piece_Right_Filter_FactoryTestCase_Foo
+namespace FooBar;
+use Piece::Right::Filter::Common;
+
+// {{{ BarBaz
 
 /**
- * A class for unit tests.
- *
  * @package    Piece_Right
- * @copyright  2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
- * @see        Piece_Right_Filter_FactoryTestCase
- * @since      Class available since Release 1.5.0
+ * @see        DescribeRightFilterfactory
+ * @since      Class available since Release 2.0.0
  */
-class Piece_Right_Filter_FactoryTestCase_Foo
+class BarBaz extends Common
 {
 
     // {{{ properties
 
     /**#@+
      * @access public
+     */
+
+    /**#@-*/
+
+    /**#@+
+     * @access protected
      */
 
     /**#@-*/
@@ -69,10 +76,16 @@ class Piece_Right_Filter_FactoryTestCase_Foo
      * @access public
      */
 
-    function filter($value)
+    public function filter($value)
     {
-        return true;
+        return $value;
     }
+
+    /**#@-*/
+
+    /**#@+
+     * @access protected
+     */
 
     /**#@-*/
 
