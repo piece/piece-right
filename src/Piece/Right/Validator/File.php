@@ -313,7 +313,7 @@ class File extends Common
     private function _setMessageByErrorCode($actualErrorCode)
     {
         $messagesByErrorCode = $this->_getRule('messagesByErrorCode');
-        foreach (self::_getErrorCodes() as $errorCode) {
+        foreach (self::$_errorCodes as $errorCode) {
             if (!defined($errorCode)) {
                 continue;
             }
@@ -329,20 +329,6 @@ class File extends Common
                 $this->setMessage($messagesByErrorCode[$errorCode]);
             }
         }
-    }
-
-    // }}}
-    // {{{ _getErrorCodes()
-
-    /**
-     * Gets the error codes for file uploading.
-     *
-     * @return array
-     * @since Method available since Release 2.0.0
-     */
-    private static function _getErrorCodes()
-    {
-        return self::$_errorCodes;
     }
 
     /**#@-*/

@@ -2,9 +2,9 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 
 /**
- * PHP versions 4 and 5
+ * PHP version 5
  *
- * Copyright (c) 2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,14 +29,15 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @since      File available since Release 0.1.0
  */
 
-require_once 'Piece/Right/Error.php';
-require_once 'Piece/Right/ClassLoader.php';
+namespace Piece::Right::Validator;
+// require_once 'Piece/Right/Error.php';
+// require_once 'Piece/Right/ClassLoader.php';
 
 // {{{ GLOBALS
 
@@ -45,24 +46,30 @@ $GLOBALS['PIECE_RIGHT_Validator_Directories'] = array(dirname(__FILE__) . '/../.
 $GLOBALS['PIECE_RIGHT_Validator_Prefixes'] = array('Piece_Right_Validator');
 
 // }}}
-// {{{ Piece_Right_Validator_Factory
+// {{{ Factory
 
 /**
  * A factory class for creating validator objects.
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-class Piece_Right_Validator_Factory
+class Factory
 {
 
     // {{{ properties
 
     /**#@+
      * @access public
+     */
+
+    /**#@-*/
+
+    /**#@+
+     * @access protected
      */
 
     /**#@-*/
@@ -90,12 +97,12 @@ class Piece_Right_Validator_Factory
      * @throws PIECE_RIGHT_ERROR_INVALID_VALIDATOR
      * @throws PIECE_RIGHT_ERROR_CANNOT_READ
      */
-    function &factory($validatorName)
+    public static function factory($validatorName)
     {
         if (!array_key_exists($validatorName, $GLOBALS['PIECE_RIGHT_Validator_Instances'])) {
             $found = false;
             foreach ($GLOBALS['PIECE_RIGHT_Validator_Prefixes'] as $prefixAlias) {
-                $validatorClass = Piece_Right_Validator_Factory::_getValidatorClass($validatorName, $prefixAlias);
+                $validatorClass = self::_getValidatorClass($validatorName, $prefixAlias);
                 if (Piece_Right_ClassLoader::loaded($validatorClass)) {
                     $found = true;
                     break;
@@ -144,7 +151,7 @@ class Piece_Right_Validator_Factory
                 }
             }
 
-            $validator = &new $validatorClass($prefixAlias);
+            $validator = new $validatorClass($prefixAlias);
             if (!is_subclass_of($validator, 'Piece_Right_Validator_Common')) {
                 Piece_Right_Error::push(PIECE_RIGHT_ERROR_INVALID_VALIDATOR,
                                         "The validator [ $validatorName ] is invalid."
@@ -153,7 +160,7 @@ class Piece_Right_Validator_Factory
                 return $return;
             }
 
-            $GLOBALS['PIECE_RIGHT_Validator_Instances'][$validatorName] = &$validator;
+            $GLOBALS['PIECE_RIGHT_Validator_Instances'][$validatorName] = $validator;
         } else {
             $GLOBALS['PIECE_RIGHT_Validator_Instances'][$validatorName]->clear();
         }
@@ -169,7 +176,7 @@ class Piece_Right_Validator_Factory
      *
      * @param string $validatorDirectory
      */
-    function addValidatorDirectory($validatorDirectory)
+    public static function addValidatorDirectory($validatorDirectory)
     {
         array_unshift($GLOBALS['PIECE_RIGHT_Validator_Directories'], $validatorDirectory);
     }
@@ -180,7 +187,7 @@ class Piece_Right_Validator_Factory
     /**
      * Clears the validator instances.
      */
-    function clearInstances()
+    public static function clearInstances()
     {
         $GLOBALS['PIECE_RIGHT_Validator_Instances'] = array();
     }
@@ -193,10 +200,16 @@ class Piece_Right_Validator_Factory
      *
      * @param string $validatorPrefix
      */
-    function addValidatorPrefix($validatorPrefix)
+    public static function addValidatorPrefix($validatorPrefix)
     {
         array_unshift($GLOBALS['PIECE_RIGHT_Validator_Prefixes'], $validatorPrefix);
     }
+
+    /**#@-*/
+
+    /**#@+
+     * @access protected
+     */
 
     /**#@-*/
 
@@ -214,7 +227,7 @@ class Piece_Right_Validator_Factory
      * @param string $prefixAlias
      * @return string
      */
-    function _getValidatorClass($validatorName, $prefixAlias)
+    private static function _getValidatorClass($validatorName, $prefixAlias)
     {
         if ($prefixAlias) {
             return "{$prefixAlias}_{$validatorName}";
