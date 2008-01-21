@@ -32,8 +32,8 @@
  * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
- * @see        DescribeRightValidatorFactory
- * @since      File available since Release 1.5.0
+ * @see        DescribeRightValidatorfactory
+ * @since      File available since Release 2.0.0
  */
 
 namespace Foo;
@@ -46,8 +46,8 @@ use Piece::Right::Validator::Common;
  * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
- * @see        DescribeRightValidatorFactory
- * @since      Class available since Release 1.5.0
+ * @see        DescribeRightValidatorfactory
+ * @since      Class available since Release 2.0.0
  */
 class Compare extends Common
 {
