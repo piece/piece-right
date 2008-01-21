@@ -2,9 +2,9 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 
 /**
- * PHP versions 4 and 5
+ * PHP version 5
  *
- * Copyright (c) 2007 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,7 +29,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @copyright  2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @link       http://www.php.net/manual/ja/features.file-upload.php
@@ -37,22 +37,23 @@
  * @since      File available since Release 1.6.0
  */
 
-require_once 'Piece/Right/Filter/Common.php';
+namespace Piece::Right::Filter;
+use Piece::Right::Filter::Common;
 
-// {{{ Piece_Right_Filter_NoFile2NULL
+// {{{ NoFile2NULL
 
 /**
  * A filter which converts a $_FILES element with UPLOAD_ERR_NO_FILE to NULL.
  *
  * @package    Piece_Right
- * @copyright  2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @link       http://www.php.net/manual/ja/features.file-upload.php
  * @link       http://www.php.net/manual/ja/features.file-upload.errors.php
  * @since      Class available since Release 1.6.0
  */
-class Piece_Right_Filter_NoFile2NULL extends Piece_Right_Filter_Common
+class NoFile2NULL extends Common
 {
 
     // {{{ properties
@@ -64,10 +65,16 @@ class Piece_Right_Filter_NoFile2NULL extends Piece_Right_Filter_Common
     /**#@-*/
 
     /**#@+
-     * @access private
+     * @access protected
      */
 
-    var $_isArrayable = true;
+    protected $_isArrayable = true;
+
+    /**#@-*/
+
+    /**#@+
+     * @access private
+     */
 
     /**#@-*/
 
@@ -84,7 +91,7 @@ class Piece_Right_Filter_NoFile2NULL extends Piece_Right_Filter_Common
      * @param array $value
      * @return mixed
      */
-    function filter($value)
+    public function filter($value)
     {
         if (is_array($value)
             && count(array_keys($value)) == 5
@@ -100,6 +107,12 @@ class Piece_Right_Filter_NoFile2NULL extends Piece_Right_Filter_Common
             return $value;
         }
     }
+
+    /**#@-*/
+
+    /**#@+
+     * @access protected
+     */
 
     /**#@-*/
 

@@ -2,9 +2,9 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 
 /**
- * PHP versions 4 and 5
+ * PHP version 5
  *
- * Copyright (c) 2007 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,24 +29,26 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @copyright  2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @since      File available since Release 1.6.0
  */
 
-// {{{ Piece_Right_Filter_Common
+namespace Piece::Right::Filter;
+
+// {{{ Common
 
 /**
  * The base class for Piece_Right filters.
  *
  * @package    Piece_Right
- * @copyright  2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 1.6.0
  */
-class Piece_Right_Filter_Common
+abstract class Common
 {
 
     // {{{ properties
@@ -58,10 +60,16 @@ class Piece_Right_Filter_Common
     /**#@-*/
 
     /**#@+
-     * @access private
+     * @access protected
      */
 
-    var $_isArrayable = false;
+    protected $_isArrayable = false;
+
+    /**#@-*/
+
+    /**#@+
+     * @access private
+     */
 
     /**#@-*/
 
@@ -79,7 +87,7 @@ class Piece_Right_Filter_Common
      * @return mixed
      * @abstract
      */
-    function filter($value) {}
+    abstract public function filter($value);
 
     // }}}
     // {{{ isArrayable()
@@ -89,10 +97,16 @@ class Piece_Right_Filter_Common
      *
      * @return boolean
      */
-    function isArrayable()
+    public function isArrayable()
     {
         return $this->_isArrayable;
     }
+
+    /**#@-*/
+
+    /**#@+
+     * @access protected
+     */
 
     /**#@-*/
 
