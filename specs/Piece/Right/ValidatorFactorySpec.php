@@ -40,10 +40,10 @@ use Stagehand::Autoload;
 
 require_once dirname(__FILE__) . '/../../prepare.php';
 
-// {{{ DescribeRightValidatorFactory
+// {{{ DescribeRightValidatorfactory
 
 /**
- * Some specs for Piece::Right::Validator::Factory.
+ * Some specs for Piece::Right::ValidatorFactory.
  *
  * @package    Piece_Right
  * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
@@ -51,7 +51,7 @@ require_once dirname(__FILE__) . '/../../prepare.php';
  * @version    Release: @package_version@
  * @since      Class available since Release 2.0.0
  */
-class DescribeRightValidatorFactory extends PHPSpec_Context
+class DescribeRightValidatorfactory extends PHPSpec_Context
 {
 
     // {{{ properties
