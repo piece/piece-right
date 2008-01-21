@@ -2,9 +2,9 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 
 /**
- * PHP versions 4 and 5
+ * PHP version 5
  *
- * Copyright (c) 2007 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,34 +29,38 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @copyright  2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
- * @see        Piece_Right_Validator_FactoryTestCase
+ * @see        DescribeRightValidatorFactory
  * @since      File available since Release 1.5.0
  */
 
-require_once 'Piece/Right/Validator/Common.php';
+use Piece::Right::Validator::Common;
 
-// {{{ BarValidator
+// {{{ BazQux
 
 /**
- * A class for unit tests.
- *
  * @package    Piece_Right
- * @copyright  2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
- * @see        Piece_Right_Validator_FactoryTestCase
+ * @see        DescribeRightValidatorFactory
  * @since      Class available since Release 1.5.0
  */
-class BarValidator extends Piece_Right_Validator_Common
+class BazQux extends Common
 {
 
     // {{{ properties
 
     /**#@+
      * @access public
+     */
+
+    /**#@-*/
+
+    /**#@+
+     * @access protected
      */
 
     /**#@-*/
@@ -71,10 +75,16 @@ class BarValidator extends Piece_Right_Validator_Common
      * @access public
      */
 
-    function validate($value)
+    public function validate($value)
     {
         return true;
     }
+
+    /**#@-*/
+
+    /**#@+
+     * @access protected
+     */
 
     /**#@-*/
 
