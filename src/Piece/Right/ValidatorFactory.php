@@ -37,7 +37,7 @@
 
 namespace Piece::Right;
 use Piece::Right::Validator::Common;
-use Piece::Right::Exception;
+use Stagehand::ObjectFactory;
 
 // {{{ ValidatorFactory
 
@@ -50,7 +50,7 @@ use Piece::Right::Exception;
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-class ValidatorFactory
+class ValidatorFactory extends ObjectFactory
 {
 
     // {{{ properties
@@ -71,83 +71,79 @@ class ValidatorFactory
      * @access private
      */
 
-    private static $_instances = array();
-    private static $_namespaces = array('Piece::Right::Validator');
-
     /**#@-*/
 
     /**#@+
      * @access public
-     * @static
      */
-
-    // }}}
-    // {{{ factory()
-
-    /**
-     * Creates a validator object from a validator name and a namespace.
-     *
-     * @param string $validatorName
-     * @return Piece::Right::Validator::Common
-     * @throws Piece::Right::Exception
-     */
-    public static function factory($validatorName)
-    {
-        while (true) {
-            if (!array_key_exists($validatorName, self::$_instances)) {
-                foreach (self::$_namespaces as $namespace) {
-                    $class = strlen($namespace) ?
-                        "$namespace::$validatorName" : $validatorName;
-                    if (class_exists($class)) {
-                        $instance = new $class();
-                        if (!($instance instanceof Common)) {
-                            throw new Exception('Invalid validator $class, a validator must extend the Piece::Right::Validator::Common class.');
-                        }
-
-                        self::$_instances[$validatorName] = $instance;
-                        break 2;
-                    }
-                }
-
-                throw new Exception("Unknown validator $validatorName, be sure the validator exists and is loaded prior to use.");
-            } else {
-                self::$_instances[$validatorName]->clear();
-                break;
-            }
-        }
-
-        return self::$_instances[$validatorName];
-    }
-
-    // }}}
-    // {{{ clearInstances()
-
-    /**
-     * Clears the validator instances.
-     */
-    public static function clearInstances()
-    {
-        self::$_instances = array();
-    }
-
-    // }}}
-    // {{{ addNamespace()
-
-    /**
-     * Adds a namespace for a validator.
-     *
-     * @param string $namespace
-     */
-    public static function addNamespace($namespace)
-    {
-        array_unshift(self::$_namespaces, $namespace);
-    }
 
     /**#@-*/
 
     /**#@+
      * @access protected
      */
+
+    // }}}
+    // {{{ _getFactoryClass()
+
+    /**
+     * Gets the class name of the factory.
+     *
+     * @return string
+     */
+    protected static function _getFactoryClass()
+    {
+        return __CLASS__;
+    }
+
+    // }}}
+    // {{{ _getExceptionClass()
+
+    /**
+     * Gets the exception class for the factory.
+     *
+     * @return string
+     */
+    protected static function _getExceptionClass()
+    {
+        return __NAMESPACE__ . '::Exception';
+    }
+
+    // }}}
+    // {{{ _afterInstantiation()
+
+    /**
+     * A callback which is called after instantiation.
+     *
+     * @param mixed $instance
+     */
+    protected static function _afterInstantiation(Common $instance) {}
+
+    // }}}
+    // {{{ _existingInstance()
+
+    /**
+     * A callback which is called if an instance already exists.
+     *
+     * @param mixed $instance
+     */
+    protected static function _existingInstance(Common $instance)
+    {
+        $instance->clear();
+    }
+
+    // }}}
+    // {{{ _getDefaultNamespaces()
+
+    /**
+     * Gets the default namespaces for classes.
+     *
+     * @return array
+     */
+    protected static function _getDefaultNamespaces()
+    {
+        return array('Piece::Right::Validator');
+    }
 
     /**#@-*/
 

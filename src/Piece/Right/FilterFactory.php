@@ -37,7 +37,7 @@
 
 namespace Piece::Right;
 use Piece::Right::Filter::Common;
-use Piece::Right::Exception;
+use Stagehand::ObjectFactory;
 
 // {{{ FilterFactory
 
@@ -50,7 +50,7 @@ use Piece::Right::Exception;
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-class FilterFactory
+class FilterFactory extends ObjectFactory
 {
 
     // {{{ properties
@@ -71,82 +71,66 @@ class FilterFactory
      * @access private
      */
 
-    private static $_instances = array();
-    private static $_namespaces = array('Piece::Right::Filter');
-
     /**#@-*/
 
     /**#@+
      * @access public
-     * @static
      */
-
-    // }}}
-    // {{{ factory()
-
-    /**
-     * Creates a filter object from a filter name and a namespace.
-     *
-     * @param string $filterName
-     * @return Piece::Right::Filter::Common
-     * @throws Piece::Right::Exception
-     */
-    public static function factory($filterName)
-    {
-        while (true) {
-            if (!array_key_exists($filterName, self::$_instances)) {
-                foreach (self::$_namespaces as $namespace) {
-                    $class = strlen($namespace) ?
-                        "$namespace::$filterName" : $filterName;
-                    if (class_exists($class)) {
-                        $instance = new $class();
-                        if (!($instance instanceof Common)) {
-                            throw new Exception('Invalid filter $class, a filter must extend the Piece::Right::Filter::Common class.');
-                        }
-
-                        self::$_instances[$filterName] = $instance;
-                        break 2;
-                    }
-                }
-
-                throw new Exception("Unknown filter $filterName, be sure the filter exists and is loaded prior to use.");
-            } else {
-                break;
-            }
-        }
-
-        return self::$_instances[$filterName];
-    }
-
-    // }}}
-    // {{{ clearInstances()
-
-    /**
-     * Clears the filter instances.
-     */
-    public static function clearInstances()
-    {
-        self::$_instances = array();
-    }
-
-    // }}}
-    // {{{ addNamespace()
-
-    /**
-     * Adds a namespace for a filter.
-     *
-     * @param string $namespace
-     */
-    public static function addNamespace($namespace)
-    {
-        array_unshift(self::$_namespaces, $namespace);
-    }
 
     /**#@-*/
 
     /**#@+
      * @access protected
      */
+
+    // }}}
+    // {{{ _getFactoryClass()
+
+    /**
+     * Gets the class name of the factory.
+     *
+     * @return string
+     */
+    protected static function _getFactoryClass()
+    {
+        return __CLASS__;
+    }
+
+    // }}}
+    // {{{ _getExceptionClass()
+
+    /**
+     * Gets the exception class for the factory.
+     *
+     * @return string
+     */
+    protected static function _getExceptionClass()
+    {
+        return __NAMESPACE__ . '::Exception';
+    }
+
+    // }}}
+    // {{{ _afterInstantiation()
+
+    /**
+     * A callback which is called after instantiation.
+     *
+     * @param mixed $instance
+     */
+    protected static function _afterInstantiation(Common $instance) {}
+
+    // }}}
+    // {{{ _getDefaultNamespaces()
+
+    /**
+     * Gets the default namespaces for classes.
+     *
+     * @return array
+     */
+    protected static function _getDefaultNamespaces()
+    {
+        return array('Piece::Right::Filter');
+    }
 
     /**#@-*/
 
