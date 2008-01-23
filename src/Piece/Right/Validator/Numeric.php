@@ -113,7 +113,7 @@ class Numeric extends Common
             $useFloat = true;
         }
 
-        while (true) {
+        do {
             if ($this->_isDecimal($value)) {
                 if (!$useInteger) {
                     return false;
@@ -155,7 +155,7 @@ class Numeric extends Common
             }
 
             return false;
-        }
+        } while (false);
 
         if (($value + 0.0) != ($value + 0)) {
             $convertedValue = $value + 0.0;
