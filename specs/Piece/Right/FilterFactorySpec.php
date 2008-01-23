@@ -135,11 +135,11 @@ class DescribeRightFilterfactory extends PHPSpec_Context
 
     public function itShouldSupportEmptyNamespace()
     {
-        require dirname(__FILE__) . '/' . basename(__FILE__, '.php') . '/BazQux.php';
+        require dirname(__FILE__) . '/' . basename(__FILE__, '.php') . '/BazQuux.php';
         FilterFactory::addNamespace('');
-        $filter = FilterFactory::factory('BazQux');
+        $filter = FilterFactory::factory('BazQuux');
 
-        $this->spec($filter)->should->beAnInstanceOf('BazQux');
+        $this->spec($filter)->should->beAnInstanceOf('BazQuux');
     }
 
     public function itShouldReplaceAExistingFilterWithAnotherClass()

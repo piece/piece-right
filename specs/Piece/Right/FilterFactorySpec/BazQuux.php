@@ -38,7 +38,7 @@
 
 use Piece::Right::Filter::Common;
 
-// {{{ BazQux
+// {{{ BazQuux
 
 /**
  * @package    Piece_Right
@@ -48,7 +48,7 @@ use Piece::Right::Filter::Common;
  * @see        DescribeRightFilterfactory
  * @since      Class available since Release 2.0.0
  */
-class BazQux extends Common
+class BazQuux extends Common
 {
 
     // {{{ properties
