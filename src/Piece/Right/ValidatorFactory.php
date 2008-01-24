@@ -115,7 +115,7 @@ class ValidatorFactory extends ObjectFactory
     /**
      * A callback which is called after instantiation.
      *
-     * @param mixed $instance
+     * @param Piece::Right::Validator::Common $instance
      */
     protected static function _afterInstantiation(Common $instance) {}
 
@@ -125,7 +125,7 @@ class ValidatorFactory extends ObjectFactory
     /**
      * A callback which is called if an instance already exists.
      *
-     * @param mixed $instance
+     * @param Piece::Right::Validator::Common $instance
      */
     protected static function _existingInstance(Common $instance)
     {

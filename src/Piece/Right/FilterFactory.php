@@ -115,7 +115,7 @@ class FilterFactory extends ObjectFactory
     /**
      * A callback which is called after instantiation.
      *
-     * @param mixed $instance
+     * @param Piece::Right::Filter::Common $instance
      */
     protected static function _afterInstantiation(Common $instance) {}
 
