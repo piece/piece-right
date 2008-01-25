@@ -39,37 +39,11 @@ require_once 'PEAR/PackageFileManager2.php';
 
 PEAR::staticPushErrorHandling(PEAR_ERROR_CALLBACK, create_function('$error', 'var_dump($error); exit();'));
 
-$releaseVersion = '1.9.0';
-$releaseStability = 'stable';
-$apiVersion = '1.1.0';
+$releaseVersion = '2.0.0RC1';
+$releaseStability = 'beta';
+$apiVersion = '2.0.0';
 $apiStability = 'stable';
-$notes = 'A new release of Piece_Right is now available.
-
-What\'s New in Piece_Right 1.9.0
-
- * Enhanced validators: File validator allows users to use messages corresponding to each error code for file uploading. Range validator supports array.
- * A defect fix: A defect that caused the validation result to be incorrect when a day later than January 19, 2038 is given has been fixed.
-
-See the following release notes for details.
-
-Enhancements
-============
-
-Validators:
-
-- Added support for messages by error code. (Ticket #41) (File)
-- Added support for array. (Ticket #59) (Range)
-
-Kernel:
-
-- Changed factory() so as to use a given cache directory as is. (Ticket #37) (Piece_Right_Config_Factory)
-
-Defect Fixes
-============
-
-Validators:
-
-- Fixed a defect that caused the validation result to be incorrect when a day later than January 19, 2038 is given. (Ticket #40) (Date, FutureDate, PastDate)';
+$notes = '';
 
 $package = new PEAR_PackageFileManager2();
 $package->setOptions(array('filelistgenerator' => 'file',
@@ -79,8 +53,9 @@ $package->setOptions(array('filelistgenerator' => 'file',
                            'packagefile'       => 'package.xml',
                            'packagedirectory'  => '.',
                            'dir_roles'         => array('data' => 'data',
-                                                        'tests' => 'test',
-                                                        'docs' => 'doc'),
+                                                        'specs' => 'test',
+                                                        'doc' => 'doc',
+                                                        'src' => 'php'),
                            'ignore'            => array('package.php', 'package.xml'))
                      );
 
@@ -97,10 +72,11 @@ $package->setAPIStability($apiStability);
 $package->setReleaseVersion($releaseVersion);
 $package->setReleaseStability($releaseStability);
 $package->setNotes($notes);
-$package->setPhpDep('4.3.0');
+$package->setPhpDep('5.3.0');
 $package->setPearinstallerDep('1.4.3');
-$package->addPackageDepWithChannel('required', 'Cache_Lite', 'pear.php.net', '1.7.0');
-$package->addPackageDepWithChannel('required', 'PEAR', 'pear.php.net', '1.4.3');
+$package->addPackageDepWithChannel('required', 'Cache_Lite', 'pear.php.net', '1.7.2');
+$package->addPackageDepWithChannel('required', 'PEAR', 'pear.php.net', '1.6.2');
+$package->addPackageDepWithChannel('required', 'Date', 'pear.php.net', '1.4.7');
 $package->addMaintainer('lead', 'iteman', 'KUBO Atsuhiro', 'iteman@users.sourceforge.net');
 $package->addGlobalReplacement('package-info', '@package_version@', 'version');
 $package->generateContents();
