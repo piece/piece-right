@@ -40,6 +40,7 @@
  */
 
 require_once 'Piece/Right/Validator/Common.php';
+require_once 'Date.php';
 
 // {{{ Piece_Right_Validator_Date
 
@@ -237,15 +238,18 @@ class Piece_Right_Validator_Date extends Piece_Right_Validator_Common
      */
     function _compareGivenDateAndCurrentDate()
     {
-        $currentTime = time();
-        $aDays = gregoriantojd($this->_month, $this->_day, $this->_year);
-        $bDays = gregoriantojd(date('n', $currentTime), date('j', $currentTime), date('Y', $currentTime));
-
-        if ($aDays == $bDays) {
-            return 0;
-        }
-
-        return ($aDays < $bDays) ? -1 : 1;
+        $givenDate = new Date();
+        $givenDate->setYear($this->_year);
+        $givenDate->setMonth($this->_month);
+        $givenDate->setDay($this->_day);
+        $givenDate->setHour(0);
+        $givenDate->setMinute(0);
+        $givenDate->setSecond(0);
+        $currentDate = new Date();
+        $currentDate->setHour(0);
+        $currentDate->setMinute(0);
+        $currentDate->setSecond(0);
+        return @Date::compare($givenDate, $currentDate);
     }
 
     /**#@-*/
