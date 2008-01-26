@@ -43,7 +43,11 @@ $releaseVersion = '1.9.1';
 $releaseStability = 'stable';
 $apiVersion = '1.1.0';
 $apiStability = 'stable';
-$notes = '';
+$notes = 'A new release of Piece_Right is now available.
+
+What\'s New in Piece_Right 1.9.1
+
+ * A defect fix: A defect that caused an error "PHP Fatal error:  Call to undefined function gregoriantojd()" to be raised if the calendar extension is disabled or not installed in the environment has been fixed.';
 
 $package = new PEAR_PackageFileManager2();
 $package->setOptions(array('filelistgenerator' => 'file',
