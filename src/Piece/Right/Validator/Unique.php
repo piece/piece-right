@@ -130,4 +130,3 @@ class Unique extends Common
  * indent-tabs-mode: nil
  * End:
  */
-?>

@@ -131,4 +131,3 @@ class PastDate extends Date
  * indent-tabs-mode: nil
  * End:
  */
-?>

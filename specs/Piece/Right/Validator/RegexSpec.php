@@ -147,4 +147,3 @@ class DescribeRightValidatorRegex extends PHPSpec_Context
  * indent-tabs-mode: nil
  * End:
  */
-?>

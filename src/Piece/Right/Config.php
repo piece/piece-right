@@ -593,4 +593,3 @@ class Config
  * indent-tabs-mode: nil
  * End:
  */
-?>

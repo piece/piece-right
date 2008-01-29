@@ -283,4 +283,3 @@ class Date extends Common
  * indent-tabs-mode: nil
  * End:
  */
-?>

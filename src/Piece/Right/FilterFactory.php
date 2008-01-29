@@ -125,4 +125,3 @@ class FilterFactory extends ObjectFactory
  * indent-tabs-mode: nil
  * End:
  */
-?>

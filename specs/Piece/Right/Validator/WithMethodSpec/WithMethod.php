@@ -114,4 +114,3 @@ class WithMethod
  * indent-tabs-mode: nil
  * End:
  */
-?>

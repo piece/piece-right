@@ -180,4 +180,3 @@ class DescribeRightFilterfactory extends PHPSpec_Context
  * indent-tabs-mode: nil
  * End:
  */
-?>

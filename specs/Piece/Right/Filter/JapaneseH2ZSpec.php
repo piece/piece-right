@@ -133,4 +133,3 @@ class DescribeRightFilterJapaneseh2z extends PHPSpec_Context
  * indent-tabs-mode: nil
  * End:
  */
-?>

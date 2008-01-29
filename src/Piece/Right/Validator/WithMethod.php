@@ -196,4 +196,3 @@ class WithMethod extends Common
  * indent-tabs-mode: nil
  * End:
  */
-?>

@@ -123,4 +123,3 @@ class DescribeRightFilterEmpty2null extends PHPSpec_Context
  * indent-tabs-mode: nil
  * End:
  */
-?>

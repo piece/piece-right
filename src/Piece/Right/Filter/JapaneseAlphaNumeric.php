@@ -121,4 +121,3 @@ class JapaneseAlphaNumeric extends Common
  * indent-tabs-mode: nil
  * End:
  */
-?>

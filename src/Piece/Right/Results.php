@@ -294,4 +294,3 @@ class Results
  * indent-tabs-mode: nil
  * End:
  */
-?>

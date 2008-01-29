@@ -109,4 +109,3 @@ class BazQux extends Common
  * indent-tabs-mode: nil
  * End:
  */
-?>

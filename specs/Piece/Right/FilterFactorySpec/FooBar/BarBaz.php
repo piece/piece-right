@@ -110,4 +110,3 @@ class BarBaz extends Common
  * indent-tabs-mode: nil
  * End:
  */
-?>

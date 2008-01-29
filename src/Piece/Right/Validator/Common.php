@@ -354,4 +354,3 @@ abstract class Common
  * indent-tabs-mode: nil
  * End:
  */
-?>

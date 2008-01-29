@@ -138,4 +138,3 @@ class Compare extends Common
  * indent-tabs-mode: nil
  * End:
  */
-?>

@@ -260,4 +260,3 @@ class DescribeRightValidatorImage extends PHPSpec_Context
  * indent-tabs-mode: nil
  * End:
  */
-?>

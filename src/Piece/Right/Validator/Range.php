@@ -166,4 +166,3 @@ class Range extends Numeric
  * indent-tabs-mode: nil
  * End:
  */
-?>

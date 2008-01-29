@@ -131,4 +131,3 @@ class FutureDate extends Date
  * indent-tabs-mode: nil
  * End:
  */
-?>

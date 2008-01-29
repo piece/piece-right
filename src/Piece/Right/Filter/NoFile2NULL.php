@@ -137,4 +137,3 @@ class NoFile2NULL extends Common
  * indent-tabs-mode: nil
  * End:
  */
-?>

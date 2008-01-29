@@ -237,4 +237,3 @@ class Piece_Right_ConfigTestCase extends PHPUnit_TestCase
  * indent-tabs-mode: nil
  * End:
  */
-?>

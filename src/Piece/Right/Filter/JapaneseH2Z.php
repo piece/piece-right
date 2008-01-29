@@ -120,4 +120,3 @@ class JapaneseH2Z extends Common
  * indent-tabs-mode: nil
  * End:
  */
-?>

@@ -62,4 +62,3 @@ class Exception extends ::Exception {}
  * indent-tabs-mode: nil
  * End:
  */
-?>

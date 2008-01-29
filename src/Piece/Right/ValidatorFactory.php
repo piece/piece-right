@@ -125,4 +125,3 @@ class ValidatorFactory extends ObjectFactory
  * indent-tabs-mode: nil
  * End:
  */
-?>

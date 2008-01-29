@@ -137,4 +137,3 @@ class Regex extends Common
  * indent-tabs-mode: nil
  * End:
  */
-?>

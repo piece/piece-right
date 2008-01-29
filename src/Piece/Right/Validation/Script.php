@@ -247,4 +247,3 @@ class Piece_Right_Validation_Script
  * indent-tabs-mode: nil
  * End:
  */
-?>

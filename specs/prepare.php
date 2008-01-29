@@ -70,4 +70,3 @@ function clearCache($cacheDirectory)
  * indent-tabs-mode: nil
  * End:
  */
-?>

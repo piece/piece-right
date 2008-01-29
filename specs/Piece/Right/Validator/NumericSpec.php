@@ -269,4 +269,3 @@ class DescribeRightValidatorNumeric extends PHPSpec_Context
  * indent-tabs-mode: nil
  * End:
  */
-?>

@@ -333,4 +333,3 @@ class Factory
  * indent-tabs-mode: nil
  * End:
  */
-?>

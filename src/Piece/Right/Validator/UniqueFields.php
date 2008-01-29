@@ -149,4 +149,3 @@ class UniqueFields extends Unique
  * indent-tabs-mode: nil
  * End:
  */
-?>
