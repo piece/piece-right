@@ -36,7 +36,7 @@
  */
 
 namespace Piece::Right;
-use Piece::Right::Context;
+use Stagehand::ContextRegistry::Ghost;
 
 // {{{ ContextRegistry
 
@@ -49,14 +49,9 @@ use Piece::Right::Context;
  * @version    Release: @package_version@
  * @since      Class available since Release 2.0.0
  */
-class ContextRegistry
+class ContextRegistry extends Stagehand::ContextRegistry
 {
 
-    // {{{ constants
-
-    const DEFAULT_CONTEXT_ID = '_Piece_Right_ContextRegistry_defaultContextID';
-
-    // }}}
     // {{{ properties
 
     /**#@+
@@ -75,8 +70,7 @@ class ContextRegistry
      * @access private
      */
 
-    private static $_contexts = array();
-    private static $_contextID;
+    private static $_ghost;
 
     /**#@-*/
 
@@ -84,69 +78,28 @@ class ContextRegistry
      * @access public
      */
 
-    // }}}
-    // {{{ getContext()
-
-    /**
-     * Gets the current Context object from the registry.
-     *
-     * @return Piece::Right::Context
-     */
-    public static function getContext()
-    {
-        return @self::$_contexts[ self::$_contextID ];
-    }
-
-    // }}}
-    // {{{ addContext()
-
-    /**
-     * Adds a Context object to the registry.
-     *
-     * @param Piece::Right::Context $context
-     */
-    public static function addContext(Context $context)
-    {
-        self::$_contexts[ $context->getID() ] = $context;
-    }
-
-    // }}}
-    // {{{ createContext()
-
-    /**
-     * Creates a new context with the given ID.
-     *
-     * @param string $id
-     */
-    public static function createContext($id = null)
-    {
-        if (is_null($id)) {
-            $id = self::DEFAULT_CONTEXT_ID;
-        }
-
-        $context = new Context($id);
-        ContextRegistry::addContext($context);
-        self::setContextID($id);
-    }
-
-    // }}}
-    // {{{ setContextID()
-
-    /**
-     * Sets the context ID.
-     *
-     * @param string $id
-     */
-    public static function setContextID($id)
-    {
-        self::$_contextID = $id;
-    }
-
     /**#@-*/
 
     /**#@+
      * @access protected
      */
+
+    // }}}
+    // {{{ _getGhost()
+
+    /**
+     * Gets an appropriate Ghost object.
+     *
+     * @return Stagehand::ContextRegistry::Ghost
+     */
+    protected static function _getGhost()
+    {
+        if (is_null(self::$_ghost)) {
+            self::$_ghost = new Ghost();
+        }
+
+        return self::$_ghost;
+    }
 
     /**#@-*/
 
