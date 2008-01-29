@@ -36,9 +36,8 @@
  */
 
 namespace Piece::Right;
-use Piece::Right::Validator::Common;
 use Stagehand::ObjectFactory;
-use Piece::Right::ContextRegistry;
+use Piece::Right::ValidatorFactory::Ghost;
 
 // {{{ ValidatorFactory
 
@@ -72,6 +71,8 @@ class ValidatorFactory extends ObjectFactory
      * @access private
      */
 
+    private static $_ghost;
+
     /**#@-*/
 
     /**#@+
@@ -85,78 +86,20 @@ class ValidatorFactory extends ObjectFactory
      */
 
     // }}}
-    // {{{ _getFactoryClass()
+    // {{{ _getGhost()
 
     /**
-     * Gets the class name of the factory.
+     * Gets an appropriate Ghost object.
      *
-     * @return string
+     * @return Piece::Right::ValidatorFactory::Ghost
      */
-    protected static function _getFactoryClass()
+    protected static function _getGhost()
     {
-        return __CLASS__;
-    }
+        if (is_null(self::$_ghost)) {
+            self::$_ghost = new Ghost();
+        }
 
-    // }}}
-    // {{{ _getExceptionClass()
-
-    /**
-     * Gets the exception class for the factory.
-     *
-     * @return string
-     */
-    protected static function _getExceptionClass()
-    {
-        return __NAMESPACE__ . '::Exception';
-    }
-
-    // }}}
-    // {{{ _getContextID()
-
-    /**
-     * Gets the context ID for the factory.
-     *
-     * @return string
-     */
-    protected static function _getContextID()
-    {
-        return ContextRegistry::getContext()->getID();
-    }
-
-    // }}}
-    // {{{ _afterInstantiation()
-
-    /**
-     * A callback which is called after instantiation.
-     *
-     * @param Piece::Right::Validator::Common $instance
-     */
-    protected static function _afterInstantiation(Common $instance) {}
-
-    // }}}
-    // {{{ _existingInstance()
-
-    /**
-     * A callback which is called if an instance already exists.
-     *
-     * @param Piece::Right::Validator::Common $instance
-     */
-    protected static function _existingInstance(Common $instance)
-    {
-        $instance->clear();
-    }
-
-    // }}}
-    // {{{ _getDefaultNamespaces()
-
-    /**
-     * Gets the default namespaces for classes.
-     *
-     * @return array
-     */
-    protected static function _getDefaultNamespaces()
-    {
-        return array('Piece::Right::Validator');
+        return self::$_ghost;
     }
 
     /**#@-*/

@@ -4,7 +4,7 @@
 /**
  * PHP version 5
  *
- * Copyright (c) 2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,28 +29,29 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @copyright  2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
- * @since      File available since Release 0.1.0
+ * @since      File available since Release 2.0.0
  */
 
-namespace Piece::Right;
-use Stagehand::ObjectFactory;
-use Piece::Right::FilterFactory::Ghost;
+namespace Piece::Right::ValidatorFactory;
+use Piece::Right::ContextRegistry;
+use Piece::Right::Exception;
+use Piece::Right::Validator::Common;
 
-// {{{ FilterFactory
+// {{{ Ghost
 
 /**
- * A factory class for creating filter objects.
+ * A ghost class for ValidatorFactory.
  *
  * @package    Piece_Right
- * @copyright  2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
- * @since      Class available since Release 0.1.0
+ * @since      Class available since Release 2.0.0
  */
-class FilterFactory extends ObjectFactory
+class Ghost extends Stagehand::ObjectFactory::Ghost
 {
 
     // {{{ properties
@@ -71,8 +72,6 @@ class FilterFactory extends ObjectFactory
      * @access private
      */
 
-    private static $_ghost;
-
     /**#@-*/
 
     /**#@+
@@ -86,20 +85,66 @@ class FilterFactory extends ObjectFactory
      */
 
     // }}}
-    // {{{ _getGhost()
+    // {{{ _getContextID()
 
     /**
-     * Gets an appropriate Ghost object.
+     * Gets the context ID for the factory.
      *
-     * @return Piece::Right::FilterFactory::Ghost
+     * @return string
      */
-    protected static function _getGhost()
+    protected function _getContextID()
     {
-        if (is_null(self::$_ghost)) {
-            self::$_ghost = new Ghost();
-        }
+        return ContextRegistry::getContext()->getID();
+    }
 
-        return self::$_ghost;
+    // }}}
+    // {{{ _throwException()
+
+    /**
+     * Throws an exception if an action is not found.
+     *
+     * @param string $class
+     * @throws Piece::Right::Exception
+     */
+    protected function _throwException($class)
+    {
+        throw new Exception("Unknown validator $class, be sure the validator exists and is loaded prior to use.");
+    }
+
+    // }}}
+    // {{{ _getNamespaces()
+
+    /**
+     * Gets the namespaces for the factory.
+     *
+     * @return array
+     */
+    protected function _getNamespaces()
+    {
+        return array_merge(parent::_getNamespaces(), array('Piece::Right::Validator'));
+    }
+
+    // }}}
+    // {{{ _afterInstantiation()
+
+    /**
+     * A callback which is called after instantiation.
+     *
+     * @param Piece::Right::Validator::Common $instance
+     */
+    protected function _afterInstantiation(Common $instance) {}
+
+    // }}}
+    // {{{ _existingInstance()
+
+    /**
+     * A callback which is called if an instance already exists.
+     *
+     * @param mixed $instance
+     */
+    protected function _existingInstance($instance)
+    {
+        $instance->clear();
     }
 
     /**#@-*/
@@ -125,4 +170,3 @@ class FilterFactory extends ObjectFactory
  * indent-tabs-mode: nil
  * End:
  */
-?>
