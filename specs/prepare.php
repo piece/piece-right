@@ -46,6 +46,10 @@ require_once 'PHPSpec/Context.php';
 require_once 'Stagehand/Autoload.php';
 require_once 'Cache/Lite/File.php';
 
+use Piece::Right::ContextRegistry;
+
+ContextRegistry::createContext();
+
 function clearCache($cacheDirectory)
 {
     $cache = new Cache_Lite_File(array('cacheDir' => "$cacheDirectory/",

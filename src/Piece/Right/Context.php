@@ -4,7 +4,7 @@
 /**
  * PHP version 5
  *
- * Copyright (c) 2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,27 +29,27 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
- * @since      File available since Release 1.7.0
+ * @since      File available since Release 2.0.0
  */
 
 namespace Piece::Right;
-use Piece::Right::Context;
+use Stagehand::AttributeHolder;
 
-// {{{ Env
+// {{{ Context
 
 /**
- * The state holder for an application with Piece_Right.
+ * The application context holder for an application with Piece_Right.
  *
  * @package    Piece_Right
- * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
- * @since      Class available since Release 1.7.0
+ * @since      Class available since Release 2.0.0
  */
-class Env
+class Context extends AttributeHolder
 {
 
     // {{{ properties
@@ -70,7 +70,7 @@ class Env
      * @access private
      */
 
-    private static $isProduction = true;
+    private $_id;
 
     /**#@-*/
 
@@ -79,34 +79,27 @@ class Env
      */
 
     // }}}
-    // {{{ setIsProduction()
+    // {{{ __construct()
 
     /**
-     * Sets whether the current environment is production or not.
-     *
-     * @param boolean $isProduction
+     * Sets the ID for the context.
      */
-    public static function setIsProduction($isProduction)
+    public function __construct($id)
     {
-        ContextRegistry::getContext()->setAttribute('_isProduction', $isProduction);
+        $this->_id = $id;
     }
 
     // }}}
-    // {{{ isProduction()
+    // {{{ getID()
 
     /**
-     * Returns whether the current environment is production or not.
+     * Gets the ID for the context.
      *
-     * @return boolean
+     * @return string
      */
-    public static function isProduction()
+    public function getID()
     {
-        $context = ContextRegistry::getContext();
-        if ($context->hasAttribute('_isProduction')) {
-            return $context->getAttribute('_isProduction');
-        } else {
-            return true;
-        }
+        return $this->_id;
     }
 
     /**#@-*/
@@ -138,4 +131,3 @@ class Env
  * indent-tabs-mode: nil
  * End:
  */
-?>

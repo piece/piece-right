@@ -38,6 +38,7 @@
 namespace Piece::Right;
 use Piece::Right::Validator::Common;
 use Stagehand::ObjectFactory;
+use Piece::Right::ContextRegistry;
 
 // {{{ ValidatorFactory
 
@@ -107,6 +108,19 @@ class ValidatorFactory extends ObjectFactory
     protected static function _getExceptionClass()
     {
         return __NAMESPACE__ . '::Exception';
+    }
+
+    // }}}
+    // {{{ _getContextID()
+
+    /**
+     * Gets the context ID for the factory.
+     *
+     * @return string
+     */
+    protected static function _getContextID()
+    {
+        return ContextRegistry::getContext()->getID();
     }
 
     // }}}

@@ -4,7 +4,7 @@
 /**
  * PHP version 5
  *
- * Copyright (c) 2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,29 +29,34 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
- * @since      File available since Release 1.7.0
+ * @since      File available since Release 2.0.0
  */
 
 namespace Piece::Right;
 use Piece::Right::Context;
 
-// {{{ Env
+// {{{ ContextRegistry
 
 /**
- * The state holder for an application with Piece_Right.
+ * The registry for Context objects.
  *
  * @package    Piece_Right
- * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
- * @since      Class available since Release 1.7.0
+ * @since      Class available since Release 2.0.0
  */
-class Env
+class ContextRegistry
 {
 
+    // {{{ constants
+
+    const DEFAULT_CONTEXT_ID = '_Piece_Right_ContextRegistry_defaultContextID';
+
+    // }}}
     // {{{ properties
 
     /**#@+
@@ -70,7 +75,8 @@ class Env
      * @access private
      */
 
-    private static $isProduction = true;
+    private static $_contexts = array();
+    private static $_contextID;
 
     /**#@-*/
 
@@ -79,34 +85,61 @@ class Env
      */
 
     // }}}
-    // {{{ setIsProduction()
+    // {{{ getContext()
 
     /**
-     * Sets whether the current environment is production or not.
+     * Gets the current Context object from the registry.
      *
-     * @param boolean $isProduction
+     * @return Piece::Right::Context
      */
-    public static function setIsProduction($isProduction)
+    public static function getContext()
     {
-        ContextRegistry::getContext()->setAttribute('_isProduction', $isProduction);
+        return @self::$_contexts[ self::$_contextID ];
     }
 
     // }}}
-    // {{{ isProduction()
+    // {{{ addContext()
 
     /**
-     * Returns whether the current environment is production or not.
+     * Adds a Context object to the registry.
      *
-     * @return boolean
+     * @param Piece::Right::Context $context
      */
-    public static function isProduction()
+    public static function addContext(Context $context)
     {
-        $context = ContextRegistry::getContext();
-        if ($context->hasAttribute('_isProduction')) {
-            return $context->getAttribute('_isProduction');
-        } else {
-            return true;
+        self::$_contexts[ $context->getID() ] = $context;
+    }
+
+    // }}}
+    // {{{ createContext()
+
+    /**
+     * Creates a new context with the given ID.
+     *
+     * @param string $id
+     */
+    public static function createContext($id = null)
+    {
+        if (is_null($id)) {
+            $id = self::DEFAULT_CONTEXT_ID;
         }
+
+        $context = new Context($id);
+        ContextRegistry::addContext($context);
+        self::setContextID($id);
+    }
+
+    // }}}
+    // {{{ setContextID()
+
+    /**
+     * Sets the context ID.
+     *
+     * @param string $id
+     */
+    public static function setContextID($id)
+    {
+        self::$_contextID = $id;
     }
 
     /**#@-*/
@@ -138,4 +171,3 @@ class Env
  * indent-tabs-mode: nil
  * End:
  */
-?>
