@@ -4,7 +4,7 @@
 /**
  * PHP versions 4 and 5
  *
- * Copyright (c) 2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,7 +29,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @since      File available since Release 0.1.0
@@ -50,7 +50,7 @@ require_once 'Piece/Right/Config/Factory.php';
  * TestCase for Piece_Right
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
@@ -1167,6 +1167,57 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $this->assertContains('lastName', $fieldNames);
 
         Piece_Right_Config_Factory::setUseUnderscoreAsDirectorySeparator(false);
+    }
+
+    /**
+     * @since Method available since Release 1.10.0
+     */
+    function testShouldContinueTheValidationsOfAFieldWhenAValidationFailUnlessTheForcevalidationIsEnabled()
+    {
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST['foo'] = 'bar';
+
+        $config = &new Piece_Right_Config();
+        $config->setRequired('foo');
+        $config->addValidation('foo', 'Length', array('min' => 5));
+        $config->addValidation('foo', 'Email');
+        $config->setForceValidation('foo');
+        $right = &new Piece_Right();
+
+        $this->assertFalse($right->validate(null, $config));
+
+        $results = &$right->getResults();
+
+        $this->assertTrue($results->isError('foo'));
+
+        $error = $results->getError('foo');
+
+        $this->assertEquals(2, $error->countErrors());
+    }
+
+    /**
+     * @since Method available since Release 1.10.0
+     */
+    function testShouldBreakTheValidationsOfAFieldWhenAValidationFailUnlessTheForcevalidationIsDisabled()
+    {
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST['foo'] = 'bar';
+
+        $config = &new Piece_Right_Config();
+        $config->setRequired('foo');
+        $config->addValidation('foo', 'Length', array('min' => 5));
+        $config->addValidation('foo', 'Email');
+        $right = &new Piece_Right();
+
+        $this->assertFalse($right->validate(null, $config));
+
+        $results = &$right->getResults();
+
+        $this->assertTrue($results->isError('foo'));
+
+        $error = $results->getError('foo');
+
+        $this->assertEquals(1, $error->countErrors());
     }
 
     /**#@-*/
