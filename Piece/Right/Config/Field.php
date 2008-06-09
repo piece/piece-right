@@ -148,7 +148,7 @@ class Piece_Right_Config_Field
 
         $forceValidation = $field->forceValidation();
         if (!is_null($forceValidation)) {
-            $field->setForceValidation($forceValidation);
+            $this->setForceValidation($forceValidation);
         }
 
         $basedOn = $field->getBasedOn();
