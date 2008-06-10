@@ -76,15 +76,19 @@ class Piece_Right_Config
     // {{{ addValidation()
 
     /**
-     * Adds a validation to a field with the given rules.
+     * Adds a validation with a given rules to a given field.
      *
-     * @param string $fieldName
-     * @param string $validatorName
-     * @param array  $rules
-     * @param string $message
+     * @param string  $fieldName
+     * @param string  $validatorName
+     * @param array   $rules
+     * @param string  $message
+     * @param boolean $useInFinals
      */
-    function addValidation($fieldName, $validatorName, $rules = array(),
-                           $message = null, $useInFinals = false
+    function addValidation($fieldName,
+                           $validatorName,
+                           $rules = array(),
+                           $message = null,
+                           $useInFinals = false
                            )
     {
         $this->addField($fieldName);
@@ -99,7 +103,7 @@ class Piece_Right_Config
     // {{{ merge()
 
     /**
-     * Merges the given configuretion into the existing configuration.
+     * Merges a given configuretion into the existing configuration.
      *
      * @param Piece_Right_Config &$config
      */
@@ -119,7 +123,7 @@ class Piece_Right_Config
     // {{{ setRequired()
 
     /**
-     * Sets a field as required.
+     * Sets a required definition to a given field.
      *
      * @param string $fieldName
      * @param array  $required
@@ -135,7 +139,7 @@ class Piece_Right_Config
     // {{{ isRequired()
 
     /**
-     * Returns whether the given field is required or not.
+     * Checks whether this field is required or not.
      *
      * @param string $fieldName
      * @return boolean
@@ -157,7 +161,7 @@ class Piece_Right_Config
     // {{{ getRequiredMessage()
 
     /**
-     * Gets the message when a field is required.
+     * Gets the required message for a given field.
      *
      * @param string $fieldName
      * @return string
@@ -179,7 +183,7 @@ class Piece_Right_Config
     // {{{ addFilter()
 
     /**
-     * Adds a filter to a field.
+     * Adds a filter to a given field.
      *
      * @param string $fieldName
      * @param string $filterName
@@ -195,7 +199,7 @@ class Piece_Right_Config
     // {{{ setWatcher()
 
     /**
-     * Sets the watcher to the given field.
+     * Sets a watcher definition to a given field.
      *
      * @param string $fieldName
      * @param array  $watcher
@@ -211,7 +215,7 @@ class Piece_Right_Config
     // {{{ getWatcher()
 
     /**
-     * Gets the watcher for the given field.
+     * Gets the watcher definition for a given field.
      *
      * @param string $fieldName
      * @return array
@@ -254,7 +258,7 @@ class Piece_Right_Config
     // {{{ setForceValidation()
 
     /**
-     * Turns force validation on/off for the given field.
+     * Turns force validation on/off for a given field.
      *
      * @param string  $fieldName
      * @param boolean $forceValidation
@@ -270,9 +274,11 @@ class Piece_Right_Config
     // {{{ forceValidation()
 
     /**
-     * Forces validation for the given field.
+     * Checks whether or not forcing invocation of all validations for a given
+     * field.
      *
      * @param string $fieldName
+     * @return boolean
      * @throws PIECE_RIGHT_ERROR_NOT_FOUND
      * @since Method available since Release 0.3.0
      */
@@ -291,7 +297,7 @@ class Piece_Right_Config
     // {{{ setPseudo()
 
     /**
-     * Sets the given field as a pseudo field.
+     * Sets a pseudo definition to a given field.
      *
      * @param string $fieldName
      * @param array  $pseudo
@@ -307,7 +313,7 @@ class Piece_Right_Config
     // {{{ isPseudo()
 
     /**
-     * Returns whether the given field is pseudo or not.
+     * Checks whether this field is pseudo or not.
      *
      * @param string $fieldName
      * @return boolean
@@ -329,7 +335,7 @@ class Piece_Right_Config
     // {{{ setDescription()
 
     /**
-     * Sets the description of the given field.
+     * Sets the description of a given field.
      *
      * @param string $fieldName
      * @param string $description
@@ -345,7 +351,7 @@ class Piece_Right_Config
     // {{{ addMessageVariable()
 
     /**
-     * Adds a message variable for the given field.
+     * Adds a message variable for a given field.
      *
      * @param string $fieldName
      * @param string $variableName
@@ -375,7 +381,7 @@ class Piece_Right_Config
     // {{{ getField()
 
     /**
-     * Gets the Piece_Right_Config_Field object for the given field.
+     * Gets the Piece_Right_Config_Field object for a given field.
      *
      * @param string $fieldName
      * @throws PIECE_RIGHT_ERROR_NOT_FOUND
@@ -398,7 +404,7 @@ class Piece_Right_Config
     // {{{ getValidations()
 
     /**
-     * Gets the validations for the given field.
+     * Gets the validations for a given field.
      *
      * @param string $fieldName
      * @return array
@@ -420,7 +426,7 @@ class Piece_Right_Config
     // {{{ getFilters()
 
     /**
-     * Gets the filters for the given field.
+     * Gets the filters for a given field.
      *
      * @param string $fieldName
      * @return array
@@ -442,7 +448,7 @@ class Piece_Right_Config
     // {{{ getPseudo()
 
     /**
-     * Gets the pseudo definition for the given field.
+     * Gets the pseudo definition for a given field.
      *
      * @param string $fieldName
      * @return array
@@ -464,7 +470,7 @@ class Piece_Right_Config
     // {{{ getMessageVariables()
 
     /**
-     * Gets the message variables of the given field.
+     * Gets the message variables of a given field.
      *
      * @param string $fieldName
      * @return array
@@ -487,7 +493,7 @@ class Piece_Right_Config
     // {{{ setBasedOn()
 
     /**
-     * Sets a field which the given field based on.
+     * Sets a field which a given field based on.
      *
      * @param string $fieldName
      * @param string $basedOn
@@ -503,7 +509,7 @@ class Piece_Right_Config
     // {{{ getBasedOn()
 
     /**
-     * Gets the field which the given field based on.
+     * Gets the field which a given field based on.
      *
      * @param string $fieldName
      * @return string
@@ -524,7 +530,7 @@ class Piece_Right_Config
     // {{{ hasBasedOn()
 
     /**
-     * Returns whether the given field is based on any field or not.
+     * Returns whether a given field is based on any field or not.
      *
      * @param string $fieldName
      * @return boolean
@@ -545,7 +551,7 @@ class Piece_Right_Config
     // {{{ inherit()
 
     /**
-     * Extends the given field using the field in the template.
+     * Extends a given field using the field in the template.
      *
      * @param string             $fieldName
      * @param string             $basedOn
@@ -587,7 +593,7 @@ class Piece_Right_Config
     // {{{ _hasField()
 
     /**
-     * Returns whether the configuration has the given field or not.
+     * Returns whether the configuration has a given field or not.
      *
      * @param string $fieldName
      * @return boolean
