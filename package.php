@@ -39,15 +39,13 @@ require_once 'PEAR/PackageFileManager2.php';
 
 PEAR::staticPushErrorHandling(PEAR_ERROR_CALLBACK, create_function('$error', 'var_dump($error); exit();'));
 
-$releaseVersion = '1.9.1';
+$releaseVersion = '1.10.0';
 $releaseStability = 'stable';
 $apiVersion = '1.1.0';
 $apiStability = 'stable';
 $notes = 'A new release of Piece_Right is now available.
 
-What\'s New in Piece_Right 1.9.1
-
- * A defect fix: A defect that caused an error "PHP Fatal error:  Call to undefined function gregoriantojd()" to be raised if the calendar extension is disabled or not installed in the environment has been fixed.';
+What\'s New in Piece_Right 1.10.0';
 
 $package = new PEAR_PackageFileManager2();
 $package->setOptions(array('filelistgenerator' => 'file',
@@ -56,10 +54,7 @@ $package->setOptions(array('filelistgenerator' => 'file',
                            'baseinstalldir'    => '/',
                            'packagefile'       => 'package.xml',
                            'packagedirectory'  => '.',
-                           'dir_roles'         => array('data' => 'data',
-                                                        'tests' => 'test',
-                                                        'docs' => 'doc'),
-                           'ignore'            => array('package.php', 'package.xml'))
+                           'ignore'            => array('package.php'))
                      );
 
 $package->setPackage('Piece_Right');

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<package packagerversion="1.7.0RC2" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+<package packagerversion="1.7.1" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
     http://pear.php.net/dtd/tasks-1.0.xsd
     http://pear.php.net/dtd/package-2.0
     http://pear.php.net/dtd/package-2.0.xsd">
@@ -15,10 +15,10 @@ Piece_Right provides a generic validation system which make it easy to validate 
   <email>iteman@users.sourceforge.net</email>
   <active>yes</active>
  </lead>
- <date>2008-01-26</date>
- <time>14:43:20</time>
+ <date>2008-06-10</date>
+ <time>23:03:54</time>
  <version>
-  <release>1.9.1</release>
+  <release>1.10.0</release>
   <api>1.1.0</api>
  </version>
  <stability>
@@ -28,9 +28,7 @@ Piece_Right provides a generic validation system which make it easy to validate 
  <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
  <notes>A new release of Piece_Right is now available.
 
-What&apos;s New in Piece_Right 1.9.1
-
- * A defect fix: A defect that caused an error &quot;PHP Fatal error:  Call to undefined function gregoriantojd()&quot; to be raised if the calendar extension is disabled or not installed in the environment has been fixed.</notes>
+What&apos;s New in Piece_Right 1.10.0</notes>
  <contents>
   <dir baseinstalldir="/" name="/">
    <dir name="data">
@@ -494,6 +492,21 @@ What&apos;s New in Piece_Right 1.9.1
  </dependencies>
  <phprelease />
  <changelog>
+  <release>
+   <version>
+    <release>1.10.0</release>
+    <api>1.1.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2008-06-10</date>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
+   <notes>A new release of Piece_Right is now available.
+
+What&apos;s New in Piece_Right 1.10.0</notes>
+  </release>
   <release>
    <version>
     <release>1.9.1</release>
