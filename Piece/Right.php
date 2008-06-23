@@ -126,7 +126,7 @@ class Piece_Right
     function validate($validationSetName = null, $dynamicConfig = null)
     {
         $config = &$this->_configure($validationSetName, $dynamicConfig);
-        if (Piece_Right_Error::hasErrors('exception')) {
+        if (Piece_Right_Error::hasErrors()) {
             return;
         }
 
@@ -140,14 +140,14 @@ class Piece_Right
         $this->_results->setMessageVariables($messageVariables);
 
         $this->_filter();
-        if (Piece_Right_Error::hasErrors('exception')) {
+        if (Piece_Right_Error::hasErrors()) {
             return;
         }
 
         $this->_generatePseudoFields();
 
         $this->_watch();
-        if (Piece_Right_Error::hasErrors('exception')) {
+        if (Piece_Right_Error::hasErrors()) {
             return;
         }
 
@@ -269,7 +269,7 @@ class Piece_Right
     function getFieldNames($validationSetName = null, $dynamicConfig = null)
     {
         $config = &$this->_configure($validationSetName, $dynamicConfig);
-        if (Piece_Right_Error::hasErrors('exception')) {
+        if (Piece_Right_Error::hasErrors()) {
             return;
         }
 
@@ -322,7 +322,7 @@ class Piece_Right
                                                        $this->_cacheDirectory,
                                                        $this->_template
                                                        );
-        if (Piece_Right_Error::hasErrors('exception')) {
+        if (Piece_Right_Error::hasErrors()) {
             $return = null;
             return $return;
         }
@@ -353,7 +353,7 @@ class Piece_Right
             foreach ($filters as $filterName) {
                 if (!function_exists($filterName)) {
                     $filter = &Piece_Right_Filter_Factory::factory($filterName);
-                    if (Piece_Right_Error::hasErrors('exception')) {
+                    if (Piece_Right_Error::hasErrors()) {
                         return;
                     }
 
@@ -527,17 +527,14 @@ class Piece_Right
             }
 
             $validator = &Piece_Right_Validator_Factory::factory($validation['validator']);
-            if (Piece_Right_Error::hasErrors('exception')) {
+            if (Piece_Right_Error::hasErrors()) {
                 return;
             }
 
             if (is_array($value) && !$validator->isArrayable()) {
-                Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
-                Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_ARRAYABLE,
-                                        "The value of the field [ $fieldName ] is an array, but the validator [ {$validation['validator']} ] is not arrayable. This validation is skipped.",
-                                        'warning'
-                                        );
-                Piece_Right_Error::popCallback();
+                trigger_error("The value of the field [ $fieldName ] is an array, but the validator [ {$validation['validator']} ] is not arrayable. This validation is skipped.",
+                              E_USER_WARNING
+                              );
                 $this->_results->addError($fieldName,
                                           $validation['validator'],
                                           $validator->getMessage()
@@ -715,7 +712,7 @@ class Piece_Right
             }
 
             $this->_validateField($fieldName, $value, $isFinals);
-            if (Piece_Right_Error::hasErrors('exception')) {
+            if (Piece_Right_Error::hasErrors()) {
                 return;
             }
         }

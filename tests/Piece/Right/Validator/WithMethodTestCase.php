@@ -4,7 +4,7 @@
 /**
  * PHP versions 4 and 5
  *
- * Copyright (c) 2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,7 +29,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @since      File available since Release 0.3.0
@@ -39,14 +39,15 @@ require_once realpath(dirname(__FILE__) . '/../../../prepare.php');
 require_once 'PHPUnit.php';
 require_once 'Piece/Right/Validator/WithMethod.php';
 require_once 'Piece/Right/Results.php';
+require_once 'PEAR/ErrorStack.php';
 
 // {{{ Piece_Right_Validator_WithMethodTestCase
 
 /**
- * TestCase for Piece_Right_Validator_WithMethod
+ * Some tests for Piece_Right_Validator_WithMethod.
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 0.3.0
@@ -76,7 +77,7 @@ class Piece_Right_Validator_WithMethodTestCase extends PHPUnit_TestCase
 
     function setUp()
     {
-        Piece_Right_Error::pushCallback(create_function('$error', 'var_dump($error); return ' . PEAR_ERRORSTACK_DIE . ';'));
+        PEAR_ErrorStack::setDefaultCallback(create_function('$error', 'var_dump($error); return ' . PEAR_ERRORSTACK_DIE . ';'));
         $this->_oldIncludePath = set_include_path(dirname(__FILE__) . '/' . basename(__FILE__, '.php') . PATH_SEPARATOR . get_include_path());
     }
 
@@ -84,7 +85,6 @@ class Piece_Right_Validator_WithMethodTestCase extends PHPUnit_TestCase
     {
         set_include_path($this->_oldIncludePath);
         Piece_Right_Error::clearErrors();
-        Piece_Right_Error::popCallback();
     }
 
     function testSuccess()
@@ -185,23 +185,22 @@ class Piece_Right_Validator_WithMethodTestCase extends PHPUnit_TestCase
      */
     function testExceptionShoudBeRaisedIfSpecifiedClassNotFound()
     {
-        Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
         $validator = &new Piece_Right_Validator_WithMethod();
         $validator->setRules(array('class' => 'Piece_Right_Validator_WithMethodTestCase_Bar',
                                    'method' => 'isFoo',
                                    'directory' => dirname(__FILE__) . '/' . basename(__FILE__, '.php'))
                              );
 
+        Piece_Right_Error::disableCallback();
         $result = $validator->validate('foo');
+        Piece_Right_Error::enableCallback();
 
         $this->assertNull($result);
-        $this->assertTrue(Piece_Right_Error::hasErrors('exception'));
+        $this->assertTrue(Piece_Right_Error::hasErrors());
 
         $error = Piece_Right_Error::pop();
 
         $this->assertEquals(PIECE_RIGHT_ERROR_NOT_FOUND, $error['code']);
-
-        Piece_Right_Error::popCallback();
     }
 
     /**

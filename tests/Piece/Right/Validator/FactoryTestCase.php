@@ -4,7 +4,7 @@
 /**
  * PHP versions 4 and 5
  *
- * Copyright (c) 2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,7 +29,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @since      File available since Release 0.1.0
@@ -39,14 +39,15 @@ require_once realpath(dirname(__FILE__) . '/../../../prepare.php');
 require_once 'PHPUnit.php';
 require_once 'Piece/Right/Validator/Factory.php';
 require_once 'Piece/Right/Error.php';
+require_once 'PEAR/ErrorStack.php';
 
 // {{{ Piece_Right_Validator_FactoryTestCase
 
 /**
- * TestCase for Piece_Right_Validator_Factory
+ * Some tests for Piece_Right_Validator_Factory.
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
@@ -77,7 +78,7 @@ class Piece_Right_Validator_FactoryTestCase extends PHPUnit_TestCase
 
     function setUp()
     {
-        Piece_Right_Error::pushCallback(create_function('$error', 'var_dump($error); return ' . PEAR_ERRORSTACK_DIE . ';'));
+        PEAR_ErrorStack::setDefaultCallback(create_function('$error', 'var_dump($error); return ' . PEAR_ERRORSTACK_DIE . ';'));
         $this->_oldValidatorDirectories = $GLOBALS['PIECE_RIGHT_Validator_Directories'];
         Piece_Right_Validator_Factory::addValidatorDirectory(dirname(__FILE__) . '/FactoryTestCase');
         $this->_oldValidatorPrefixes = $GLOBALS['PIECE_RIGHT_Validator_Prefixes'];
@@ -89,37 +90,32 @@ class Piece_Right_Validator_FactoryTestCase extends PHPUnit_TestCase
         Piece_Right_Validator_Factory::clearInstances();
         $GLOBALS['PIECE_RIGHT_Validator_Directories'] = $this->_oldValidatorDirectories;
         Piece_Right_Error::clearErrors();
-        Piece_Right_Error::popCallback();
     }
 
     function testFailureToCreateByNonExistingFile()
     {
-        Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
-
+        Piece_Right_Error::disableCallback();
         Piece_Right_Validator_Factory::factory('NonExisting');
+        Piece_Right_Error::enableCallback();
 
-        $this->assertTrue(Piece_Right_Error::hasErrors('exception'));
+        $this->assertTrue(Piece_Right_Error::hasErrors());
 
         $error = Piece_Right_Error::pop();
 
         $this->assertEquals(PIECE_RIGHT_ERROR_NOT_FOUND, $error['code']);
-
-        Piece_Right_Error::popCallback();
     }
 
     function testFailureToCreateByInvalidValidator()
     {
-        Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
-
+        Piece_Right_Error::disableCallback();
         Piece_Right_Validator_Factory::factory('Invalid');
+        Piece_Right_Error::enableCallback();
 
-        $this->assertTrue(Piece_Right_Error::hasErrors('exception'));
+        $this->assertTrue(Piece_Right_Error::hasErrors());
 
         $error = Piece_Right_Error::pop();
 
         $this->assertEquals(PIECE_RIGHT_ERROR_INVALID_VALIDATOR, $error['code']);
-
-        Piece_Right_Error::popCallback();
     }
 
     function testFactory()

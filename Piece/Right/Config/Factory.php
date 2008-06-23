@@ -141,25 +141,17 @@ class Piece_Right_Config_Factory
             }
 
             if (!file_exists($cacheDirectory)) {
-                Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
-                Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                        "The cache directory [ $cacheDirectory ] not found.",
-                                        'warning'
-                                        );
-                Piece_Right_Error::popCallback();
-
+                trigger_error("The cache directory [ $cacheDirectory ] is not found.",
+                              E_USER_WARNING
+                              );
                 $config = &Piece_Right_Config_Factory::_getConfigurationFromFile($configFile);
                 break;
             }
 
             if (!is_readable($cacheDirectory) || !is_writable($cacheDirectory)) {
-                Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
-                Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_READABLE,
-                                        "The cache directory [ $cacheDirectory ] is not readable or writable.",
-                                        'warning'
-                                        );
-                Piece_Right_Error::popCallback();
-
+                trigger_error("The cache directory [ $cacheDirectory ] is not readable or writable.",
+                              E_USER_WARNING
+                              );
                 $config = &Piece_Right_Config_Factory::_getConfigurationFromFile($configFile);
                 break;
             }
@@ -168,7 +160,7 @@ class Piece_Right_Config_Factory
             break;
         }
 
-        if (Piece_Right_Error::hasErrors('exception')) {
+        if (Piece_Right_Error::hasErrors()) {
             $return = null;
             return $return;
         }
@@ -182,7 +174,7 @@ class Piece_Right_Config_Factory
                                                          $cacheDirectory,
                                                          null
                                                          );
-        if (Piece_Right_Error::hasErrors('exception')) {
+        if (Piece_Right_Error::hasErrors()) {
             $return = null;
             return $return;
         }
@@ -250,31 +242,24 @@ class Piece_Right_Config_Factory
          */
         $config = $cache->get($masterFile);
         if (PEAR::isError($config)) {
-            Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
-            Piece_Right_Error::push(PIECE_RIGHT_ERROR_CANNOT_READ,
-                                    "Cannot read the cache file in the directory [ $cacheDirectory ].",
-                                    'warning'
-                                    );
-            Piece_Right_Error::popCallback();
-
+            trigger_error("Cannot read the cache file in the directory [ $cacheDirectory ].",
+                          E_USER_WARNING
+                          );
             return Piece_Right_Config_Factory::_getConfigurationFromFile($masterFile);
         }
 
         if (!$config) {
             $config = &Piece_Right_Config_Factory::_getConfigurationFromFile($masterFile);
-            if (Piece_Right_Error::hasErrors('exception')) {
+            if (Piece_Right_Error::hasErrors()) {
                 $return = null;
                 return $return;
             }
 
             $result = $cache->save($config);
             if (PEAR::isError($result)) {
-                Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
-                Piece_Right_Error::push(PIECE_RIGHT_ERROR_CANNOT_WRITE,
-                                        "Cannot write the Piece_Right_Config object to the cache file in the directory [ $cacheDirectory ].",
-                                        'warning'
-                                        );
-                Piece_Right_Error::popCallback();
+                trigger_error("Cannot write the Piece_Right_Config object to the cache file in the directory [ $cacheDirectory ].",
+                              E_USER_WARNING
+                              );
             }
         }
 

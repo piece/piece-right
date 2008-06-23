@@ -43,11 +43,12 @@ require_once 'Piece/Right/Config.php';
 require_once 'Cache/Lite/File.php';
 require_once 'Piece/Right/Filter/Factory.php';
 require_once 'Piece/Right/Config/Factory.php';
+require_once 'PEAR/ErrorStack.php';
 
 // {{{ Piece_RightTestCase
 
 /**
- * TestCase for Piece_Right
+ * Some tests for Piece_Right.
  *
  * @package    Piece_Right
  * @copyright  2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
@@ -82,7 +83,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
 
     function setUp()
     {
-        Piece_Right_Error::pushCallback(create_function('$error', 'var_dump($error); return ' . PEAR_ERRORSTACK_DIE . ';'));
+        PEAR_ErrorStack::setDefaultCallback(create_function('$error', 'var_dump($error); return ' . PEAR_ERRORSTACK_DIE . ';'));
         $this->_cacheDirectory = dirname(__FILE__) . '/' . basename(__FILE__, '.php');
         $this->_oldFilterDirectories = $GLOBALS['PIECE_RIGHT_Filter_Directories'];
         Piece_Right_Filter_Factory::addFilterDirectory($this->_cacheDirectory);
@@ -107,7 +108,6 @@ class Piece_RightTestCase extends PHPUnit_TestCase
                                       );
         $cache->clean();
         Piece_Right_Error::clearErrors();
-        Piece_Right_Error::popCallback();
     }
 
     function testSuccessToValidate()
@@ -222,7 +222,7 @@ class Piece_RightTestCase extends PHPUnit_TestCase
         $dynamicConfig->addValidation('baz', 'Length', array('min' => 5));
         $right = &new Piece_Right();
 
-        $this->assertFalse($right->validate('Example', $dynamicConfig));
+        $this->assertFalse(@$right->validate('Example', $dynamicConfig));
 
         $results = &$right->getResults();
 

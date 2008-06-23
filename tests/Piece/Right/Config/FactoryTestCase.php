@@ -40,11 +40,17 @@ require_once 'PHPUnit.php';
 require_once 'Piece/Right/Config/Factory.php';
 require_once 'Piece/Right/Error.php';
 require_once 'Cache/Lite/File.php';
+require_once 'PEAR/ErrorStack.php';
 
+// {{{ GLOBALS
+
+$GLOBALS['PIECE_RIGHT_Config_FactoryTestCase_hasWarnings'] = false;
+
+// }}}
 // {{{ Piece_Right_Config_FactoryTestCase
 
 /**
- * TestCase for Piece_Right_Config_Factory
+ * Some tests for Piece_Right_Config_Factory.
  *
  * @package    Piece_Right
  * @copyright  2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
@@ -77,7 +83,7 @@ class Piece_Right_Config_FactoryTestCase extends PHPUnit_TestCase
 
     function setUp()
     {
-        Piece_Right_Error::pushCallback(create_function('$error', 'var_dump($error); return ' . PEAR_ERRORSTACK_DIE . ';'));
+        PEAR_ErrorStack::setDefaultCallback(create_function('$error', 'var_dump($error); return ' . PEAR_ERRORSTACK_DIE . ';'));
         $this->_cacheDirectory = dirname(__FILE__) . '/' . basename(__FILE__, '.php');
     }
 
@@ -90,7 +96,6 @@ class Piece_Right_Config_FactoryTestCase extends PHPUnit_TestCase
                                       );
         $cache->clean();
         Piece_Right_Error::clearErrors();
-        Piece_Right_Error::popCallback();
     }
 
     function testCreate()
@@ -135,57 +140,52 @@ class Piece_Right_Config_FactoryTestCase extends PHPUnit_TestCase
 
     function testCreateIfConfigurationDirectoryNotFound()
     {
-        Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
-
+        Piece_Right_Error::disableCallback();
         $config = &Piece_Right_Config_Factory::factory('Example',
                                                        "{$this->_cacheDirectory}/foo",
                                                        $this->_cacheDirectory
                                                        );
+        Piece_Right_Error::enableCallback();
+
         $this->assertNull($config);
-        $this->assertTrue(Piece_Right_Error::hasErrors('exception'));
+        $this->assertTrue(Piece_Right_Error::hasErrors());
 
         $error = Piece_Right_Error::pop();
 
         $this->assertEquals(PIECE_RIGHT_ERROR_NOT_FOUND, $error['code']);
-
-        Piece_Right_Error::popCallback();
     }
 
     function testCreateIfConfigurationFileNotFound()
     {
-        Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
-
+        Piece_Right_Error::disableCallback();
         $config = &Piece_Right_Config_Factory::factory('Example',
                                                        dirname(__FILE__),
                                                        $this->_cacheDirectory
                                                        );
+        Piece_Right_Error::enableCallback();
+
         $this->assertNull($config);
-        $this->assertTrue(Piece_Right_Error::hasErrors('exception'));
+        $this->assertTrue(Piece_Right_Error::hasErrors());
 
         $error = Piece_Right_Error::pop();
 
         $this->assertEquals(PIECE_RIGHT_ERROR_NOT_FOUND, $error['code']);
-
-        Piece_Right_Error::popCallback();
     }
 
     function testNotCacheIfCacheDirectoryNotFound()
     {
-        Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
-
+        set_error_handler(create_function('$code, $message, $file, $line', "
+if (\$code == E_USER_WARNING) {
+    \$GLOBALS['PIECE_RIGHT_Config_FactoryTestCase_hasWarnings'] = true;
+}
+"));
         $config = &Piece_Right_Config_Factory::factory('Example',
                                                        $this->_cacheDirectory,
                                                        'foo'
                                                        );
+        restore_error_handler();
 
-        $this->assertTrue(is_a($config, 'Piece_Right_Config'));
-        $this->assertTrue(Piece_Right_Error::hasErrors('warning'));
-
-        $error = Piece_Right_Error::pop();
-
-        $this->assertEquals(PIECE_RIGHT_ERROR_NOT_FOUND, $error['code']);
-
-        Piece_Right_Error::popCallback();
+        $this->assertTrue($GLOBALS['PIECE_RIGHT_Config_FactoryTestCase_hasWarnings']);
     }
 
     /**
@@ -193,19 +193,17 @@ class Piece_Right_Config_FactoryTestCase extends PHPUnit_TestCase
      */
     function testInvalidConfiguration()
     {
-        Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
-
+        Piece_Right_Error::disableCallback();
         Piece_Right_Config_Factory::factory('InvalidConfiguration',
                                             $this->_cacheDirectory
                                             );
+        Piece_Right_Error::enableCallback();
 
-        $this->assertTrue(Piece_Right_Error::hasErrors('exception'));
+        $this->assertTrue(Piece_Right_Error::hasErrors());
 
         $error = Piece_Right_Error::pop();
 
         $this->assertEquals(PIECE_RIGHT_ERROR_INVALID_CONFIGURATION, $error['code']);
-
-        Piece_Right_Error::popCallback();
     }
 
     /**

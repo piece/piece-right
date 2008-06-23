@@ -4,7 +4,7 @@
 /**
  * PHP versions 4 and 5
  *
- * Copyright (c) 2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,7 +29,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @since      File available since Release 0.3.0
@@ -37,6 +37,7 @@
 
 require_once 'Piece/Right/Validator/Common.php';
 require_once 'Piece/Right/ClassLoader.php';
+require_once 'Piece/Right/Error.php';
 
 // {{{ Piece_Right_Validator_WithMethod
 
@@ -45,7 +46,7 @@ require_once 'Piece/Right/ClassLoader.php';
  * arbitrary method.
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 0.3.0
@@ -96,7 +97,7 @@ class Piece_Right_Validator_WithMethod extends Piece_Right_Validator_Common
 
         if (!Piece_Right_ClassLoader::loaded($class)) {
             Piece_Right_ClassLoader::load($class, $this->_getRule('directory'));
-            if (Piece_Right_Error::hasErrors('exception')) {
+            if (Piece_Right_Error::hasErrors()) {
                 return;
             }
 

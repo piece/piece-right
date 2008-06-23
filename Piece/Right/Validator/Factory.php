@@ -4,7 +4,7 @@
 /**
  * PHP versions 4 and 5
  *
- * Copyright (c) 2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,7 +29,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @since      File available since Release 0.1.0
@@ -51,7 +51,7 @@ $GLOBALS['PIECE_RIGHT_Validator_Prefixes'] = array('Piece_Right_Validator');
  * A factory class for creating validator objects.
  *
  * @package    Piece_Right
- * @copyright  2006-2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
@@ -107,11 +107,11 @@ class Piece_Right_Validator_Factory
                     foreach ($GLOBALS['PIECE_RIGHT_Validator_Prefixes'] as $prefixAlias) {
                         $validatorClass = Piece_Right_Validator_Factory::_getValidatorClass($validatorName, $prefixAlias);
 
-                        Piece_Right_Error::pushCallback(create_function('$error', 'return ' . PEAR_ERRORSTACK_PUSHANDLOG . ';'));
+                        Piece_Right_Error::disableCallback();
                         Piece_Right_ClassLoader::load($validatorClass, $validatorDirectory);
-                        Piece_Right_Error::popCallback();
+                        Piece_Right_Error::enableCallback();
 
-                        if (Piece_Right_Error::hasErrors('exception')) {
+                        if (Piece_Right_Error::hasErrors()) {
                             $error = Piece_Right_Error::pop();
                             if ($error['code'] == PIECE_RIGHT_ERROR_NOT_FOUND) {
                                 continue;
