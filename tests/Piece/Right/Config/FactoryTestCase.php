@@ -186,6 +186,8 @@ if (\$code == E_USER_WARNING) {
         restore_error_handler();
 
         $this->assertTrue($GLOBALS['PIECE_RIGHT_Config_FactoryTestCase_hasWarnings']);
+
+        $GLOBALS['PIECE_RIGHT_Config_FactoryTestCase_hasWarnings'] = false;
     }
 
     /**
