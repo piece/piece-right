@@ -45,10 +45,8 @@ require_once 'PEAR/ErrorStack.php';
 define('PIECE_RIGHT_ERROR_NOT_FOUND',             -1);
 define('PIECE_RIGHT_ERROR_NOT_READABLE',          -2);
 define('PIECE_RIGHT_ERROR_CANNOT_READ',           -3);
-define('PIECE_RIGHT_ERROR_CANNOT_WRITE',          -4);
 define('PIECE_RIGHT_ERROR_INVALID_VALIDATOR',     -5);
 define('PIECE_RIGHT_ERROR_INVALID_CONFIGURATION', -6);
-define('PIECE_RIGHT_ERROR_NOT_ARRAYABLE',         -7);
 
 // }}}
 // {{{ Piece_Right_Error
