@@ -135,7 +135,7 @@ class Piece_Right_Filter_Factory
 
                 if (!$found) {
                     Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                            "The filter [ $filterName ] not found in the following directories:\n" .
+                                            "The filter [ $filterName ] is not found in the following directories:\n" .
                                             implode("\n", $GLOBALS['PIECE_RIGHT_Filter_Directories'])
                                             );
                     $return = null;

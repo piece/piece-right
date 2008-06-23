@@ -101,7 +101,7 @@ class Piece_Right_Validator_WithMethod extends Piece_Right_Validator_Common
 
             if (!Piece_Right_ClassLoader::loaded($class)) {
                 Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                        "The class [ $class ] not found in the loaded file.",
+                                        "The class [ $class ] is not found in the loaded file.",
                                         'exception',
                                         array('validator' => __CLASS__)
                                         );

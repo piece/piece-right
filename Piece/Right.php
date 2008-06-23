@@ -433,7 +433,7 @@ class Piece_Right
             foreach ($turnOnFields as $turnOnFieldName) {
                 if (!in_array($turnOnFieldName, $fieldNames)) {
                     Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                            "The field [ $turnOnFieldName ] which is a target of turn on not found in the configuration."
+                                            "The field [ $turnOnFieldName ] which is a target of turn on is not found in the configuration."
                                             );
                     return;
                 }
@@ -444,7 +444,7 @@ class Piece_Right
             foreach ($turnOffFields as $turnOffFieldName) {
                 if (!in_array($turnOffFieldName, $fieldNames)) {
                     Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                            "The field [ $turnOffFieldName ] which is a target of turn off not found in the configuration."
+                                            "The field [ $turnOffFieldName ] which is a target of turn off is not found in the configuration."
                                             );
                     return;
                 }

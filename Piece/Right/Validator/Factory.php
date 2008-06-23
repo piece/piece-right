@@ -136,7 +136,7 @@ class Piece_Right_Validator_Factory
 
                 if (!$found) {
                     Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                            "The validator [ $validatorName ] not found in the following directories:\n" .
+                                            "The validator [ $validatorName ] is not found in the following directories:\n" .
                                             implode("\n", $GLOBALS['PIECE_RIGHT_Validator_Directories'])
                                             );
                     $return = null;

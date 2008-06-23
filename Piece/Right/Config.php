@@ -150,7 +150,7 @@ class Piece_Right_Config
     {
         if (!$this->_hasField($fieldName)) {
             Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                    "The field [ $fieldName ] not found."
+                                    "The field [ $fieldName ] is not found."
                                     );
         }
 
@@ -172,7 +172,7 @@ class Piece_Right_Config
     {
         if (!$this->_hasField($fieldName)) {
             Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                    "The field [ $fieldName ] not found."
+                                    "The field [ $fieldName ] is not found."
                                     );
         }
 
@@ -226,7 +226,7 @@ class Piece_Right_Config
     {
         if (!$this->_hasField($fieldName)) {
             Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                    "The field [ $fieldName ] not found."
+                                    "The field [ $fieldName ] is not found."
                                     );
         }
 
@@ -286,7 +286,7 @@ class Piece_Right_Config
     {
         if (!$this->_hasField($fieldName)) {
             Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                    "The field [ $fieldName ] not found."
+                                    "The field [ $fieldName ] is not found."
                                     );
         }
 
@@ -324,7 +324,7 @@ class Piece_Right_Config
     {
         if (!$this->_hasField($fieldName)) {
             Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                    "The field [ $fieldName ] not found."
+                                    "The field [ $fieldName ] is not found."
                                     );
         }
 
@@ -391,7 +391,7 @@ class Piece_Right_Config
     {
         if (!$this->_hasField($fieldName)) {
             Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                    "The field [ $fieldName ] not found."
+                                    "The field [ $fieldName ] is not found."
                                     );
             $return = null;
             return $return;
@@ -415,7 +415,7 @@ class Piece_Right_Config
     {
         if (!$this->_hasField($fieldName)) {
             Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                    "The field [ $fieldName ] not found."
+                                    "The field [ $fieldName ] is not found."
                                     );
         }
 
@@ -437,7 +437,7 @@ class Piece_Right_Config
     {
         if (!$this->_hasField($fieldName)) {
             Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                    "The field [ $fieldName ] not found."
+                                    "The field [ $fieldName ] is not found."
                                     );
         }
 
@@ -459,7 +459,7 @@ class Piece_Right_Config
     {
         if (!$this->_hasField($fieldName)) {
             Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                    "The field [ $fieldName ] not found."
+                                    "The field [ $fieldName ] is not found."
                                     );
         }
 
@@ -481,7 +481,7 @@ class Piece_Right_Config
     {
         if (!$this->_hasField($fieldName)) {
             Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                    "The field [ $fieldName ] not found."
+                                    "The field [ $fieldName ] is not found."
                                     );
             return;
         }
@@ -519,7 +519,7 @@ class Piece_Right_Config
     {
         if (!$this->_hasField($fieldName)) {
             Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                    "The field [ $fieldName ] not found."
+                                    "The field [ $fieldName ] is not found."
                                     );
         }
 
@@ -540,7 +540,7 @@ class Piece_Right_Config
     {
         if (!$this->_hasField($fieldName)) {
             Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                    "The field [ $fieldName ] not found."
+                                    "The field [ $fieldName ] is not found."
                                     );
         }
 
@@ -563,7 +563,7 @@ class Piece_Right_Config
     {
         if (!$this->_hasField($fieldName)) {
             Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                    "The field [ $fieldName ] not found."
+                                    "The field [ $fieldName ] is not found."
                                     );
             return;
         }

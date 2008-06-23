@@ -91,7 +91,7 @@ class Piece_Right_ClassLoader
 
             if (!file_exists($file)) {
                 Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                        "The class file [ $file ] for the class [ $class ] not found."
+                                        "The class file [ $file ] for the class [ $class ] is not found."
                                         );
                 return;
             }
@@ -106,7 +106,7 @@ class Piece_Right_ClassLoader
 
         if (!include_once $file) {
             Piece_Right_Error::push(PIECE_RIGHT_ERROR_CANNOT_READ,
-                                    "The class file [ $file ] not found or is not readable."
+                                    "The class file [ $file ] is not found or is not readable."
                                     );
         }
     }
