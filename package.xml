@@ -15,8 +15,8 @@ Piece_Right provides a generic validation system which make it easy to validate 
   <email>iteman@users.sourceforge.net</email>
   <active>yes</active>
  </lead>
- <date>2008-06-10</date>
- <time>23:03:54</time>
+ <date>2008-06-24</date>
+ <time>00:37:58</time>
  <version>
   <release>1.10.0</release>
   <api>1.1.0</api>
@@ -501,7 +501,7 @@ What&apos;s New in Piece_Right 1.10.0</notes>
     <release>stable</release>
     <api>stable</api>
    </stability>
-   <date>2008-06-10</date>
+   <date>2008-06-24</date>
    <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
    <notes>A new release of Piece_Right is now available.
 
