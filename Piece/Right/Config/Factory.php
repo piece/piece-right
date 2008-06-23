@@ -83,6 +83,7 @@ class Piece_Right_Config_Factory
 
     /**#@+
      * @access public
+     * @static
      */
 
     // }}}
@@ -97,9 +98,8 @@ class Piece_Right_Config_Factory
      * @param string $cacheDirectory
      * @param string $TemplateName
      * @return Piece_Right_Config
-     * @throws PIECE_RIGHT_ERROR_INVALID_CONFIGURATION
      * @throws PIECE_RIGHT_ERROR_NOT_FOUND
-     * @static
+     * @throws PIECE_RIGHT_ERROR_NOT_READABLE
      */
     function &factory($validationSetName = null,
                       $configDirectory   = null,
@@ -120,7 +120,7 @@ class Piece_Right_Config_Factory
 
         if (!file_exists($configFile)) {
             Piece_Right_Error::push(PIECE_RIGHT_ERROR_NOT_FOUND,
-                                    "The configuration file [ $configFile ] not found."
+                                    "The configuration file [ $configFile ] is not found."
                                     );
             $return = null;
             return $return;
@@ -220,8 +220,6 @@ class Piece_Right_Config_Factory
      * @param string $masterFile
      * @param string $cacheDirectory
      * @return Piece_Right_Config
-     * @throws PIECE_RIGHT_ERROR_INVALID_CONFIGURATION
-     * @static
      */
     function &_getConfiguration($masterFile, $cacheDirectory)
     {
@@ -275,7 +273,6 @@ class Piece_Right_Config_Factory
      * @param string $file
      * @return Piece_Right_Config
      * @throws PIECE_RIGHT_ERROR_INVALID_CONFIGURATION
-     * @static
      */
     function &_getConfigurationFromFile($file)
     {

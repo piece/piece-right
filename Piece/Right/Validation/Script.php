@@ -113,9 +113,6 @@ class Piece_Right_Validation_Script
      * @param Piece_Right_Config $config
      * @param boolean            $keepOriginalFieldValue
      * @return Piece_Right_Results
-     * @throws PIECE_RIGHT_ERROR_INVALID_CONFIGURATION
-     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
-     * @throws PIECE_RIGHT_ERROR_INVALID_FILTER
      */
     function &run($validationSetName,
                   &$container,
@@ -193,8 +190,6 @@ class Piece_Right_Validation_Script
      * @param string             $validationSetName
      * @param Piece_Right_Config $config
      * @return array
-     * @throws PIECE_RIGHT_ERROR_INVALID_CONFIGURATION
-     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
      */
     function getFieldNames($validationSetName, $config)
     {

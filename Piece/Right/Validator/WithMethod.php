@@ -82,9 +82,7 @@ class Piece_Right_Validator_WithMethod extends Piece_Right_Validator_Common
      *
      * @param mixed $value
      * @return boolean
-     * @throws PIECE_RIGHT_ERROR_NOT_READABLE
      * @throws PIECE_RIGHT_ERROR_NOT_FOUND
-     * @throws PIECE_RIGHT_ERROR_CANNOT_READ
      */
     function validate($value)
     {

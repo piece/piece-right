@@ -116,12 +116,6 @@ class Piece_Right
      * @param string             $validationSetName
      * @param Piece_Right_Config $dynamicConfig
      * @return boolean
-     * @throws PIECE_RIGHT_ERROR_INVALID_CONFIGURATION
-     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
-     * @throws PIECE_RIGHT_ERROR_INVALID_FILTER
-     * @throws PIECE_RIGHT_ERROR_CANNOT_READ
-     * @throws PIECE_RIGHT_ERROR_INVALID_VALIDATOR
-     * @throws PIECE_RIGHT_ERROR_NOT_READABLE
      */
     function validate($validationSetName = null, $dynamicConfig = null)
     {
@@ -263,8 +257,6 @@ class Piece_Right
      * @param string             $validationSetName
      * @param Piece_Right_Config $dynamicConfig
      * @return array
-     * @throws PIECE_RIGHT_ERROR_INVALID_CONFIGURATION
-     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
      */
     function getFieldNames($validationSetName = null, $dynamicConfig = null)
     {
@@ -312,8 +304,6 @@ class Piece_Right
      * @param string             $validationSetName
      * @param Piece_Right_Config $dynamicConfig
      * @return Piece_Right_Config
-     * @throws PIECE_RIGHT_ERROR_INVALID_CONFIGURATION
-     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
      */
     function &_configure($validationSetName = null, $dynamicConfig = null)
     {
@@ -341,9 +331,6 @@ class Piece_Right
      * Filters field values.
      *
      * @since Method available since Release 0.3.0
-     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
-     * @throws PIECE_RIGHT_ERROR_INVALID_FILTER
-     * @throws PIECE_RIGHT_ERROR_CANNOT_READ
      */
     function _filter()
     {
@@ -513,10 +500,6 @@ class Piece_Right
      * @param string  $fieldName
      * @param string  $value
      * @param boolean $isFinals
-     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
-     * @throws PIECE_RIGHT_ERROR_INVALID_VALIDATOR
-     * @throws PIECE_RIGHT_ERROR_CANNOT_READ
-     * @throws PIECE_RIGHT_ERROR_NOT_READABLE
      * @since Method available since Release 0.3.0
      */
     function _validateField($fieldName, $value, $isFinals)
@@ -694,10 +677,6 @@ class Piece_Right
      * Validates value of all fields.
      *
      * @param boolean $isFinals
-     * @throws PIECE_RIGHT_ERROR_NOT_FOUND
-     * @throws PIECE_RIGHT_ERROR_INVALID_VALIDATOR
-     * @throws PIECE_RIGHT_ERROR_CANNOT_READ
-     * @throws PIECE_RIGHT_ERROR_NOT_READABLE
      * @since Method available since Release 1.6.0
      */
     function _validateFields($isFinals)
