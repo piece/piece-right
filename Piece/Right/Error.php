@@ -52,7 +52,7 @@ define('PIECE_RIGHT_ERROR_INVALID_CONFIGURATION', -6);
 // {{{ Piece_Right_Error
 
 /**
- * The error class for Piece_Right package.
+ * The error class for the Piece_Right package.
  *
  * @package    Piece_Right
  * @copyright  2006-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
