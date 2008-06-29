@@ -39,7 +39,6 @@ require_once realpath(dirname(__FILE__) . '/../../../prepare.php');
 require_once 'PHPUnit.php';
 require_once 'Piece/Right/Validator/WithMethod.php';
 require_once 'Piece/Right/Results.php';
-require_once 'PEAR/ErrorStack.php';
 
 // {{{ Piece_Right_Validator_WithMethodTestCase
 
@@ -77,7 +76,6 @@ class Piece_Right_Validator_WithMethodTestCase extends PHPUnit_TestCase
 
     function setUp()
     {
-        PEAR_ErrorStack::setDefaultCallback(create_function('$error', 'var_dump($error); return ' . PEAR_ERRORSTACK_DIE . ';'));
         $this->_oldIncludePath = set_include_path(dirname(__FILE__) . '/' . basename(__FILE__, '.php') . PATH_SEPARATOR . get_include_path());
     }
 

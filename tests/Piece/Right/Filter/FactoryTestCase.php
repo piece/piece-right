@@ -39,7 +39,6 @@ require_once realpath(dirname(__FILE__) . '/../../../prepare.php');
 require_once 'PHPUnit.php';
 require_once 'Piece/Right/Filter/Factory.php';
 require_once 'Piece/Right/Error.php';
-require_once 'PEAR/ErrorStack.php';
 
 // {{{ Piece_Right_Filter_FactoryTestCase
 
@@ -78,7 +77,6 @@ class Piece_Right_Filter_FactoryTestCase extends PHPUnit_TestCase
 
     function setUp()
     {
-        PEAR_ErrorStack::setDefaultCallback(create_function('$error', 'var_dump($error); return ' . PEAR_ERRORSTACK_DIE . ';'));
         $this->_oldFilterDirectories = $GLOBALS['PIECE_RIGHT_Filter_Directories'];
         Piece_Right_Filter_Factory::addFilterDirectory(dirname(__FILE__) . '/FactoryTestCase');
         $this->_oldFilterPrefixes = $GLOBALS['PIECE_RIGHT_Filter_Prefixes'];

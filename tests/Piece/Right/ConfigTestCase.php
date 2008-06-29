@@ -39,7 +39,6 @@ require_once realpath(dirname(__FILE__) . '/../../prepare.php');
 require_once 'PHPUnit.php';
 require_once 'Piece/Right/Config.php';
 require_once 'Piece/Right/Error.php';
-require_once 'PEAR/ErrorStack.php';
 
 // {{{ Piece_Right_ConfigTestCase
 
@@ -77,7 +76,6 @@ class Piece_Right_ConfigTestCase extends PHPUnit_TestCase
 
     function setUp()
     {
-        PEAR_ErrorStack::setDefaultCallback(create_function('$error', 'var_dump($error); return ' . PEAR_ERRORSTACK_DIE . ';'));
         $this->_config = &new Piece_Right_Config();
     }
 
