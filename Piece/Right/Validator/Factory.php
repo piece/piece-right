@@ -240,4 +240,3 @@ class Piece_Right_Validator_Factory
  * indent-tabs-mode: nil
  * End:
  */
-?>

@@ -136,4 +136,3 @@ class Piece_Right_Validator_UniqueFields extends Piece_Right_Validator_Unique
  * indent-tabs-mode: nil
  * End:
  */
-?>

@@ -98,4 +98,3 @@ class ValidateFinals
  * indent-tabs-mode: nil
  * End:
  */
-?>

@@ -97,4 +97,3 @@ class BarFilter
  * indent-tabs-mode: nil
  * End:
  */
-?>

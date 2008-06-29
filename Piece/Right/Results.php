@@ -298,4 +298,3 @@ class Piece_Right_Results
  * indent-tabs-mode: nil
  * End:
  */
-?>

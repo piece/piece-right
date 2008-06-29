@@ -180,4 +180,3 @@ class Piece_Right_Filter_FactoryTestCase extends PHPUnit_TestCase
  * indent-tabs-mode: nil
  * End:
  */
-?>

@@ -117,4 +117,3 @@ class Piece_Right_Filter_JapaneseAlphaNumericTestCase extends PHPUnit_TestCase
  * indent-tabs-mode: nil
  * End:
  */
-?>

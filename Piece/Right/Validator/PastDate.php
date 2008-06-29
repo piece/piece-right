@@ -118,4 +118,3 @@ class Piece_Right_Validator_PastDate extends Piece_Right_Validator_Date
  * indent-tabs-mode: nil
  * End:
  */
-?>

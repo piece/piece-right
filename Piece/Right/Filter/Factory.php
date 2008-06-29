@@ -228,4 +228,3 @@ class Piece_Right_Filter_Factory
  * indent-tabs-mode: nil
  * End:
  */
-?>

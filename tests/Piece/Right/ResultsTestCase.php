@@ -116,4 +116,3 @@ class Piece_Right_ResultsTestCase extends PHPUnit_TestCase
  * indent-tabs-mode: nil
  * End:
  */
-?>

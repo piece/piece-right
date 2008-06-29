@@ -122,4 +122,3 @@ class Piece_Right_Env
  * indent-tabs-mode: nil
  * End:
  */
-?>

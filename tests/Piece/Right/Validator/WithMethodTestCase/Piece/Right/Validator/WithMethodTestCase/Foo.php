@@ -103,4 +103,3 @@ class Piece_Right_Validator_WithMethodTestCase_Foo
  * indent-tabs-mode: nil
  * End:
  */
-?>

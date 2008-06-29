@@ -276,4 +276,3 @@ class Piece_Right_Validation_ScriptTestCase extends PHPUnit_TestCase
  * indent-tabs-mode: nil
  * End:
  */
-?>

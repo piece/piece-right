@@ -107,4 +107,3 @@ class Piece_Right_Filter_JapaneseH2Z extends Piece_Right_Filter_Common
  * indent-tabs-mode: nil
  * End:
  */
-?>

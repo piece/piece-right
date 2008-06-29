@@ -141,4 +141,3 @@ class Piece_Right_Filter_NoFile2NULLTestCase extends PHPUnit_TestCase
  * indent-tabs-mode: nil
  * End:
  */
-?>

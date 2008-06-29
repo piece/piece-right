@@ -97,4 +97,3 @@ class Piece_Right_Filter_FactoryTestCase_Foo
  * indent-tabs-mode: nil
  * End:
  */
-?>

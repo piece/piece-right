@@ -97,4 +97,3 @@ class FactoryTestCaseAlias_FooFilter
  * indent-tabs-mode: nil
  * End:
  */
-?>

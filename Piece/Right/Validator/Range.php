@@ -153,4 +153,3 @@ class Piece_Right_Validator_Range extends Piece_Right_Validator_Numeric
  * indent-tabs-mode: nil
  * End:
  */
-?>

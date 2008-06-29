@@ -124,4 +124,3 @@ class Piece_Right_Validator_EmailTestCase extends PHPUnit_TestCase
  * indent-tabs-mode: nil
  * End:
  */
-?>

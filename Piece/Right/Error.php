@@ -250,4 +250,3 @@ class Piece_Right_Error
  * indent-tabs-mode: nil
  * End:
  */
-?>

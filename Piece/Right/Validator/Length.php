@@ -139,4 +139,3 @@ class Piece_Right_Validator_Length extends Piece_Right_Validator_Common
  * indent-tabs-mode: nil
  * End:
  */
-?>

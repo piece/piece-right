@@ -99,4 +99,3 @@ class FactoryTestCaseAlias_FooValidator extends Piece_Right_Validator_Common
  * indent-tabs-mode: nil
  * End:
  */
-?>

@@ -155,4 +155,3 @@ class Piece_Right_Validation_Error
  * indent-tabs-mode: nil
  * End:
  */
-?>

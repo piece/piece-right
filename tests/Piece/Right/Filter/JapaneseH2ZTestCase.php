@@ -109,4 +109,3 @@ class Piece_Right_Filter_JapaneseH2ZTestCase extends PHPUnit_TestCase
  * indent-tabs-mode: nil
  * End:
  */
-?>

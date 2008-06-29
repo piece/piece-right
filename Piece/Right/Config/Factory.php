@@ -365,4 +365,3 @@ class Piece_Right_Config_Factory
  * indent-tabs-mode: nil
  * End:
  */
-?>

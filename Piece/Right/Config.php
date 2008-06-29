@@ -621,4 +621,3 @@ class Piece_Right_Config
  * indent-tabs-mode: nil
  * End:
  */
-?>

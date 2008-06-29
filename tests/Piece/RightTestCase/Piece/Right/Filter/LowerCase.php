@@ -95,4 +95,3 @@ class Piece_Right_Filter_LowerCase
  * indent-tabs-mode: nil
  * End:
  */
-?>

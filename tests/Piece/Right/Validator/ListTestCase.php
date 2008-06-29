@@ -119,4 +119,3 @@ class Piece_Right_Validator_ListTestCase extends PHPUnit_TestCase
  * indent-tabs-mode: nil
  * End:
  */
-?>

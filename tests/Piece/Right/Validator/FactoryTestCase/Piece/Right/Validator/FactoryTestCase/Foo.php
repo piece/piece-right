@@ -99,4 +99,3 @@ class Piece_Right_Validator_FactoryTestCase_Foo extends Piece_Right_Validator_Co
  * indent-tabs-mode: nil
  * End:
  */
-?>

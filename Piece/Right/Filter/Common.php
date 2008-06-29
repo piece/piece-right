@@ -117,4 +117,3 @@ class Piece_Right_Filter_Common
  * indent-tabs-mode: nil
  * End:
  */
-?>

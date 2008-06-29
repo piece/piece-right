@@ -108,4 +108,3 @@ class Piece_Right_Filter_JapaneseAlphaNumeric extends Piece_Right_Filter_Common
  * indent-tabs-mode: nil
  * End:
  */
-?>

@@ -124,4 +124,3 @@ class Piece_Right_Validator_Regex extends Piece_Right_Validator_Common
  * indent-tabs-mode: nil
  * End:
  */
-?>

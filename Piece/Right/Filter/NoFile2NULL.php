@@ -124,4 +124,3 @@ class Piece_Right_Filter_NoFile2NULL extends Piece_Right_Filter_Common
  * indent-tabs-mode: nil
  * End:
  */
-?>
