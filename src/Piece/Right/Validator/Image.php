@@ -187,4 +187,3 @@ class Image extends File
  * indent-tabs-mode: nil
  * End:
  */
-?>
