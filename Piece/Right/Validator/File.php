@@ -251,7 +251,7 @@ class Piece_Right_Validator_File extends Piece_Right_Validator_Common
             return mime_content_type($filename);
         }
 
-        if (!substr(PHP_OS, 0, 3) != 'WIN') {
+        if (substr(PHP_OS, 0, 3) != 'WIN') {
             return exec('file -bi '. escapeshellarg($filename));
         }
 
@@ -338,4 +338,3 @@ class Piece_Right_Validator_File extends Piece_Right_Validator_Common
  * indent-tabs-mode: nil
  * End:
  */
-?>
