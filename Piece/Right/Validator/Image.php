@@ -175,4 +175,3 @@ class Piece_Right_Validator_Image extends Piece_Right_Validator_File
  * indent-tabs-mode: nil
  * End:
  */
-?>
