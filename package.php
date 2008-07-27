@@ -46,7 +46,11 @@ $apiVersion = '1.1.0';
 $apiStability = 'stable';
 $notes = 'A new release of Piece_Right is now available.
 
-What\'s New in Piece_Right 1.10.0';
+What\'s New in Piece_Right 1.10.0
+
+ * Improved error handling: The behavior of internal error handling has been changed so as to handle only own and "exception" level errors.
+ * Improved validation process flow: The validation process flow has been changed so that the validations of a field to be broken when a validation fail unless the "forcevalidation" option is disabled.
+ * A defect fix: A defect for the the "forceValidation" option has been fixed so that the option of a field was not merged.';
 
 $package = new PEAR_PackageFileManager2();
 $package->setOptions(array('filelistgenerator' => 'file',
@@ -60,8 +64,8 @@ $package->setOptions(array('filelistgenerator' => 'file',
 
 $package->setPackage('Piece_Right');
 $package->setPackageType('php');
-$package->setSummary('A validation framework for PHP');
-$package->setDescription('Piece_Right is a validation framework for PHP.
+$package->setSummary('A validation framework');
+$package->setDescription('Piece_Right is a validation framework.
 
 Piece_Right provides a generic validation system which make it easy to validate input values on Web applications. Piece_Right includes a lot of ready-to-use built-in validators. This can make it a lot faster to get started with Piece_Right in existing web applications and web application frameworks.');
 $package->setChannel('pear.piece-framework.com');

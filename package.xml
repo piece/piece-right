@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<package packagerversion="1.7.1" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+<package packagerversion="1.7.2" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
     http://pear.php.net/dtd/tasks-1.0.xsd
     http://pear.php.net/dtd/package-2.0
     http://pear.php.net/dtd/package-2.0.xsd">
  <name>Piece_Right</name>
  <channel>pear.piece-framework.com</channel>
- <summary>A validation framework for PHP</summary>
- <description>Piece_Right is a validation framework for PHP.
+ <summary>A validation framework</summary>
+ <description>Piece_Right is a validation framework.
 
 Piece_Right provides a generic validation system which make it easy to validate input values on Web applications. Piece_Right includes a lot of ready-to-use built-in validators. This can make it a lot faster to get started with Piece_Right in existing web applications and web application frameworks.</description>
  <lead>
@@ -15,8 +15,8 @@ Piece_Right provides a generic validation system which make it easy to validate 
   <email>iteman@users.sourceforge.net</email>
   <active>yes</active>
  </lead>
- <date>2008-06-24</date>
- <time>00:37:58</time>
+ <date>2008-07-27</date>
+ <time>21:07:52</time>
  <version>
   <release>1.10.0</release>
   <api>1.1.0</api>
@@ -28,7 +28,11 @@ Piece_Right provides a generic validation system which make it easy to validate 
  <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
  <notes>A new release of Piece_Right is now available.
 
-What&apos;s New in Piece_Right 1.10.0</notes>
+What&apos;s New in Piece_Right 1.10.0
+
+ * Improved error handling: The behavior of internal error handling has been changed so as to handle only own and &quot;exception&quot; level errors.
+ * Improved validation process flow: The validation process flow has been changed so that the validations of a field to be broken when a validation fail unless the &quot;forcevalidation&quot; option is disabled.
+ * A defect fix: A defect for the the &quot;forceValidation&quot; option has been fixed so that the option of a field was not merged.</notes>
  <contents>
   <dir baseinstalldir="/" name="/">
    <dir name="data">
@@ -501,11 +505,15 @@ What&apos;s New in Piece_Right 1.10.0</notes>
     <release>stable</release>
     <api>stable</api>
    </stability>
-   <date>2008-06-24</date>
+   <date>2008-07-27</date>
    <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
    <notes>A new release of Piece_Right is now available.
 
-What&apos;s New in Piece_Right 1.10.0</notes>
+What&apos;s New in Piece_Right 1.10.0
+
+ * Improved error handling: The behavior of internal error handling has been changed so as to handle only own and &quot;exception&quot; level errors.
+ * Improved validation process flow: The validation process flow has been changed so that the validations of a field to be broken when a validation fail unless the &quot;forcevalidation&quot; option is disabled.
+ * A defect fix: A defect for the the &quot;forceValidation&quot; option has been fixed so that the option of a field was not merged.</notes>
   </release>
   <release>
    <version>
