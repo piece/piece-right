@@ -4,7 +4,7 @@
 /**
  * PHP versions 4 and 5
  *
- * Copyright (c) 2007 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,7 +29,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @copyright  2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @since      File available since Release 1.6.0
@@ -40,13 +40,13 @@ require_once 'Piece/Right/Validator/Unique.php';
 // {{{ Piece_Right_Validator_UniqueFields
 
 /**
- * A validator which can be used to check that each value of multiple fields
- * do not duplicate.
+ * A validator which can be used to check that each value of multiple fields do not
+ * duplicate.
  *
  * @package    Piece_Right
- * @copyright  2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    Release: @package_version@
+ * @version    Release: 1.10.0
  * @since      Class available since Release 1.6.0
  */
 class Piece_Right_Validator_UniqueFields extends Piece_Right_Validator_Unique
@@ -93,6 +93,14 @@ class Piece_Right_Validator_UniqueFields extends Piece_Right_Validator_Unique
             $value = $this->_results->getFieldValue($field);
             if (is_array($value)) {
                 return false;
+            }
+
+            if (is_null($value)) {
+                continue;
+            }
+
+            if (!strlen($value)) {
+                continue;
             }
 
             $values[] = $value;

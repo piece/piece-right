@@ -4,7 +4,7 @@
 /**
  * PHP versions 4 and 5
  *
- * Copyright (c) 2007 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,7 +29,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Piece_Right
- * @copyright  2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @since      File available since Release 1.6.0
@@ -46,7 +46,7 @@ require_once 'Piece/Right/Results.php';
  * TestCase for Piece_Right_Validator_UniqueFields
  *
  * @package    Piece_Right
- * @copyright  2007 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 1.6.0
@@ -71,6 +71,7 @@ class Piece_Right_Validator_UniqueFieldsTestCase extends PHPUnit_TestCase
     /**#@+
      * @access public
      */
+
     /**#@-*/
 
     function testValidationOfMultipleFieldsShouldWork()
@@ -101,6 +102,21 @@ class Piece_Right_Validator_UniqueFieldsTestCase extends PHPUnit_TestCase
         $validator->setRules(array('fields' => array('desiredAccount2', 'desiredAccount3')));
 
         $this->assertFalse($validator->validate('foo'));
+    }
+
+    /**
+     * @since Method available since Release 1.11.0
+     */
+    function testShouldIgnoreEmptyFields()
+    {
+        $results = &new Piece_Right_Results();
+        $results->setFieldValue('desiredAccount2', '');
+        $results->setFieldValue('desiredAccount3', '');
+        $validator = &new Piece_Right_Validator_UniqueFields();
+        $validator->setResults($results);
+        $validator->setRules(array('fields' => array('desiredAccount2', 'desiredAccount3')));
+
+        $this->assertTrue($validator->validate('foo'));
     }
 
     /**#@+
