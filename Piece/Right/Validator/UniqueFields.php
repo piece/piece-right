@@ -46,7 +46,7 @@ require_once 'Piece/Right/Validator/Unique.php';
  * @package    Piece_Right
  * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    Release: 1.10.0
+ * @version    Release: @package_version@
  * @since      Class available since Release 1.6.0
  */
 class Piece_Right_Validator_UniqueFields extends Piece_Right_Validator_Unique
