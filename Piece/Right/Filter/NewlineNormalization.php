@@ -32,6 +32,7 @@
  * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
+ * @link       http://www.din.or.jp/~ohzaki/perl.htm#CRLF_Unify
  * @since      File available since Release 1.11.0
  */
 
@@ -46,6 +47,7 @@ require_once 'Piece/Right/Filter/Common.php';
  * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
+ * @link       http://www.din.or.jp/~ohzaki/perl.htm#CRLF_Unify
  * @since      Class available since Release 1.11.0
  */
 class Piece_Right_Filter_NewlineNormalization extends Piece_Right_Filter_Common
