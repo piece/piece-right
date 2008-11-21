@@ -6,19 +6,17 @@
  <name>Piece_Right</name>
  <channel>pear.piece-framework.com</channel>
  <summary>A validation framework</summary>
- <description>Piece_Right is a validation framework.
-
-Piece_Right provides a generic validation system which make it easy to validate input values on Web applications. Piece_Right includes a lot of ready-to-use built-in validators. This can make it a lot faster to get started with Piece_Right in existing web applications and web application frameworks.</description>
+ <description>Piece_Right provides a generic validation system which make it easy to validate input values on Web applications. Piece_Right includes a lot of ready-to-use built-in validators. This can make it a lot faster to get started with Piece_Right in existing web applications and web application frameworks.</description>
  <lead>
   <name>KUBO Atsuhiro</name>
   <user>iteman</user>
   <email>iteman@users.sourceforge.net</email>
   <active>yes</active>
  </lead>
- <date>2008-07-27</date>
- <time>21:07:52</time>
+ <date>2008-11-22</date>
+ <time>00:37:16</time>
  <version>
-  <release>1.10.0</release>
+  <release>1.11.0</release>
   <api>1.1.0</api>
  </version>
  <stability>
@@ -28,11 +26,7 @@ Piece_Right provides a generic validation system which make it easy to validate 
  <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
  <notes>A new release of Piece_Right is now available.
 
-What&apos;s New in Piece_Right 1.10.0
-
- * Improved error handling: The behavior of internal error handling has been changed so as to handle only own and &quot;exception&quot; level errors.
- * Improved validation process flow: The validation process flow has been changed so that the validations of a field to be broken when a validation fail unless the &quot;forcevalidation&quot; option is disabled.
- * A defect fix: A defect for the the &quot;forceValidation&quot; option has been fixed so that the option of a field was not merged.</notes>
+What&apos;s New in Piece_Right 1.11.0</notes>
  <contents>
   <dir baseinstalldir="/" name="/">
    <dir name="data">
@@ -69,6 +63,9 @@ What&apos;s New in Piece_Right 1.10.0
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
       <file name="JapaneseH2Z.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="NewlineNormalization.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
       <file name="NoFile2NULL.php" role="php">
@@ -220,6 +217,9 @@ What&apos;s New in Piece_Right 1.10.0
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
        <file name="JapaneseH2ZTestCase.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="NewlineNormalizationTestCase.php" role="test">
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
        <file name="NoFile2NULLTestCase.php" role="test">
@@ -496,6 +496,21 @@ What&apos;s New in Piece_Right 1.10.0
  </dependencies>
  <phprelease />
  <changelog>
+  <release>
+   <version>
+    <release>1.11.0</release>
+    <api>1.1.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2008-11-22</date>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
+   <notes>A new release of Piece_Right is now available.
+
+What&apos;s New in Piece_Right 1.11.0</notes>
+  </release>
   <release>
    <version>
     <release>1.10.0</release>

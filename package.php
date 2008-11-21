@@ -40,17 +40,13 @@ require_once 'PEAR.php';
 
 PEAR::staticPushErrorHandling(PEAR_ERROR_CALLBACK, create_function('$error', 'var_dump($error); exit();'));
 
-$releaseVersion = '1.10.0';
+$releaseVersion = '1.11.0';
 $releaseStability = 'stable';
 $apiVersion = '1.1.0';
 $apiStability = 'stable';
 $notes = 'A new release of Piece_Right is now available.
 
-What\'s New in Piece_Right 1.10.0
-
- * Improved error handling: The behavior of internal error handling has been changed so as to handle only own and "exception" level errors.
- * Improved validation process flow: The validation process flow has been changed so that the validations of a field to be broken when a validation fail unless the "forcevalidation" option is disabled.
- * A defect fix: A defect for the the "forceValidation" option has been fixed so that the option of a field was not merged.';
+What\'s New in Piece_Right 1.11.0';
 
 $package = new PEAR_PackageFileManager2();
 $package->setOptions(array('filelistgenerator' => 'file',
@@ -65,9 +61,7 @@ $package->setOptions(array('filelistgenerator' => 'file',
 $package->setPackage('Piece_Right');
 $package->setPackageType('php');
 $package->setSummary('A validation framework');
-$package->setDescription('Piece_Right is a validation framework.
-
-Piece_Right provides a generic validation system which make it easy to validate input values on Web applications. Piece_Right includes a lot of ready-to-use built-in validators. This can make it a lot faster to get started with Piece_Right in existing web applications and web application frameworks.');
+$package->setDescription('Piece_Right provides a generic validation system which make it easy to validate input values on Web applications. Piece_Right includes a lot of ready-to-use built-in validators. This can make it a lot faster to get started with Piece_Right in existing web applications and web application frameworks.');
 $package->setChannel('pear.piece-framework.com');
 $package->setLicense('BSD License (revised)', 'http://www.opensource.org/licenses/bsd-license.php');
 $package->setAPIVersion($apiVersion);
