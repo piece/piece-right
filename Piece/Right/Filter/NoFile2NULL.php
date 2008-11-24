@@ -93,7 +93,7 @@ class Piece_Right_Filter_NoFile2NULL extends Piece_Right_Filter_Common
             && array_key_exists('tmp_name', $value)
             && array_key_exists('error', $value)
             && array_key_exists('size', $value)
-            && $value['error'] == UPLOAD_ERR_NO_FILE
+            && $value['error'] === UPLOAD_ERR_NO_FILE
             ) {
             return null;
         } else {
